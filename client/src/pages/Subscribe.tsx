@@ -59,13 +59,8 @@ export default function Subscribe() {
       {/* Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0e14]/95 backdrop-blur-md border-b border-white/5">
         <div className="container flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded bg-[#00d4aa] flex items-center justify-center shrink-0">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                <path d="M2 14 Q5 4 9 9 Q13 14 16 4" stroke="#0a0e14" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
-              </svg>
-            </div>
-            <span className="font-['Space_Grotesk'] font-bold text-lg text-white tracking-tight">Elastic<span className="text-[#00d4aa]">Scanner</span></span>
+          <Link href="/" className="flex items-center">
+            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/primal-edge-logo_4b5a68ab.webp" alt="Primal Edge" className="h-10 w-auto" />
           </Link>
           <Link href="/" className="text-white/50 text-sm hover:text-white transition-colors flex items-center gap-1.5">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -82,7 +77,7 @@ export default function Subscribe() {
           <div className="text-center mb-10 sm:mb-14">
             <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">JOIN THE PRIVATE GROUP</p>
             <h1 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white mb-4">
-              Get Access to the<br />Elastic Slingshot Scanner
+              Get Access to<br />Primal Edge AI Scanner
             </h1>
             <p className="text-white/50 text-base sm:text-lg max-w-xl mx-auto">
               Fill in your details below to request access. Seats are limited — we'll confirm your subscription and onboard you within 24 hours.
@@ -222,7 +217,7 @@ export default function Subscribe() {
                     <h2 className="font-['Space_Grotesk'] font-semibold text-lg text-white mb-4">Disclaimer & Agreement</h2>
                     <div className="bg-[#0d1520] rounded-xl p-4 mb-4">
                       <p className="text-white/40 text-xs leading-relaxed">
-                        The Elastic Scanner is an <strong className="text-white/60">educational and informational tool only</strong>. Scan results do not constitute financial advice, investment recommendations, or solicitations to buy or sell any security. All trading involves risk. Past performance of any scanner setup does not guarantee future results. You are solely responsible for your own trading decisions. Always consult a licensed financial advisor before making investment decisions.
+                        Primal Edge is an <strong className="text-white/60">educational and informational tool only</strong>. Scan results do not constitute financial advice, investment recommendations, or solicitations to buy or sell any security. All trading involves risk. Past performance of any scanner setup does not guarantee future results. You are solely responsible for your own trading decisions. Always consult a licensed financial advisor before making investment decisions.
                       </p>
                     </div>
                     <label className="flex items-start gap-3 cursor-pointer">

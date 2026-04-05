@@ -91,13 +91,8 @@ function Navbar() {
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-[#0a0e14]/95 backdrop-blur-md border-b border-white/5" : "bg-transparent"}`}>
       <div className="container flex items-center justify-between h-16">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded bg-[#00d4aa] flex items-center justify-center shrink-0">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <path d="M2 14 Q5 4 9 9 Q13 14 16 4" stroke="#0a0e14" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
-            </svg>
-          </div>
-          <span className="font-['Space_Grotesk'] font-bold text-lg text-white tracking-tight">Elastic<span className="text-[#00d4aa]">Scanner</span></span>
+        <Link href="/" className="flex items-center">
+          <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/primal-edge-logo_4b5a68ab.webp" alt="Primal Edge" className="h-10 w-auto" />
         </Link>
 
         {/* Desktop nav */}
@@ -798,13 +793,8 @@ function Footer() {
     <footer className="bg-[#0d1520] border-t border-white/5 py-10 sm:py-12">
       <div className="container">
         <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded bg-[#00d4aa] flex items-center justify-center">
-              <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
-                <path d="M2 14 Q5 4 9 9 Q13 14 16 4" stroke="#0a0e14" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
-              </svg>
-            </div>
-            <span className="font-['Space_Grotesk'] font-bold text-white">Elastic<span className="text-[#00d4aa]">Scanner</span></span>
+          <div className="flex items-center">
+            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/primal-edge-logo_4b5a68ab.webp" alt="Primal Edge" className="h-9 w-auto" />
           </div>
           <div className="flex flex-wrap justify-center gap-4 sm:gap-6 text-sm text-white/30">
             <a href="#how-it-works" className="hover:text-white/60 transition-colors">How It Works</a>
@@ -815,7 +805,7 @@ function Footer() {
             <Link href="/subscribe" className="hover:text-[#00d4aa] transition-colors">Subscribe</Link>
           </div>
           <p className="text-white/20 text-xs text-center">
-            © 2025 ElasticScanner — AI-Powered Quantitative Trading Signals. For educational purposes only. Not financial advice.
+            © 2025 Primal Edge — Adaptive Intelligence. Decisive Signals. For educational purposes only. Not financial advice.
           </p>
         </div>
       </div>
