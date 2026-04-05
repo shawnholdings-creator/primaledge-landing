@@ -92,7 +92,7 @@ function Navbar() {
       <div className="container flex items-center justify-between h-20">
         {/* Logo */}
         <Link href="/" className="flex items-center">
-          <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/primal-edge-logo_4b5a68ab.webp" alt="Primal Edge" className="h-16 w-auto" />
+          <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/primal-edge-logo_4b5a68ab.webp" alt="Primal Edge" className="h-20 w-auto max-w-[280px] object-contain" />
         </Link>
 
         {/* Desktop nav */}
@@ -189,7 +189,7 @@ function Hero() {
               <img
                 src="https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/primal-edge-logo_4b5a68ab.webp"
                 alt="Primal Edge"
-                className="h-20 sm:h-24 w-auto"
+                className="h-32 sm:h-40 w-auto max-w-[420px] object-contain"
               />
             </div>
 
@@ -803,7 +803,7 @@ function Footer() {
       <div className="container">
         <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
           <div className="flex items-center">
-            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/primal-edge-logo_4b5a68ab.webp" alt="Primal Edge" className="h-14 w-auto" />
+            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/primal-edge-logo_4b5a68ab.webp" alt="Primal Edge" className="h-20 w-auto max-w-[280px] object-contain" />
           </div>
           <div className="flex flex-wrap justify-center gap-4 sm:gap-6 text-sm text-white/30">
             <a href="#how-it-works" className="hover:text-white/60 transition-colors">How It Works</a>
