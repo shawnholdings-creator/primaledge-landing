@@ -5,6 +5,7 @@
 
 import { useState } from "react";
 import { Link } from "wouter";
+import PrimalEdgeLogo from "@/components/PrimalEdgeLogo";
 import { toast } from "sonner";
 
 function GradeBadge({ grade }: { grade: string }) {
@@ -60,7 +61,7 @@ export default function Subscribe() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0e14]/95 backdrop-blur-md border-b border-white/5">
         <div className="container flex items-center justify-between h-20">
           <Link href="/" className="flex items-center">
-            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/primal-edge-logo-cropped_d23b007c.webp" alt="Primal Edge" className="h-12 w-auto max-w-[260px] object-contain" />
+            <PrimalEdgeLogo size="sm" />
           </Link>
           <Link href="/" className="text-white/50 text-sm hover:text-white transition-colors flex items-center gap-1.5">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">

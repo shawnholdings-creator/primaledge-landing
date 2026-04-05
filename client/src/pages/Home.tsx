@@ -7,6 +7,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
+import PrimalEdgeLogo from "@/components/PrimalEdgeLogo";
 import { toast } from "sonner";
 
 // ── Ticker tape data ──────────────────────────────────────────
@@ -92,7 +93,7 @@ function Navbar() {
       <div className="container flex items-center justify-between h-20">
         {/* Logo */}
         <Link href="/" className="flex items-center">
-          <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/primal-edge-logo-cropped_d23b007c.webp" alt="Primal Edge" className="h-12 w-auto max-w-[260px] object-contain" />
+          <PrimalEdgeLogo size="sm" />
         </Link>
 
         {/* Desktop nav */}
@@ -186,11 +187,7 @@ function Hero() {
           <div>
             {/* Hero brand logo */}
             <div className="mb-6 fade-up fade-up-delay-1">
-              <img
-                src="https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/primal-edge-logo-cropped_d23b007c.webp"
-                alt="Primal Edge"
-                className="h-20 sm:h-28 w-auto max-w-[480px] object-contain"
-              />
+              <PrimalEdgeLogo size="lg" />
             </div>
 
             <div className="inline-flex items-center gap-2 bg-[#00d4aa]/10 border border-[#00d4aa]/20 rounded-full px-4 py-1.5 mb-6 fade-up fade-up-delay-2">
@@ -803,7 +800,7 @@ function Footer() {
       <div className="container">
         <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
           <div className="flex items-center">
-            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/primal-edge-logo-cropped_d23b007c.webp" alt="Primal Edge" className="h-12 w-auto max-w-[260px] object-contain" />
+            <PrimalEdgeLogo size="md" />
           </div>
           <div className="flex flex-wrap justify-center gap-4 sm:gap-6 text-sm text-white/30">
             <a href="#how-it-works" className="hover:text-white/60 transition-colors">How It Works</a>
