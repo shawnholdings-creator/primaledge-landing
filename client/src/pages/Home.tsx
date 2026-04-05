@@ -89,10 +89,10 @@ function Navbar() {
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-[#0a0e14]/95 backdrop-blur-md border-b border-white/5" : "bg-transparent"}`}>
-      <div className="container flex items-center justify-between h-16">
+      <div className="container flex items-center justify-between h-20">
         {/* Logo */}
         <Link href="/" className="flex items-center">
-          <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/primal-edge-logo_4b5a68ab.webp" alt="Primal Edge" className="h-10 w-auto" />
+          <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/primal-edge-logo_4b5a68ab.webp" alt="Primal Edge" className="h-16 w-auto" />
         </Link>
 
         {/* Desktop nav */}
@@ -794,7 +794,7 @@ function Footer() {
       <div className="container">
         <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
           <div className="flex items-center">
-            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/primal-edge-logo_4b5a68ab.webp" alt="Primal Edge" className="h-9 w-auto" />
+            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/primal-edge-logo_4b5a68ab.webp" alt="Primal Edge" className="h-14 w-auto" />
           </div>
           <div className="flex flex-wrap justify-center gap-4 sm:gap-6 text-sm text-white/30">
             <a href="#how-it-works" className="hover:text-white/60 transition-colors">How It Works</a>

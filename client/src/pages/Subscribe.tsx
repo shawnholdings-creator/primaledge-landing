@@ -58,9 +58,9 @@ export default function Subscribe() {
     <div className="min-h-screen bg-[#0a0e14]">
       {/* Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0e14]/95 backdrop-blur-md border-b border-white/5">
-        <div className="container flex items-center justify-between h-16">
+        <div className="container flex items-center justify-between h-20">
           <Link href="/" className="flex items-center">
-            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/primal-edge-logo_4b5a68ab.webp" alt="Primal Edge" className="h-10 w-auto" />
+            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/primal-edge-logo_4b5a68ab.webp" alt="Primal Edge" className="h-16 w-auto" />
           </Link>
           <Link href="/" className="text-white/50 text-sm hover:text-white transition-colors flex items-center gap-1.5">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
