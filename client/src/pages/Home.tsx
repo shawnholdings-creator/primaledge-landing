@@ -184,7 +184,16 @@ function Hero() {
         <div className="grid lg:grid-cols-2 gap-10 xl:gap-16 items-center">
           {/* Left: Copy */}
           <div>
-            <div className="inline-flex items-center gap-2 bg-[#00d4aa]/10 border border-[#00d4aa]/20 rounded-full px-4 py-1.5 mb-6 fade-up fade-up-delay-1">
+            {/* Hero brand logo */}
+            <div className="mb-6 fade-up fade-up-delay-1">
+              <img
+                src="https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/primal-edge-logo_4b5a68ab.webp"
+                alt="Primal Edge"
+                className="h-20 sm:h-24 w-auto"
+              />
+            </div>
+
+            <div className="inline-flex items-center gap-2 bg-[#00d4aa]/10 border border-[#00d4aa]/20 rounded-full px-4 py-1.5 mb-6 fade-up fade-up-delay-2">
               <span className="w-2 h-2 rounded-full bg-[#00d4aa] animate-pulse" />
               <span className="font-mono text-xs text-[#00d4aa] tracking-wider">AI ENGINE ACTIVE — LIVE</span>
             </div>
