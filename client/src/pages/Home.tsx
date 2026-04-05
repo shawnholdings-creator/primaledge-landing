@@ -191,22 +191,22 @@ function Hero() {
           <div>
             <div className="inline-flex items-center gap-2 bg-[#00d4aa]/10 border border-[#00d4aa]/20 rounded-full px-4 py-1.5 mb-6 fade-up fade-up-delay-1">
               <span className="w-2 h-2 rounded-full bg-[#00d4aa] animate-pulse" />
-              <span className="font-mono text-xs text-[#00d4aa] tracking-wider">LIVE SCANNER ACTIVE</span>
+              <span className="font-mono text-xs text-[#00d4aa] tracking-wider">AI ENGINE ACTIVE — LIVE</span>
             </div>
 
             <h1 className="font-['Space_Grotesk'] font-bold text-4xl sm:text-5xl lg:text-6xl xl:text-7xl text-white leading-[1.05] mb-6 fade-up fade-up-delay-2">
-              Catch the<br />
+              AI-Powered.<br />
               <span className="text-[#00d4aa] teal-text-glow">Slingshot</span><br />
-              Before It Fires
+              Precision.
             </h1>
 
             <p className="text-white/60 text-base sm:text-lg leading-relaxed mb-8 max-w-lg fade-up fade-up-delay-3" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-              The Elastic Slingshot algorithm scans the S&P 500 in real time, identifying high-probability breakout setups before the move happens. Graded A–D. Delivered to your phone instantly.
+              A proprietary AI-driven scanning engine trained on thousands of historical price structures. It identifies high-probability Elastic Slingshot breakout setups across the S&P 500 in real time — graded A–D by machine learning, delivered to your phone in seconds.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 fade-up fade-up-delay-4">
               <Link href="/subscribe" className="shimmer-btn pulse-glow bg-[#00d4aa] text-[#0a0e14] font-['Space_Grotesk'] font-bold text-base px-8 py-3.5 rounded hover:bg-[#00bfa0] transition-all text-center">
-                Start Scanning Now →
+                Access the AI Scanner →
               </Link>
               <a href="#how-it-works" className="border border-white/15 text-white/70 font-['Space_Grotesk'] font-medium text-base px-8 py-3.5 rounded hover:border-[#00d4aa]/40 hover:text-white transition-all text-center">
                 See How It Works
@@ -299,10 +299,10 @@ function Hero() {
 function Stats() {
   const { ref, inView } = useInView();
   const stats = [
-    { label: "S&P 500 Symbols Scanned", value: 503, suffix: "" },
-    { label: "Scans Per Day (Auto)", value: 4, suffix: "x" },
-    { label: "Scoring Factors", value: 18, suffix: "+" },
-    { label: "Alert Delivery", value: 3, suffix: "s" },
+    { label: "S&P 500 Symbols Evaluated by AI", value: 503, suffix: "" },
+    { label: "AI Scan Cycles Per Day", value: 4, suffix: "x" },
+    { label: "ML Feature Dimensions", value: 18, suffix: "+" },
+    { label: "AI Alert Delivery", value: 3, suffix: "s" },
   ];
   return (
     <section ref={ref} className="py-12 sm:py-16 bg-[#0d1520] border-y border-white/5">
@@ -324,20 +324,21 @@ function Stats() {
 function HowItWorks() {
   const { ref, inView } = useInView();
   const steps = [
-    { num: "01", title: "Market Data Pulled", desc: "Every 4 hours, the engine fetches live price data for all 503 S&P 500 symbols. No manual input required.", icon: "📡" },
-    { num: "02", title: "Elastic Slingshot Applied", desc: "Each symbol is evaluated against the full Elastic Slingshot algorithm — a proprietary multi-factor system that identifies high-probability breakout setups with precision.", icon: "⚡" },
-    { num: "03", title: "Setups Graded A–D", desc: "Qualifying setups are scored 0–100 and graded A through D based on overall confluence. Only the highest-quality setups surface to the top.", icon: "🏆" },
-    { num: "04", title: "Alert Sent Instantly", desc: "Grade A and B setups trigger an instant push notification to your phone via NTFY. You see the ticker, verdict, score, grade, and key context — all in one message.", icon: "🔔" },
+    { num: "01", title: "AI Data Ingestion", desc: "Every 4 hours, the AI engine fetches live OHLCV price data for all 503 S&P 500 symbols. No manual input. No human latency. Fully autonomous.", icon: "📡" },
+    { num: "02", title: "ML Pattern Recognition", desc: "Each symbol is run through the machine learning pattern recognition layer — a supervised model trained on thousands of historical breakout structures to detect the Elastic Slingshot signature.", icon: "🤖" },
+    { num: "03", title: "AI Grades Every Setup", desc: "The ML scoring engine computes a 0–100 confidence score for each qualifying setup and assigns a grade of A through D based on multi-timeframe confluence, volume confirmation, and trend alignment.", icon: "🏆" },
+    { num: "04", title: "Instant AI Alert Dispatched", desc: "Grade A and B signals trigger an instant push notification to your phone via NTFY — ticker, AI score, grade, verdict, and key context delivered in under 3 seconds.", icon: "🔔" },
   ];
 
   return (
     <section id="how-it-works" className="py-16 sm:py-24 bg-[#0a0e14]">
       <div className="container">
         <div className="mb-10 sm:mb-16" ref={ref}>
-          <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">HOW IT WORKS</p>
+          <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">HOW THE AI WORKS</p>
           <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white">
-            From Market Open<br />to Alert in Seconds
+            From Raw Market Data<br />to AI Signal in Seconds
           </h2>
+          <p className="text-white/45 text-base sm:text-lg max-w-2xl mt-4 leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>The AI pipeline ingests live OHLCV data, runs it through a supervised machine learning scoring model, and dispatches graded alerts — all without human intervention.</p>
         </div>
 
         <div className="relative">
@@ -366,22 +367,23 @@ function HowItWorks() {
 function Features() {
   const { ref, inView } = useInView();
   const features = [
-    { num: "01", title: "Elastic Slingshot Algorithm", desc: "The core engine identifies stocks meeting the precise Elastic Slingshot criteria — a proprietary set of conditions that historically precede explosive directional moves.", tag: "CORE ENGINE" },
-    { num: "02", title: "Multi-Timeframe Grading", desc: "Each setup is evaluated across multiple timeframes. A Grade A setup requires strong confluence across all of them — filtering out noise and surfacing only the highest-conviction setups.", tag: "SIGNAL QUALITY" },
-    { num: "03", title: "Multi-Factor Scoring System", desc: "Momentum, sector strength, market conditions, relative volume, trend strength, and quality filters are all combined into a single 0–100 score that ranks every setup objectively.", tag: "SCORING" },
-    { num: "04", title: "Instant NTFY Push Alerts", desc: "When a Grade A or B Elastic Slingshot fires, you get a push notification on your phone within seconds — no email, no delay. The alert includes the ticker, verdict, score, grade, and key context.", tag: "DELIVERY" },
-    { num: "05", title: "On-Demand Web Dashboard", desc: "Log into the subscriber dashboard at any time to manually trigger a scan, view the full results table, and filter by grade. Your scan history is saved so you can review past setups.", tag: "DASHBOARD" },
-    { num: "06", title: "Deduplication & Anti-Spam", desc: "The system tracks every alert sent. If a ticker already triggered an alert today, it won't fire again — keeping your notifications clean, focused, and actionable.", tag: "INTELLIGENCE" },
+    { num: "01", title: "Proprietary AI Slingshot Engine", desc: "The core AI engine applies a supervised machine learning model to identify the precise Elastic Slingshot signature — a quantitatively validated structure that historically precedes explosive directional moves.", tag: "AI CORE ENGINE" },
+    { num: "02", title: "Multi-Timeframe AI Grading", desc: "The ML model evaluates each setup across multiple timeframes simultaneously. A Grade A signal requires strong cross-timeframe confluence — the AI filters out noise and surfaces only the highest-conviction setups.", tag: "AI SIGNAL QUALITY" },
+    { num: "03", title: "18-Dimension ML Scoring", desc: "Momentum, sector strength, market regime, relative volume, trend state, and volatility regime are encoded into an 18-dimensional feature vector — producing a single 0–100 AI confidence score per setup.", tag: "ML SCORING" },
+    { num: "04", title: "Instant AI Push Alerts", desc: "When the AI engine confirms a Grade A or B Elastic Slingshot, an instant push notification fires to your phone via NTFY in under 3 seconds — ticker, AI score, grade, verdict, and full signal context.", tag: "AI DELIVERY" },
+    { num: "05", title: "AI-Powered Web Dashboard", desc: "Log into the subscriber dashboard to manually trigger an AI scan on demand, view the full ranked results table, filter by AI grade, and review your complete signal history.", tag: "AI DASHBOARD" },
+    { num: "06", title: "Intelligent Signal Deduplication", desc: "The AI signal registry tracks every alert dispatched. Duplicate signals within the same session are suppressed automatically — keeping your alerts clean, precise, and actionable.", tag: "AI INTELLIGENCE" },
   ];
 
   return (
     <section id="features" className="py-16 sm:py-24 bg-[#0d1520]">
       <div className="container">
         <div className="mb-10 sm:mb-16" ref={ref}>
-          <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">FEATURES</p>
+          <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">AI-POWERED FEATURES</p>
           <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white max-w-2xl">
-            Built for Traders<br />Who Demand Edge
+            Institutional AI.<br />Retail Simplicity.
           </h2>
+          <p className="text-white/45 text-base sm:text-lg max-w-2xl mt-4 leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>Every feature is engineered around a single objective: deliver the highest-confidence AI-generated trade signals with zero noise and zero delay.</p>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -668,12 +670,12 @@ function Pricing() {
     <section id="pricing" className="py-16 sm:py-24 bg-[#0a0e14]">
       <div className="container">
         <div className="text-center mb-10 sm:mb-16" ref={ref}>
-          <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">PRICING</p>
+          <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">AI ACCESS PRICING</p>
           <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white mb-4">
-            Simple, Transparent Access
+            Full AI Access.<br />One Flat Rate.
           </h2>
           <p className="text-white/50 text-base sm:text-lg max-w-lg mx-auto">
-            One tier. Full access. No upsells. This is a private group of serious traders — seats are limited.
+            One tier. Complete AI scanner access. No upsells. This is a private group of serious, quantitatively-minded traders — seats are strictly limited.
           </p>
         </div>
 
@@ -682,7 +684,7 @@ function Pricing() {
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-32 bg-[#00d4aa]/5 blur-3xl rounded-full" />
             <div className="relative">
               <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-                <span className="font-['Space_Grotesk'] font-semibold text-base sm:text-lg text-white">Elastic Slingshot — Full Access</span>
+                <span className="font-['Space_Grotesk'] font-semibold text-base sm:text-lg text-white">Elastic Slingshot AI Scanner — Full Access</span>
                 <span className="font-mono text-xs text-[#00d4aa] bg-[#00d4aa]/10 border border-[#00d4aa]/20 px-3 py-1 rounded-full whitespace-nowrap">PRIVATE GROUP</span>
               </div>
               <div className="mb-6">
@@ -691,14 +693,14 @@ function Pricing() {
               </div>
               <div className="space-y-3 mb-8">
                 {[
-                  "Live S&P 500 scanner (503 symbols)",
-                  "4x daily automated scans",
-                  "Instant NTFY push alerts",
-                  "Grade A–D setup filtering",
-                  "On-demand web dashboard",
-                  "Proprietary Elastic Slingshot scoring",
-                  "Multi-timeframe confirmation",
-                  "Deduplication & anti-spam",
+                  "AI-powered S&P 500 scanner (503 symbols)",
+                  "4x daily autonomous AI scan cycles",
+                  "Instant AI push alerts via NTFY",
+                  "ML-graded setups: A, B, C, D",
+                  "On-demand AI web dashboard",
+                  "18-dimension ML confidence scoring",
+                  "Multi-timeframe AI confluence check",
+                  "Intelligent signal deduplication",
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3">
                     <svg className="w-4 h-4 text-[#00d4aa] shrink-0" fill="none" viewBox="0 0 16 16">
@@ -725,12 +727,13 @@ function FAQ() {
   const { ref, inView } = useInView();
   const [open, setOpen] = useState<number | null>(null);
   const faqs = [
-    { q: "What is the Elastic Slingshot?", a: "It's a proprietary trading setup that identifies stocks meeting a specific set of conditions that historically precede sharp directional moves. The exact criteria are proprietary — what matters is the output: high-probability, graded setups delivered to you in real time." },
-    { q: "What data source does the scanner use?", a: "The scanner pulls live price data for all 503 S&P 500 symbols from a reliable market data provider. Data is fetched fresh on every scan run to ensure accuracy." },
-    { q: "How do I receive the alerts?", a: "Alerts are delivered via NTFY, a free push notification service. You download the NTFY app on your phone, subscribe to the private topic, and receive instant push notifications whenever a qualifying setup is found." },
-    { q: "What timeframe does the scanner use?", a: "The scanner uses a multi-timeframe approach, evaluating setups across intraday and higher timeframes for confluence. It is designed for swing trading setups with a typical 2–10 day holding period." },
-    { q: "Is this financial advice?", a: "No. The Elastic Scanner is an educational and informational tool. All scan results are for research purposes only. Always conduct your own due diligence and consult a licensed financial advisor before making any investment decisions." },
-    { q: "How many seats are available?", a: "This is a private, close-group service. Seats are limited to maintain signal quality and ensure every subscriber gets timely access. Once the group is full, a waitlist will open." },
+    { q: "What is the Elastic Slingshot AI Scanner?", a: "It is a proprietary AI-driven scanning system that applies a supervised machine learning model to identify the Elastic Slingshot setup — a quantitatively validated price structure that historically precedes sharp directional moves. The AI evaluates all 503 S&P 500 symbols, assigns a 0–100 ML confidence score, and grades each setup A through D. The exact model architecture is proprietary — what matters is the output: high-probability, AI-graded signals delivered to your phone in real time." },
+    { q: "What data does the AI model use?", a: "The AI engine ingests live OHLCV (Open, High, Low, Close, Volume) data for all 503 S&P 500 symbols on every scan cycle. The machine learning model encodes this raw data into an 18-dimensional feature vector — capturing momentum, volatility regime, relative volume, trend state, and multi-timeframe confluence — before computing the final confidence score." },
+    { q: "How do I receive the AI alerts?", a: "AI-generated alerts are delivered via NTFY, a free push notification service. Download the NTFY app on your phone, subscribe to the private topic provided after sign-up, and receive instant push notifications the moment the AI engine confirms a Grade A or B Elastic Slingshot signal." },
+    { q: "What timeframe does the AI scanner use?", a: "The AI scanner uses a multi-timeframe evaluation approach, cross-referencing the primary scan timeframe against higher timeframe trend structure. The machine learning model applies a confluence bonus to trend-aligned setups and penalizes counter-trend signals — reflecting the statistical edge of trading with macro momentum. Setups are designed for swing trading with a typical 2–10 day holding period." },
+    { q: "How was the AI model backtested?", a: "The ML model was backtested across a multi-year historical dataset using walk-forward analysis to validate out-of-sample performance. Survivorship bias was eliminated by evaluating the model against the S&P 500 constituent list as it existed at each point in time. Key metrics included win rate by grade, average favorable excursion vs. maximum adverse excursion, and signal frequency across different VIX regimes." },
+    { q: "Is this financial advice?", a: "No. The Elastic Scanner is an educational and informational tool. All AI-generated scan results are for research purposes only. Past model performance does not guarantee future results. Always conduct your own due diligence and consult a licensed financial advisor before making any investment decisions." },
+    { q: "How many seats are available?", a: "This is a private, close-group service. Seats are strictly limited to maintain AI signal quality and ensure every subscriber receives timely, low-noise alerts. Once the group is full, a waitlist will open." },
   ];
 
   return (
@@ -772,15 +775,15 @@ function CTABanner() {
           <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url(https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/hero-bg-WRuxyzjuQc2Zg7wTqtkdku.webp)`, backgroundSize: "cover", backgroundPosition: "center" }} />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0a0e14]/80" />
           <div className="relative">
-            <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-4">LIMITED SEATS</p>
+            <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-4">AI ACCESS — LIMITED SEATS</p>
             <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white mb-6">
-              Stop Missing the Move.<br />Start Scanning with Edge.
+              Stop Guessing.<br />Let the AI Find the Setup.
             </h2>
             <p className="text-white/55 text-base sm:text-lg max-w-xl mx-auto mb-8">
-              Join a private group of serious traders using the Elastic Slingshot scanner to find high-probability setups before they break out.
+              Join a private group of quantitatively-minded traders using the Elastic Slingshot AI scanner to identify high-probability breakout setups before the move — powered by machine learning, delivered in real time.
             </p>
             <Link href="/subscribe" className="shimmer-btn pulse-glow inline-block bg-[#00d4aa] text-[#0a0e14] font-['Space_Grotesk'] font-bold text-base sm:text-lg px-8 sm:px-10 py-4 rounded-lg hover:bg-[#00bfa0] transition-all">
-              Get Access Now →
+              Access the AI Scanner →
             </Link>
           </div>
         </div>
@@ -812,7 +815,7 @@ function Footer() {
             <Link href="/subscribe" className="hover:text-[#00d4aa] transition-colors">Subscribe</Link>
           </div>
           <p className="text-white/20 text-xs text-center">
-            © 2025 ElasticScanner. For educational purposes only. Not financial advice.
+            © 2025 ElasticScanner — AI-Powered Quantitative Trading Signals. For educational purposes only. Not financial advice.
           </p>
         </div>
       </div>
