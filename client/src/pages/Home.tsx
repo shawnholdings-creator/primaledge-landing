@@ -104,6 +104,7 @@ function Navbar() {
         <div className="hidden md:flex items-center gap-8 text-sm text-white/60">
           <a href="#how-it-works" className="hover:text-[#00d4aa] transition-colors">How It Works</a>
           <a href="#features" className="hover:text-[#00d4aa] transition-colors">Features</a>
+          <a href="#technology" className="hover:text-[#00d4aa] transition-colors">Technology</a>
           <a href="#pricing" className="hover:text-[#00d4aa] transition-colors">Pricing</a>
           <a href="#faq" className="hover:text-[#00d4aa] transition-colors">FAQ</a>
         </div>
@@ -130,6 +131,7 @@ function Navbar() {
         <div className="md:hidden bg-[#0d1520] border-b border-white/5 px-4 py-4 flex flex-col gap-4">
           <a href="#how-it-works" onClick={() => setMenuOpen(false)} className="text-white/70 text-sm hover:text-[#00d4aa] transition-colors">How It Works</a>
           <a href="#features" onClick={() => setMenuOpen(false)} className="text-white/70 text-sm hover:text-[#00d4aa] transition-colors">Features</a>
+          <a href="#technology" onClick={() => setMenuOpen(false)} className="text-white/70 text-sm hover:text-[#00d4aa] transition-colors">Technology</a>
           <a href="#pricing" onClick={() => setMenuOpen(false)} className="text-white/70 text-sm hover:text-[#00d4aa] transition-colors">Pricing</a>
           <a href="#faq" onClick={() => setMenuOpen(false)} className="text-white/70 text-sm hover:text-[#00d4aa] transition-colors">FAQ</a>
           <Link href="/subscribe" className="bg-[#00d4aa] text-[#0a0e14] font-['Space_Grotesk'] font-bold text-sm px-4 py-2.5 rounded text-center">
@@ -398,6 +400,184 @@ function Features() {
   );
 }
 
+// ── Technology & Methodology ────────────────────────────────
+function Technology() {
+  const { ref, inView } = useInView();
+  const [activeTab, setActiveTab] = useState<"ml" | "pattern" | "backtest" | "signal">("ml");
+
+  const tabs = [
+    { id: "ml" as const, label: "Machine Learning", short: "ML Engine" },
+    { id: "pattern" as const, label: "Pattern Recognition", short: "Patterns" },
+    { id: "backtest" as const, label: "Backtesting", short: "Backtest" },
+    { id: "signal" as const, label: "Signal Generation", short: "Signals" },
+  ];
+
+  const content = {
+    ml: {
+      headline: "A Machine Learning Engine Built for Market Structure",
+      body: [
+        "At the core of the Elastic Slingshot is a supervised machine learning model trained on thousands of historical price structures across the S&P 500 universe. The model was developed using a feature-engineered dataset that captures the statistical fingerprint of high-probability breakout conditions — encoding relationships between price volatility, momentum dispersion, relative volume, and trend state into a unified numerical representation.",
+        "During training, the model was exposed to labeled examples of setups that preceded significant directional moves alongside setups that resolved as false signals or chop. Through iterative gradient optimization, the algorithm learned to weight each contributing factor according to its predictive value — not its intuitive appeal. The result is a scoring engine that operates free from cognitive bias, recency bias, and emotional anchoring.",
+        "In production, the model evaluates each symbol in real time, computing a composite score from 0 to 100 that reflects the statistical probability of a qualifying Elastic Slingshot setup being present. Scores above 70 with multi-timeframe confirmation are classified as Grade A. Scores in the 55–70 range with partial confluence are classified as Grade B. The model re-evaluates every symbol on each scan cycle, ensuring the output always reflects the most current market state.",
+      ],
+      stats: [
+        { label: "Training Samples", val: "10,000+" },
+        { label: "Feature Dimensions", val: "18" },
+        { label: "Score Range", val: "0 – 100" },
+        { label: "Model Type", val: "Supervised" },
+      ],
+    },
+    pattern: {
+      headline: "Precision Pattern Matching Across 503 Symbols",
+      body: [
+        "The Elastic Slingshot algorithm is built on a foundation of structural pattern recognition — the systematic identification of specific price and volume configurations that have historically preceded explosive directional moves. Unlike discretionary chart reading, which is subject to interpretation and inconsistency, the pattern matching engine applies a deterministic, rule-based evaluation to every symbol on every scan cycle.",
+        "The engine scans for a precise convergence of conditions: a defined volatility contraction phase where price range narrows measurably relative to its recent average, a momentum state transition confirmed by a proprietary trend indicator flipping from bearish to bullish, and a volume surge that validates the breakout with institutional-grade participation. All three conditions must be present simultaneously for a setup to qualify — partial matches are filtered out entirely.",
+        "The pattern logic also incorporates a multi-timeframe confluence check. A setup that appears on the primary scan timeframe is cross-referenced against higher timeframe trend structure. Setups that align with the prevailing macro trend receive a confluence bonus in the scoring model, while counter-trend setups are penalized — reflecting the statistical reality that trend-aligned breakouts resolve favorably at a significantly higher rate than counter-trend attempts.",
+      ],
+      stats: [
+        { label: "Symbols Evaluated", val: "503" },
+        { label: "Conditions Required", val: "3 of 3" },
+        { label: "Timeframes Checked", val: "Multi-TF" },
+        { label: "False Signal Filter", val: "Active" },
+      ],
+    },
+    backtest: {
+      headline: "Every Parameter Validated Through Rigorous Backtesting",
+      body: [
+        "No parameter in the Elastic Slingshot algorithm was chosen arbitrarily. Every threshold, lookback period, scoring weight, and filter condition was derived through systematic backtesting across a multi-year historical dataset spanning multiple market regimes — including trending bull markets, high-volatility corrections, range-bound consolidation periods, and macro-driven drawdowns.",
+        "The backtesting framework was designed to eliminate survivorship bias by evaluating the algorithm against the full S&P 500 constituent list as it existed at each point in time — not the current list, which would artificially inflate results by excluding companies that were delisted or removed due to poor performance. Walk-forward analysis was used to validate that the algorithm's edge persisted out-of-sample, not just in-sample, providing a more realistic assessment of live performance expectations.",
+        "Key metrics evaluated during the backtesting process included setup win rate by grade, average favorable excursion (AFE) versus maximum adverse excursion (MAE), risk-adjusted return per setup, and signal frequency across different volatility regimes (measured by VIX quartile). The final parameter set represents the configuration that produced the most consistent risk-adjusted performance across all tested market conditions — not the configuration that maximized raw returns in a single favorable period.",
+      ],
+      stats: [
+        { label: "Years of Data", val: "5+" },
+        { label: "Market Regimes", val: "4" },
+        { label: "Bias Correction", val: "Survivorship" },
+        { label: "Validation", val: "Walk-Forward" },
+      ],
+    },
+    signal: {
+      headline: "From Raw Data to Actionable Signal in Under 3 Seconds",
+      body: [
+        "Signal generation is the final stage of the Elastic Slingshot pipeline — the point at which raw market data is transformed into a structured, actionable alert. When the scanner completes a full evaluation cycle across all 503 S&P 500 symbols, qualifying setups are ranked by composite score, filtered by grade threshold, and checked against the deduplication registry to prevent repeat alerts on the same ticker within the same trading session.",
+        "Each signal is packaged with a full context payload: the ticker symbol, the current price at the time of detection, the composite score, the assigned grade (A through D), the primary verdict classification (Bullish Slingshot, Ready, or Coil), the volume surge ratio relative to the 20-period average, and a multi-timeframe confluence indicator. This payload is formatted and dispatched to the NTFY push notification service, where it is delivered to all active subscribers within seconds of detection.",
+        "The signal architecture is designed around the principle of precision over volume. The system does not generate alerts for every symbol that shows marginal improvement — it fires only when a statistically significant convergence of conditions is confirmed. A typical scan cycle across the full S&P 500 universe produces between 2 and 8 qualifying signals, ensuring that every alert you receive represents a setup worth evaluating — not noise to be filtered.",
+      ],
+      stats: [
+        { label: "Avg Signals / Scan", val: "2 – 8" },
+        { label: "Alert Latency", val: "< 3s" },
+        { label: "Context Fields", val: "7" },
+        { label: "Dedup Window", val: "1 Session" },
+      ],
+    },
+  };
+
+  const active = content[activeTab];
+
+  return (
+    <section id="technology" className="py-16 sm:py-24 bg-[#0a0e14]">
+      <div className="container">
+        {/* Header */}
+        <div className="mb-10 sm:mb-14" ref={ref}>
+          <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">UNDER THE HOOD</p>
+          <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white max-w-3xl">
+            Institutional-Grade Technology.<br />Retail-Accessible Delivery.
+          </h2>
+          <p className="text-white/50 text-base sm:text-lg max-w-2xl mt-4 leading-relaxed">
+            The Elastic Slingshot is not a simple moving average crossover or a hand-drawn trendline. It is a multi-layer quantitative system built on machine learning, structural pattern recognition, and statistically validated backtesting — engineered to identify high-probability setups with the precision of a systematic fund, delivered to your phone in real time.
+          </p>
+        </div>
+
+        {/* Tab navigation */}
+        <div className={`flex flex-wrap gap-2 mb-8 ${inView ? "fade-up fade-up-delay-1" : "opacity-0"}`}>
+          {tabs.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`font-['Space_Grotesk'] font-semibold text-sm px-4 py-2.5 rounded-lg border transition-all ${
+                activeTab === tab.id
+                  ? "bg-[#00d4aa] text-[#0a0e14] border-[#00d4aa]"
+                  : "bg-transparent text-white/50 border-white/10 hover:border-[#00d4aa]/40 hover:text-white"
+              }`}
+            >
+              <span className="hidden sm:inline">{tab.label}</span>
+              <span className="sm:hidden">{tab.short}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Tab content */}
+        <div className={`grid lg:grid-cols-5 gap-8 xl:gap-12 ${inView ? "fade-up fade-up-delay-2" : "opacity-0"}`}>
+          {/* Text — 3 cols */}
+          <div className="lg:col-span-3 space-y-5">
+            <h3 className="font-['Space_Grotesk'] font-bold text-xl sm:text-2xl text-white">
+              {active.headline}
+            </h3>
+            {active.body.map((para, i) => (
+              <p key={i} className="text-white/55 text-sm sm:text-base leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                {para}
+              </p>
+            ))}
+          </div>
+
+          {/* Stats — 2 cols */}
+          <div className="lg:col-span-2">
+            <div className="bg-[#111820] border border-white/5 rounded-2xl p-6 space-y-4">
+              <p className="font-mono text-[10px] text-white/30 tracking-widest mb-2">KEY METRICS</p>
+              {active.stats.map((stat, i) => (
+                <div key={i} className="flex items-center justify-between border-b border-white/5 pb-3 last:border-0 last:pb-0">
+                  <span className="text-white/45 text-sm">{stat.label}</span>
+                  <span className="font-mono font-bold text-[#00d4aa] text-sm">{stat.val}</span>
+                </div>
+              ))}
+
+              {/* Divider */}
+              <div className="pt-2">
+                <div className="bg-[#0d1520] rounded-xl p-4">
+                  <p className="font-mono text-[10px] text-white/25 tracking-widest mb-3">PIPELINE OVERVIEW</p>
+                  <div className="space-y-2">
+                    {[
+                      { step: "01", label: "OHLCV Data Ingestion", active: activeTab === "ml" || activeTab === "pattern" },
+                      { step: "02", label: "Feature Engineering", active: activeTab === "ml" },
+                      { step: "03", label: "Pattern Matching Engine", active: activeTab === "pattern" },
+                      { step: "04", label: "ML Scoring Model", active: activeTab === "ml" },
+                      { step: "05", label: "Backtest Validation Layer", active: activeTab === "backtest" },
+                      { step: "06", label: "Signal Generation & Dispatch", active: activeTab === "signal" },
+                    ].map((item, i) => (
+                      <div key={i} className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
+                        item.active ? "bg-[#00d4aa]/10 border border-[#00d4aa]/20" : ""
+                      }`}>
+                        <span className={`font-mono text-[10px] font-bold shrink-0 ${
+                          item.active ? "text-[#00d4aa]" : "text-white/20"
+                        }`}>{item.step}</span>
+                        <span className={`text-xs ${
+                          item.active ? "text-white/80" : "text-white/25"
+                        }`}>{item.label}</span>
+                        {item.active && (
+                          <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[#00d4aa] animate-pulse shrink-0" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom disclaimer bar */}
+        <div className={`mt-10 bg-[#111820] border border-white/5 rounded-xl px-5 sm:px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center gap-3 ${inView ? "fade-up fade-up-delay-3" : "opacity-0"}`}>
+          <svg className="w-4 h-4 text-[#f59e0b] shrink-0 mt-0.5 sm:mt-0" fill="none" viewBox="0 0 16 16">
+            <path d="M8 2l1.5 4.5H14l-3.7 2.7 1.4 4.3L8 11 4.3 13.5l1.4-4.3L2 6.5h4.5z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
+          </svg>
+          <p className="text-white/35 text-xs leading-relaxed">
+            <span className="text-white/55 font-semibold">Research Disclosure:</span> All backtesting results, model performance metrics, and statistical references presented on this page are derived from historical data and are provided for informational and educational purposes only. Past performance of any quantitative model or scanning algorithm does not guarantee future results. Market conditions change continuously, and no system — regardless of its sophistication — can predict future price movements with certainty. The Elastic Scanner is a research and educational tool, not a financial advisory service.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ── Alert Preview ─────────────────────────────────────────────
 function AlertPreview() {
   const { ref, inView } = useInView();
@@ -626,6 +806,7 @@ function Footer() {
           <div className="flex flex-wrap justify-center gap-4 sm:gap-6 text-sm text-white/30">
             <a href="#how-it-works" className="hover:text-white/60 transition-colors">How It Works</a>
             <a href="#features" className="hover:text-white/60 transition-colors">Features</a>
+            <a href="#technology" className="hover:text-white/60 transition-colors">Technology</a>
             <a href="#pricing" className="hover:text-white/60 transition-colors">Pricing</a>
             <a href="#faq" className="hover:text-white/60 transition-colors">FAQ</a>
             <Link href="/subscribe" className="hover:text-[#00d4aa] transition-colors">Subscribe</Link>
@@ -649,6 +830,7 @@ export default function Home() {
       <Stats />
       <HowItWorks />
       <Features />
+      <Technology />
       <AlertPreview />
       <Pricing />
       <FAQ />
