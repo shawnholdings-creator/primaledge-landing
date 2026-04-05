@@ -268,12 +268,12 @@ export default function Subscribe() {
                     </div>
                     <div className="space-y-2.5 mb-5">
                       {[
-                        "503 S&P 500 symbols scanned",
+                        "Premium multi-index universe scanned",
                         "4x daily automated scans",
                         "Instant NTFY push alerts",
                         "Grade A–D filtering",
                         "On-demand dashboard",
-                        "Proprietary Elastic Slingshot",
+                        "Elastic Slingshot — flagship AI signal",
                         "Multi-timeframe confirmation",
                         "Anti-spam deduplication",
                       ].map((item, i) => (
