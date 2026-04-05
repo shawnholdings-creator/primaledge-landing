@@ -8,6 +8,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
 import PrimalEdgeLogo from "@/components/PrimalEdgeLogo";
+import SharedNavbar from "@/components/Navbar";
 import { toast } from "sonner";
 
 // ── Ticker tape data ──────────────────────────────────────────
@@ -78,66 +79,7 @@ function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
 }
 
 // ── Navbar ────────────────────────────────────────────────────
-function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", fn);
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
-
-  return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-[#0a0e14]/95 backdrop-blur-md border-b border-white/5" : "bg-transparent"}`}>
-      <div className="container flex items-center justify-between h-20">
-        {/* Logo */}
-        <Link href="/" className="flex items-center">
-          <PrimalEdgeLogo size="sm" />
-        </Link>
-
-        {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-8 text-sm text-white/60">
-          <a href="#how-it-works" className="hover:text-[#00d4aa] transition-colors">How It Works</a>
-          <a href="#features" className="hover:text-[#00d4aa] transition-colors">Features</a>
-          <a href="#technology" className="hover:text-[#00d4aa] transition-colors">Technology</a>
-          <a href="#pricing" className="hover:text-[#00d4aa] transition-colors">Pricing</a>
-          <a href="#faq" className="hover:text-[#00d4aa] transition-colors">FAQ</a>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <Link href="/subscribe" className="shimmer-btn bg-[#00d4aa] text-[#0a0e14] font-['Space_Grotesk'] font-semibold text-sm px-4 py-2 rounded hover:bg-[#00bfa0] transition-colors">
-            Get Access
-          </Link>
-          {/* Mobile hamburger */}
-          <button
-            className="md:hidden flex flex-col gap-1.5 p-1"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
-          >
-            <span className={`block w-5 h-0.5 bg-white transition-all ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
-            <span className={`block w-5 h-0.5 bg-white transition-all ${menuOpen ? "opacity-0" : ""}`} />
-            <span className={`block w-5 h-0.5 bg-white transition-all ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div className="md:hidden bg-[#0d1520] border-b border-white/5 px-4 py-4 flex flex-col gap-4">
-          <a href="#how-it-works" onClick={() => setMenuOpen(false)} className="text-white/70 text-sm hover:text-[#00d4aa] transition-colors">How It Works</a>
-          <a href="#features" onClick={() => setMenuOpen(false)} className="text-white/70 text-sm hover:text-[#00d4aa] transition-colors">Features</a>
-          <a href="#technology" onClick={() => setMenuOpen(false)} className="text-white/70 text-sm hover:text-[#00d4aa] transition-colors">Technology</a>
-          <a href="#pricing" onClick={() => setMenuOpen(false)} className="text-white/70 text-sm hover:text-[#00d4aa] transition-colors">Pricing</a>
-          <a href="#faq" onClick={() => setMenuOpen(false)} className="text-white/70 text-sm hover:text-[#00d4aa] transition-colors">FAQ</a>
-          <Link href="/subscribe" className="bg-[#00d4aa] text-[#0a0e14] font-['Space_Grotesk'] font-bold text-sm px-4 py-2.5 rounded text-center">
-            Get Access →
-          </Link>
-        </div>
-      )}
-    </nav>
-  );
-}
+// Using shared Navbar component (see components/Navbar.tsx)
 
 // ── Ticker Tape ───────────────────────────────────────────────
 function TickerTape() {
@@ -807,9 +749,15 @@ function Footer() {
           <div className="flex flex-wrap justify-center gap-4 sm:gap-6 text-sm text-white/30">
             <a href="#how-it-works" className="hover:text-white/60 transition-colors">How It Works</a>
             <a href="#features" className="hover:text-white/60 transition-colors">Features</a>
-            <a href="#technology" className="hover:text-white/60 transition-colors">Technology</a>
             <a href="#pricing" className="hover:text-white/60 transition-colors">Pricing</a>
-            <a href="#faq" className="hover:text-white/60 transition-colors">FAQ</a>
+            <Link href="/products" className="hover:text-white/60 transition-colors">Products</Link>
+            <Link href="/market-sentiment" className="hover:text-white/60 transition-colors">Market Sentiment</Link>
+            <Link href="/sectors" className="hover:text-white/60 transition-colors">Sectors</Link>
+            <Link href="/charts" className="hover:text-white/60 transition-colors">Charts</Link>
+            <Link href="/education" className="hover:text-white/60 transition-colors">Education</Link>
+            <Link href="/podcasts" className="hover:text-white/60 transition-colors">Podcasts</Link>
+            <Link href="/references" className="hover:text-white/60 transition-colors">References</Link>
+            <Link href="/dev-requests" className="hover:text-white/60 transition-colors">Dev Requests</Link>
             <Link href="/subscribe" className="hover:text-[#00d4aa] transition-colors">Subscribe</Link>
           </div>
           <p className="text-white/20 text-xs text-center">
@@ -825,7 +773,7 @@ function Footer() {
 export default function Home() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#0a0e14" }}>
-      <Navbar />
+      <SharedNavbar />
       <TickerTape />
       <Hero />
       <Stats />
