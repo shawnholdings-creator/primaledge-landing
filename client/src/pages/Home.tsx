@@ -215,12 +215,14 @@ function Hero() {
             </div>
 
             <div className="flex items-center gap-4 mt-8 fade-up fade-up-delay-5">
-              <div className="flex -space-x-2">
-                {["#3b82f6","#22c55e","#f59e0b","#ef4444","#8b5cf6"].map((c, i) => (
-                  <div key={i} className="w-8 h-8 rounded-full border-2 border-[#0a0e14]" style={{ backgroundColor: c }} />
-                ))}
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#00d4aa]/20 border border-[#00d4aa]/40">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M6 1L7.5 4.5H11L8.5 6.5L9.5 10L6 8L2.5 10L3.5 6.5L1 4.5H4.5L6 1Z" fill="#00d4aa"/>
+                  </svg>
+                </span>
+                <p className="text-white/60 text-sm font-medium tracking-wide">Exclusive <span className="text-[#00d4aa] font-semibold">Elite Members</span> Only</p>
               </div>
-              <p className="text-white/50 text-sm"><span className="text-white font-semibold">200+</span> traders already subscribed</p>
             </div>
           </div>
 
