@@ -184,7 +184,7 @@ function Hero() {
             </h1>
 
             <p className="text-white/60 text-lg leading-relaxed mb-8 max-w-lg fade-up fade-up-delay-3" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-              The Elastic Compression Slingshot algorithm scans the S&P 500 in real time, identifying high-probability breakout setups before the move happens. Graded A–D. Delivered to your phone instantly.
+              The Elastic Slingshot algorithm scans the S&P 500 in real time, identifying high-probability breakout setups before the move happens. Graded A–D. Delivered to your phone instantly.
             </p>
 
             <div className="flex flex-wrap gap-4 fade-up fade-up-delay-4">
@@ -297,25 +297,25 @@ function HowItWorks() {
     {
       num: "01",
       title: "Market Data Pulled",
-      desc: "Every 4 hours, the engine fetches live OHLCV data for all 503 S&P 500 symbols via yfinance. No manual input required.",
+      desc: "Every 4 hours, the engine fetches live price data for all 503 S&P 500 symbols. No manual input required.",
       icon: "📡",
     },
     {
       num: "02",
-      title: "Elastic Logic Applied",
-      desc: "Each symbol is evaluated against the full Elastic Compression Slingshot algorithm — ATR trailing stop, BB/KC squeeze, volume surge, multi-timeframe confirmation, and 18 scoring factors.",
+      title: "Elastic Slingshot Applied",
+      desc: "Each symbol is evaluated against the full Elastic Slingshot algorithm — a proprietary multi-factor system that identifies high-probability breakout setups with precision.",
       icon: "⚡",
     },
     {
       num: "03",
       title: "Setups Graded A–D",
-      desc: "Qualifying setups are scored 0–100 and graded A through D based on confluence. Only the highest-quality setups surface to the top.",
+      desc: "Qualifying setups are scored 0–100 and graded A through D based on overall confluence. Only the highest-quality setups surface to the top.",
       icon: "🏆",
     },
     {
       num: "04",
       title: "Alert Sent Instantly",
-      desc: "Grade A and B setups trigger an instant push notification to your phone via NTFY. You see the ticker, verdict, score, grade, and key reasons — all in one message.",
+      desc: "Grade A and B setups trigger an instant push notification to your phone via NTFY. You see the ticker, verdict, score, grade, and key context — all in one message.",
       icon: "🔔",
     },
   ];
@@ -323,7 +323,7 @@ function HowItWorks() {
   return (
     <section id="how-it-works" className="py-24 bg-[#0a0e14]">
       <div className="container">
-        <div className="mb-16" ref={ref}>
+       <div className="mb-16" ref={ref}>
           <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">HOW IT WORKS</p>
           <h2 className="font-['Space_Grotesk'] font-bold text-4xl lg:text-5xl text-white">
             From Market Open<br />to Alert in Seconds
@@ -366,26 +366,26 @@ function Features() {
   const features = [
     {
       num: "01",
-      title: "Elastic Compression Slingshot",
-      desc: "The core algorithm identifies stocks where price has compressed inside a Bollinger Band / Keltner Channel squeeze, with an ATR trailing stop flip and volume confirmation — the exact conditions that precede explosive moves.",
+      title: "Elastic Slingshot Algorithm",
+      desc: "The core engine identifies stocks meeting the precise Elastic Slingshot criteria — a proprietary set of conditions that historically precede explosive directional moves.",
       tag: "CORE ENGINE",
     },
     {
       num: "02",
       title: "Multi-Timeframe Grading",
-      desc: "Each setup is evaluated across the 4H, daily, and weekly timeframes. A grade A setup requires confluence across all three — filtering out noise and surfacing only the highest-conviction setups.",
+      desc: "Each setup is evaluated across multiple timeframes. A Grade A setup requires strong confluence across all of them — filtering out noise and surfacing only the highest-conviction setups.",
       tag: "SIGNAL QUALITY",
     },
     {
       num: "03",
-      title: "18-Factor Scoring System",
-      desc: "Momentum, sector strength, market conditions, relative volume, ADX trend strength, extension guard, and chop/mixed penalties are all factored into a single 0–100 score.",
+      title: "Multi-Factor Scoring System",
+      desc: "Momentum, sector strength, market conditions, relative volume, trend strength, and quality filters are all combined into a single 0–100 score that ranks every setup objectively.",
       tag: "SCORING",
     },
     {
       num: "04",
       title: "Instant NTFY Push Alerts",
-      desc: "When a Grade A or B slingshot fires, you get a push notification on your phone within seconds — no email, no delay. The alert includes the ticker, verdict, score, grade, and the key reasons it qualified.",
+      desc: "When a Grade A or B Elastic Slingshot fires, you get a push notification on your phone within seconds — no email, no delay. The alert includes the ticker, verdict, score, grade, and key context.",
       tag: "DELIVERY",
     },
     {
@@ -397,7 +397,7 @@ function Features() {
     {
       num: "06",
       title: "Deduplication & Anti-Spam",
-      desc: "The system tracks every alert sent. If a ticker already triggered an alert today, it won't fire again — keeping your notifications clean and actionable.",
+      desc: "The system tracks every alert sent. If a ticker already triggered an alert today, it won't fire again — keeping your notifications clean, focused, and actionable.",
       tag: "INTELLIGENCE",
     },
   ];
@@ -462,7 +462,7 @@ function AlertPreview() {
               Your Phone Rings<br />When the Setup Fires
             </h2>
             <p className="text-white/55 text-lg leading-relaxed mb-8">
-              No more staring at charts all day. The Elastic Scanner monitors the market for you and sends a push notification the moment a Grade A or B slingshot setup is confirmed. Every alert includes the full context you need to act.
+              No more staring at charts all day. The Elastic Scanner monitors the market for you and sends a push notification the moment a Grade A or B Elastic Slingshot setup is confirmed. Every alert includes the full context you need to act.
             </p>
 
             <div className="space-y-4">
@@ -471,7 +471,7 @@ function AlertPreview() {
                 { label: "Verdict", val: "BULLISH SLINGSHOT" },
                 { label: "Score / Grade", val: "82 / A" },
                 { label: "Price at Alert", val: "$875.20" },
-                { label: "Key Reasons", val: "ATR flip, BB/KC squeeze, vol surge 2.1x" },
+                { label: "Key Context", val: "Elastic Slingshot confirmed, vol surge 2.1x" },
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-4 teal-border-left">
                   <div className="flex-1">
@@ -528,7 +528,7 @@ function Pricing() {
             Simple, Transparent Access
           </h2>
           <p className="text-white/50 text-lg max-w-lg mx-auto">
-            One tier. Full access. No upsells. This is a private group — seats are limited.
+            One tier. Full access. No upsells. This is a private group of serious traders — seats are limited.
           </p>
         </div>
 
@@ -539,7 +539,7 @@ function Pricing() {
 
             <div className="relative">
               <div className="flex items-center justify-between mb-6">
-                <span className="font-['Space_Grotesk'] font-semibold text-lg text-white">Full Access</span>
+                <span className="font-['Space_Grotesk'] font-semibold text-lg text-white">Elastic Slingshot — Full Access</span>
                 <span className="font-mono text-xs text-[#00d4aa] bg-[#00d4aa]/10 border border-[#00d4aa]/20 px-3 py-1 rounded-full">PRIVATE GROUP</span>
               </div>
 
@@ -555,7 +555,7 @@ function Pricing() {
                   "Instant NTFY push alerts",
                   "Grade A–D setup filtering",
                   "On-demand web dashboard",
-                  "18-factor scoring breakdown",
+                  "Proprietary Elastic Slingshot scoring",
                   "Multi-timeframe confirmation",
                   "Deduplication & anti-spam",
                 ].map((item, i) => (
@@ -590,12 +590,12 @@ function FAQ() {
   const [open, setOpen] = useState<number | null>(null);
   const faqs = [
     {
-      q: "What is the Elastic Compression Slingshot?",
-      a: "It's a proprietary trading setup that identifies stocks where price has compressed inside a volatility squeeze (Bollinger Bands inside Keltner Channels), the ATR trailing stop has flipped bullish with volume confirmation, and the stock is not overextended. These conditions historically precede sharp directional moves.",
+      q: "What is the Elastic Slingshot?",
+      a: "It's a proprietary trading setup that identifies stocks meeting a specific set of conditions that historically precede sharp directional moves. The exact criteria are proprietary — what matters is the output: high-probability, graded setups delivered to you in real time.",
     },
     {
       q: "What data source does the scanner use?",
-      a: "The scanner pulls live OHLCV data from Yahoo Finance (yfinance) for all 503 S&P 500 symbols. Data is fetched fresh on every scan run.",
+      a: "The scanner pulls live price data for all 503 S&P 500 symbols from a reliable market data provider. Data is fetched fresh on every scan run to ensure accuracy.",
     },
     {
       q: "How do I receive the alerts?",
@@ -603,7 +603,7 @@ function FAQ() {
     },
     {
       q: "What timeframe does the scanner use?",
-      a: "The primary scan timeframe is 4H (4-hour candles), with multi-timeframe confirmation on the daily and weekly charts. This is designed for swing trading setups with a 2–10 day holding period.",
+      a: "The scanner uses a multi-timeframe approach, evaluating setups across intraday and higher timeframes for confluence. It is designed for swing trading setups with a typical 2–10 day holding period.",
     },
     {
       q: "Is this financial advice?",
@@ -674,7 +674,7 @@ function CTABanner() {
               Stop Missing the Move.<br />Start Scanning with Edge.
             </h2>
             <p className="text-white/55 text-lg max-w-xl mx-auto mb-8">
-              Join a private group of serious traders using institutional-grade scanning logic to find high-probability setups before they break out.
+              Join a private group of serious traders using the Elastic Slingshot scanner to find high-probability setups before they break out.
             </p>
             <button
               onClick={() => toast.info("Subscription portal coming soon! Join the waitlist.")}
