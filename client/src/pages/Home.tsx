@@ -170,7 +170,26 @@ function Hero() {
 
           {/* Right: Live scan mock — hidden on mobile, shown lg+ */}
           <div className="hidden lg:block">
-            <div className="bg-[#111820] border border-white/8 rounded-xl overflow-hidden teal-glow">
+            <div className="relative bg-[#111820] border border-white/8 rounded-xl overflow-hidden teal-glow">
+              {/* SAMPLE watermark overlay */}
+              <div className="absolute inset-0 z-20 pointer-events-none flex items-center justify-center" style={{background: 'transparent'}}>
+                <div style={{
+                  position: 'absolute',
+                  inset: 0,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '18px',
+                  transform: 'rotate(-30deg)',
+                  opacity: 0.13,
+                  pointerEvents: 'none',
+                }}>
+                  {[0,1,2,3,4].map(i => (
+                    <span key={i} className="font-mono font-black tracking-[0.35em] text-[#00d4aa] select-none whitespace-nowrap" style={{fontSize: '28px', letterSpacing: '0.35em'}}>PRIMAL EDGE · SAMPLE</span>
+                  ))}
+                </div>
+              </div>
               <div className="flex items-center justify-between px-4 py-3 bg-[#0d1520] border-b border-white/5">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-[#ef4444]" />
@@ -215,7 +234,26 @@ function Hero() {
 
         {/* Mobile scan preview — shown below copy on small screens */}
         <div className="lg:hidden mt-10">
-          <div className="bg-[#111820] border border-white/8 rounded-xl overflow-hidden">
+          <div className="relative bg-[#111820] border border-white/8 rounded-xl overflow-hidden">
+            {/* SAMPLE watermark overlay — mobile */}
+            <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden" style={{borderRadius: 'inherit'}}>
+              <div style={{
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '14px',
+                transform: 'rotate(-30deg)',
+                opacity: 0.13,
+                pointerEvents: 'none',
+              }}>
+                {[0,1,2,3].map(i => (
+                  <span key={i} className="font-mono font-black tracking-[0.3em] text-[#00d4aa] select-none whitespace-nowrap" style={{fontSize: '18px'}}>PRIMAL EDGE · SAMPLE</span>
+                ))}
+              </div>
+            </div>
             <div className="flex items-center justify-between px-3 py-2.5 bg-[#0d1520] border-b border-white/5">
               <span className="font-mono text-[10px] text-white/40">PRIMAL EDGE ENGINE</span>
               <span className="flex items-center gap-1.5">
