@@ -10,6 +10,7 @@ import PrimalEdgeLogo from "./PrimalEdgeLogo";
 
 const PRODUCTS_LINKS = [
   { label: "Elastic Slingshot Scanner", href: "/", badge: "LIVE", badgeColor: "#00d4aa" },
+  { label: "Neural AI Picks", href: "/products", badge: "LIVE", badgeColor: "#a78bfa" },
   { label: "Market Sentiment", href: "/market-sentiment", badge: "COMING SOON", badgeColor: "#f59e0b" },
   { label: "Sectors", href: "/sectors", badge: "COMING SOON", badgeColor: "#f59e0b" },
   { label: "All Products", href: "/products", badge: null, badgeColor: "" },

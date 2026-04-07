@@ -27,6 +27,31 @@ const PRODUCTS = [
     ),
   },
   {
+    id: "neural-ai-picks",
+    name: "Neural AI Picks",
+    tag: "LIVE",
+    tagColor: "#a78bfa",
+    description:
+      "The AI's highest-conviction selections, curated and delivered directly to your phone. Neural AI Picks filters the full scanner output through a secondary neural scoring layer — surfacing only the setups the model believes in most, graded A or above.",
+    features: ["AI-curated top picks only", "Neural confidence scoring", "Instant push notification delivery", "A-grade setups exclusively"],
+    cta: "Get Access",
+    ctaHref: "/subscribe",
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="3" fill="#a78bfa"/>
+        <circle cx="6" cy="8" r="2" fill="#a78bfa" opacity="0.6"/>
+        <circle cx="26" cy="8" r="2" fill="#a78bfa" opacity="0.6"/>
+        <circle cx="6" cy="24" r="2" fill="#a78bfa" opacity="0.6"/>
+        <circle cx="26" cy="24" r="2" fill="#a78bfa" opacity="0.6"/>
+        <line x1="8" y1="9" x2="14" y2="14" stroke="#a78bfa" strokeWidth="1.5" opacity="0.7"/>
+        <line x1="24" y1="9" x2="18" y2="14" stroke="#a78bfa" strokeWidth="1.5" opacity="0.7"/>
+        <line x1="8" y1="23" x2="14" y2="18" stroke="#a78bfa" strokeWidth="1.5" opacity="0.7"/>
+        <line x1="24" y1="23" x2="18" y2="18" stroke="#a78bfa" strokeWidth="1.5" opacity="0.7"/>
+        <circle cx="16" cy="16" r="6" stroke="#a78bfa" strokeWidth="1" strokeDasharray="2 2" opacity="0.4"/>
+      </svg>
+    ),
+  },
+  {
     id: "bearish-scanner",
     name: "Bearish Reversal Scanner",
     tag: "COMING SOON",
@@ -144,7 +169,7 @@ export default function Products() {
                     className="w-full py-3 rounded-xl font-bold text-sm transition-all duration-200"
                     style={
                       product.tag === "LIVE"
-                        ? { backgroundColor: "#00d4aa", color: "#0a0e14" }
+                        ? { backgroundColor: product.tagColor, color: product.tagColor === "#a78bfa" ? "#fff" : "#0a0e14" }
                         : { backgroundColor: "transparent", color: "#f59e0b", border: "1px solid #f59e0b40" }
                     }
                   >
