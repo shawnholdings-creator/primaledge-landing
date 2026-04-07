@@ -671,7 +671,7 @@ function Pricing() {
                 <span className="font-mono text-xs text-[#00d4aa] bg-[#00d4aa]/10 border border-[#00d4aa]/20 px-3 py-1 rounded-full whitespace-nowrap">PRIVATE GROUP</span>
               </div>
               <div className="mb-6">
-                <span className="font-['Space_Grotesk'] font-bold text-4xl sm:text-5xl text-white">$49</span>
+                <span className="font-['Space_Grotesk'] font-bold text-4xl sm:text-5xl text-white">$299</span>
                 <span className="text-white/40 text-base sm:text-lg">/month</span>
               </div>
               <div className="space-y-3 mb-8">
