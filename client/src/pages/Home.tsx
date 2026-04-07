@@ -85,7 +85,7 @@ function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
 function TickerTape() {
   const items = [...TICKER_ITEMS, ...TICKER_ITEMS];
   return (
-    <div className="fixed top-16 left-0 right-0 z-40 bg-[#0d1520] border-b border-white/5 overflow-hidden h-8">
+    <div className="fixed top-20 left-0 right-0 z-40 bg-[#0d1520] border-b border-white/5 overflow-hidden h-8">
       <div className="ticker-tape flex items-center h-full gap-8 px-4">
         {items.map((item, i) => (
           <span key={i} className="flex items-center gap-2 shrink-0">
@@ -117,7 +117,7 @@ function Hero() {
 
   return (
     <section
-      className="relative min-h-screen flex items-center pt-28 pb-16 overflow-hidden"
+      className="relative min-h-screen flex items-center pt-36 pb-16 overflow-hidden"
       style={{ background: "linear-gradient(135deg, #0a0e14 0%, #0d1520 50%, #0a0e14 100%)" }}
     >
       <div className="absolute inset-0 opacity-20" style={{ backgroundImage: `url(https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/hero-bg-WRuxyzjuQc2Zg7wTqtkdku.webp)`, backgroundSize: "cover", backgroundPosition: "center" }} />

@@ -17,7 +17,7 @@ export default function PrimalEdgeLogo({ size = "sm", className = "" }: PrimalEd
   const bylineSize = size === "lg" ? "text-[11px]" : size === "md" ? "text-[9px]" : "text-[8px]";
 
   return (
-    <div className={`flex items-center gap-2.5 select-none ${className}`} style={{ pointerEvents: 'none' }}>
+    <div className={`flex items-center gap-2.5 select-none ${className}`}>
       {/* P-icon image — only the icon portion */}
       <img
         src="https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/primal-edge-logo-cropped_d23b007c.webp"
