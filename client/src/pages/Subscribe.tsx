@@ -264,7 +264,7 @@ export default function Subscribe() {
                       <span className="font-mono text-xs text-[#00d4aa] bg-[#00d4aa]/10 border border-[#00d4aa]/20 px-2 py-0.5 rounded-full">PRIVATE GROUP</span>
                     </div>
                     <div className="mb-5">
-                      <span className="font-['Space_Grotesk'] font-bold text-4xl text-white">$49</span>
+                      <span className="font-['Space_Grotesk'] font-bold text-4xl text-white">$299</span>
                       <span className="text-white/40">/month</span>
                     </div>
                     <div className="space-y-2.5 mb-5">
@@ -288,7 +288,7 @@ export default function Subscribe() {
                     </div>
                     <div className="border-t border-white/5 pt-4 flex items-center justify-between">
                       <span className="text-white/40 text-sm">Total today</span>
-                      <span className="font-['Space_Grotesk'] font-bold text-white">$49.00</span>
+                      <span className="font-['Space_Grotesk'] font-bold text-white">$299.00</span>
                     </div>
                   </div>
 
