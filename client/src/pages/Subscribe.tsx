@@ -72,7 +72,7 @@ export default function Subscribe() {
         </div>
       </nav>
 
-      <div className="pt-24 pb-16 sm:pt-28">
+      <div className="pt-24 pb-16 sm:pt-28 px-4 sm:px-0">
         <div className="container">
           {/* Header */}
           <div className="text-center mb-10 sm:mb-14">
@@ -256,7 +256,7 @@ export default function Subscribe() {
 
               {/* Pricing Summary — 2 cols */}
               <div className="lg:col-span-2">
-                <div className="sticky top-24 space-y-4">
+                <div className="lg:sticky lg:top-24 space-y-4">
                   {/* Plan summary */}
                   <div className="bg-[#111820] border border-[#00d4aa]/25 rounded-2xl p-6 teal-glow">
                     <div className="flex items-center justify-between mb-4">
@@ -301,9 +301,9 @@ export default function Subscribe() {
                         { sym: "META", verdict: "BULLISH SLINGSHOT", grade: "A", score: 79 },
                         { sym: "NVDA", verdict: "READY", grade: "B", score: 71 },
                       ].map((row, i) => (
-                        <div key={i} className="flex items-center justify-between bg-[#0d1520] rounded-lg px-3 py-2.5">
-                          <span className="font-mono text-sm font-bold text-white w-12">{row.sym}</span>
-                          <span className={`font-mono text-xs font-semibold ${row.verdict.includes("SLINGSHOT") ? "text-[#00d4aa]" : "text-[#3b82f6]"}`}>{row.verdict}</span>
+                        <div key={i} className="flex items-center gap-2 bg-[#0d1520] rounded-lg px-3 py-2.5">
+                          <span className="font-mono text-sm font-bold text-white w-12 shrink-0">{row.sym}</span>
+                          <span className={`font-mono text-xs font-semibold flex-1 min-w-0 truncate ${row.verdict.includes("SLINGSHOT") ? "text-[#00d4aa]" : "text-[#3b82f6]"}`}>{row.verdict}</span>
                           <div className="flex items-center gap-2">
                             <span className="font-mono text-xs text-white/40">{row.score}</span>
                             <GradeBadge grade={row.grade} />

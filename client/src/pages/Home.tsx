@@ -117,7 +117,7 @@ function Hero() {
 
   return (
     <section
-      className="relative min-h-screen flex items-center pt-36 pb-16 overflow-hidden"
+      className="relative min-h-screen flex items-center pt-32 sm:pt-36 pb-16 overflow-hidden"
       style={{ background: "linear-gradient(135deg, #0a0e14 0%, #0d1520 50%, #0a0e14 100%)" }}
     >
       <div className="absolute inset-0 opacity-20" style={{ backgroundImage: `url(https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/hero-bg-WRuxyzjuQc2Zg7wTqtkdku.webp)`, backgroundSize: "cover", backgroundPosition: "center" }} />
@@ -137,7 +137,7 @@ function Hero() {
               <span className="font-mono text-xs text-[#00d4aa] tracking-wider">AI ENGINE ACTIVE — LIVE</span>
             </div>
 
-            <h1 className="font-['Space_Grotesk'] font-bold text-4xl sm:text-5xl lg:text-6xl xl:text-7xl text-white leading-[1.05] mb-6 fade-up fade-up-delay-2">
+            <h1 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-6xl xl:text-7xl text-white leading-[1.05] mb-6 fade-up fade-up-delay-2">
               AI-Powered.<br />
               <span className="text-[#00d4aa] teal-text-glow">Slingshot</span><br />
               Precision.
@@ -147,7 +147,7 @@ function Hero() {
               A proprietary AI-driven scanning engine trained on thousands of historical price structures across multiple indices and premium watchlists. It identifies high-probability Elastic Slingshot breakout setups in real time — graded A–D by adaptive intelligence, delivered to your phone in seconds.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-3 fade-up fade-up-delay-4">
+            <div className="flex flex-col xs:flex-row gap-3 fade-up fade-up-delay-4">
               <Link href="/subscribe" className="shimmer-btn pulse-glow bg-[#00d4aa] text-[#0a0e14] font-['Space_Grotesk'] font-bold text-base px-8 py-3.5 rounded hover:bg-[#00bfa0] transition-all text-center">
                 Access the AI Scanner →
               </Link>
@@ -784,7 +784,7 @@ function Footer() {
           <div className="flex items-center">
             <PrimalEdgeLogo size="md" />
           </div>
-          <div className="flex flex-wrap justify-center gap-4 sm:gap-6 text-sm text-white/30">
+          <div className="flex flex-wrap justify-center gap-3 sm:gap-6 text-xs sm:text-sm text-white/30">
             <a href="#how-it-works" className="hover:text-white/60 transition-colors">How It Works</a>
             <a href="#features" className="hover:text-white/60 transition-colors">Features</a>
             <a href="#pricing" className="hover:text-white/60 transition-colors">Pricing</a>

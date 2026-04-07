@@ -50,13 +50,13 @@ export default function DevRequests() {
       <Navbar />
 
       {/* Hero */}
-      <section className="pt-40 pb-12 px-4">
+      <section className="pt-28 sm:pt-36 md:pt-40 pb-12 px-4">
         <div className="container max-w-4xl">
           <div className="inline-flex items-center gap-2 bg-[#00d4aa]/10 border border-[#00d4aa]/20 rounded-full px-4 py-1.5 mb-6">
             <span className="w-2 h-2 rounded-full bg-[#00d4aa] animate-pulse" />
             <span className="font-mono text-xs text-[#00d4aa] tracking-wider">COMMUNITY DRIVEN DEVELOPMENT</span>
           </div>
-          <h1 className="text-4xl md:text-6xl font-black text-white mb-4 leading-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-4 leading-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
             Shape the<br /><span className="text-[#00d4aa]">Primal Edge</span> Roadmap.
           </h1>
           <p className="text-white/50 text-lg leading-relaxed max-w-2xl">
@@ -145,7 +145,7 @@ export default function DevRequests() {
             </h2>
             <div className="space-y-3">
               {EXISTING_REQUESTS.map((req) => (
-                <div key={req.id} className="bg-[#0d1520] border border-white/5 rounded-xl p-4 flex items-center gap-4 hover:border-[#00d4aa]/20 transition-all group">
+                <div key={req.id} className="bg-[#0d1520] border border-white/5 rounded-xl p-3 sm:p-4 flex items-center gap-3 hover:border-[#00d4aa]/20 transition-all group">
                   {/* Vote button */}
                   <button
                     onClick={() => toast.success("Vote recorded!")}
@@ -161,7 +161,7 @@ export default function DevRequests() {
                     <p className="text-white/30 text-xs mt-0.5">{req.category}</p>
                   </div>
                   <span
-                    className="text-xs font-bold px-2.5 py-1 rounded-full border whitespace-nowrap"
+                    className="text-[10px] sm:text-xs font-bold px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full border whitespace-nowrap shrink-0"
                     style={{ color: STATUS_COLORS[req.status], borderColor: `${STATUS_COLORS[req.status]}40`, backgroundColor: `${STATUS_COLORS[req.status]}10` }}
                   >
                     {req.status}

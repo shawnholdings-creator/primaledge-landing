@@ -87,13 +87,13 @@ export default function Products() {
       <Navbar />
 
       {/* Hero */}
-      <section className="pt-40 pb-20 px-4">
+      <section className="pt-28 sm:pt-36 md:pt-40 pb-16 sm:pb-20 px-4">
         <div className="container max-w-4xl">
           <div className="inline-flex items-center gap-2 bg-[#00d4aa]/10 border border-[#00d4aa]/20 rounded-full px-4 py-1.5 mb-6">
             <span className="w-2 h-2 rounded-full bg-[#00d4aa] animate-pulse" />
             <span className="font-mono text-xs text-[#00d4aa] tracking-wider">PRIMAL EDGE PRODUCT SUITE</span>
           </div>
-          <h1 className="text-4xl md:text-6xl font-black text-white mb-6 leading-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
             Every Edge.<br /><span className="text-[#00d4aa]">One Platform.</span>
           </h1>
           <p className="text-lg text-white/50 max-w-2xl leading-relaxed">
@@ -109,7 +109,7 @@ export default function Products() {
             {PRODUCTS.map((product) => (
               <div
                 key={product.id}
-                className="relative bg-[#0d1520] border border-white/5 rounded-2xl p-8 hover:border-[#00d4aa]/20 transition-all duration-300 group"
+                className="relative bg-[#0d1520] border border-white/5 rounded-2xl p-5 sm:p-8 hover:border-[#00d4aa]/20 transition-all duration-300 group"
               >
                 {/* Tag */}
                 <div className="flex items-center justify-between mb-6">

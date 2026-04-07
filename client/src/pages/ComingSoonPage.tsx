@@ -28,7 +28,7 @@ export default function ComingSoonPage({
       <Navbar />
 
       {/* Hero */}
-      <section className="pt-40 pb-16 px-4">
+      <section className="pt-28 sm:pt-36 md:pt-40 pb-16 px-4">
         <div className="container max-w-3xl text-center">
           <div className="flex justify-center mb-8">
             <div className="p-6 bg-[#00d4aa]/10 border border-[#00d4aa]/20 rounded-2xl">
@@ -39,7 +39,7 @@ export default function ComingSoonPage({
             <span className="w-2 h-2 rounded-full bg-[#f59e0b] animate-pulse" />
             <span className="font-mono text-xs text-[#f59e0b] tracking-wider">COMING SOON</span>
           </div>
-          <h1 className="text-4xl md:text-6xl font-black text-white mb-4 leading-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-4 leading-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
             {title}
           </h1>
           <p className="text-[#00d4aa] font-semibold text-lg mb-6 tracking-wide">{subtitle}</p>
@@ -64,7 +64,7 @@ export default function ComingSoonPage({
           </div>
 
           {/* Notify CTA */}
-          <div className="mt-16 text-center bg-[#0d1520] border border-[#00d4aa]/20 rounded-2xl p-10">
+          <div className="mt-12 sm:mt-16 text-center bg-[#0d1520] border border-[#00d4aa]/20 rounded-2xl p-6 sm:p-10">
             <h3 className="text-2xl font-bold text-white mb-3" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
               Be First to Know
             </h3>

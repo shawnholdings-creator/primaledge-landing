@@ -34,7 +34,7 @@ export default function PrimalEdgeLogo({ size = "sm", className = "" }: PrimalEd
           PRIMAL EDGE
         </span>
         <span
-          className={`${bylineSize} font-medium tracking-widest mt-0.5`}
+          className={`${bylineSize} font-medium tracking-widest mt-0.5 hidden xs:block`}
           style={{
             fontFamily: "'Space Grotesk', sans-serif",
             letterSpacing: "0.12em",
