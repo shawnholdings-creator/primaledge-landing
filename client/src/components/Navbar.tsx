@@ -148,7 +148,12 @@ export default function Navbar() {
 
           {/* Right side */}
           <div className="flex items-center gap-3">
-            <Link href="/subscribe" className="hidden sm:block">
+            <Link href="/subscribe" className="hidden sm:flex items-center gap-2 group">
+              {/* Members Only badge */}
+              <span className="hidden lg:flex items-center gap-1 text-[10px] font-bold tracking-widest text-[#00d4aa] bg-[#00d4aa]/10 border border-[#00d4aa]/30 px-2.5 py-1 rounded-full animate-pulse">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00d4aa] shrink-0" />
+                MEMBERS ONLY
+              </span>
               <button className="bg-[#00d4aa] text-[#0a0e14] font-bold text-sm px-5 py-2.5 rounded-lg hover:bg-[#00d4aa]/90 transition-colors">
                 Get Access
               </button>
@@ -229,7 +234,11 @@ export default function Navbar() {
             </Link>
 
             {/* CTA */}
-            <div className="pt-2">
+            <div className="pt-2 space-y-2">
+              <div className="flex items-center justify-center gap-1.5 text-[10px] font-bold tracking-widest text-[#00d4aa]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00d4aa] animate-pulse shrink-0" />
+                MEMBERS ONLY — INVITE REQUIRED
+              </div>
               <Link href="/subscribe">
                 <button className="w-full bg-[#00d4aa] text-[#0a0e14] font-bold py-3 rounded-xl text-sm">
                   Get Access →
