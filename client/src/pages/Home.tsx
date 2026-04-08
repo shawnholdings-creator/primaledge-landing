@@ -646,19 +646,19 @@ function AlertPreview() {
   );
 }
 
-// ── Pricing ───────────────────────────────────────────────────
-function Pricing() {
+// ── Private Access ────────────────────────────────────────────
+function PrivateAccess() {
   const { ref, inView } = useInView();
   return (
-    <section id="pricing" className="py-16 sm:py-24 bg-[#0a0e14]">
+    <section id="access" className="py-16 sm:py-24 bg-[#0a0e14]">
       <div className="container">
         <div className="text-center mb-10 sm:mb-16" ref={ref}>
-          <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">AI ACCESS PRICING</p>
+          <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">PRIVATE GROUP ACCESS</p>
           <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white mb-4">
-            Full AI Access.<br />One Flat Rate.
+            Exclusive Access.<br />Strictly Limited Seats.
           </h2>
           <p className="text-white/50 text-base sm:text-lg max-w-lg mx-auto">
-            One tier. Complete AI scanner access. No upsells. This is a private group of serious, quantitatively-minded traders — seats are strictly limited.
+            Primal Edge is a private group of serious, quantitatively-minded traders. Access is by request only — submit your application and we will be in touch.
           </p>
         </div>
 
@@ -667,12 +667,8 @@ function Pricing() {
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-32 bg-[#00d4aa]/5 blur-3xl rounded-full" />
             <div className="relative">
               <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-                <span className="font-['Space_Grotesk'] font-semibold text-base sm:text-lg text-white">Primal Edge — Elastic Slingshot Access</span>
+                <span className="font-['Space_Grotesk'] font-semibold text-base sm:text-lg text-white">Primal Edge — Full AI Suite Access</span>
                 <span className="font-mono text-xs text-[#00d4aa] bg-[#00d4aa]/10 border border-[#00d4aa]/20 px-3 py-1 rounded-full whitespace-nowrap">PRIVATE GROUP</span>
-              </div>
-              <div className="mb-6">
-                <span className="font-['Space_Grotesk'] font-bold text-4xl sm:text-5xl text-white">$299</span>
-                <span className="text-white/40 text-base sm:text-lg">/month</span>
               </div>
               <div className="space-y-3 mb-8">
                 {[
@@ -680,10 +676,10 @@ function Pricing() {
                   "4x daily autonomous AI scan cycles",
                   "Instant AI push alerts via NTFY",
                   "ML-graded setups: A, B, C, D",
+                  "Neural AI Picks — top-conviction curated alerts",
                   "On-demand AI web dashboard",
                   "Proprietary multi-dimension ML confidence scoring",
                   "Multi-timeframe AI confluence check",
-                  "Intelligent signal deduplication",
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3">
                     <svg className="w-4 h-4 text-[#00d4aa] shrink-0" fill="none" viewBox="0 0 16 16">
@@ -694,9 +690,8 @@ function Pricing() {
                 ))}
               </div>
               <Link href="/subscribe" className="shimmer-btn block w-full bg-[#00d4aa] text-[#0a0e14] font-['Space_Grotesk'] font-bold text-base py-4 rounded-lg hover:bg-[#00bfa0] transition-all pulse-glow text-center">
-                Get Access Now →
+                Request Access →
               </Link>
-              <p className="text-center text-white/30 text-xs mt-4">Cancel anytime. Billed monthly.</p>
             </div>
           </div>
         </div>
@@ -787,7 +782,7 @@ function Footer() {
           <div className="flex flex-wrap justify-center gap-3 sm:gap-6 text-xs sm:text-sm text-white/30">
             <a href="#how-it-works" className="hover:text-white/60 transition-colors">How It Works</a>
             <a href="#features" className="hover:text-white/60 transition-colors">Features</a>
-            <a href="#pricing" className="hover:text-white/60 transition-colors">Pricing</a>
+            <a href="#access" className="hover:text-white/60 transition-colors">Access</a>
             <Link href="/products" className="hover:text-white/60 transition-colors">Products</Link>
             <Link href="/market-sentiment" className="hover:text-white/60 transition-colors">Market Sentiment</Link>
             <Link href="/sectors" className="hover:text-white/60 transition-colors">Sectors</Link>
@@ -819,7 +814,7 @@ export default function Home() {
       <Features />
       <Technology />
       <AlertPreview />
-      <Pricing />
+      <PrivateAccess />
       <FAQ />
       <CTABanner />
       <Footer />

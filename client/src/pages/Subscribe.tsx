@@ -254,29 +254,25 @@ export default function Subscribe() {
                 </form>
               </div>
 
-              {/* Pricing Summary — 2 cols */}
+              {/* Access Summary — 2 cols */}
               <div className="lg:col-span-2">
                 <div className="lg:sticky lg:top-24 space-y-4">
-                  {/* Plan summary */}
+                  {/* Access summary */}
                   <div className="bg-[#111820] border border-[#00d4aa]/25 rounded-2xl p-6 teal-glow">
                     <div className="flex items-center justify-between mb-4">
-                      <span className="font-['Space_Grotesk'] font-semibold text-white text-sm">Your Plan</span>
+                      <span className="font-['Space_Grotesk'] font-semibold text-white text-sm">What You Get</span>
                       <span className="font-mono text-xs text-[#00d4aa] bg-[#00d4aa]/10 border border-[#00d4aa]/20 px-2 py-0.5 rounded-full">PRIVATE GROUP</span>
-                    </div>
-                    <div className="mb-5">
-                      <span className="font-['Space_Grotesk'] font-bold text-4xl text-white">$299</span>
-                      <span className="text-white/40">/month</span>
                     </div>
                     <div className="space-y-2.5 mb-5">
                       {[
                         "Premium multi-index universe scanned",
-                        "4x daily automated scans",
+                        "4x daily automated AI scans",
                         "Instant NTFY push alerts",
-                        "Grade A–D filtering",
-                        "On-demand dashboard",
+                        "Grade A–D ML filtering",
+                        "Neural AI Picks — top-conviction curated alerts",
+                        "On-demand AI dashboard",
                         "Elastic Slingshot — flagship AI signal",
-                        "Multi-timeframe confirmation",
-                        "Anti-spam deduplication",
+                        "Multi-timeframe AI confirmation",
                       ].map((item, i) => (
                         <div key={i} className="flex items-center gap-2.5">
                           <svg className="w-3.5 h-3.5 text-[#00d4aa] shrink-0" fill="none" viewBox="0 0 16 16">
@@ -285,10 +281,6 @@ export default function Subscribe() {
                           <span className="text-white/55 text-xs">{item}</span>
                         </div>
                       ))}
-                    </div>
-                    <div className="border-t border-white/5 pt-4 flex items-center justify-between">
-                      <span className="text-white/40 text-sm">Total today</span>
-                      <span className="font-['Space_Grotesk'] font-bold text-white">$299.00</span>
                     </div>
                   </div>
 
