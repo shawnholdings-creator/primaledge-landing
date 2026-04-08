@@ -60,7 +60,8 @@ export default function DevRequests() {
             Shape the<br /><span className="text-[#00d4aa]">Primal Edge</span> Roadmap.
           </h1>
           <p className="text-white/50 text-lg leading-relaxed max-w-2xl">
-            Elite members drive what gets built next. Submit your feature requests, vote on existing ideas, and watch the platform evolve around what matters most to you.
+            Elite members drive what gets built next. Submit your feature requests, vote on existing ideas, and watch the platform evolve around what matters most to you. Not a member yet?{" "}
+            <Link href="/subscribe" className="text-[#00d4aa] hover:underline font-medium">Request access →</Link>
           </p>
         </div>
       </section>
@@ -169,7 +170,9 @@ export default function DevRequests() {
                 </div>
               ))}
             </div>
-            <p className="text-white/20 text-xs text-center mt-6 font-mono">More requests visible to Elite Members</p>
+            <Link href="/subscribe" className="block text-white/30 hover:text-[#00d4aa] text-xs text-center mt-6 font-mono transition-colors">
+              More requests visible to Elite Members — Request Access →
+            </Link>
           </div>
         </div>
       </section>
