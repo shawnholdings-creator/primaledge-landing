@@ -49,10 +49,32 @@ export default function Subscribe() {
       return;
     }
     setLoading(true);
-    // Simulate submission
-    await new Promise(r => setTimeout(r, 1500));
-    setLoading(false);
-    setSubmitted(true);
+    try {
+      const res = await fetch("https://formspree.io/f/mykbvkzb", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({
+          "First Name": form.firstName,
+          "Last Name": form.lastName,
+          "Email": form.email,
+          "Phone": form.phone || "Not provided",
+          "Trading Experience": form.tradingExp || "Not specified",
+          "NTFY Topic": form.ntfyTopic || "Not provided",
+          "_subject": `New Primal Edge Access Request — ${form.firstName} ${form.lastName}`,
+          "_replyto": form.email,
+        }),
+      });
+      if (res.ok) {
+        setSubmitted(true);
+      } else {
+        const data = await res.json();
+        toast.error(data?.errors?.[0]?.message || "Submission failed. Please try again.");
+      }
+    } catch {
+      toast.error("Network error. Please check your connection and try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
