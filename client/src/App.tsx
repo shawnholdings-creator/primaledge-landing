@@ -14,6 +14,7 @@ import References from "./pages/References";
 import MarketSentiment from "./pages/MarketSentiment";
 import Sectors from "./pages/Sectors";
 import DevRequests from "./pages/DevRequests";
+import ThankYou from "./pages/ThankYou";
 
 function Router() {
   return (
@@ -28,6 +29,7 @@ function Router() {
       <Route path={"/market-sentiment"} component={MarketSentiment} />
       <Route path={"/sectors"} component={Sectors} />
       <Route path={"/dev-requests"} component={DevRequests} />
+      <Route path={"/thank-you"} component={ThankYou} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>

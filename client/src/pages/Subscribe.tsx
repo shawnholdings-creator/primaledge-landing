@@ -4,7 +4,7 @@
    ============================================================ */
 
 import { useState } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import PrimalEdgeLogo from "@/components/PrimalEdgeLogo";
 import { toast } from "sonner";
 
@@ -27,7 +27,7 @@ export default function Subscribe() {
     ntfyTopic: "",
     agree: false,
   });
-  const [submitted, setSubmitted] = useState(false);
+  const [, navigate] = useLocation();
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -65,7 +65,7 @@ export default function Subscribe() {
         }),
       });
       if (res.ok) {
-        setSubmitted(true);
+        navigate("/thank-you");
       } else {
         const data = await res.json();
         toast.error(data?.errors?.[0]?.message || "Submission failed. Please try again.");
@@ -107,43 +107,8 @@ export default function Subscribe() {
             </p>
           </div>
 
-          {submitted ? (
-            /* ── Success State ── */
-            <div className="max-w-lg mx-auto text-center">
-              <div className="bg-[#111820] border border-[#00d4aa]/30 rounded-2xl p-8 sm:p-10 teal-glow">
-                <div className="w-16 h-16 rounded-full bg-[#00d4aa]/15 border border-[#00d4aa]/30 flex items-center justify-center mx-auto mb-6">
-                  <svg className="w-8 h-8 text-[#00d4aa]" fill="none" viewBox="0 0 24 24">
-                    <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-                <h2 className="font-['Space_Grotesk'] font-bold text-2xl sm:text-3xl text-white mb-3">
-                  Request Received!
-                </h2>
-                <p className="text-white/55 text-base leading-relaxed mb-6">
-                  Thank you, <span className="text-white font-semibold">{form.firstName}</span>! Your access request has been received. We'll review your application and reach out at <span className="text-[#00d4aa]">{form.email}</span> within 24 hours.
-                </p>
-                <div className="bg-[#0d1520] rounded-xl p-4 mb-6 text-left space-y-2">
-                  <p className="font-mono text-xs text-white/30 tracking-widest mb-3">NEXT STEPS</p>
-                  {[
-                    "Check your email for onboarding instructions",
-                    "Download the NTFY app on your phone",
-                    "Subscribe to your private alert topic",
-                    "Log in to the subscriber dashboard",
-                  ].map((step, i) => (
-                    <div key={i} className="flex items-start gap-3">
-                      <span className="font-mono text-xs text-[#00d4aa] shrink-0 mt-0.5">0{i + 1}</span>
-                      <span className="text-white/60 text-sm">{step}</span>
-                    </div>
-                  ))}
-                </div>
-                <Link href="/" className="inline-block text-[#00d4aa] font-['Space_Grotesk'] font-medium text-sm hover:underline">
-                  ← Return to Home
-                </Link>
-              </div>
-            </div>
-          ) : (
-            /* ── Form + Summary ── */
-            <div className="grid lg:grid-cols-5 gap-8 xl:gap-12 max-w-5xl mx-auto">
+          {/* ── Form + Summary ── */}
+          <div className="grid lg:grid-cols-5 gap-8 xl:gap-12 max-w-5xl mx-auto">
               {/* Form — 3 cols */}
               <div className="lg:col-span-3">
                 <form onSubmit={handleSubmit} className="bg-[#111820] border border-white/5 rounded-2xl p-6 sm:p-8 space-y-5">
@@ -331,7 +296,7 @@ export default function Subscribe() {
                   <div className="bg-[#111820] border border-white/5 rounded-2xl p-5 space-y-3">
                     {[
                       { icon: "🔒", text: "Secure & private — your data is never shared" },
-                      { icon: "❌", text: "Cancel anytime, no questions asked" },
+                      { icon: "✅", text: "Access reviewed and confirmed within 24 hours" },
                       { icon: "⚡", text: "Onboarded within 24 hours of request" },
                       { icon: "📱", text: "Works on any phone via NTFY app" },
                     ].map((item, i) => (
@@ -344,9 +309,8 @@ export default function Subscribe() {
                 </div>
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
-    </div>
   );
 }
