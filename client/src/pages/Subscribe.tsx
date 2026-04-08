@@ -1,6 +1,6 @@
 /* ============================================================
-   ELASTIC SIGNAL DESIGN SYSTEM — Subscribe Page
-   Subscription sign-up form with pricing summary sidebar
+   ELASTIC SIGNAL DESIGN SYSTEM — Access Request Page
+   Private access request form with membership summary sidebar
    ============================================================ */
 
 import { useState } from "react";
@@ -76,12 +76,12 @@ export default function Subscribe() {
         <div className="container">
           {/* Header */}
           <div className="text-center mb-10 sm:mb-14">
-            <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">JOIN THE PRIVATE GROUP</p>
+            <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">PRIVATE ACCESS REQUEST</p>
             <h1 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white mb-4">
-              Get Access to<br />Primal Edge AI Scanner
+              Request Private<br />Access to Primal Edge
             </h1>
             <p className="text-white/50 text-base sm:text-lg max-w-xl mx-auto">
-              Fill in your details below to request access. Seats are limited — we'll confirm your subscription and onboard you within 24 hours.
+              Primal Edge is an invite-only group of serious, quantitatively-minded traders. Submit your details below — we review every application and respond within 24 hours.
             </p>
           </div>
 
@@ -98,7 +98,7 @@ export default function Subscribe() {
                   Request Received!
                 </h2>
                 <p className="text-white/55 text-base leading-relaxed mb-6">
-                  Thank you, <span className="text-white font-semibold">{form.firstName}</span>! We've received your subscription request. You'll receive a confirmation email at <span className="text-[#00d4aa]">{form.email}</span> with onboarding instructions within 24 hours.
+                  Thank you, <span className="text-white font-semibold">{form.firstName}</span>! Your access request has been received. We'll review your application and reach out at <span className="text-[#00d4aa]">{form.email}</span> within 24 hours.
                 </p>
                 <div className="bg-[#0d1520] rounded-xl p-4 mb-6 text-left space-y-2">
                   <p className="font-mono text-xs text-white/30 tracking-widest mb-3">NEXT STEPS</p>
@@ -125,7 +125,7 @@ export default function Subscribe() {
               {/* Form — 3 cols */}
               <div className="lg:col-span-3">
                 <form onSubmit={handleSubmit} className="bg-[#111820] border border-white/5 rounded-2xl p-6 sm:p-8 space-y-5">
-                  <h2 className="font-['Space_Grotesk'] font-semibold text-lg text-white mb-2">Your Details</h2>
+                  <h2 className="font-['Space_Grotesk'] font-semibold text-lg text-white mb-2">Your Application</h2>
 
                   {/* Name row */}
                   <div className="grid sm:grid-cols-2 gap-4">
@@ -250,7 +250,7 @@ export default function Subscribe() {
                       </span>
                     ) : "Request Access →"}
                   </button>
-                  <p className="text-center text-white/25 text-xs">We'll confirm your access within 24 hours. Cancel anytime.</p>
+                  <p className="text-center text-white/25 text-xs">We review every application and respond within 24 hours.</p>
                 </form>
               </div>
 
