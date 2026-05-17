@@ -60,22 +60,18 @@ export default function Subscribe() {
     setLoading(true);
 
     try {
-      const resp = await fetch("https://formsubmit.co/ajax/shawnholdings@gmail.com", {
+      const resp = await fetch("/api/subscribe", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Accept: "application/json",
         },
         body: JSON.stringify({
-          _subject: `🚀 New Access Request: ${form.firstName} ${form.lastName}`,
-          _template: "table",
-          "First Name": form.firstName,
-          "Last Name": form.lastName || "—",
-          Email: form.email,
-          Phone: form.phone || "—",
-          "Trading Experience": form.tradingExp || "—",
-          "Alert Username": form.ntfyTopic || "—",
-          _captcha: "false",
+          firstName: form.firstName,
+          lastName: form.lastName,
+          email: form.email,
+          phone: form.phone,
+          tradingExp: form.tradingExp,
+          ntfyTopic: form.ntfyTopic,
         }),
       });
 
