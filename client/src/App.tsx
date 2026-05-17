@@ -15,6 +15,7 @@ import MarketSentiment from "./pages/MarketSentiment";
 import Sectors from "./pages/Sectors";
 import DevRequests from "./pages/DevRequests";
 import AIDashboard from "./pages/AIDashboard";
+import GlobalDisclaimer from "./components/GlobalDisclaimer";
 
 function Router() {
   return (
@@ -43,6 +44,7 @@ function App() {
         <TooltipProvider>
           <Toaster />
           <Router />
+          <GlobalDisclaimer />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>

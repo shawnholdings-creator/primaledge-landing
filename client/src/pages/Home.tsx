@@ -144,15 +144,19 @@ function Hero() {
             </h1>
 
             <p className="text-white/60 text-base sm:text-lg leading-relaxed mb-8 max-w-lg fade-up fade-up-delay-3" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-              A proprietary AI-driven scanning engine trained on thousands of historical price structures across multiple indices and premium watchlists. It identifies high-probability Elastic Slingshot breakout setups in real time — graded A–D by adaptive intelligence, delivered to your phone in seconds.
+              A proprietary adaptive intelligence engine that continuously monitors market microstructure across a curated premium universe. The system processes multi-dimensional feature spaces in real time — isolating statistically anomalous setups with institutional-grade precision. Every qualifying signal is scored, graded, and dispatched to your device in seconds. The architecture is proprietary. The output speaks for itself.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 fade-up fade-up-delay-4">
               <Link href="/subscribe" className="shimmer-btn pulse-glow bg-[#00d4aa] text-[#0a0e14] font-['Space_Grotesk'] font-bold text-base px-8 py-3.5 rounded hover:bg-[#00bfa0] transition-all text-center">
                 Access the AI Scanner →
               </Link>
-              <a href="#how-it-works" className="border border-white/15 text-white/70 font-['Space_Grotesk'] font-medium text-base px-8 py-3.5 rounded hover:border-[#00d4aa]/40 hover:text-white transition-all text-center">
-                See How It Works
+              <a href="#how-it-works" className="group relative border border-[#00d4aa]/40 text-white font-['Space_Grotesk'] font-semibold text-base px-8 py-3.5 rounded hover:border-[#00d4aa] hover:bg-[#00d4aa]/10 transition-all text-center overflow-hidden">
+                <span className="absolute inset-0 bg-gradient-to-r from-[#00d4aa]/0 via-[#00d4aa]/10 to-[#00d4aa]/0 animate-shimmer" />
+                <span className="relative flex items-center justify-center gap-2">
+                  See How It Works
+                  <svg className="w-4 h-4 animate-bounce" fill="none" viewBox="0 0 16 16"><path d="M8 3v10M4 9l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </span>
               </a>
             </div>
 
@@ -244,10 +248,10 @@ function Hero() {
 function Stats() {
   const { ref, inView } = useInView();
   const stats = [
-    { label: "Premium Symbols Evaluated by AI", value: 5000, suffix: "+" },
-    { label: "AI Scan Cycles Per Day", value: 4, suffix: "x" },
-    { label: "ML Feature Dimensions", value: 18, suffix: "+" },
-    { label: "AI Alert Delivery", value: 3, suffix: "s" },
+    { label: "Symbols Scanned Per Cycle", value: 500, suffix: "+" },
+    { label: "Autonomous Cycles / Market Day", value: 9, suffix: "x" },
+    { label: "Multi-Dimensional Feature Space", value: 7, suffix: "+" },
+    { label: "Signal-to-Device Latency", value: 3, suffix: "s" },
   ];
   return (
     <section ref={ref} className="py-12 sm:py-16 bg-[#0d1520] border-y border-white/5">
@@ -269,21 +273,21 @@ function Stats() {
 function HowItWorks() {
   const { ref, inView } = useInView();
   const steps = [
-    { num: "01", title: "AI Data Ingestion", desc: "On every cycle, the AI engine fetches live market data across a curated premium universe spanning multiple indices and proprietary watchlists. No manual input. No human latency. Fully autonomous.", icon: "📡" },
-    { num: "02", title: "ML Pattern Recognition", desc: "Each symbol is run through the machine learning pattern recognition layer — a supervised model trained on thousands of historical breakout structures to detect the Elastic Slingshot signature.", icon: "🤖" },
-    { num: "03", title: "AI Grades Every Setup", desc: "The ML scoring engine computes a 0–100 confidence score for each qualifying setup and assigns a grade of A through D based on multi-timeframe confluence, volume confirmation, and trend alignment.", icon: "🏆" },
-    { num: "04", title: "Instant AI Alert Dispatched", desc: "Grade A and B signals trigger an instant push notification to your phone via NTFY — ticker, AI score, grade, verdict, and key context delivered in under 3 seconds.", icon: "🔔" },
+    { num: "01", title: "Autonomous Data Ingestion", desc: "On every cycle, the engine autonomously ingests live market data across a curated universe of premium symbols spanning multiple indices and proprietary watchlists. Data is normalized, adjusted for corporate actions, and staged for feature extraction — zero manual input, zero human bottleneck.", icon: "📡" },
+    { num: "02", title: "Proprietary Feature Extraction", desc: "Raw price and volume data is transformed through a multi-layer feature engineering pipeline into a high-dimensional numerical representation. The system captures latent relationships between momentum regime, volatility structure, and directional pressure that are invisible to standard technical analysis.", icon: "🧠" },
+    { num: "03", title: "Adaptive Conviction Scoring", desc: "A proprietary scoring model evaluates each candidate across multiple orthogonal dimensions of market confluence, producing a single 0–100 conviction score. Dynamic penalty layers adjust for regime risk, overextension, and event proximity — tiering every setup as ELITE, FIRE, PREP, or SUPPRESS.", icon: "🏆" },
+    { num: "04", title: "Dual-Channel Signal Dispatch", desc: "Qualifying signals are deduplicated against the session registry, packaged with full context — ticker, conviction score, grade, verdict, and price — and dispatched simultaneously to your mobile device and the live AI Dashboard. Typical signal-to-screen latency: under 3 seconds.", icon: "🔔" },
   ];
 
   return (
     <section id="how-it-works" className="py-16 sm:py-24 bg-[#0a0e14]">
       <div className="container">
         <div className="mb-10 sm:mb-16" ref={ref}>
-          <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">HOW THE AI WORKS</p>
+          <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">HOW THE ENGINE WORKS</p>
           <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white">
-            From Raw Market Data<br />to AI Signal in Seconds
+            From Raw Market Data<br />to Graded Analysis in Seconds
           </h2>
-          <p className="text-white/45 text-base sm:text-lg max-w-2xl mt-4 leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>The Primal Edge pipeline ingests live market data across our premium universe, runs it through a proprietary adaptive intelligence scoring engine, and dispatches graded alerts — all without human intervention.</p>
+          <p className="text-white/45 text-base sm:text-lg max-w-2xl mt-4 leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>The Primal Edge pipeline ingests live market data across our premium universe, processes it through a proprietary adaptive intelligence scoring engine, and delivers graded analytical insights — fully autonomous, fully systematic.</p>
         </div>
 
         <div className="relative">
@@ -312,23 +316,23 @@ function HowItWorks() {
 function Features() {
   const { ref, inView } = useInView();
   const features = [
-    { num: "01", title: "Proprietary AI Signal Engine", desc: "The core AI engine applies a multi-layer adaptive model to identify the precise Elastic Slingshot signature — a quantitatively validated structure that historically precedes explosive directional moves. The exact architecture is proprietary.", tag: "AI CORE ENGINE" },
-    { num: "02", title: "Multi-Timeframe AI Grading", desc: "The ML model evaluates each setup across multiple timeframes simultaneously. A Grade A signal requires strong cross-timeframe confluence — the AI filters out noise and surfaces only the highest-conviction setups.", tag: "AI SIGNAL QUALITY" },
-    { num: "03", title: "Multi-Dimension ML Scoring", desc: "Momentum, sector strength, market regime, relative volume, trend state, and volatility regime are encoded into a high-dimensional feature vector — producing a single 0–100 AI confidence score per setup. The exact dimensions are proprietary.", tag: "ML SCORING" },
-    { num: "04", title: "Instant AI Push Alerts", desc: "When the AI engine confirms a Grade A or B signal, an instant push notification fires to your phone in under 3 seconds — ticker, AI score, grade, verdict, and full signal context. No app required beyond a free notification client.", tag: "AI DELIVERY" },
-    { num: "05", title: "AI-Powered Web Dashboard", desc: "Log into the subscriber dashboard to manually trigger an AI scan on demand, view the full ranked results table, filter by AI grade, and review your complete signal history.", tag: "AI DASHBOARD" },
-    { num: "06", title: "Intelligent Signal Deduplication", desc: "The AI signal registry tracks every alert dispatched. Duplicate signals within the same session are suppressed automatically — keeping your alerts clean, precise, and actionable.", tag: "AI INTELLIGENCE" },
+    { num: "01", title: "Proprietary Adaptive Engine", desc: "The core intelligence layer applies a multi-factor adaptive model to identify high-probability setups across the full premium universe. The model architecture, feature composition, and scoring weights are entirely proprietary — engineered to detect structural patterns that precede significant directional moves.", tag: "ADAPTIVE ENGINE" },
+    { num: "02", title: "Multi-Timeframe Confluence Layer", desc: "Every setup is cross-validated against multiple timeframes simultaneously. The engine applies directional confluence filters and trend-alignment scoring to ensure signals are structurally sound across the macro and micro landscape — filtering out noise at the source.", tag: "MTF CONFLUENCE" },
+    { num: "03", title: "Multi-Dimensional Conviction Scoring", desc: "Multiple orthogonal factors — spanning momentum, structure, volume behavior, sector dynamics, and regime awareness — are synthesized into a single 0–100 conviction score through a proprietary weighted intelligence model. The exact dimensions and weights are undisclosed.", tag: "CONVICTION SCORING" },
+    { num: "04", title: "Sub-3-Second Signal Delivery", desc: "When a high-conviction signal is confirmed, a structured alert payload is dispatched to your mobile device and the web dashboard simultaneously — ticker, score, grade, verdict, and price context delivered in under 3 seconds. No app store dependencies.", tag: "REAL-TIME DISPATCH" },
+    { num: "05", title: "Encrypted Live Dashboard", desc: "Access a PIN-secured, real-time analytical dashboard that reflects the latest scan results. View ranked setups, conviction scores, grade badges, and verdicts — updated autonomously every cycle. Your private window into the engine's output.", tag: "LIVE DASHBOARD" },
+    { num: "06", title: "Intelligent Signal Deduplication", desc: "A session-level deduplication registry ensures you never receive redundant alerts on the same ticker within a single session. Every notification represents a fresh, unique analytical insight — keeping your feed clean, precise, and actionable.", tag: "ANTI-NOISE" },
   ];
 
   return (
     <section id="features" className="py-16 sm:py-24 bg-[#0d1520]">
       <div className="container">
         <div className="mb-10 sm:mb-16" ref={ref}>
-          <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">AI-POWERED FEATURES</p>
+          <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">ENGINEERED FEATURES</p>
           <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white max-w-2xl">
-            Institutional AI.<br />Retail Simplicity.
+            Institutional-Grade Analysis.<br />Retail Simplicity.
           </h2>
-          <p className="text-white/45 text-base sm:text-lg max-w-2xl mt-4 leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>Every feature is engineered around a single objective: deliver the highest-confidence AI-generated trade signals with zero noise and zero delay.</p>
+          <p className="text-white/45 text-base sm:text-lg max-w-2xl mt-4 leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>Every feature is engineered around a single objective: deliver the highest-conviction analytical insights with zero noise and zero delay — built for serious market enthusiasts.</p>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -361,31 +365,31 @@ function Technology() {
 
   const content = {
     ml: {
-      headline: "A Machine Learning Engine Built for Market Structure",
+      headline: "Adaptive Intelligence Built for Market Microstructure",
       body: [
-        "At the core of the Primal Edge signal suite is a supervised machine learning model trained on thousands of historical price structures across a curated premium universe spanning multiple indices and proprietary watchlists. The model was developed using a feature-engineered dataset that captures the statistical fingerprint of high-probability breakout conditions — encoding relationships between price volatility, momentum dispersion, relative volume, and trend state into a unified numerical representation.",
-        "During training, the model was exposed to labeled examples of setups that preceded significant directional moves alongside setups that resolved as false signals or chop. Through iterative gradient optimization, the algorithm learned to weight each contributing factor according to its predictive value — not its intuitive appeal. The result is a scoring engine that operates free from cognitive bias, recency bias, and emotional anchoring.",
-        "In production, the model evaluates each symbol in real time, computing a composite score from 0 to 100 that reflects the statistical probability of a qualifying Elastic Slingshot setup being present. Scores above 70 with multi-timeframe confirmation are classified as Grade A. Scores in the 55–70 range with partial confluence are classified as Grade B. The model re-evaluates every symbol on each scan cycle, ensuring the output always reflects the most current market state.",
+        "At the core of Primal Edge is a quantitative model trained on extensive historical data across multiple market regimes. The model learns to weight contributing factors by their predictive value — not their intuitive appeal — producing a scoring engine free from cognitive bias, recency bias, and emotional anchoring.",
+        "In production, the model evaluates each symbol in real time, computing a composite conviction score from 0 to 100 that reflects the statistical probability of a qualifying setup being present. The model re-evaluates every symbol on each cycle, ensuring output always reflects the most current market state.",
+        "The proprietary feature engineering pipeline transforms raw market data into a multi-dimensional numerical representation that captures latent structural relationships invisible to standard chart analysis. The exact feature architecture, training methodology, and scoring weights are undisclosed.",
       ],
       stats: [
-        { label: "Training Samples", val: "10,000+" },
-        { label: "Feature Dimensions", val: "18" },
-        { label: "Score Range", val: "0 – 100" },
-        { label: "Model Type", val: "Supervised" },
+        { label: "Architecture", val: "Proprietary Adaptive" },
+        { label: "Scoring Range", val: "0 – 100" },
+        { label: "Regime Awareness", val: "Dynamic" },
+        { label: "Tier System", val: "ELITE / FIRE / PREP" },
       ],
     },
     pattern: {
-      headline: "Precision Pattern Matching Across a Premium Universe",
+      headline: "Structural Anomaly Detection Across a Premium Universe",
       body: [
-        "The Elastic Slingshot algorithm is built on a foundation of structural pattern recognition — the systematic identification of specific price and volume configurations that have historically preceded explosive directional moves. Unlike discretionary chart reading, which is subject to interpretation and inconsistency, the pattern matching engine applies a deterministic, rule-based evaluation to every symbol on every scan cycle.",
-        "The engine scans for a precise convergence of proprietary conditions across a curated universe of premium symbols. All conditions must be present simultaneously for a setup to qualify — partial matches are filtered out entirely. The specific criteria and thresholds are proprietary and not disclosed.",
-        "The pattern logic also incorporates a multi-timeframe confluence check. A setup that appears on the primary scan timeframe is cross-referenced against higher timeframe trend structure. Setups that align with the prevailing macro trend receive a confluence bonus in the scoring model, while counter-trend setups are penalized — reflecting the statistical reality that trend-aligned breakouts resolve favorably at a significantly higher rate than counter-trend attempts.",
+        "The engine applies deterministic, rule-based evaluation to every symbol on every cycle — identifying structural configurations that have historically preceded explosive directional moves. Unlike discretionary chart reading, which is subject to interpretation and inconsistency, the pattern matching engine applies a fully systematic evaluation.",
+        "The system scans for a precise convergence of proprietary conditions across a curated universe of premium symbols. All conditions must be present simultaneously for a setup to qualify — partial matches are filtered out entirely. The specific criteria and thresholds are proprietary and not disclosed.",
+        "Multi-timeframe confluence checks cross-reference the primary detection against higher timeframe structure. Trend-aligned setups receive scoring bonuses while counter-trend signals are penalized — reflecting the statistical reality that alignment with macro momentum significantly improves resolution rates.",
       ],
       stats: [
-        { label: "Universe", val: "Premium" },
-        { label: "Conditions Required", val: "3 of 3" },
-        { label: "Timeframes Checked", val: "Multi-TF" },
-        { label: "False Signal Filter", val: "Active" },
+        { label: "Universe", val: "Premium Curated" },
+        { label: "Detection Mode", val: "Systematic" },
+        { label: "Timeframes", val: "Multi-TF" },
+        { label: "Noise Filter", val: "Active" },
       ],
     },
     backtest: {
@@ -430,7 +434,7 @@ function Technology() {
             Institutional-Grade Technology.<br />Retail-Accessible Delivery.
           </h2>
           <p className="text-white/50 text-base sm:text-lg max-w-2xl mt-4 leading-relaxed">
-            The Primal Edge signal engine is not a simple indicator or a hand-drawn trendline. It is a multi-layer quantitative system built on adaptive machine learning, structural pattern recognition, and statistically validated backtesting — engineered to identify high-probability setups with the precision of a systematic fund, delivered to your phone in real time. The Elastic Slingshot is the flagship signal within the Primal Edge product suite.
+            The Primal Edge engine is not a simple indicator overlay or a hand-drawn trendline. It is a multi-layer quantitative system built on adaptive intelligence, structural pattern recognition, and statistically validated methodology — engineered to identify high-probability setups with the precision of a systematic fund, delivered as educational analysis to your device in real time.
           </p>
         </div>
 
@@ -483,12 +487,12 @@ function Technology() {
                   <p className="font-mono text-[10px] text-white/25 tracking-widest mb-3">PIPELINE OVERVIEW</p>
                   <div className="space-y-2">
                     {[
-                      { step: "01", label: "OHLCV Data Ingestion", active: activeTab === "ml" || activeTab === "pattern" },
-                      { step: "02", label: "Feature Engineering", active: activeTab === "ml" },
-                      { step: "03", label: "Pattern Matching Engine", active: activeTab === "pattern" },
-                      { step: "04", label: "ML Scoring Model", active: activeTab === "ml" },
-                      { step: "05", label: "Backtest Validation Layer", active: activeTab === "backtest" },
-                      { step: "06", label: "Signal Generation & Dispatch", active: activeTab === "signal" },
+                      { step: "01", label: "Live Market Data Ingestion", active: activeTab === "ml" || activeTab === "pattern" },
+                      { step: "02", label: "Proprietary Feature Extraction", active: activeTab === "ml" },
+                      { step: "03", label: "Structural Anomaly Detection", active: activeTab === "pattern" },
+                      { step: "04", label: "Adaptive Conviction Scoring", active: activeTab === "ml" },
+                      { step: "05", label: "Regime-Aware Penalty Engine", active: activeTab === "backtest" },
+                      { step: "06", label: "Dual-Channel Signal Dispatch", active: activeTab === "signal" },
                     ].map((item, i) => (
                       <div key={i} className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
                         item.active ? "bg-[#00d4aa]/10 border border-[#00d4aa]/20" : ""
@@ -534,12 +538,12 @@ function AlertPreview() {
         <div className="grid lg:grid-cols-2 gap-10 sm:gap-16 items-center">
           {/* Left: Alert detail list */}
           <div className={`order-2 lg:order-1 ${inView ? "fade-up fade-up-delay-1" : "opacity-0"}`} ref={ref}>
-            <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">INSTANT ALERTS</p>
+            <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">INSTANT ANALYSIS</p>
             <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white mb-6">
-              Your Phone Rings<br />When the Setup Fires
+              Your Phone Buzzes<br />When the Setup Fires
             </h2>
             <p className="text-white/55 text-base sm:text-lg leading-relaxed mb-8">
-              No more staring at charts all day. The Elastic Scanner monitors the market for you and sends a push notification the moment a Grade A or B Elastic Slingshot setup is confirmed.
+              No more staring at charts all day. The engine monitors the market for you and sends a push notification the moment a high-conviction setup is confirmed — delivered as educational analysis for your review.
             </p>
             <div className="space-y-4">
               {[
@@ -615,12 +619,12 @@ function Pricing() {
     <section id="pricing" className="py-16 sm:py-24 bg-[#0a0e14]">
       <div className="container">
         <div className="text-center mb-10 sm:mb-16" ref={ref}>
-          <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">AI ACCESS PRICING</p>
+          <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">MEMBERSHIP PRICING</p>
           <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white mb-4">
-            Full AI Access.<br />One Flat Rate.
+            Full Access.<br />One Flat Rate.
           </h2>
           <p className="text-white/50 text-base sm:text-lg max-w-lg mx-auto">
-            One tier. Complete AI scanner access. No upsells. This is a private group of serious, quantitatively-minded traders — seats are strictly limited.
+            One tier. Complete analytical engine access. No upsells. This is a private community of serious, quantitatively-minded market enthusiasts — seats are strictly limited.
           </p>
         </div>
 
@@ -638,13 +642,13 @@ function Pricing() {
               </div>
               <div className="space-y-3 mb-8">
                 {[
-                  "AI-powered scanner — premium multi-index universe",
-                  "4x daily autonomous AI scan cycles",
-                  "Instant AI push alerts via NTFY",
-                  "ML-graded setups: A, B, C, D",
-                  "On-demand AI web dashboard",
-                  "Proprietary multi-dimension ML confidence scoring",
-                  "Multi-timeframe AI confluence check",
+                  "Adaptive intelligence engine — premium multi-index universe",
+                  "9x daily autonomous scan cycles",
+                  "Instant push notifications",
+                  "Conviction-graded setups: A, B, C, D",
+                  "Live analytical dashboard",
+                  "Proprietary multi-dimensional conviction scoring",
+                  "Multi-timeframe confluence analysis",
                   "Intelligent signal deduplication",
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3">
@@ -672,13 +676,13 @@ function FAQ() {
   const { ref, inView } = useInView();
   const [open, setOpen] = useState<number | null>(null);
   const faqs = [
-    { q: "What is the Primal Edge Elastic Slingshot Scanner?", a: "It is the flagship AI signal within the Primal Edge product suite — a proprietary adaptive intelligence system that identifies the Elastic Slingshot setup across a curated premium universe spanning multiple indices and proprietary watchlists. The engine assigns a 0–100 ML confidence score and grades each setup A through D. The exact model architecture and universe composition are proprietary — what matters is the output: high-probability, AI-graded signals delivered to your phone in real time." },
-    { q: "What data does the AI model use?", a: "The AI engine ingests live market data across a curated premium universe on every scan cycle. The machine learning model encodes this raw data into a high-dimensional proprietary feature vector — capturing momentum, volatility regime, relative volume, trend state, and multi-timeframe confluence — before computing the final confidence score. The specific data sources and feature dimensions are not disclosed." },
-    { q: "How do I receive the AI alerts?", a: "AI-generated alerts are delivered via NTFY, a free push notification service. Download the NTFY app on your phone, subscribe to the private topic provided after sign-up, and receive instant push notifications the moment the AI engine confirms a Grade A or B Elastic Slingshot signal." },
-    { q: "What timeframe does the AI scanner use?", a: "The AI scanner uses a multi-timeframe evaluation approach, cross-referencing the primary scan timeframe against higher timeframe trend structure. The machine learning model applies a confluence bonus to trend-aligned setups and penalizes counter-trend signals — reflecting the statistical edge of trading with macro momentum. Setups are designed for swing trading with a typical 2–10 day holding period." },
-    { q: "How was the AI model backtested?", a: "The model was backtested across a multi-year historical dataset using walk-forward analysis to validate out-of-sample performance. Survivorship bias was eliminated by evaluating the model against the full universe as it existed at each historical point in time. Key metrics included win rate by grade, average favorable excursion vs. maximum adverse excursion, and signal frequency across different volatility regimes. Detailed backtesting results are available to active subscribers only." },
-    { q: "Is this financial advice?", a: "No. Primal Edge is an educational and informational tool. All AI-generated scan results are for research purposes only. Past model performance does not guarantee future results. Always conduct your own due diligence and consult a licensed financial advisor before making any investment decisions." },
-    { q: "How many seats are available?", a: "This is a private, close-group service. Seats are strictly limited to maintain AI signal quality and ensure every subscriber receives timely, low-noise alerts. Once the group is full, a waitlist will open." },
+    { q: "What is the Primal Edge Elastic Slingshot Scanner?", a: "It is the flagship adaptive intelligence signal within the Primal Edge product suite — a proprietary system that identifies a specific structural pattern across a curated premium universe. The engine assigns a 0–100 conviction score and grades each setup A through D. The exact model architecture, pattern definition, and universe composition are proprietary. All output is provided for educational and analytical purposes only." },
+    { q: "What data does the model use?", a: "The engine ingests live market data across a curated premium universe on every cycle. Raw data is transformed through a proprietary feature engineering pipeline into a multi-dimensional numerical representation. The specific data sources, feature composition, and transformation methods are not disclosed." },
+    { q: "How do I receive the analysis?", a: "Analytical insights are delivered via push notification to your mobile device. Download a free notification client, subscribe to the private topic provided after sign-up, and receive instant updates the moment the engine confirms a high-conviction setup." },
+    { q: "What timeframe does the scanner analyze?", a: "The engine uses a multi-timeframe evaluation approach, cross-referencing the primary scan timeframe against higher timeframe trend structure. The model applies a confluence bonus to trend-aligned setups and penalizes counter-trend signals. Setups are designed for analysis of swing-timeframe structures with a typical 2–10 day observation window." },
+    { q: "How was the model validated?", a: "The model was validated across a multi-year historical dataset using walk-forward analysis to confirm out-of-sample performance. Survivorship bias was eliminated by evaluating against the full universe as it existed at each historical point. Detailed methodology is available to active members only." },
+    { q: "Is this financial advice?", a: "No. Primal Edge is an educational and analytical tool only. All scan results, scores, and grades are for research and educational purposes only. Past model performance does not guarantee future results. This is not a recommendation to buy, sell, or hold any security. Always conduct your own due diligence and consult a licensed financial advisor." },
+    { q: "How many seats are available?", a: "This is a private, close-community service. Seats are strictly limited to maintain analytical quality and ensure every member receives timely, low-noise insights. Once the community is full, a waitlist will open." },
   ];
 
   return (
@@ -720,12 +724,12 @@ function CTABanner() {
           <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url(https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/hero-bg-WRuxyzjuQc2Zg7wTqtkdku.webp)`, backgroundSize: "cover", backgroundPosition: "center" }} />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0a0e14]/80" />
           <div className="relative">
-            <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-4">AI ACCESS — LIMITED SEATS</p>
+            <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-4">PRIVATE MEMBERSHIP — LIMITED SEATS</p>
             <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white mb-6">
-              Stop Guessing.<br />Let the AI Find the Setup.
+              Stop Guessing.<br />Let the Engine Find the Edge.
             </h2>
             <p className="text-white/55 text-base sm:text-lg max-w-xl mx-auto mb-8">
-              Join a private group of quantitatively-minded traders using the Primal Edge AI signal suite — starting with the Elastic Slingshot — to identify high-probability breakout setups before the move, powered by adaptive intelligence and delivered in real time.
+              Join a private community of systematic market enthusiasts using Primal Edge's adaptive intelligence to study high-conviction setups before the move — scored, graded, and delivered as real-time educational analysis.
             </p>
             <Link href="/subscribe" className="shimmer-btn pulse-glow inline-block bg-[#00d4aa] text-[#0a0e14] font-['Space_Grotesk'] font-bold text-base sm:text-lg px-8 sm:px-10 py-4 rounded-lg hover:bg-[#00bfa0] transition-all">
               Access the AI Scanner →

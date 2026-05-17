@@ -254,4 +254,13 @@
   .fade-up-delay-3 { animation-delay: 0.3s; opacity: 0; }
   .fade-up-delay-4 { animation-delay: 0.4s; opacity: 0; }
   .fade-up-delay-5 { animation-delay: 0.5s; opacity: 0; }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2.5s ease-in-out infinite;
+  }
 }
