@@ -145,12 +145,22 @@ function PinGate({ onUnlock }: { onUnlock: () => void }) {
             </p>
           )}
 
-          <p className="text-white/20 text-xs mt-8">
-            Contact{" "}
-            <a href="mailto:support@primaledge.io" className="text-[#00d4aa]/60 hover:text-[#00d4aa]">
+          {/* Request Access CTA */}
+          <div className="mt-10">
+            <Link href="/subscribe">
+              <button className="bg-[#00d4aa] text-[#0a0e14] font-bold text-sm px-8 py-3 rounded-xl hover:bg-[#00d4aa]/90 transition-all duration-200 hover:scale-105">
+                Request Access →
+              </button>
+            </Link>
+          </div>
+
+          <p className="text-white/20 text-xs mt-6">
+            Already have a PIN?{" "}
+            <span className="text-white/30">Enter it above.</span>
+            {" · "}
+            <a href="mailto:support@primaledge.io" className="text-[#00d4aa]/50 hover:text-[#00d4aa] transition-colors">
               support@primaledge.io
-            </a>{" "}
-            for access
+            </a>
           </p>
         </div>
       </div>
