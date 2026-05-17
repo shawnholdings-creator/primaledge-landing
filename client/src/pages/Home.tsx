@@ -151,7 +151,7 @@ function Hero() {
               <a href="#how-it-works" className="shimmer-btn pulse-glow bg-[#00d4aa] text-[#0a0e14] font-['Space_Grotesk'] font-bold text-base px-8 py-3.5 rounded hover:bg-[#00bfa0] transition-all text-center overflow-hidden relative">
                 <span className="absolute inset-0 bg-gradient-to-r from-[#00d4aa]/0 via-white/15 to-[#00d4aa]/0 animate-shimmer" />
                 <span className="relative flex items-center justify-center gap-2">
-                  See How It Works
+                  See a Signal Form
                   <svg className="w-4 h-4 animate-bounce" fill="none" viewBox="0 0 16 16"><path d="M8 3v10M4 9l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </span>
               </a>
@@ -273,21 +273,22 @@ function Stats() {
 function HowItWorks() {
   const { ref, inView } = useInView();
   const steps = [
-    { num: "01", title: "Autonomous Data Ingestion", desc: "On every cycle, the engine autonomously ingests live market data across a curated universe of premium symbols spanning multiple indices and proprietary watchlists. Data is normalized, adjusted for corporate actions, and staged for feature extraction — zero manual input, zero human bottleneck.", icon: "📡" },
-    { num: "02", title: "Proprietary Feature Extraction", desc: "Raw price and volume data is transformed through a multi-layer feature engineering pipeline into a high-dimensional numerical representation. The system captures latent relationships between momentum regime, volatility structure, and directional pressure that are invisible to standard technical analysis.", icon: "🧠" },
-    { num: "03", title: "Adaptive Conviction Scoring", desc: "A proprietary scoring model evaluates each candidate across multiple orthogonal dimensions of market confluence, producing a single 0–100 conviction score. Dynamic penalty layers adjust for regime risk, overextension, and event proximity — tiering every setup as ELITE, FIRE, PREP, or SUPPRESS.", icon: "🏆" },
-    { num: "04", title: "Dual-Channel Signal Dispatch", desc: "Qualifying signals are deduplicated against the session registry, packaged with full context — ticker, conviction score, grade, verdict, and price — and dispatched simultaneously to your mobile device and the live AI Dashboard. Typical signal-to-screen latency: under 3 seconds.", icon: "🔔" },
+    { num: "01", title: "Autonomous Data Ingestion", desc: "On every cycle, the engine autonomously ingests live market data across a curated universe of premium symbols spanning multiple indices and proprietary watchlists. Data is normalized, adjusted for corporate actions, and staged for feature extraction — zero manual input, zero human bottleneck.", icon: "📡", traderValue: "The engine watches the premium market universe for you, reducing the need to manually cycle through endless charts. Traders get a cleaner starting point: fewer names to chase, more focus on symbols showing meaningful activity." },
+    { num: "02", title: "Proprietary Feature Extraction", desc: "Raw price and volume data is transformed through a multi-layer feature engineering pipeline into a high-dimensional numerical representation. The system captures latent relationships between momentum regime, volatility structure, and directional pressure that are invisible to standard technical analysis.", icon: "🧠", traderValue: "Instead of reacting to obvious price movement after the crowd sees it, the system studies structure, compression, momentum, volume behavior, and directional pressure. This helps surface setups that may be forming beneath the noise." },
+    { num: "03", title: "Adaptive Conviction Scoring", desc: "A proprietary scoring model evaluates each candidate across multiple orthogonal dimensions of market confluence, producing a single 0–100 conviction score. Dynamic penalty layers adjust for regime risk, overextension, and event proximity — tiering every setup as ELITE, FIRE, PREP, or SUPPRESS.", icon: "🏆", traderValue: "Every candidate is ranked before it reaches the trader. The 0–100 score and grade help separate high-priority setups from weak or early formations, so traders can decide what deserves immediate review." },
+    { num: "04", title: "Dual-Channel Signal Dispatch", desc: "Qualifying signals are deduplicated against the session registry, packaged with full context — ticker, conviction score, grade, verdict, and price — and dispatched simultaneously to your mobile device and the live AI Dashboard. Typical signal-to-screen latency: under 3 seconds.", icon: "🔔", traderValue: "When a qualified setup fires, the alert arrives with ticker, verdict, score, grade, price, and context. This turns a raw market event into a fast review-ready signal instead of a vague notification." },
   ];
 
   return (
     <section id="how-it-works" className="py-16 sm:py-24 bg-[#0a0e14]">
       <div className="container">
+        {/* Bridge headline */}
         <div className="mb-10 sm:mb-16" ref={ref}>
           <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">HOW THE ENGINE WORKS</p>
           <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white">
-            From Raw Market Data<br />to Graded Analysis in Seconds
+            From Market Noise<br />to Ranked Setups
           </h2>
-          <p className="text-white/45 text-base sm:text-lg max-w-2xl mt-4 leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>The Primal Edge pipeline ingests live market data across our premium universe, processes it through a proprietary adaptive intelligence scoring engine, and delivers graded analytical insights — fully autonomous, fully systematic.</p>
+          <p className="text-white/45 text-base sm:text-lg max-w-2xl mt-4 leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>Primal Edge translates live market complexity into scored, graded, review-ready signals — helping traders focus on the setups that appear to deserve attention.</p>
         </div>
 
         <div className="relative">
@@ -302,10 +303,22 @@ function HowItWorks() {
                 </div>
                 <div className="text-2xl mb-3">{step.icon}</div>
                 <h3 className="font-['Space_Grotesk'] font-semibold text-base sm:text-lg text-white mb-2">{step.title}</h3>
-                <p className="text-white/50 text-sm leading-relaxed">{step.desc}</p>
+                <p className="text-white/50 text-sm leading-relaxed mb-3">{step.desc}</p>
+                {/* Trader Value translation */}
+                <div className="bg-[#00d4aa]/5 border border-[#00d4aa]/10 rounded-lg px-3 py-2.5 mt-auto">
+                  <p className="font-mono text-[10px] text-[#00d4aa]/70 tracking-widest mb-1">WHY TRADERS CARE</p>
+                  <p className="text-white/55 text-xs leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>{step.traderValue}</p>
+                </div>
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Value strip */}
+        <div className={`mt-10 sm:mt-14 flex flex-wrap justify-center gap-3 sm:gap-4 ${inView ? "fade-up fade-up-delay-5" : "opacity-0"}`}>
+          {["Premium Universe", "Multi-Timeframe Context", "AI Conviction Score", "Noise Filter", "Fast Alert Delivery"].map((item, i) => (
+            <span key={i} className="font-mono text-[10px] sm:text-xs text-white/35 tracking-wider bg-white/3 border border-white/5 rounded-full px-3 sm:px-4 py-1.5">{item}</span>
+          ))}
         </div>
       </div>
     </section>
@@ -316,12 +329,12 @@ function HowItWorks() {
 function Features() {
   const { ref, inView } = useInView();
   const features = [
-    { num: "01", title: "Proprietary Adaptive Engine", desc: "The core intelligence layer applies a multi-factor adaptive model to identify high-probability setups across the full premium universe. The model architecture, feature composition, and scoring weights are entirely proprietary — engineered to detect structural patterns that precede significant directional moves.", tag: "ADAPTIVE ENGINE" },
-    { num: "02", title: "Multi-Timeframe Confluence Layer", desc: "Every setup is cross-validated against multiple timeframes simultaneously. The engine applies directional confluence filters and trend-alignment scoring to ensure signals are structurally sound across the macro and micro landscape — filtering out noise at the source.", tag: "MTF CONFLUENCE" },
-    { num: "03", title: "Multi-Dimensional Conviction Scoring", desc: "Multiple orthogonal factors — spanning momentum, structure, volume behavior, sector dynamics, and regime awareness — are synthesized into a single 0–100 conviction score through a proprietary weighted intelligence model. The exact dimensions and weights are undisclosed.", tag: "CONVICTION SCORING" },
-    { num: "04", title: "Sub-3-Second Signal Delivery", desc: "When a high-conviction signal is confirmed, a structured alert payload is dispatched to your mobile device and the web dashboard simultaneously — ticker, score, grade, verdict, and price context delivered in under 3 seconds. No app store dependencies.", tag: "REAL-TIME DISPATCH" },
-    { num: "05", title: "Encrypted Live Dashboard", desc: "Access a PIN-secured, real-time analytical dashboard that reflects the latest scan results. View ranked setups, conviction scores, grade badges, and verdicts — updated autonomously every cycle. Your private window into the engine's output.", tag: "LIVE DASHBOARD" },
-    { num: "06", title: "Intelligent Signal Deduplication", desc: "A session-level deduplication registry ensures you never receive redundant alerts on the same ticker within a single session. Every notification represents a fresh, unique analytical insight — keeping your feed clean, precise, and actionable.", tag: "ANTI-NOISE" },
+    { num: "01", title: "Proprietary Adaptive Engine", desc: "The core intelligence layer applies a multi-factor adaptive model to identify high-probability setups across the full premium universe. The model architecture, feature composition, and scoring weights are entirely proprietary — engineered to detect structural patterns that precede significant directional moves.", tag: "ADAPTIVE ENGINE", traderValue: "The engine is built to identify structural behavior across the broader market, not just simple indicator crosses. Traders benefit from a systematic filter designed to reduce emotion, bias, and random chart scanning." },
+    { num: "02", title: "Multi-Timeframe Confluence Layer", desc: "Every setup is cross-validated against multiple timeframes simultaneously. The engine applies directional confluence filters and trend-alignment scoring to ensure signals are structurally sound across the macro and micro landscape — filtering out noise at the source.", tag: "MTF CONFLUENCE", traderValue: "A setup is stronger when short-term movement aligns with the larger structure. This helps traders avoid acting on isolated one-timeframe noise and focus on cleaner alignment." },
+    { num: "03", title: "Multi-Dimensional Conviction Scoring", desc: "Multiple orthogonal factors — spanning momentum, structure, volume behavior, sector dynamics, and regime awareness — are synthesized into a single 0–100 conviction score through a proprietary weighted intelligence model. The exact dimensions and weights are undisclosed.", tag: "CONVICTION SCORING", traderValue: "Momentum, structure, volume, sector behavior, and regime awareness are compressed into one readable score. Traders can prioritize attention faster without manually weighing every factor from scratch." },
+    { num: "04", title: "Sub-3-Second Signal Delivery", desc: "When a high-conviction signal is confirmed, a structured alert payload is dispatched to your mobile device and the web dashboard simultaneously — ticker, score, grade, verdict, and price context delivered in under 3 seconds. No app store dependencies.", tag: "REAL-TIME DISPATCH", traderValue: "Speed matters when a setup starts moving. The trader receives the signal quickly enough to review the chart while the setup is still fresh." },
+    { num: "05", title: "Encrypted Live Dashboard", desc: "Access a PIN-secured, real-time analytical dashboard that reflects the latest scan results. View ranked setups, conviction scores, grade badges, and verdicts — updated autonomously every cycle. Your private window into the engine's output.", tag: "LIVE DASHBOARD", traderValue: "The dashboard gives traders a private command center for ranked setups, grades, and verdicts. It helps preserve situational awareness beyond a single phone alert." },
+    { num: "06", title: "Intelligent Signal Deduplication", desc: "A session-level deduplication registry ensures you never receive redundant alerts on the same ticker within a single session. Every notification represents a fresh, unique analytical insight — keeping your feed clean, precise, and actionable.", tag: "ANTI-NOISE", traderValue: "Fewer repeated alerts means less noise and more trust in each notification. Traders only see fresh or meaningful signals instead of getting spammed by the same ticker." },
   ];
 
   return (
@@ -342,7 +355,12 @@ function Features() {
               <span className="font-mono text-[10px] text-[#00d4aa]/70 tracking-widest bg-[#00d4aa]/8 border border-[#00d4aa]/15 rounded px-2 py-0.5 mb-4 inline-block">{f.tag}</span>
               <div className="absolute left-0 top-6 bottom-6 w-0.5 bg-[#00d4aa] opacity-0 group-hover:opacity-100 transition-opacity rounded-full" />
               <h3 className="font-['Space_Grotesk'] font-semibold text-base sm:text-lg text-white mb-3 group-hover:text-[#00d4aa] transition-colors">{f.title}</h3>
-              <p className="text-white/45 text-sm leading-relaxed">{f.desc}</p>
+              <p className="text-white/45 text-sm leading-relaxed mb-3">{f.desc}</p>
+              {/* Trader Value translation */}
+              <div className="bg-[#00d4aa]/5 border border-[#00d4aa]/10 rounded-lg px-3 py-2.5 mt-auto">
+                <p className="font-mono text-[10px] text-[#00d4aa]/70 tracking-widest mb-1">TRADER VALUE</p>
+                <p className="text-white/55 text-xs leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>{f.traderValue}</p>
+              </div>
             </div>
           ))}
         </div>
