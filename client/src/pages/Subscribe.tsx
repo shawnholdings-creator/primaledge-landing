@@ -49,10 +49,37 @@ export default function Subscribe() {
       return;
     }
     setLoading(true);
-    // Simulate submission
-    await new Promise(r => setTimeout(r, 1500));
-    setLoading(false);
-    setSubmitted(true);
+
+    try {
+      const resp = await fetch("https://formsubmit.co/ajax/shawnholdings@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          _subject: `🚀 New Access Request: ${form.firstName} ${form.lastName}`,
+          _template: "table",
+          "First Name": form.firstName,
+          "Last Name": form.lastName || "—",
+          Email: form.email,
+          Phone: form.phone || "—",
+          "Trading Experience": form.tradingExp || "—",
+          "NTFY Username": form.ntfyTopic || "—",
+          _captcha: "false",
+        }),
+      });
+
+      if (!resp.ok) throw new Error("Submission failed");
+
+      setSubmitted(true);
+      toast.success("Request submitted successfully!");
+    } catch (err) {
+      console.error("Form submission error:", err);
+      toast.error("Something went wrong. Please try again or email support@primaledge.io.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
