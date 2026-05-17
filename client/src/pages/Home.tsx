@@ -148,16 +148,16 @@ function Hero() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 fade-up fade-up-delay-4">
-              <Link href="/subscribe" className="shimmer-btn pulse-glow bg-[#00d4aa] text-[#0a0e14] font-['Space_Grotesk'] font-bold text-base px-8 py-3.5 rounded hover:bg-[#00bfa0] transition-all text-center">
-                Access the AI Scanner →
-              </Link>
-              <a href="#how-it-works" className="group relative border border-[#00d4aa]/40 text-white font-['Space_Grotesk'] font-semibold text-base px-8 py-3.5 rounded hover:border-[#00d4aa] hover:bg-[#00d4aa]/10 transition-all text-center overflow-hidden">
-                <span className="absolute inset-0 bg-gradient-to-r from-[#00d4aa]/0 via-[#00d4aa]/10 to-[#00d4aa]/0 animate-shimmer" />
+              <a href="#how-it-works" className="shimmer-btn pulse-glow bg-[#00d4aa] text-[#0a0e14] font-['Space_Grotesk'] font-bold text-base px-8 py-3.5 rounded hover:bg-[#00bfa0] transition-all text-center overflow-hidden relative">
+                <span className="absolute inset-0 bg-gradient-to-r from-[#00d4aa]/0 via-white/15 to-[#00d4aa]/0 animate-shimmer" />
                 <span className="relative flex items-center justify-center gap-2">
                   See How It Works
                   <svg className="w-4 h-4 animate-bounce" fill="none" viewBox="0 0 16 16"><path d="M8 3v10M4 9l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </span>
               </a>
+              <Link href="/subscribe" className="border border-white/15 text-white/70 font-['Space_Grotesk'] font-medium text-base px-8 py-3.5 rounded hover:border-white/30 hover:text-white transition-all text-center">
+                Access the AI Scanner →
+              </Link>
             </div>
 
             <div className="flex items-center gap-4 mt-8 fade-up fade-up-delay-5">
