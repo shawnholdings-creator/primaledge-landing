@@ -422,6 +422,9 @@ export default function Subscribe() {
             </p>
           </div>
 
+          {/* Spacer for fixed bottom disclaimer */}
+          <div className="h-12" />
+
         </div>
       </div>
     </div>
