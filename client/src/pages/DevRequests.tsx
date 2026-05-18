@@ -35,12 +35,13 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 export default function DevRequests() {
-  const [form, setForm] = useState({ title: "", category: CATEGORIES[0], description: "", email: "" });
+  const [form, setForm] = useState({ title: "", category: CATEGORIES[0], description: "", email: "", agree: false });
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.title.trim()) { toast.error("Please enter a request title."); return; }
+    if (!form.agree) { toast.error("Please accept the disclosure before submitting."); return; }
     setSubmitted(true);
     toast.success("Request submitted! We'll review it shortly.");
   };
@@ -128,6 +129,20 @@ export default function DevRequests() {
                     className="w-full bg-[#0d1520] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#00d4aa]/50 transition-colors"
                   />
                 </div>
+
+                {/* Disclosure checkbox */}
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={form.agree}
+                    onChange={e => setForm({ ...form, agree: e.target.checked })}
+                    className="mt-0.5 w-4 h-4 rounded border-white/20 bg-[#0d1520] accent-[#00d4aa] shrink-0"
+                  />
+                  <span className="text-white/55 text-sm leading-snug">
+                    I understand this is for educational and analytical purposes only. Not financial advice.
+                  </span>
+                </label>
+
                 <button
                   type="submit"
                   className="w-full bg-[#00d4aa] text-[#0a0e14] font-bold py-3.5 rounded-xl hover:bg-[#00d4aa]/90 transition-colors"
