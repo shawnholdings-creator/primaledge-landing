@@ -1,141 +1,272 @@
 /* ============================================================
-   MarketSentiment.tsx — Live product page
-   Shows the sample watermarked TradingView Market Sentiment overlay
+   MarketSentiment.tsx — Standalone product page
+   Private-access market intelligence layer
+   Design: dark premium, AI/quant, proprietary
    ============================================================ */
 
 import Navbar from "../components/Navbar";
 import { Link } from "wouter";
 
+const PILLARS = [
+  {
+    icon: "◆",
+    title: "Market Bias",
+    desc: "A single directional verdict — bullish, bearish, or neutral — derived from the composite behavior of major indices across multiple timeframes. No ambiguity, no guesswork.",
+    tag: "DIRECTIONAL",
+  },
+  {
+    icon: "◆",
+    title: "Participation Quality",
+    desc: "Measures how broadly the market is confirming its direction. High participation means conviction is widespread; low participation signals fragile, narrow leadership.",
+    tag: "BREADTH",
+  },
+  {
+    icon: "◆",
+    title: "Volatility Pressure",
+    desc: "Real-time volatility regime classification — compressed, normal, or elevated. Traders instantly see whether the tape favors breakout entries or defensive positioning.",
+    tag: "REGIME",
+  },
+  {
+    icon: "◆",
+    title: "Sector Rotation",
+    desc: "Identifies which sector is absorbing the most capital flow in the current session. Tracks the hottest rotation in real time so traders know where institutional energy is concentrating.",
+    tag: "FLOW",
+  },
+  {
+    icon: "◆",
+    title: "Options-Flow Tone",
+    desc: "Quantifies whether aggregate options activity is leaning calls-heavy, puts-heavy, or balanced — an indirect read on how the derivatives market is positioning for near-term direction.",
+    tag: "DERIVATIVES",
+  },
+  {
+    icon: "◆",
+    title: "Streak Dynamics",
+    desc: "Tracks how many consecutive sessions the sentiment has maintained its current direction. Sustained streaks confirm trend persistence; breaks signal potential regime shifts.",
+    tag: "PERSISTENCE",
+  },
+  {
+    icon: "◆",
+    title: "Key-Symbol Alignment",
+    desc: "An 11-symbol grid monitoring every major index and high-impact name across daily, weekly, and compression timeframes — instant visual confirmation of broad directional agreement.",
+    tag: "MULTI-TF",
+  },
+];
+
 export default function MarketSentiment() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#0a0e14] pt-32 pb-32">
-        <div className="container">
-          {/* Header */}
-          <div className="text-center mb-10 sm:mb-14">
-            <div className="inline-flex items-center gap-2 font-mono text-xs text-[#00d4aa] tracking-widest mb-4 bg-[#00d4aa]/10 border border-[#00d4aa]/20 rounded-full px-4 py-1.5">
-              <span className="w-2 h-2 rounded-full bg-[#00d4aa] animate-pulse" />
-              LIVE PRODUCT
-            </div>
-            <h1 className="font-['Space_Grotesk'] font-bold text-4xl sm:text-5xl lg:text-6xl text-white mb-4">
-              Market Sentiment
-            </h1>
-            <p className="text-white/50 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-              A proprietary TradingView overlay that delivers real-time multi-timeframe sentiment analysis across major indices and Mag-7 tickers — conviction, streak, sector flow, and directional alignment in one unified dashboard panel.
-            </p>
+      <main className="min-h-screen bg-[#0a0e14]">
+
+        {/* ── HERO ──────────────────────────────────────────────── */}
+        <section className="pt-32 sm:pt-40 pb-16 sm:pb-24 relative overflow-hidden">
+          {/* Background glow */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-[#00d4aa]/5 rounded-full blur-[120px]" />
           </div>
 
-          {/* Overall Market Sentiment — Indicator Overview Card */}
-          <div className="max-w-4xl mx-auto mb-12 sm:mb-16">
-            <div className="relative bg-[#111820] border border-[#00d4aa]/15 rounded-2xl overflow-hidden">
-              {/* Top accent bar */}
-              <div className="h-1 bg-gradient-to-r from-[#00d4aa]/0 via-[#00d4aa] to-[#00d4aa]/0" />
-              <div className="p-6 sm:p-8 lg:p-10">
-                {/* Indicator badge + title */}
-                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-5">
-                  <span className="font-mono text-[10px] text-[#00d4aa]/70 tracking-widest bg-[#00d4aa]/8 border border-[#00d4aa]/15 rounded px-2.5 py-1 inline-block w-fit">INDICATOR</span>
-                  <h2 className="font-['Space_Grotesk'] font-bold text-2xl sm:text-3xl text-white">
-                    Overall Market Sentiment
-                  </h2>
+          <div className="container relative">
+            <div className="max-w-3xl mx-auto text-center">
+              <div className="inline-flex items-center gap-2 font-mono text-[10px] text-[#00d4aa]/70 tracking-widest bg-[#00d4aa]/8 border border-[#00d4aa]/15 rounded-full px-4 py-1.5 mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00d4aa] animate-pulse" />
+                PRIVATE ACCESS · INTELLIGENCE LAYER
+              </div>
+
+              <h1 className="font-['Space_Grotesk'] font-bold text-4xl sm:text-5xl lg:text-6xl text-white mb-4 leading-tight">
+                Market Sentiment
+              </h1>
+
+              <p className="font-['Space_Grotesk'] text-lg sm:text-xl text-[#00d4aa]/80 mb-6">
+                Read the market state. Filter the noise. Focus the opportunity.
+              </p>
+
+              <p className="text-white/45 text-base sm:text-lg leading-relaxed mb-10 max-w-2xl mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                Overall Market Sentiment is a private-access intelligence layer built to decode the live market state into a single actionable dashboard. It synthesizes market bias, participation quality, volatility pressure, sector rotation, options-flow tone, streak dynamics, and key-symbol alignment into a clean visual readout designed for fast interpretation.
+              </p>
+
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <Link href="/subscribe">
+                  <button className="shimmer-btn pulse-glow bg-[#00d4aa] text-[#0a0e14] font-['Space_Grotesk'] font-bold text-base px-8 py-3.5 rounded-lg hover:bg-[#00bfa0] transition-all overflow-hidden relative w-full sm:w-auto">
+                    <span className="absolute inset-0 bg-gradient-to-r from-[#00d4aa]/0 via-white/15 to-[#00d4aa]/0 animate-shimmer" />
+                    <span className="relative">Request Market Sentiment Access</span>
+                  </button>
+                </Link>
+                <a href="#preview" className="border border-white/10 text-white/60 hover:text-white hover:border-white/20 font-['Space_Grotesk'] font-semibold text-base px-8 py-3.5 rounded-lg transition-all w-full sm:w-auto text-center">
+                  Preview the Sentiment Layer ↓
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── VISUAL PRODUCT PREVIEW ────────────────────────────── */}
+        <section id="preview" className="pb-16 sm:pb-24">
+          <div className="container">
+            <div className="max-w-5xl mx-auto">
+              {/* Preview label */}
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <div className="h-px flex-1 bg-gradient-to-r from-transparent to-white/10" />
+                <span className="font-mono text-[10px] text-white/25 tracking-widest">SAMPLE READOUT</span>
+                <div className="h-px flex-1 bg-gradient-to-l from-transparent to-white/10" />
+              </div>
+
+              {/* Sample image with frame */}
+              <div className="relative rounded-2xl overflow-hidden border border-white/8 bg-[#0d1117]">
+                {/* Top bar mock */}
+                <div className="flex items-center gap-2 px-4 py-2.5 bg-[#0d1117] border-b border-white/5">
+                  <div className="flex gap-1.5">
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+                  </div>
+                  <span className="font-mono text-[10px] text-white/20 ml-3 tracking-wider">MARKET SENTIMENT — PRIVATE INTELLIGENCE LAYER</span>
+                  <div className="ml-auto flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#00d4aa] animate-pulse" />
+                    <span className="font-mono text-[10px] text-[#00d4aa]/60 tracking-wider">LIVE</span>
+                  </div>
                 </div>
 
-                {/* Description */}
-                <p className="text-white/55 text-sm sm:text-base leading-relaxed mb-6" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                  Overall Market Sentiment is a real-time command layer that translates broad market conditions into a clean, trader-ready readout. It synthesizes index behavior, multi-timeframe bias, sector participation, volatility, options-flow pressure, and symbol-level alignment into one compact sentiment panel.
-                </p>
+                {/* Image */}
+                <img
+                  src="/market_sentiment_sample.png"
+                  alt="Market Sentiment — Sample Intelligence Readout"
+                  className="w-full h-auto"
+                  loading="eager"
+                />
+              </div>
 
-                {/* Trader Value box */}
-                <div className="bg-[#00d4aa]/5 border border-[#00d4aa]/10 rounded-lg px-4 sm:px-5 py-4 mb-6">
-                  <p className="font-mono text-[10px] text-[#00d4aa]/70 tracking-widest mb-2">WHY TRADERS CARE</p>
-                  <p className="text-white/55 text-sm leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                    Less guesswork, less chart-hopping, and faster context on whether the tape is bullish, defensive, sector-led, or mixed — before reviewing individual setups.
-                  </p>
+              <p className="text-center text-white/20 text-xs font-mono mt-4 tracking-wider">
+                Sample readout — live data available to private-access subscribers only
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ── TRADER VALUE BRIDGE ────────────────────────────────── */}
+        <section className="py-12 sm:py-16 border-y border-white/5 bg-[#0d1117]/50">
+          <div className="container">
+            <div className="max-w-3xl mx-auto text-center">
+              <p className="text-white/50 text-base sm:text-lg leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                For traders, this creates a more disciplined decision backdrop: understand when the environment supports momentum, when conditions are fragmented, and when selectivity should take priority over activity.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ── SEVEN PILLARS ─────────────────────────────────────── */}
+        <section className="py-16 sm:py-24">
+          <div className="container">
+            <div className="text-center mb-12 sm:mb-16">
+              <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">INTELLIGENCE DIMENSIONS</p>
+              <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white">
+                Seven Layers of<br />Market Context
+              </h2>
+            </div>
+
+            <div className="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+              {PILLARS.map((pillar, i) => (
+                <div
+                  key={i}
+                  className={`relative bg-[#111820] border border-white/5 rounded-xl p-6 hover:border-[#00d4aa]/20 transition-all group ${
+                    i === 6 ? "sm:col-span-2 lg:col-span-1 sm:max-w-md sm:mx-auto lg:max-w-none" : ""
+                  }`}
+                >
+                  {/* Tag */}
+                  <span className="font-mono text-[9px] text-[#00d4aa]/50 tracking-widest bg-[#00d4aa]/5 border border-[#00d4aa]/10 rounded px-2 py-0.5 mb-4 inline-block">
+                    {pillar.tag}
+                  </span>
+
+                  {/* Number */}
+                  <div className="absolute top-5 right-5 font-['Space_Grotesk'] text-4xl font-bold text-white/3">
+                    {String(i + 1).padStart(2, "0")}
+                  </div>
+
+                  <h3 className="font-['Space_Grotesk'] font-semibold text-base sm:text-lg text-white mb-3 group-hover:text-[#00d4aa] transition-colors">
+                    {pillar.title}
+                  </h3>
+                  <p className="text-white/40 text-sm leading-relaxed">{pillar.desc}</p>
                 </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
-                {/* Key capabilities strip */}
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {["Index Behavior", "MTF Bias", "Sector Participation", "Volatility Regime", "Options Flow", "Symbol Alignment"].map((item, i) => (
-                    <span key={i} className="font-mono text-[10px] text-white/30 tracking-wider bg-white/3 border border-white/5 rounded-full px-3 py-1">
-                      {item}
-                    </span>
-                  ))}
-                </div>
+        {/* ── CONVERSION SECTION ────────────────────────────────── */}
+        <section className="py-16 sm:py-24 bg-gradient-to-b from-[#0a0e14] to-[#0d1117]">
+          <div className="container">
+            <div className="max-w-4xl mx-auto">
+              <div className="bg-[#111820] border border-[#00d4aa]/10 rounded-2xl overflow-hidden">
+                <div className="h-1 bg-gradient-to-r from-[#00d4aa]/0 via-[#00d4aa] to-[#00d4aa]/0" />
+                <div className="p-8 sm:p-12 lg:p-14">
+                  <div className="text-center mb-10">
+                    <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">PRIVATE ACCESS</p>
+                    <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl text-white mb-4">
+                      Clearer Context. Reduced Noise.
+                    </h2>
+                    <p className="text-white/45 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                      Market Sentiment gives you the environmental read before you commit to a position. Instead of reacting to isolated charts, you operate from a structured view of the market's current state.
+                    </p>
+                  </div>
 
-                {/* CTA row */}
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                  <Link href="/subscribe">
-                    <button className="shimmer-btn bg-[#00d4aa] text-[#0a0e14] font-['Space_Grotesk'] font-bold text-sm px-6 py-3 rounded-lg hover:bg-[#00bfa0] transition-all overflow-hidden relative">
-                      <span className="absolute inset-0 bg-gradient-to-r from-[#00d4aa]/0 via-white/15 to-[#00d4aa]/0 animate-shimmer" />
-                      <span className="relative">View Market Sentiment →</span>
-                    </button>
-                  </Link>
-                  <span className="text-white/25 text-xs font-mono tracking-wider">Educational & analysis purposes only</span>
+                  {/* Value propositions */}
+                  <div className="grid sm:grid-cols-3 gap-6 mb-10">
+                    {[
+                      {
+                        icon: "🔒",
+                        title: "Private Access",
+                        desc: "Exclusive intelligence layer available only to verified subscribers. Not a public feed.",
+                      },
+                      {
+                        icon: "🎯",
+                        title: "Clearer Market Context",
+                        desc: "Seven dimensions of market state — synthesized into one clean, fast-read dashboard.",
+                      },
+                      {
+                        icon: "🔇",
+                        title: "Reduced Noise",
+                        desc: "Stop cycling through charts and feeds. One glance tells you whether conditions support action or patience.",
+                      },
+                    ].map((item, i) => (
+                      <div key={i} className="text-center">
+                        <div className="text-3xl mb-3">{item.icon}</div>
+                        <h3 className="font-['Space_Grotesk'] font-semibold text-white text-sm mb-2">{item.title}</h3>
+                        <p className="text-white/35 text-xs leading-relaxed">{item.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* CTA */}
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <Link href="/subscribe">
+                      <button className="shimmer-btn pulse-glow bg-[#00d4aa] text-[#0a0e14] font-['Space_Grotesk'] font-bold text-base px-10 py-4 rounded-lg hover:bg-[#00bfa0] transition-all overflow-hidden relative w-full sm:w-auto">
+                        <span className="absolute inset-0 bg-gradient-to-r from-[#00d4aa]/0 via-white/15 to-[#00d4aa]/0 animate-shimmer" />
+                        <span className="relative">Request Market Sentiment Access</span>
+                      </button>
+                    </Link>
+                    <a href="#preview" className="border border-white/10 text-white/50 hover:text-white hover:border-white/20 font-['Space_Grotesk'] font-semibold text-sm px-8 py-3.5 rounded-lg transition-all w-full sm:w-auto text-center">
+                      Preview the Sentiment Layer ↑
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+        </section>
 
-          {/* Sample Image */}
-          <div className="relative max-w-5xl mx-auto mb-12 sm:mb-16">
-            <div className="relative rounded-2xl overflow-hidden border border-white/10 teal-glow">
-              <img
-                src="/market_sentiment_sample.png"
-                alt="Market Sentiment — Sample Preview"
-                className="w-full h-auto"
-                loading="eager"
-              />
-              {/* SAMPLE overlay badge */}
-              <div className="absolute top-4 left-4 font-mono text-xs font-bold tracking-widest text-white/60 bg-black/60 backdrop-blur-sm border border-white/10 rounded-lg px-3 py-1.5">
-                SAMPLE PREVIEW
-              </div>
+        {/* ── DISCLAIMER ───────────────────────────────────────── */}
+        <section className="pb-32">
+          <div className="container">
+            <div className="max-w-4xl mx-auto bg-[#111820] border border-white/5 rounded-xl px-5 sm:px-6 py-4 flex items-start gap-3">
+              <svg className="w-4 h-4 text-[#f59e0b] shrink-0 mt-0.5" fill="none" viewBox="0 0 16 16">
+                <path d="M8 2l1.5 4.5H14l-3.7 2.7 1.4 4.3L8 11 4.3 13.5l1.4-4.3L2 6.5h4.5z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
+              </svg>
+              <p className="text-white/35 text-xs leading-relaxed">
+                <span className="text-white/55 font-semibold">Research Disclosure:</span> Market Sentiment is an educational and analytical intelligence tool. Sentiment readings, conviction levels, directional labels, and all visual readouts are derived from proprietary analysis of historical and real-time data. They are provided for informational purposes only and do not constitute financial advice or a recommendation to buy, sell, or hold any security. Past performance of any model or analytical system does not guarantee future results.
+              </p>
             </div>
-            <p className="text-center text-white/30 text-xs font-mono mt-3 tracking-wider">
-              Live TradingView overlay — real-time data shown to active subscribers only
-            </p>
           </div>
+        </section>
 
-          {/* Feature Grid */}
-          <div className="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 mb-12 sm:mb-16">
-            {[
-              { icon: "🟢", title: "Overall Verdict", desc: "BULLISH or BEARISH — a single conviction-weighted verdict across all monitored timeframes and tickers." },
-              { icon: "🔥", title: "Conviction Level", desc: "LOW, MODERATE, or HIGH — quantified confidence in the current directional bias based on internal signal density." },
-              { icon: "📊", title: "Streak Tracking", desc: "How many consecutive sessions the sentiment has maintained its direction — identifying sustained trends vs. reversals." },
-              { icon: "⚡", title: "Volatility & Participation", desc: "Real-time volatility regime and market participation breadth — know whether the market is quiet or loaded." },
-              { icon: "🏦", title: "Sector Flow", desc: "Identifies the hottest rotating sector and tracks options flow bias (Calls Heavy vs. Puts Heavy) across the market." },
-              { icon: "📱", title: "Mag-7 + Index Grid", desc: "11-symbol grid showing 1D, 1W, and Coil status for every major index and Mag-7 name — instant multi-timeframe alignment." },
-            ].map((item, i) => (
-              <div key={i} className="bg-[#111820] border border-white/5 rounded-xl p-5 hover:border-[#00d4aa]/20 transition-colors group">
-                <div className="text-2xl mb-3">{item.icon}</div>
-                <h3 className="font-['Space_Grotesk'] font-semibold text-white text-sm sm:text-base mb-2 group-hover:text-[#00d4aa] transition-colors">{item.title}</h3>
-                <p className="text-white/40 text-xs sm:text-sm leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* CTA */}
-          <div className="text-center">
-            <Link href="/subscribe">
-              <button className="shimmer-btn pulse-glow bg-[#00d4aa] text-[#0a0e14] font-['Space_Grotesk'] font-bold text-base px-10 py-4 rounded-lg hover:bg-[#00bfa0] transition-all overflow-hidden relative">
-                <span className="absolute inset-0 bg-gradient-to-r from-[#00d4aa]/0 via-white/15 to-[#00d4aa]/0 animate-shimmer" />
-                <span className="relative">Get Access to Market Sentiment →</span>
-              </button>
-            </Link>
-            <p className="text-white/25 text-xs font-mono mt-4 tracking-wider">
-              Included with all Primal Edge subscriptions
-            </p>
-          </div>
-
-          {/* Disclaimer */}
-          <div className="max-w-4xl mx-auto mt-12 bg-[#111820] border border-white/5 rounded-xl px-5 sm:px-6 py-4 flex items-start gap-3">
-            <svg className="w-4 h-4 text-[#f59e0b] shrink-0 mt-0.5" fill="none" viewBox="0 0 16 16">
-              <path d="M8 2l1.5 4.5H14l-3.7 2.7 1.4 4.3L8 11 4.3 13.5l1.4-4.3L2 6.5h4.5z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
-            </svg>
-            <p className="text-white/35 text-xs leading-relaxed">
-              <span className="text-white/55 font-semibold">Disclaimer:</span> Market Sentiment is an educational and analytical tool. Sentiment readings, conviction levels, and directional labels are derived from historical and real-time data and do not constitute financial advice or a recommendation to buy, sell, or hold any security.
-            </p>
-          </div>
-        </div>
       </main>
     </>
   );
