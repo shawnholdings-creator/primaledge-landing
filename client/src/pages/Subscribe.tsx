@@ -154,7 +154,7 @@ export default function Subscribe() {
                     "Check your email for onboarding instructions",
                     "Download NTFY on your phone for push alerts",
                     "Subscribe to your private alert channel",
-                    "Access the live AI Dashboard",
+                    "Access the live Primal Edge AI Cockpit",
                   ].map((step, i) => (
                     <div key={i} className="flex items-start gap-3">
                       <span className="font-mono text-xs text-[#00d4aa] shrink-0 mt-0.5">0{i + 1}</span>

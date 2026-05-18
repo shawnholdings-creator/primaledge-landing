@@ -11,7 +11,7 @@ import Navbar from "@/components/Navbar";
 const PRODUCTS = [
   {
     id: "ai-dashboard",
-    name: "AI Dashboard",
+    name: "Primal Edge AI Cockpit",
     tag: "BETA",
     tagColor: "#a855f7",
     description:

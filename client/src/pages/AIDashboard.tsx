@@ -1,5 +1,5 @@
 /* ============================================================
-   AIDashboard.tsx — PIN-Locked AI Dashboard (Live Feed)
+   AIDashboard.tsx — PIN-Locked Primal Edge AI Cockpit (Live Feed)
    Design: Terminal-style signal engine matching screenshot mockup
    PIN gate: temporary access control before auth is built
    Data: Fetches live signal data from GitHub Gist
@@ -108,7 +108,7 @@ function PinGate({ onUnlock }: { onUnlock: () => void }) {
             className="text-3xl md:text-4xl font-black text-white mb-3 leading-tight"
             style={{ fontFamily: "'Space Grotesk', sans-serif" }}
           >
-            AI Dashboard
+            Primal Edge AI Cockpit
           </h1>
           <p className="text-white/40 text-sm mb-8">Enter your 4-digit access PIN to continue</p>
 
