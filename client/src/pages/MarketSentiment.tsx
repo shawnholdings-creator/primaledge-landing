@@ -26,6 +26,56 @@ export default function MarketSentiment() {
             </p>
           </div>
 
+          {/* Overall Market Sentiment — Indicator Overview Card */}
+          <div className="max-w-4xl mx-auto mb-12 sm:mb-16">
+            <div className="relative bg-[#111820] border border-[#00d4aa]/15 rounded-2xl overflow-hidden">
+              {/* Top accent bar */}
+              <div className="h-1 bg-gradient-to-r from-[#00d4aa]/0 via-[#00d4aa] to-[#00d4aa]/0" />
+              <div className="p-6 sm:p-8 lg:p-10">
+                {/* Indicator badge + title */}
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-5">
+                  <span className="font-mono text-[10px] text-[#00d4aa]/70 tracking-widest bg-[#00d4aa]/8 border border-[#00d4aa]/15 rounded px-2.5 py-1 inline-block w-fit">INDICATOR</span>
+                  <h2 className="font-['Space_Grotesk'] font-bold text-2xl sm:text-3xl text-white">
+                    Overall Market Sentiment
+                  </h2>
+                </div>
+
+                {/* Description */}
+                <p className="text-white/55 text-sm sm:text-base leading-relaxed mb-6" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                  Overall Market Sentiment is a real-time command layer that translates broad market conditions into a clean, trader-ready readout. It synthesizes index behavior, multi-timeframe bias, sector participation, volatility, options-flow pressure, and symbol-level alignment into one compact sentiment panel.
+                </p>
+
+                {/* Trader Value box */}
+                <div className="bg-[#00d4aa]/5 border border-[#00d4aa]/10 rounded-lg px-4 sm:px-5 py-4 mb-6">
+                  <p className="font-mono text-[10px] text-[#00d4aa]/70 tracking-widest mb-2">WHY TRADERS CARE</p>
+                  <p className="text-white/55 text-sm leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                    Less guesswork, less chart-hopping, and faster context on whether the tape is bullish, defensive, sector-led, or mixed — before reviewing individual setups.
+                  </p>
+                </div>
+
+                {/* Key capabilities strip */}
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {["Index Behavior", "MTF Bias", "Sector Participation", "Volatility Regime", "Options Flow", "Symbol Alignment"].map((item, i) => (
+                    <span key={i} className="font-mono text-[10px] text-white/30 tracking-wider bg-white/3 border border-white/5 rounded-full px-3 py-1">
+                      {item}
+                    </span>
+                  ))}
+                </div>
+
+                {/* CTA row */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                  <Link href="/subscribe">
+                    <button className="shimmer-btn bg-[#00d4aa] text-[#0a0e14] font-['Space_Grotesk'] font-bold text-sm px-6 py-3 rounded-lg hover:bg-[#00bfa0] transition-all overflow-hidden relative">
+                      <span className="absolute inset-0 bg-gradient-to-r from-[#00d4aa]/0 via-white/15 to-[#00d4aa]/0 animate-shimmer" />
+                      <span className="relative">View Market Sentiment →</span>
+                    </button>
+                  </Link>
+                  <span className="text-white/25 text-xs font-mono tracking-wider">Educational & analysis purposes only</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Sample Image */}
           <div className="relative max-w-5xl mx-auto mb-12 sm:mb-16">
             <div className="relative rounded-2xl overflow-hidden border border-white/10 teal-glow">
