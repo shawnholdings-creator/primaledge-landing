@@ -10,7 +10,7 @@ import PrimalEdgeLogo from "./PrimalEdgeLogo";
 
 const PRODUCTS_LINKS = [
   { label: "AI Dashboard", href: "/ai-dashboard", badge: "LIVE", badgeColor: "#00d4aa" },
-  { label: "Market Sentiment", href: "/market-sentiment", badge: "COMING SOON", badgeColor: "#f59e0b" },
+  { label: "Market Sentiment", href: "/market-sentiment", badge: "LIVE", badgeColor: "#00d4aa" },
   { label: "Sectors", href: "/sectors", badge: "COMING SOON", badgeColor: "#f59e0b" },
   { label: "All Products", href: "/products", badge: null, badgeColor: "" },
 ];

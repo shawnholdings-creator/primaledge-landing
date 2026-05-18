@@ -1,31 +1,92 @@
-import ComingSoonPage from "./ComingSoonPage";
+/* ============================================================
+   MarketSentiment.tsx — Live product page
+   Shows the sample watermarked TradingView Market Sentiment overlay
+   ============================================================ */
+
+import Navbar from "../components/Navbar";
+import { Link } from "wouter";
 
 export default function MarketSentiment() {
   return (
-    <ComingSoonPage
-      title="Market Sentiment"
-      subtitle="Know the Mood Before the Move."
-      description="Real-time and historical sentiment analysis across equities, options flow, social signals, and macro indicators — giving you a quantified read on where institutional and retail money is positioned right now."
-      icon={
-        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-          <path d="M6 34 C10 20, 16 28, 24 16 C32 4, 38 22, 42 14" stroke="#00d4aa" strokeWidth="3" strokeLinecap="round" fill="none"/>
-          <circle cx="24" cy="16" r="3" fill="#00d4aa"/>
-          <path d="M6 42h36" stroke="#00d4aa" strokeWidth="2" strokeOpacity="0.3" strokeLinecap="round"/>
-          <path d="M6 6v36" stroke="#00d4aa" strokeWidth="2" strokeOpacity="0.3" strokeLinecap="round"/>
-          <rect x="8" y="36" width="6" height="6" rx="1" fill="#00d4aa" opacity="0.3"/>
-          <rect x="18" y="30" width="6" height="12" rx="1" fill="#00d4aa" opacity="0.5"/>
-          <rect x="28" y="24" width="6" height="18" rx="1" fill="#00d4aa" opacity="0.7"/>
-          <rect x="38" y="18" width="6" height="24" rx="1" fill="#00d4aa"/>
-        </svg>
-      }
-      teaserItems={[
-        { label: "Fear & Greed Index", desc: "A composite AI-weighted sentiment score across volatility, momentum, breadth, and options data — updated in real time." },
-        { label: "Put/Call Ratio Analysis", desc: "Track the put/call ratio across indices and individual names to gauge institutional hedging and directional bias." },
-        { label: "Options Flow Heatmap", desc: "Visualize where the smart money is positioning — unusual options activity mapped by sector, size, and conviction." },
-        { label: "Short Interest Tracker", desc: "Monitor short interest levels and changes across the premium universe to identify potential squeeze candidates." },
-        { label: "Breadth Indicators", desc: "Advance/decline lines, new highs vs. new lows, and percentage of stocks above key moving averages — the market's internal health." },
-        { label: "Macro Sentiment Dashboard", desc: "Fed policy signals, yield curve dynamics, and dollar strength — how macro forces are shaping equity market sentiment." },
-      ]}
-    />
+    <>
+      <Navbar />
+      <main className="min-h-screen bg-[#0a0e14] pt-32 pb-32">
+        <div className="container">
+          {/* Header */}
+          <div className="text-center mb-10 sm:mb-14">
+            <div className="inline-flex items-center gap-2 font-mono text-xs text-[#00d4aa] tracking-widest mb-4 bg-[#00d4aa]/10 border border-[#00d4aa]/20 rounded-full px-4 py-1.5">
+              <span className="w-2 h-2 rounded-full bg-[#00d4aa] animate-pulse" />
+              LIVE PRODUCT
+            </div>
+            <h1 className="font-['Space_Grotesk'] font-bold text-4xl sm:text-5xl lg:text-6xl text-white mb-4">
+              Market Sentiment
+            </h1>
+            <p className="text-white/50 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+              A proprietary TradingView overlay that delivers real-time multi-timeframe sentiment analysis across major indices and Mag-7 tickers — conviction, streak, sector flow, and directional alignment in one unified dashboard panel.
+            </p>
+          </div>
+
+          {/* Sample Image */}
+          <div className="relative max-w-5xl mx-auto mb-12 sm:mb-16">
+            <div className="relative rounded-2xl overflow-hidden border border-white/10 teal-glow">
+              <img
+                src="/market_sentiment_sample.png"
+                alt="Market Sentiment — Sample Preview"
+                className="w-full h-auto"
+                loading="eager"
+              />
+              {/* SAMPLE overlay badge */}
+              <div className="absolute top-4 left-4 font-mono text-xs font-bold tracking-widest text-white/60 bg-black/60 backdrop-blur-sm border border-white/10 rounded-lg px-3 py-1.5">
+                SAMPLE PREVIEW
+              </div>
+            </div>
+            <p className="text-center text-white/30 text-xs font-mono mt-3 tracking-wider">
+              Live TradingView overlay — real-time data shown to active subscribers only
+            </p>
+          </div>
+
+          {/* Feature Grid */}
+          <div className="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 mb-12 sm:mb-16">
+            {[
+              { icon: "🟢", title: "Overall Verdict", desc: "BULLISH or BEARISH — a single conviction-weighted verdict across all monitored timeframes and tickers." },
+              { icon: "🔥", title: "Conviction Level", desc: "LOW, MODERATE, or HIGH — quantified confidence in the current directional bias based on internal signal density." },
+              { icon: "📊", title: "Streak Tracking", desc: "How many consecutive sessions the sentiment has maintained its direction — identifying sustained trends vs. reversals." },
+              { icon: "⚡", title: "Volatility & Participation", desc: "Real-time volatility regime and market participation breadth — know whether the market is quiet or loaded." },
+              { icon: "🏦", title: "Sector Flow", desc: "Identifies the hottest rotating sector and tracks options flow bias (Calls Heavy vs. Puts Heavy) across the market." },
+              { icon: "📱", title: "Mag-7 + Index Grid", desc: "11-symbol grid showing 1D, 1W, and Coil status for every major index and Mag-7 name — instant multi-timeframe alignment." },
+            ].map((item, i) => (
+              <div key={i} className="bg-[#111820] border border-white/5 rounded-xl p-5 hover:border-[#00d4aa]/20 transition-colors group">
+                <div className="text-2xl mb-3">{item.icon}</div>
+                <h3 className="font-['Space_Grotesk'] font-semibold text-white text-sm sm:text-base mb-2 group-hover:text-[#00d4aa] transition-colors">{item.title}</h3>
+                <p className="text-white/40 text-xs sm:text-sm leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <div className="text-center">
+            <Link href="/subscribe">
+              <button className="shimmer-btn pulse-glow bg-[#00d4aa] text-[#0a0e14] font-['Space_Grotesk'] font-bold text-base px-10 py-4 rounded-lg hover:bg-[#00bfa0] transition-all overflow-hidden relative">
+                <span className="absolute inset-0 bg-gradient-to-r from-[#00d4aa]/0 via-white/15 to-[#00d4aa]/0 animate-shimmer" />
+                <span className="relative">Get Access to Market Sentiment →</span>
+              </button>
+            </Link>
+            <p className="text-white/25 text-xs font-mono mt-4 tracking-wider">
+              Included with all Primal Edge subscriptions
+            </p>
+          </div>
+
+          {/* Disclaimer */}
+          <div className="max-w-4xl mx-auto mt-12 bg-[#111820] border border-white/5 rounded-xl px-5 sm:px-6 py-4 flex items-start gap-3">
+            <svg className="w-4 h-4 text-[#f59e0b] shrink-0 mt-0.5" fill="none" viewBox="0 0 16 16">
+              <path d="M8 2l1.5 4.5H14l-3.7 2.7 1.4 4.3L8 11 4.3 13.5l1.4-4.3L2 6.5h4.5z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
+            </svg>
+            <p className="text-white/35 text-xs leading-relaxed">
+              <span className="text-white/55 font-semibold">Disclaimer:</span> Market Sentiment is an educational and analytical tool. Sentiment readings, conviction levels, and directional labels are derived from historical and real-time data and do not constitute financial advice or a recommendation to buy, sell, or hold any security.
+            </p>
+          </div>
+        </div>
+      </main>
+    </>
   );
 }
