@@ -35,13 +35,14 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 export default function DevRequests() {
-  const [form, setForm] = useState({ title: "", category: CATEGORIES[0], description: "", email: "", agree: false });
+  const [form, setForm] = useState({ title: "", category: CATEGORIES[0], description: "", email: "", agree: false, agreeDocusign: false });
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.title.trim()) { toast.error("Please enter a request title."); return; }
     if (!form.agree) { toast.error("Please accept the disclosure before submitting."); return; }
+    if (!form.agreeDocusign) { toast.error("Please agree to read and sign disclosures via DocuSign."); return; }
     setSubmitted(true);
     toast.success("Request submitted! We'll review it shortly.");
   };
@@ -140,6 +141,17 @@ export default function DevRequests() {
                   />
                   <span className="text-white/55 text-sm leading-snug">
                     I understand this is for educational and analytical purposes only. Not financial advice.
+                  </span>
+                </label>
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={form.agreeDocusign}
+                    onChange={e => setForm({ ...form, agreeDocusign: e.target.checked })}
+                    className="mt-0.5 w-4 h-4 rounded border-white/20 bg-[#0d1520] accent-[#00d4aa] shrink-0"
+                  />
+                  <span className="text-white/55 text-sm leading-snug">
+                    I agree to read and sign the required disclosures via DocuSign upon approval.
                   </span>
                 </label>
 

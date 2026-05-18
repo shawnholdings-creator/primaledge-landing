@@ -35,6 +35,7 @@ export default function Subscribe() {
     tradingExp: "",
     ntfyTopic: "",
     agree: false,
+    agreeDocusign: false,
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -51,6 +52,10 @@ export default function Subscribe() {
     e.preventDefault();
     if (!form.agree) {
       toast.error("Please agree to the terms to continue.");
+      return;
+    }
+    if (!form.agreeDocusign) {
+      toast.error("Please agree to read and sign disclosures via DocuSign.");
       return;
     }
     if (!form.firstName || !form.email) {
@@ -252,6 +257,15 @@ export default function Subscribe() {
                       />
                       <span className="text-white/55 text-sm leading-snug">
                         I understand this is for educational and analytical purposes only. Not financial advice.
+                      </span>
+                    </label>
+                    <label className="flex items-start gap-3 cursor-pointer">
+                      <input
+                        type="checkbox" name="agreeDocusign" checked={form.agreeDocusign} onChange={handleChange}
+                        className="mt-0.5 w-4 h-4 rounded border-white/20 bg-[#0d1520] accent-[#00d4aa] shrink-0"
+                      />
+                      <span className="text-white/55 text-sm leading-snug">
+                        I agree to read and sign the required disclosures via DocuSign upon approval.
                       </span>
                     </label>
                   </div>
