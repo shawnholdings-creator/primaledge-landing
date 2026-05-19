@@ -1,16 +1,14 @@
 /* ============================================================
-   AIDashboard.tsx — PIN-Locked Primal Edge AI Cockpit (Live Feed)
-   Design: Terminal-style signal engine matching screenshot mockup
-   PIN gate: temporary access control before auth is built
+   AIDashboard.tsx — Primal Edge AI Cockpit (Live Feed)
+   Auth: Protected by Supabase auth + user_access approval
    Data: Fetches live signal data from GitHub Gist
    ============================================================ */
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "wouter";
 import PrimalEdgeLogo from "@/components/PrimalEdgeLogo";
 import Navbar from "@/components/Navbar";
-
-const CORRECT_PIN = "1331";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 // GitHub Gist raw URL
 const GIST_ID = "a490177229d88de297de0bf4746fdff8";
@@ -35,147 +33,6 @@ interface DashboardData {
   tickers_scanned: number;
   actionable_count: number;
   signals: Signal[];
-}
-
-/* ─── PIN Gate ──────────────────────────────────────────────── */
-function PinGate({ onUnlock }: { onUnlock: () => void }) {
-  const [pin, setPin] = useState(["", "", "", ""]);
-  const [error, setError] = useState(false);
-  const [shake, setShake] = useState(false);
-  const refs = [
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-  ];
-
-  useEffect(() => {
-    refs[0].current?.focus();
-  }, []);
-
-  const handleChange = (index: number, value: string) => {
-    if (!/^\d*$/.test(value)) return;
-    const next = [...pin];
-    next[index] = value.slice(-1);
-    setPin(next);
-    setError(false);
-
-    if (value && index < 3) {
-      refs[index + 1].current?.focus();
-    }
-
-    // Auto-submit on last digit
-    if (index === 3 && value) {
-      const entered = [...next].join("");
-      if (entered === CORRECT_PIN) {
-        onUnlock();
-      } else {
-        setError(true);
-        setShake(true);
-        setTimeout(() => {
-          setShake(false);
-          setPin(["", "", "", ""]);
-          refs[0].current?.focus();
-        }, 600);
-      }
-    }
-  };
-
-  const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
-    if (e.key === "Backspace" && !pin[index] && index > 0) {
-      refs[index - 1].current?.focus();
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-[#0a0e14] text-white flex flex-col">
-      <Navbar />
-      <div className="flex-1 flex items-center justify-center px-4">
-        <div className="text-center max-w-md w-full">
-          {/* Lock Icon */}
-          <div className="flex justify-center mb-8">
-            <div className="p-6 bg-[#00d4aa]/10 border border-[#00d4aa]/20 rounded-2xl">
-              <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                <rect x="8" y="22" width="32" height="22" rx="4" stroke="#00d4aa" strokeWidth="2.5" />
-                <path d="M16 22V14a8 8 0 0 1 16 0v8" stroke="#00d4aa" strokeWidth="2.5" strokeLinecap="round" />
-                <circle cx="24" cy="33" r="3" fill="#00d4aa" />
-                <path d="M24 36v3" stroke="#00d4aa" strokeWidth="2.5" strokeLinecap="round" />
-              </svg>
-            </div>
-          </div>
-
-          <h1
-            className="text-3xl md:text-4xl font-black text-white mb-3 leading-tight"
-            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-          >
-            Primal Edge AI Cockpit
-          </h1>
-          <p className="text-white/40 text-sm mb-8">Enter your 4-digit access PIN to continue</p>
-
-          {/* PIN Inputs */}
-          <div
-            className={`flex justify-center gap-4 mb-6 ${shake ? "animate-shake" : ""}`}
-            style={shake ? { animation: "shake 0.4s ease-in-out" } : {}}
-          >
-            {pin.map((digit, i) => (
-              <input
-                key={i}
-                ref={refs[i]}
-                type="password"
-                inputMode="numeric"
-                maxLength={1}
-                value={digit}
-                onChange={(e) => handleChange(i, e.target.value)}
-                onKeyDown={(e) => handleKeyDown(i, e)}
-                className={`w-14 h-16 text-center text-2xl font-bold rounded-xl border-2 bg-[#0d1520] outline-none transition-all duration-200 ${
-                  error
-                    ? "border-red-500 text-red-400"
-                    : digit
-                    ? "border-[#00d4aa] text-[#00d4aa]"
-                    : "border-white/10 text-white focus:border-[#00d4aa]/60"
-                }`}
-                style={{ fontFamily: "'JetBrains Mono', monospace" }}
-              />
-            ))}
-          </div>
-
-          {error && (
-            <p className="text-red-400 text-sm mb-4 font-mono animate-pulse">
-              Incorrect PIN. Try again.
-            </p>
-          )}
-
-          {/* Request Access CTA */}
-          <div className="mt-10">
-            <Link href="/subscribe">
-              <button className="bg-[#00d4aa] text-[#0a0e14] font-bold text-sm px-8 py-3 rounded-xl hover:bg-[#00d4aa]/90 transition-all duration-200 hover:scale-105">
-                Request Access →
-              </button>
-            </Link>
-          </div>
-
-          <p className="text-white/20 text-xs mt-6">
-            Already have a PIN?{" "}
-            <span className="text-white/30">Enter it above.</span>
-            {" · "}
-            <a href="mailto:support@primaledge.io" className="text-[#00d4aa]/50 hover:text-[#00d4aa] transition-colors">
-              support@primaledge.io
-            </a>
-          </p>
-        </div>
-      </div>
-
-      <style>{`
-        @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          20% { transform: translateX(-10px); }
-          40% { transform: translateX(10px); }
-          60% { transform: translateX(-6px); }
-          80% { transform: translateX(6px); }
-        }
-      `}</style>
-    </div>
-  );
 }
 
 /* ─── Loading Skeleton ─────────────────────────────────────── */
@@ -203,7 +60,7 @@ function LoadingSkeleton() {
   );
 }
 
-/* ─── Dashboard Content (shown after PIN unlock) ───────────── */
+/* ─── Dashboard Content (shown after auth + approval) ──────── */
 function DashboardContent() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -453,25 +310,11 @@ function DashboardContent() {
   );
 }
 
-/* ─── Main Export ──────────────────────────────────────────── */
+/* ─── Main Export — Auth Protected ─────────────────────────── */
 export default function AIDashboard() {
-  const [unlocked, setUnlocked] = useState(false);
-
-  // Check sessionStorage for previous unlock
-  useEffect(() => {
-    if (sessionStorage.getItem("pe_dash_unlocked") === "1") {
-      setUnlocked(true);
-    }
-  }, []);
-
-  const handleUnlock = () => {
-    sessionStorage.setItem("pe_dash_unlocked", "1");
-    setUnlocked(true);
-  };
-
-  if (!unlocked) {
-    return <PinGate onUnlock={handleUnlock} />;
-  }
-
-  return <DashboardContent />;
+  return (
+    <ProtectedRoute>
+      <DashboardContent />
+    </ProtectedRoute>
+  );
 }
