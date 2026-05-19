@@ -50,3 +50,8 @@ CREATE POLICY "Service role can manage all"
 --   SET approved = true, approved_at = now()
 --   WHERE email = 'user@example.com';
 -- ============================================================
+
+-- 6. Grant table permissions to roles
+GRANT SELECT ON public.user_access TO authenticated;
+GRANT SELECT ON public.user_access TO anon;
+
