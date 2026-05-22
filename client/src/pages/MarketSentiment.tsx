@@ -126,13 +126,54 @@ export default function MarketSentiment() {
                   </div>
                 </div>
 
-                {/* Image */}
-                <img
-                  src="/market_sentiment_sample.png"
-                  alt="Market Sentiment — Sample Intelligence Readout"
-                  className="w-full h-auto"
-                  loading="eager"
-                />
+                {/* Image with watermark */}
+                <div className="relative">
+                  <img
+                    src="/market_sentiment_sample.png"
+                    alt="Market Sentiment — Sample Intelligence Readout"
+                    className="w-full h-auto"
+                    loading="eager"
+                  />
+                  {/* Diagonal SAMPLE watermark — repeating grid */}
+                  <div
+                    className="absolute inset-0 pointer-events-none overflow-hidden"
+                    style={{ zIndex: 2 }}
+                  >
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "-50%",
+                        left: "-50%",
+                        width: "200%",
+                        height: "200%",
+                        display: "flex",
+                        flexWrap: "wrap",
+                        alignContent: "center",
+                        justifyContent: "center",
+                        gap: "60px 80px",
+                        transform: "rotate(-35deg)",
+                      }}
+                    >
+                      {Array.from({ length: 20 }).map((_, i) => (
+                        <span
+                          key={i}
+                          style={{
+                            fontFamily: "'Space Grotesk', sans-serif",
+                            fontSize: "clamp(2rem, 5vw, 3.5rem)",
+                            fontWeight: 900,
+                            letterSpacing: "0.2em",
+                            color: "rgba(255,255,255,0.07)",
+                            textTransform: "uppercase",
+                            userSelect: "none",
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          SAMPLE
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <p className="text-center text-white/20 text-xs font-mono mt-4 tracking-wider">

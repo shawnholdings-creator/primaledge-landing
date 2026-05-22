@@ -147,11 +147,13 @@ export default function Navbar() {
 
           {/* Right side */}
           <div className="flex items-center gap-3">
-            <Link href="/subscribe" className="hidden sm:block">
-              <button className="bg-[#00d4aa] text-[#0a0e14] font-bold text-sm px-5 py-2.5 rounded-lg hover:bg-[#00d4aa]/90 transition-colors">
-                Get Access
-              </button>
-            </Link>
+            {location !== "/ai-dashboard" && (
+              <Link href="/subscribe" className="hidden sm:block">
+                <button className="bg-[#00d4aa] text-[#0a0e14] font-bold text-sm px-5 py-2.5 rounded-lg hover:bg-[#00d4aa]/90 transition-colors">
+                  Get Access
+                </button>
+              </Link>
+            )}
 
             {/* Mobile hamburger */}
             <button
@@ -228,13 +230,15 @@ export default function Navbar() {
             </Link>
 
             {/* CTA */}
-            <div className="pt-2">
-              <Link href="/subscribe">
-                <button className="w-full bg-[#00d4aa] text-[#0a0e14] font-bold py-3 rounded-xl text-sm">
-                  Get Access →
-                </button>
-              </Link>
-            </div>
+            {location !== "/ai-dashboard" && (
+              <div className="pt-2">
+                <Link href="/subscribe">
+                  <button className="w-full bg-[#00d4aa] text-[#0a0e14] font-bold py-3 rounded-xl text-sm">
+                    Get Access →
+                  </button>
+                </Link>
+              </div>
+            )}
           </div>
         )}
       </nav>

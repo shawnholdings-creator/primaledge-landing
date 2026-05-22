@@ -15,7 +15,7 @@ const PRODUCTS = [
     tag: "BETA",
     tagColor: "#a855f7",
     description:
-      "Live intelligence feed from the Elastic Scanner engine. Real-time signal output with multi-timeframe, multi-index analysis powered by the Dashboard v2.5 verdict ladder. PIN-protected early access.",
+      "Live intelligence feed from the AI Cockpit engine. Real-time signal output with multi-timeframe, multi-index analysis powered by the v3.0 scoring engine. PIN-protected early access.",
     features: ["Live signal feed", "Backtest analytics", "Verdict ladder grading", "Multi-index scanning"],
     cta: "Access Dashboard",
     ctaHref: "/ai-dashboard",
@@ -31,8 +31,8 @@ const PRODUCTS = [
     ),
   },
   {
-    id: "elastic-slingshot",
-    name: "Elastic Slingshot Scanner",
+    id: "ai-cockpit-scanner",
+    name: "AI Cockpit Scanner",
     tag: "LIVE",
     tagColor: "#00d4aa",
     description:
@@ -53,7 +53,7 @@ const PRODUCTS = [
     tag: "COMING SOON",
     tagColor: "#f59e0b",
     description:
-      "Identify high-probability bearish reversal and breakdown setups across the full market universe. Powered by the same adaptive intelligence engine as the Elastic Slingshot — optimized for short-side opportunities.",
+      "Identify high-probability bearish reversal and breakdown setups across the full market universe. Powered by the same adaptive intelligence engine as the AI Cockpit — optimized for short-side opportunities.",
     features: ["Short-side signal detection", "Multi-timeframe analysis", "AI-graded setups", "Instant alerts"],
     cta: "Join Waitlist",
     ctaHref: "/subscribe",

@@ -19,7 +19,7 @@ export default function Sectors() {
         { label: "Sector Rotation Dashboard", desc: "Real-time relative strength rankings across all 11 GICS sectors — visualized as a rotation cycle map." },
         { label: "Leading vs. Lagging Sectors", desc: "AI-ranked sector momentum scores updated daily, showing which sectors are accelerating and which are fading." },
         { label: "Sector Signal Alerts", desc: "Get notified when the Primal Edge engine detects a significant shift in sector leadership or institutional rotation." },
-        { label: "Top Stocks by Sector", desc: "The highest-scoring Elastic Slingshot setups filtered by sector — find the best setups within the strongest sectors." },
+        { label: "Top Stocks by Sector", desc: "The highest-scoring AI Cockpit setups filtered by sector — find the best setups within the strongest sectors." },
         { label: "Sector ETF Analysis", desc: "XLK, XLF, XLE, XLV and all major sector ETFs — technical structure, volume profile, and AI signal grade." },
         { label: "Macro Sector Correlation", desc: "How interest rates, inflation, and economic cycles historically impact each sector — and what the current macro regime implies." },
       ]}

@@ -129,7 +129,7 @@ export default function Subscribe() {
             </p>
 
             <p className="text-white/35 text-sm max-w-xl mx-auto leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-              Built for traders seeking high-conviction multi-timeframe setups using proprietary Elastic signal architecture.
+              Built for traders seeking high-conviction multi-timeframe setups using the proprietary AI Cockpit signal architecture.
             </p>
           </div>
 
@@ -324,7 +324,7 @@ export default function Subscribe() {
                     <div className="space-y-2.5">
                       {[
                         "AI-ranked bullish & bearish setups",
-                        "Elastic Slingshot™ detection",
+                        "AI Cockpit™ slingshot detection",
                         "Compression → expansion tracking",
                         "4H / 1D / 1W alignment engine",
                         "Mobile push alerts",

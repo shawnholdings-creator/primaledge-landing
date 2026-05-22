@@ -248,7 +248,7 @@ function Hero() {
 function Stats() {
   const { ref, inView } = useInView();
   const stats = [
-    { label: "Symbols Scanned Per Cycle", value: 500, suffix: "+" },
+    { label: "Symbols Scanned Per Cycle", value: 1500, suffix: "+" },
     { label: "Autonomous Cycles / Market Day", value: 9, suffix: "x" },
     { label: "Multi-Dimensional Feature Space", value: 7, suffix: "+" },
     { label: "Signal-to-Device Latency", value: 3, suffix: "s" },
@@ -539,7 +539,7 @@ function Technology() {
             <path d="M8 2l1.5 4.5H14l-3.7 2.7 1.4 4.3L8 11 4.3 13.5l1.4-4.3L2 6.5h4.5z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
           </svg>
           <p className="text-white/35 text-xs leading-relaxed">
-            <span className="text-white/55 font-semibold">Research Disclosure:</span> All backtesting results, model performance metrics, and statistical references presented on this page are derived from historical data and are provided for informational and educational purposes only. Past performance of any quantitative model or scanning algorithm does not guarantee future results. Market conditions change continuously, and no system — regardless of its sophistication — can predict future price movements with certainty. The Elastic Scanner is a research and educational tool, not a financial advisory service.
+            <span className="text-white/55 font-semibold">Research Disclosure:</span> All backtesting results, model performance metrics, and statistical references presented on this page are derived from historical data and are provided for informational and educational purposes only. Past performance of any quantitative model or scanning algorithm does not guarantee future results. Market conditions change continuously, and no system — regardless of its sophistication — can predict future price movements with certainty. The AI Cockpit is a research and educational tool, not a financial advisory service.
           </p>
         </div>
       </div>
@@ -569,7 +569,7 @@ function AlertPreview() {
                 { label: "Verdict", val: "BULLISH SLINGSHOT" },
                 { label: "Score / Grade", val: "82 / A" },
                 { label: "Price at Alert", val: "$875.20" },
-                { label: "Key Context", val: "Elastic Slingshot confirmed, vol surge 2.1x" },
+                { label: "Key Context", val: "AI Cockpit slingshot confirmed, vol surge 2.1x" },
               ].map((item, i) => (
                 <div key={i} className="teal-border-left">
                   <span className="font-mono text-[10px] text-white/30 tracking-widest block">{item.label}</span>
@@ -618,7 +618,7 @@ function AlertPreview() {
                   </div>
                 </div>
                 <div className="mt-3 flex items-center justify-between">
-                  <span className="font-mono text-[10px] text-white/25">Elastic Slingshot confirmed</span>
+                  <span className="font-mono text-[10px] text-white/25">AI Cockpit slingshot confirmed</span>
                   <span className="font-mono text-[10px] text-[#00d4aa]">&lt; 3s delivery</span>
                 </div>
               </div>
@@ -651,7 +651,7 @@ function Pricing() {
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-32 bg-[#00d4aa]/5 blur-3xl rounded-full" />
             <div className="relative">
               <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-                <span className="font-['Space_Grotesk'] font-semibold text-base sm:text-lg text-white">Primal Edge — Elastic Slingshot Access</span>
+                <span className="font-['Space_Grotesk'] font-semibold text-base sm:text-lg text-white">Primal Edge — AI Cockpit Access</span>
                 <span className="font-mono text-xs text-[#00d4aa] bg-[#00d4aa]/10 border border-[#00d4aa]/20 px-3 py-1 rounded-full whitespace-nowrap">PRIVATE GROUP</span>
               </div>
               <div className="mb-6">
@@ -694,7 +694,7 @@ function FAQ() {
   const { ref, inView } = useInView();
   const [open, setOpen] = useState<number | null>(null);
   const faqs = [
-    { q: "What is the Primal Edge Elastic Slingshot Scanner?", a: "It is the flagship adaptive intelligence signal within the Primal Edge product suite — a proprietary system that identifies a specific structural pattern across a curated premium universe. The engine assigns a 0–100 conviction score and grades each setup A through D. The exact model architecture, pattern definition, and universe composition are proprietary. All output is provided for educational and analytical purposes only." },
+    { q: "What is the Primal Edge AI Cockpit?", a: "It is the flagship adaptive intelligence signal within the Primal Edge product suite — a proprietary system that identifies a specific structural pattern across a curated premium universe. The engine assigns a 0–100 conviction score and grades each setup A through D. The exact model architecture, pattern definition, and universe composition are proprietary. All output is provided for educational and analytical purposes only." },
     { q: "What data does the model use?", a: "The engine ingests live market data across a curated premium universe on every cycle. Raw data is transformed through a proprietary feature engineering pipeline into a multi-dimensional numerical representation. The specific data sources, feature composition, and transformation methods are not disclosed." },
     { q: "How do I receive the analysis?", a: "Analytical insights are delivered via push notification to your mobile device. Download a free notification client, subscribe to the private topic provided after sign-up, and receive instant updates the moment the engine confirms a high-conviction setup." },
     { q: "What timeframe does the scanner analyze?", a: "The engine uses a multi-timeframe evaluation approach, cross-referencing the primary scan timeframe against higher timeframe trend structure. The model applies a confluence bonus to trend-aligned setups and penalizes counter-trend signals. Setups are designed for analysis of swing-timeframe structures with a typical 2–10 day observation window." },
