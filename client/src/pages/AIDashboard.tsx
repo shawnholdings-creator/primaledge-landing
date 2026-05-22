@@ -796,8 +796,8 @@ function DashboardContent() {
               <div className="flex flex-wrap gap-2">
                 {[
                   { grade: "A", label: "Elite", score: "75+", bg: "#22c55e", text: "#fff", where: "ENTRY" },
-                  { grade: "B", label: "Good", score: "55–74", bg: "#3b82f6", text: "#fff", where: "ENTRY" },
-                  { grade: "C", label: "Early", score: "35–54", bg: "#f59e0b", text: "#0a0e14", where: "FORMING" },
+                  { grade: "B", label: "Good", score: "50–74", bg: "#3b82f6", text: "#fff", where: "ENTRY" },
+                  { grade: "C", label: "Early", score: "30–49", bg: "#f59e0b", text: "#0a0e14", where: "FORMING" },
                   { grade: "D", label: "Hot", score: "20–34", bg: "#ff6b35", text: "#fff", where: "FORMING" },
                 ].map((g) => (
                   <div key={g.grade} className="flex items-center gap-1.5 px-2 py-1 rounded-full" style={{ background: `${g.bg}08`, border: `1px solid ${g.bg}15` }}>
