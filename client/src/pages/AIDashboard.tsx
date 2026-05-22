@@ -382,19 +382,20 @@ function DashboardContent() {
     ? new Date(data.timestamp).toLocaleString()
     : "Awaiting first scan...";
 
-  // Split: A+B (score≥55) in main table, C+D (score 20-54) in watchlist
+  // Split: A+B grade in main table, C+D grade in watchlist
+  const MAIN_GRADES = new Set(["A", "B"]);
   const tradable = allSignals
-    .filter((s) => s.score >= 55)
+    .filter((s) => MAIN_GRADES.has(s.grade))
     .sort((a, b) => b.score - a.score);
   const watchlist = allSignals
-    .filter((s) => s.score < 55)
+    .filter((s) => !MAIN_GRADES.has(s.grade))
     .sort((a, b) => b.score - a.score);
 
   // Display verdict: READY → WATCH, COIL stays
   const displayVerdict = (v: string) => (v === "READY" ? "WATCH" : v);
 
-  // Near-tradable count (score 45-54, close to B threshold)
-  const nearCount = watchlist.filter((s) => s.score >= 45).length;
+  // Near-tradable count (grade C = one step from B promotion)
+  const nearCount = watchlist.filter((s) => s.grade === "C").length;
 
   // Next scan time helper
   const nextScanTime = (): string => {
