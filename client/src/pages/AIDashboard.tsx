@@ -510,7 +510,7 @@ function DashboardContent() {
                   <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
                 </div>
                 <span
-                  className="text-xs text-white/40 tracking-[0.2em] uppercase"
+                  className="text-xs text-[#00d4aa] tracking-[0.2em] uppercase font-bold"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
                   Active Signals
@@ -888,7 +888,7 @@ function DashboardContent() {
               <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
                 <div className="flex items-center gap-2">
                   <span
-                    className="text-[11px] text-white/40 tracking-widest uppercase"
+                    className="text-[11px] text-[#00d4aa] tracking-widest uppercase font-bold"
                     style={{ fontFamily: "'JetBrains Mono', monospace" }}
                   >
                     Forming
