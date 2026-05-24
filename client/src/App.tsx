@@ -16,6 +16,7 @@ import MarketSentiment from "./pages/MarketSentiment";
 import Sectors from "./pages/Sectors";
 import DevRequests from "./pages/DevRequests";
 import AIDashboard from "./pages/AIDashboard";
+import OptionsDashboard from "./pages/OptionsDashboard";
 import GlobalDisclaimer from "./components/GlobalDisclaimer";
 
 function Router() {
@@ -32,6 +33,7 @@ function Router() {
       <Route path={"/sectors"} component={Sectors} />
       <Route path={"/dev-requests"} component={DevRequests} />
       <Route path={"/ai-dashboard"} component={AIDashboard} />
+      <Route path={"/options-prep"} component={OptionsDashboard} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>
