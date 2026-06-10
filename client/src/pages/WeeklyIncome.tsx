@@ -55,6 +55,8 @@ interface ScoreDetails {
     rsi?: number;
     atr?: number;
     avg_volume?: number;
+    compression?: boolean;
+    bb_width?: number;
   };
 }
 
@@ -503,6 +505,22 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
               AvgVol {(sd.indicators.avg_volume / 1e6).toFixed(1)}M
             </span>
           )}
+          {sd.indicators.compression && (
+            <span
+              className="text-[10px] font-bold tracking-wider bg-green-500/10 border border-green-500/20 rounded-full px-2.5 py-1"
+              style={{ fontFamily: "'JetBrains Mono', monospace", color: "#22c55e" }}
+            >
+              ⚡ COMPRESSION
+            </span>
+          )}
+          {sd.indicators.bb_width != null && (
+            <span
+              className="text-[10px] text-white/30 bg-white/[0.04] border border-white/[0.06] rounded-full px-2.5 py-1"
+              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            >
+              BB Width {(sd.indicators.bb_width * 100).toFixed(1)}%
+            </span>
+          )}
         </div>
       )}
 
@@ -673,7 +691,7 @@ function WeeklyIncomeContent() {
                       border: "1px solid rgba(107,114,128,0.15)",
                     }}
                   >
-                    PUT FOCUSED
+                    PUTS + CALLS
                   </span>
                 </div>
               </div>
