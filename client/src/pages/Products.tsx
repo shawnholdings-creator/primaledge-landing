@@ -48,6 +48,25 @@ const PRODUCTS = [
     ),
   },
   {
+    id: "weekly-income",
+    name: "Weekly Income Dashboard",
+    tag: "LIVE",
+    tagColor: "#00d4aa",
+    description:
+      "Automated bi-directional scanner for weekly income opportunities. Finds conservative short put candidates on bullish names and short call candidates on bearish names — generating income in any market condition.",
+    features: ["Short puts + short calls", "100-point scoring model", "Real-time phone alerts", "Blue-chip universe only"],
+    cta: "View Dashboard",
+    ctaHref: "/weekly-income",
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <path d="M16 4v24" stroke="#00d4aa" strokeWidth="2.5" strokeLinecap="round"/>
+        <path d="M10 12l6-6 6 6" stroke="#00d4aa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M10 20l6 6 6-6" stroke="#00d4aa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <rect x="4" y="13" width="24" height="6" rx="3" stroke="#00d4aa" strokeWidth="1.5" opacity="0.4"/>
+      </svg>
+    ),
+  },
+  {
     id: "bearish-scanner",
     name: "Bearish Reversal Scanner",
     tag: "COMING SOON",
@@ -67,8 +86,8 @@ const PRODUCTS = [
   {
     id: "options-scanner",
     name: "Options Flow Scanner",
-    tag: "COMING SOON",
-    tagColor: "#f59e0b",
+    tag: "IN DEV",
+    tagColor: "#3b82f6",
     description:
       "Track unusual options activity and institutional flow in real time. Surface high-conviction directional bets before the crowd catches on — powered by Primal Edge's proprietary signal intelligence.",
     features: ["Unusual options activity", "Institutional flow tracking", "Strike & expiry analysis", "AI conviction scoring"],
@@ -168,6 +187,8 @@ export default function Products() {
                         ? { backgroundColor: "#00d4aa", color: "#0a0e14" }
                         : product.tag === "BETA"
                         ? { backgroundColor: "#a855f7", color: "#fff" }
+                        : product.tag === "IN DEV"
+                        ? { backgroundColor: "transparent", color: "#3b82f6", border: "1px solid #3b82f640" }
                         : { backgroundColor: "transparent", color: "#f59e0b", border: "1px solid #f59e0b40" }
                     }
                   >
