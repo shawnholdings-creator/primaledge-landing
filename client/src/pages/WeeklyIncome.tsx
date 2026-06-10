@@ -268,7 +268,10 @@ export default function WeeklyIncome() {
           </div>
 
           {/* ═══ MAIN TERMINAL CARD ═══ */}
-          <div className="bg-[#0d1520] border border-white/10 rounded-2xl overflow-hidden">
+          <div className="animated-border">
+          <div className="bg-[#0d1520] border border-white/10 rounded-2xl overflow-hidden relative">
+            {/* Scan sweep line */}
+            {isMarketOpen() && <div className="scan-sweep" />}
 
             {/* Terminal title bar */}
             <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.06]">
@@ -720,6 +723,7 @@ export default function WeeklyIncome() {
                 ))}
               </div>
             </div>
+          </div>
           </div>
 
           {/* Disclaimer */}
