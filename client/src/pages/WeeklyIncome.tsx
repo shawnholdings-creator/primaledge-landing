@@ -36,6 +36,28 @@ function marketStatusLabel(): { text: string; color: string } {
 }
 
 /* ─── Types ─────────────────────────────────────────────────── */
+interface ScoreCategory {
+  name: string;
+  score: number;
+  max: number;
+  status: string;
+  explanation: string;
+}
+
+interface ScoreDetails {
+  categories: ScoreCategory[];
+  gates: { label: string; passed: boolean }[];
+  warnings: string[];
+  final_summary: string;
+  indicators: {
+    sma20?: number;
+    sma50?: number;
+    rsi?: number;
+    atr?: number;
+    avg_volume?: number;
+  };
+}
+
 interface Candidate {
   ticker: string;
   side: string;
@@ -55,6 +77,7 @@ interface Candidate {
   grade: string;
   contract_symbol: string;
   reasons: string[];
+  score_details?: ScoreDetails;
 }
 
 interface ScanData {
@@ -263,6 +286,220 @@ function gradeStyle(grade: string): { bg: string; text: string } {
   return { bg: "#f59e0b", text: "#0a0e14" };
 }
 
+/* ─── Status Badge Color ───────────────────────────────────── */
+function statusColor(status: string): string {
+  switch (status) {
+    case "Strong":     return "#22c55e";
+    case "Good":       return "#00d4aa";
+    case "Acceptable": return "#3b82f6";
+    case "Moderate":   return "#f59e0b";
+    case "Weak":       return "#ef4444";
+    case "Review":     return "#f97316";
+    default:           return "#6b7280";
+  }
+}
+
+/* ─── Score Detail Panel ───────────────────────────────────── */
+function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: string } }) {
+  const sd = candidate.score_details;
+
+  /* Fallback: no score_details — show reasons list */
+  if (!sd) {
+    return (
+      <div
+        className="px-4 sm:px-6 py-4 bg-white/[0.02] border-t border-white/[0.06]"
+      >
+        <div
+          className="text-[10px] text-white/25 tracking-widest uppercase mb-2"
+          style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+        >
+          Scoring Reasons
+        </div>
+        <ul className="space-y-1">
+          {candidate.reasons.map((r, i) => (
+            <li
+              key={i}
+              className="text-xs text-white/40 flex items-start gap-2"
+              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            >
+              <span className="text-[#00d4aa] mt-px">•</span>
+              {r}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
+  const hasIndicators = sd.indicators && Object.values(sd.indicators).some((v) => v != null);
+
+  return (
+    <div className="px-4 sm:px-6 py-5 bg-white/[0.02] border-t border-white/[0.06] space-y-5">
+
+      {/* ── Score Breakdown ── */}
+      <div>
+        <div
+          className="text-[10px] text-white/25 tracking-widest uppercase mb-3"
+          style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+        >
+          Score Breakdown
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
+          {sd.categories.map((cat) => {
+            const pct = cat.max > 0 ? cat.score / cat.max : 0;
+            const barColor = pct >= 0.8 ? "#00d4aa" : pct >= 0.6 ? "#f59e0b" : "#ef4444";
+            const sc = statusColor(cat.status);
+            return (
+              <div key={cat.name}>
+                <div className="flex items-center justify-between mb-1">
+                  <span
+                    className="text-[11px] text-white/50"
+                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                  >
+                    {cat.name}
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="text-[11px] text-white/60"
+                      style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                    >
+                      {cat.score}/{cat.max}
+                    </span>
+                    <span
+                      className="text-[9px] font-bold tracking-wide px-1.5 py-0.5 rounded-full"
+                      style={{
+                        fontFamily: "'JetBrains Mono', monospace",
+                        color: sc,
+                        backgroundColor: `${sc}15`,
+                        border: `1px solid ${sc}25`,
+                      }}
+                    >
+                      {cat.status}
+                    </span>
+                  </div>
+                </div>
+                {/* Bar */}
+                <div className="h-1 rounded-full bg-white/[0.06] overflow-hidden mb-1">
+                  <div
+                    className="h-full rounded-full transition-all duration-500"
+                    style={{ width: `${Math.min(pct * 100, 100)}%`, backgroundColor: barColor }}
+                  />
+                </div>
+                <p
+                  className="text-[10px] text-white/25 leading-snug"
+                  style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                >
+                  {cat.explanation}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ── Hard Gates ── */}
+      {sd.gates.length > 0 && (
+        <div>
+          <div
+            className="text-[10px] text-white/25 tracking-widest uppercase mb-2"
+            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+          >
+            Hard Gates
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1">
+            {sd.gates.map((g, i) => (
+              <div
+                key={i}
+                className="flex items-center gap-2 text-[11px]"
+                style={{ fontFamily: "'JetBrains Mono', monospace" }}
+              >
+                <span style={{ color: g.passed ? "#22c55e" : "#ef4444" }}>
+                  {g.passed ? "✓" : "✗"}
+                </span>
+                <span className={g.passed ? "text-white/40" : "text-red-400/70"}>
+                  {g.label}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── Warnings ── */}
+      {sd.warnings.length > 0 && (
+        <div className="space-y-1">
+          {sd.warnings.map((w, i) => (
+            <div
+              key={i}
+              className="flex items-start gap-2 text-[11px]"
+              style={{ fontFamily: "'JetBrains Mono', monospace", color: "#f59e0b" }}
+            >
+              <span className="mt-px">⚠</span>
+              <span className="text-amber-400/70">{w}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ── Technical Indicators ── */}
+      {hasIndicators && (
+        <div className="flex flex-wrap gap-2">
+          {sd.indicators.sma20 != null && (
+            <span
+              className="text-[10px] text-white/30 bg-white/[0.04] border border-white/[0.06] rounded-full px-2.5 py-1"
+              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            >
+              SMA20 {sd.indicators.sma20.toFixed(2)}
+            </span>
+          )}
+          {sd.indicators.sma50 != null && (
+            <span
+              className="text-[10px] text-white/30 bg-white/[0.04] border border-white/[0.06] rounded-full px-2.5 py-1"
+              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            >
+              SMA50 {sd.indicators.sma50.toFixed(2)}
+            </span>
+          )}
+          {sd.indicators.rsi != null && (
+            <span
+              className="text-[10px] text-white/30 bg-white/[0.04] border border-white/[0.06] rounded-full px-2.5 py-1"
+              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            >
+              RSI {sd.indicators.rsi.toFixed(1)}
+            </span>
+          )}
+          {sd.indicators.atr != null && (
+            <span
+              className="text-[10px] text-white/30 bg-white/[0.04] border border-white/[0.06] rounded-full px-2.5 py-1"
+              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            >
+              ATR {sd.indicators.atr.toFixed(2)}
+            </span>
+          )}
+          {sd.indicators.avg_volume != null && (
+            <span
+              className="text-[10px] text-white/30 bg-white/[0.04] border border-white/[0.06] rounded-full px-2.5 py-1"
+              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            >
+              AvgVol {(sd.indicators.avg_volume / 1e6).toFixed(1)}M
+            </span>
+          )}
+        </div>
+      )}
+
+      {/* ── Final Summary ── */}
+      {sd.final_summary && (
+        <div
+          className="text-xs text-white/40 leading-relaxed border-l-2 border-[#00d4aa]/30 pl-3"
+          style={{ fontFamily: "'JetBrains Mono', monospace" }}
+        >
+          {sd.final_summary}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ─── Dashboard Content (shown after auth + approval) ──────── */
 function WeeklyIncomeContent() {
   const [data, setData] = useState<ScanData | null>(null);
@@ -270,6 +507,16 @@ function WeeklyIncomeContent() {
   const [error, setError] = useState<string | null>(null);
   const [history, setHistory] = useState<GistHistoryEntry[]>([]);
   const [activeVersion, setActiveVersion] = useState<string | null>(null);
+  const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
+
+  const toggleRow = useCallback((idx: number) => {
+    setExpandedRows((prev) => {
+      const next = new Set(prev);
+      if (next.has(idx)) next.delete(idx);
+      else next.add(idx);
+      return next;
+    });
+  }, []);
 
   const fetchData = useCallback(async () => {
     try {
@@ -534,7 +781,7 @@ function WeeklyIncomeContent() {
                 className="hidden sm:grid gap-3 px-4 py-3 text-xs text-white/30 tracking-widest uppercase"
                 style={{
                   fontFamily: "'JetBrains Mono', monospace",
-                  gridTemplateColumns: "0.5fr 0.7fr 0.8fr 0.9fr 0.6fr 0.5fr 0.5fr 1fr",
+                  gridTemplateColumns: "0.5fr 0.7fr 0.8fr 0.9fr 0.6fr 0.5fr 0.5fr 1fr auto",
                 }}
               >
                 <span>Side</span>
@@ -545,6 +792,7 @@ function WeeklyIncomeContent() {
                 <span className="text-center">DTE</span>
                 <span className="text-center">Delta</span>
                 <span className="text-right">Price</span>
+                <span className="w-5" />
               </div>
 
               <div className="border-b border-white/5 mx-2" />
@@ -603,15 +851,18 @@ function WeeklyIncomeContent() {
                 const strikeLabel = `$${c.strike.toFixed(1)}${isPut ? "P" : "C"}`;
                 const creditPer100 = (c.credit * 100).toFixed(0);
 
+                const isExpanded = expandedRows.has(i);
+
                 return (
                   <div key={`${c.contract_symbol}-${i}`}>
                     {/* Desktop row */}
                     <div
-                      className="hidden sm:grid gap-3 px-4 py-4 border-b border-white/[0.04] items-center hover:bg-white/[0.02] transition-colors"
+                      className="hidden sm:grid gap-3 px-4 py-4 border-b border-white/[0.04] items-center hover:bg-white/[0.02] transition-colors cursor-pointer select-none"
                       style={{
                         animationDelay: `${i * 0.06}s`,
-                        gridTemplateColumns: "0.5fr 0.7fr 0.8fr 0.9fr 0.6fr 0.5fr 0.5fr 1fr",
+                        gridTemplateColumns: "0.5fr 0.7fr 0.8fr 0.9fr 0.6fr 0.5fr 0.5fr 1fr auto",
                       }}
+                      onClick={() => toggleRow(i)}
                     >
                       {/* Side */}
                       <div className="flex items-center gap-2">
@@ -709,90 +960,149 @@ function WeeklyIncomeContent() {
                           {otmDisplay}% OTM
                         </span>
                       </div>
+
+                      {/* Chevron */}
+                      <div className="flex items-center justify-center w-5">
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="text-white/20 transition-transform duration-200"
+                          style={{ transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)" }}
+                        >
+                          <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                      </div>
+                    </div>
+
+                    {/* Desktop expansion panel */}
+                    <div
+                      className="hidden sm:block overflow-hidden transition-all duration-300 ease-in-out"
+                      style={{
+                        maxHeight: isExpanded ? "1200px" : "0px",
+                        opacity: isExpanded ? 1 : 0,
+                      }}
+                    >
+                      {isExpanded && <ScoreDetailPanel candidate={c} />}
                     </div>
 
                     {/* Mobile card */}
                     <div
-                      className="sm:hidden px-4 py-4 border-b border-white/[0.04]"
+                      className="sm:hidden border-b border-white/[0.04] cursor-pointer select-none"
                       style={{ animationDelay: `${i * 0.06}s` }}
+                      onClick={() => toggleRow(i)}
                     >
-                      {/* Top row: side dot + ticker + grade + price */}
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2.5">
-                          <div
-                            className="w-2.5 h-2.5 rounded-full shrink-0"
-                            style={{ backgroundColor: sideColor, boxShadow: `0 0 8px ${sideColor}60` }}
-                          />
-                          <span
-                            className="text-lg font-black text-white"
-                            style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                          >
-                            {c.ticker}
-                          </span>
-                          <span
-                            className="text-[10px] font-bold tracking-wider"
-                            style={{ fontFamily: "'JetBrains Mono', monospace", color: sideColor }}
-                          >
-                            {c.side.toUpperCase()}
-                          </span>
-                          <div
-                            className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black shrink-0"
-                            style={{ backgroundColor: gs.bg, color: gs.text }}
-                          >
-                            {grade}
+                      <div className="px-4 py-4">
+                        {/* Top row: side dot + ticker + grade + price + chevron */}
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2.5">
+                            <div
+                              className="w-2.5 h-2.5 rounded-full shrink-0"
+                              style={{ backgroundColor: sideColor, boxShadow: `0 0 8px ${sideColor}60` }}
+                            />
+                            <span
+                              className="text-lg font-black text-white"
+                              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                            >
+                              {c.ticker}
+                            </span>
+                            <span
+                              className="text-[10px] font-bold tracking-wider"
+                              style={{ fontFamily: "'JetBrains Mono', monospace", color: sideColor }}
+                            >
+                              {c.side.toUpperCase()}
+                            </span>
+                            <div
+                              className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black shrink-0"
+                              style={{ backgroundColor: gs.bg, color: gs.text }}
+                            >
+                              {grade}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="text-right">
+                              <span
+                                className="text-sm text-white/70 block"
+                                style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                              >
+                                ${c.stock_price.toFixed(2)}
+                              </span>
+                              <span
+                                className="text-[10px] block"
+                                style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00d4aa" }}
+                              >
+                                {otmDisplay}% OTM
+                              </span>
+                            </div>
+                            <svg
+                              width="12"
+                              height="12"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              className="text-white/20 transition-transform duration-200 ml-1"
+                              style={{ transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)" }}
+                            >
+                              <polyline points="6 9 12 15 18 9" />
+                            </svg>
                           </div>
                         </div>
-                        <div className="text-right">
-                          <span
-                            className="text-sm text-white/70 block"
-                            style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                          >
-                            ${c.stock_price.toFixed(2)}
-                          </span>
-                          <span
-                            className="text-[10px] block"
-                            style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00d4aa" }}
-                          >
-                            {otmDisplay}% OTM
-                          </span>
+                        {/* Bottom row: strike, credit, dte, delta */}
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <span
+                              className="text-xs text-white/50"
+                              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                            >
+                              {strikeLabel}
+                            </span>
+                            <span
+                              className="text-xs font-bold"
+                              style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00d4aa" }}
+                            >
+                              ${c.credit.toFixed(2)}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <span
+                              className="text-xs text-white/40"
+                              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                            >
+                              {c.dte}d
+                            </span>
+                            <span
+                              className="text-xs text-white/40"
+                              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                            >
+                              Δ{c.delta.toFixed(2)}
+                            </span>
+                            <span
+                              className="text-xs text-white/40"
+                              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                            >
+                              Score {c.total_score}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                      {/* Bottom row: strike, credit, dte, delta */}
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <span
-                            className="text-xs text-white/50"
-                            style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                          >
-                            {strikeLabel}
-                          </span>
-                          <span
-                            className="text-xs font-bold"
-                            style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00d4aa" }}
-                          >
-                            ${c.credit.toFixed(2)}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <span
-                            className="text-xs text-white/40"
-                            style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                          >
-                            {c.dte}d
-                          </span>
-                          <span
-                            className="text-xs text-white/40"
-                            style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                          >
-                            Δ{c.delta.toFixed(2)}
-                          </span>
-                          <span
-                            className="text-xs text-white/40"
-                            style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                          >
-                            Score {c.total_score}
-                          </span>
-                        </div>
+
+                      {/* Mobile expansion panel */}
+                      <div
+                        className="overflow-hidden transition-all duration-300 ease-in-out"
+                        style={{
+                          maxHeight: isExpanded ? "1200px" : "0px",
+                          opacity: isExpanded ? 1 : 0,
+                        }}
+                      >
+                        {isExpanded && <ScoreDetailPanel candidate={c} />}
                       </div>
                     </div>
                   </div>
