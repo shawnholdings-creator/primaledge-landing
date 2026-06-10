@@ -4,7 +4,7 @@
    Data: Fetches live scan data from GitHub Gist
    ============================================================ */
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Link } from "wouter";
 import Navbar from "@/components/Navbar";
 import PrimalEdgeLogo from "@/components/PrimalEdgeLogo";
@@ -65,6 +65,161 @@ interface ScanData {
   candidates: Candidate[];
 }
 
+interface GistHistoryEntry {
+  version: string;
+  committed_at: string;
+}
+
+/* ─── Archive Panel ────────────────────────────────────────── */
+function ArchivePanel({
+  history,
+  activeVersion,
+  onSelect,
+  onReset,
+}: {
+  history: GistHistoryEntry[];
+  activeVersion: string | null;
+  onSelect: (version: string) => void;
+  onReset: () => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
+
+  if (history.length === 0) return null;
+
+  const entries = useMemo(
+    () =>
+      history.map((h) => {
+        const d = new Date(h.committed_at);
+        const dateStr = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+        const timeStr = d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+        const label = `${dateStr} \u00b7 ${timeStr}`;
+        return { ...h, label };
+      }),
+    [history]
+  );
+
+  const searchTerm = search.trim().toLowerCase();
+  const filtered = searchTerm
+    ? entries.filter((e) => e.label.toLowerCase().includes(searchTerm))
+    : entries;
+
+  return (
+    <div className="mt-4">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-2 text-xs text-white/25 hover:text-white/50 transition-colors ml-auto"
+        style={{ fontFamily: "'JetBrains Mono', monospace" }}
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 8v13H3V8" />
+          <path d="M1 3h22v5H1z" />
+          <path d="M10 12h4" />
+        </svg>
+        {open ? "Close Archive" : "Scan Archive"}
+        <span className="text-white/15">({history.length})</span>
+      </button>
+
+      {open && (
+        <div
+          className="mt-2 bg-[#0d1520] border border-white/10 rounded-xl overflow-hidden"
+          style={{ scrollbarWidth: "thin", scrollbarColor: "rgba(255,255,255,0.1) transparent" }}
+        >
+          {/* Search */}
+          <div className="px-3 pt-3 pb-1">
+            <div className="relative">
+              <svg
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3 h-3 text-white/20"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
+              </svg>
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Filter dates\u2026"
+                className="w-full bg-white/[0.03] border border-white/5 rounded-lg pl-8 pr-7 py-1.5 text-[11px] text-white/70 placeholder-white/15 focus:outline-none focus:border-[#00d4aa]/30 transition-colors"
+                style={{ fontFamily: "'JetBrains Mono', monospace" }}
+              />
+              {search && (
+                <button
+                  onClick={() => setSearch("")}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/20 hover:text-white/50 transition-colors text-[10px]"
+                >
+                  \u2715
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Scrollable list */}
+          <div className="max-h-40 overflow-y-auto">
+            {activeVersion && !searchTerm && (
+              <button
+                onClick={onReset}
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-left hover:bg-white/[0.04] transition-colors border-b border-white/5"
+              >
+                <span className="relative flex h-2 w-2 shrink-0">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#28c840] opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#28c840]" />
+                </span>
+                <span
+                  className="text-xs text-[#28c840] tracking-wide"
+                  style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                >
+                  \u2190 Back to Live
+                </span>
+              </button>
+            )}
+
+            {filtered.length === 0 && (
+              <div className="px-4 py-4 text-center">
+                <span className="text-[10px] text-white/20 font-mono">No matching dates</span>
+              </div>
+            )}
+
+            {filtered.map((h) => {
+              const isActive = h.version === activeVersion;
+              const isHighlighted = searchTerm && h.label.toLowerCase().includes(searchTerm);
+              return (
+                <button
+                  key={h.version}
+                  onClick={() => onSelect(h.version)}
+                  className={`w-full flex items-center gap-3 px-4 py-2 text-left hover:bg-white/[0.04] transition-colors border-b border-white/5 last:border-b-0 ${
+                    isActive ? "bg-white/[0.04]" : ""
+                  } ${isHighlighted ? "bg-[#00d4aa]/[0.04]" : ""}`}
+                >
+                  <div
+                    className="w-1.5 h-1.5 rounded-full shrink-0"
+                    style={{
+                      backgroundColor: isActive || isHighlighted
+                        ? "#00d4aa"
+                        : "rgba(255,255,255,0.15)",
+                    }}
+                  />
+                  <span
+                    className="text-xs tracking-wide"
+                    style={{
+                      fontFamily: "'JetBrains Mono', monospace",
+                      color: isActive || isHighlighted
+                        ? "#00d4aa"
+                        : "rgba(255,255,255,0.3)",
+                    }}
+                  >
+                    {h.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ─── Loading Skeleton ─────────────────────────────────────── */
 function LoadingSkeleton() {
   return (
@@ -112,6 +267,8 @@ export default function WeeklyIncome() {
   const [data, setData] = useState<ScanData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [history, setHistory] = useState<GistHistoryEntry[]>([]);
+  const [activeVersion, setActiveVersion] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     try {
@@ -125,6 +282,16 @@ export default function WeeklyIncome() {
       const parsed: ScanData = JSON.parse(content);
       setData(parsed);
       setError(null);
+
+      // Extract history entries for archive
+      if (gist.history && Array.isArray(gist.history)) {
+        setHistory(
+          gist.history.map((h: any) => ({
+            version: h.version,
+            committed_at: h.committed_at,
+          }))
+        );
+      }
     } catch (e: any) {
       console.error("Failed to fetch weekly income data:", e);
       setError(e.message || "Failed to load");
@@ -132,6 +299,36 @@ export default function WeeklyIncome() {
       setLoading(false);
     }
   }, []);
+
+  // Load a specific historical version
+  const loadVersion = useCallback(async (version: string) => {
+    setError(null);
+    try {
+      const resp = await fetch(`${GIST_API}/${version}`, {
+        headers: { Accept: "application/vnd.github+json" },
+      });
+      if (resp.status === 403) {
+        setError("GitHub API rate limit reached. Try again in a minute.");
+        return;
+      }
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const gist = await resp.json();
+      const content = gist.files?.["weekly_income_scan.json"]?.content;
+      if (!content) throw new Error("weekly_income_scan.json not found in archive");
+      const parsed: ScanData = JSON.parse(content);
+      setData(parsed);
+      setActiveVersion(version);
+      setError(null);
+    } catch (e: any) {
+      console.error("Failed to load archive version:", e);
+      setError(e.message || "Failed to load archive");
+    }
+  }, []);
+
+  const resetToLive = useCallback(() => {
+    setActiveVersion(null);
+    fetchData();
+  }, [fetchData]);
 
   useEffect(() => {
     fetchData();
@@ -271,7 +468,7 @@ export default function WeeklyIncome() {
           <div className="animated-border">
           <div className="bg-[#0d1520] border border-white/10 rounded-2xl overflow-hidden relative">
             {/* Scan sweep line */}
-            {isMarketOpen() && <div className="scan-sweep" />}
+            {!activeVersion && isMarketOpen() && <div className="scan-sweep" />}
 
             {/* Terminal title bar */}
             <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.06]">
@@ -289,24 +486,42 @@ export default function WeeklyIncome() {
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="relative flex h-2.5 w-2.5">
-                  {isMarketOpen() && (
+                {activeVersion ? (
+                  <>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 8v13H3V8" />
+                      <path d="M1 3h22v5H1z" />
+                      <path d="M10 12h4" />
+                    </svg>
                     <span
-                      className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
-                      style={{ backgroundColor: ms.color }}
-                    />
-                  )}
-                  <span
-                    className="relative inline-flex rounded-full h-2.5 w-2.5"
-                    style={{ backgroundColor: ms.color }}
-                  />
-                </span>
-                <span
-                  className="text-[10px] tracking-wider uppercase"
-                  style={{ fontFamily: "'JetBrains Mono', monospace", color: ms.color }}
-                >
-                  {ms.text}
-                </span>
+                      className="text-[10px] tracking-wider uppercase font-bold"
+                      style={{ fontFamily: "'JetBrains Mono', monospace", color: "#f59e0b" }}
+                    >
+                      ARCHIVE
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span className="relative flex h-2.5 w-2.5">
+                      {isMarketOpen() && (
+                        <span
+                          className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
+                          style={{ backgroundColor: ms.color }}
+                        />
+                      )}
+                      <span
+                        className="relative inline-flex rounded-full h-2.5 w-2.5"
+                        style={{ backgroundColor: ms.color }}
+                      />
+                    </span>
+                    <span
+                      className="text-[10px] tracking-wider uppercase"
+                      style={{ fontFamily: "'JetBrains Mono', monospace", color: ms.color }}
+                    >
+                      {ms.text}
+                    </span>
+                  </>
+                )}
               </div>
             </div>
 
@@ -734,6 +949,14 @@ export default function WeeklyIncome() {
             OPTIONS TRADING INVOLVES SUBSTANTIAL RISK. This is not financial advice.
             Review all setups manually before trading.
           </p>
+
+          {/* Archive Panel */}
+          <ArchivePanel
+            history={history}
+            activeVersion={activeVersion}
+            onSelect={loadVersion}
+            onReset={resetToLive}
+          />
         </div>
       </section>
 
