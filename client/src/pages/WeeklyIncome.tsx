@@ -773,6 +773,151 @@ function WeeklyIncomeContent() {
             </div>
           </div>
 
+          {/* ── PRODUCT INTRO COPY ── */}
+          <section className="pb-8 sm:pb-12">
+            <div className="max-w-3xl mx-auto text-center">
+              <div className="inline-flex items-center gap-2 font-mono text-[10px] text-[#00d4aa]/70 tracking-widest bg-[#00d4aa]/8 border border-[#00d4aa]/15 rounded-full px-4 py-1.5 mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00d4aa] animate-pulse" />
+                PRIVATE ACCESS · INCOME INTELLIGENCE
+              </div>
+
+              <p className="font-['Space_Grotesk'] text-lg sm:text-xl text-[#00d4aa]/80 mb-6">
+                Find the premium. Measure the risk. Trade with discipline.
+              </p>
+
+              <p className="text-white/45 text-base sm:text-lg leading-relaxed mb-4 max-w-2xl mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                Weekly Income Scanner is a private-access income intelligence layer built to surface high-quality option-selling opportunities from a curated universe of liquid, premium names. It evaluates credit quality, delta, distance from price, liquidity, trend condition, event risk, and risk-adjusted reward so traders can focus on the contracts that deserve review.
+              </p>
+
+              <p className="text-white/35 text-sm leading-relaxed max-w-2xl mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                For weekly income traders, this creates a more disciplined workflow: identify juicy premium, avoid low-quality traps, understand why a setup qualifies, and review only the candidates with the strongest balance of income and risk control.
+              </p>
+            </div>
+          </section>
+
+          {/* ── SAMPLE DASHBOARD PREVIEW ── */}
+          <section id="preview" className="pb-12 sm:pb-16">
+            <div className="max-w-5xl mx-auto">
+              {/* Preview label */}
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <div className="h-px flex-1 bg-gradient-to-r from-transparent to-white/10" />
+                <span className="font-mono text-[10px] text-white/25 tracking-widest">SAMPLE DASHBOARD</span>
+                <div className="h-px flex-1 bg-gradient-to-l from-transparent to-white/10" />
+              </div>
+
+              {/* Sample dashboard frame */}
+              <div className="relative rounded-2xl overflow-hidden border border-white/8 bg-[#0d1117]">
+                {/* Top bar */}
+                <div className="flex items-center gap-2 px-4 py-2.5 bg-[#0d1117] border-b border-white/5">
+                  <div className="flex gap-1.5">
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+                  </div>
+                  <span className="font-mono text-[10px] text-white/20 ml-3 tracking-wider">WEEKLY INCOME SCANNER — PRIVATE INCOME INTELLIGENCE</span>
+                  <div className="ml-auto flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#00d4aa] animate-pulse" />
+                    <span className="font-mono text-[10px] text-[#00d4aa]/60 tracking-wider">LIVE</span>
+                  </div>
+                </div>
+
+                {/* Sample table with watermark */}
+                <div className="relative p-4 sm:p-6">
+                  {/* The sample scanner table */}
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                      <thead>
+                        <tr className="text-[10px] text-white/25 tracking-widest border-b border-white/5">
+                          <th className="pb-3 pr-4">SIDE</th>
+                          <th className="pb-3 pr-4">TICKER</th>
+                          <th className="pb-3 pr-4">STRIKE</th>
+                          <th className="pb-3 pr-4">DTE</th>
+                          <th className="pb-3 pr-4">DELTA</th>
+                          <th className="pb-3 pr-4">CREDIT</th>
+                          <th className="pb-3 pr-4">PREMIUM</th>
+                          <th className="pb-3 pr-4">OTM %</th>
+                          <th className="pb-3 pr-4">SCORE</th>
+                          <th className="pb-3 pr-4">GRADE</th>
+                          <th className="pb-3">SETUP</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-xs">
+                        {[
+                          { side: "PUT", ticker: "QQQ", strike: "666P", dte: "8d", delta: "-0.21", credit: "$5.22", premium: "$522", otm: "4.0%", score: "79", grade: "B", setup: "Juicy Premium", gradeColor: "#00d4aa", setupColor: "#22c55e" },
+                          { side: "PUT", ticker: "SPY", strike: "704P", dte: "8d", delta: "-0.18", credit: "$3.19", premium: "$319", otm: "3.0%", score: "76", grade: "B", setup: "Strong Premium", gradeColor: "#00d4aa", setupColor: "#3b82f6" },
+                          { side: "PUT", ticker: "IWM", strike: "270P", dte: "8d", delta: "-0.17", credit: "$1.57", premium: "$157", otm: "4.3%", score: "77", grade: "B", setup: "Meets Minimum", gradeColor: "#00d4aa", setupColor: "#00d4aa" },
+                        ].map((row, i) => (
+                          <tr key={i} className="border-b border-white/[0.03] hover:bg-white/[0.02]">
+                            <td className="py-3 pr-4"><span className="text-[#22c55e] font-bold">{row.side}</span></td>
+                            <td className="py-3 pr-4 text-white/70 font-bold">{row.ticker}</td>
+                            <td className="py-3 pr-4 text-white/50">{row.strike}</td>
+                            <td className="py-3 pr-4 text-white/40">{row.dte}</td>
+                            <td className="py-3 pr-4 text-white/40">{row.delta}</td>
+                            <td className="py-3 pr-4 text-[#00d4aa]">{row.credit}</td>
+                            <td className="py-3 pr-4 text-white/50">{row.premium}</td>
+                            <td className="py-3 pr-4 text-white/40">{row.otm}</td>
+                            <td className="py-3 pr-4 text-white/60">{row.score}</td>
+                            <td className="py-3 pr-4"><span className="text-[9px] font-bold px-1.5 py-0.5 rounded" style={{ color: row.gradeColor, background: `${row.gradeColor}15`, border: `1px solid ${row.gradeColor}25` }}>{row.grade}</span></td>
+                            <td className="py-3"><span className="text-[9px] tracking-wider" style={{ color: row.setupColor }}>{row.setup}</span></td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Diagonal SAMPLE watermark — repeating grid */}
+                  <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 2 }}>
+                    <div style={{
+                      position: "absolute", top: "-50%", left: "-50%", width: "200%", height: "200%",
+                      display: "flex", flexWrap: "wrap", alignContent: "center", justifyContent: "center",
+                      gap: "60px 80px", transform: "rotate(-35deg)",
+                    }}>
+                      {Array.from({ length: 20 }).map((_, i) => (
+                        <span key={i} style={{
+                          fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(2rem, 5vw, 3.5rem)",
+                          fontWeight: 900, letterSpacing: "0.2em", color: "rgba(255,255,255,0.07)",
+                          textTransform: "uppercase", userSelect: "none", whiteSpace: "nowrap",
+                        }}>SAMPLE</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <p className="text-center text-white/20 text-xs font-mono mt-4 tracking-wider">
+                Sample readout — live data available to private-access subscribers only
+              </p>
+            </div>
+          </section>
+
+          {/* ── INCOME INTELLIGENCE DIMENSIONS ── */}
+          <section className="pb-12 sm:pb-16">
+            <div className="text-center mb-10">
+              <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">INTELLIGENCE DIMENSIONS</p>
+              <h2 className="font-['Space_Grotesk'] font-bold text-2xl sm:text-3xl text-white">
+                Six Layers of<br />Income Intelligence
+              </h2>
+            </div>
+
+            <div className="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {[
+                { tag: "PREMIUM", title: "Premium Strength", desc: "Prioritizes contracts that meet or exceed the minimum income threshold. No contract below $150 per contract is surfaced as tradable." },
+                { tag: "DELTA", title: "Conservative Delta", desc: "Filters for controlled probability exposure instead of reckless premium chasing. Preferred range: -0.18 to -0.25 delta." },
+                { tag: "LIQUIDITY", title: "Liquidity Quality", desc: "Checks spread, open interest, and tradability before a contract is surfaced. Wide spreads are flagged or rejected." },
+                { tag: "RISK", title: "Risk Cushion", desc: "Evaluates OTM distance, ATR buffer, support location, and price cushion before any contract qualifies." },
+                { tag: "EVENT", title: "Event Awareness", desc: "Flags earnings and known risk events before expiration. No candidate with confirmed earnings before expiry is marked tradable." },
+                { tag: "SCORE", title: "Score Explanation", desc: "Shows why a candidate qualifies, where it is strong, what still needs review, and the final conviction read." },
+              ].map((item, i) => (
+                <div key={i} className="relative bg-[#111820] border border-white/5 rounded-xl p-6 hover:border-[#00d4aa]/20 transition-all group">
+                  <span className="font-mono text-[9px] text-[#00d4aa]/50 tracking-widest bg-[#00d4aa]/5 border border-[#00d4aa]/10 rounded px-2 py-0.5 mb-4 inline-block">{item.tag}</span>
+                  <div className="absolute top-5 right-5 font-['Space_Grotesk'] text-4xl font-bold text-white/[0.03]">{String(i + 1).padStart(2, "0")}</div>
+                  <h3 className="font-['Space_Grotesk'] font-semibold text-base text-white mb-3 group-hover:text-[#00d4aa] transition-colors">{item.title}</h3>
+                  <p className="text-white/40 text-sm leading-relaxed">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
           {/* ═══ MAIN TERMINAL CARD ═══ */}
           <div className="animated-border">
           <div className="bg-[#0d1520] border border-white/10 rounded-2xl overflow-hidden relative">
@@ -1370,6 +1515,16 @@ function WeeklyIncomeContent() {
               </div>
             </div>
           </div>
+          </div>
+
+          {/* ── DISCLAIMER ── */}
+          <div className="mt-12 mb-8 max-w-4xl mx-auto bg-[#111820] border border-white/5 rounded-xl px-5 sm:px-6 py-4 flex items-start gap-3">
+            <svg className="w-4 h-4 text-[#f59e0b] shrink-0 mt-0.5" fill="none" viewBox="0 0 16 16">
+              <path d="M8 2l1.5 4.5H14l-3.7 2.7 1.4 4.3L8 11 4.3 13.5l1.4-4.3L2 6.5h4.5z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
+            </svg>
+            <p className="text-white/35 text-xs leading-relaxed">
+              <span className="text-white/55 font-semibold">Research Disclosure:</span> AI Cockpit and Weekly Income Scanner are educational and analytical intelligence tools. Signals, scores, candidate lists, premiums, directional labels, and all visual readouts are derived from data analysis and may be delayed, incomplete, or inaccurate depending on source availability. They are provided for informational purposes only and do not constitute financial advice or a recommendation to buy, sell, hold, or trade any security or derivative. Every trade idea must be independently reviewed before action.
+            </p>
           </div>
 
           {/* Disclaimer */}

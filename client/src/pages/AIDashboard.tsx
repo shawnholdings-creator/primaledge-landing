@@ -493,6 +493,169 @@ function DashboardContent() {
             </div>
           </div>
 
+          {/* ── PRODUCT INTRO COPY ── */}
+          <section className="pb-8 sm:pb-12">
+            <div className="max-w-3xl mx-auto text-center">
+              <div className="inline-flex items-center gap-2 font-mono text-[10px] text-[#00d4aa]/70 tracking-widest bg-[#00d4aa]/8 border border-[#00d4aa]/15 rounded-full px-4 py-1.5 mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00d4aa] animate-pulse" />
+                PRIVATE ACCESS · TRADING COMMAND LAYER
+              </div>
+
+              <p className="font-['Space_Grotesk'] text-lg sm:text-xl text-[#00d4aa]/80 mb-6">
+                From market noise to trade-ready intelligence.
+              </p>
+
+              <p className="text-white/45 text-base sm:text-lg leading-relaxed mb-4 max-w-2xl mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                AI Cockpit is a private-access trading command layer built to help traders evaluate opportunities with speed, structure, and discipline. It brings together market context, technical condition, options premium, risk cushion, event exposure, and setup quality into a single decision cockpit designed for fast interpretation.
+              </p>
+
+              <p className="text-white/35 text-sm leading-relaxed max-w-2xl mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                Instead of jumping between charts, chains, scanners, and notes, traders get a unified view of what matters: the opportunity, the risk, the reason, and the next decision.
+              </p>
+            </div>
+          </section>
+
+          {/* ── SAMPLE COMMAND DASHBOARD PREVIEW ── */}
+          <section id="preview" className="pb-12 sm:pb-16">
+            <div className="max-w-5xl mx-auto">
+              {/* Preview label */}
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <div className="h-px flex-1 bg-gradient-to-r from-transparent to-white/10" />
+                <span className="font-mono text-[10px] text-white/25 tracking-widest">SAMPLE READOUT</span>
+                <div className="h-px flex-1 bg-gradient-to-l from-transparent to-white/10" />
+              </div>
+
+              {/* Sample dashboard frame */}
+              <div className="relative rounded-2xl overflow-hidden border border-white/8 bg-[#0d1117]">
+                {/* Top bar */}
+                <div className="flex items-center gap-2 px-4 py-2.5 bg-[#0d1117] border-b border-white/5">
+                  <div className="flex gap-1.5">
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+                  </div>
+                  <span className="font-mono text-[10px] text-white/20 ml-3 tracking-wider">AI COCKPIT — PRIVATE TRADING COMMAND LAYER</span>
+                  <div className="ml-auto flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#00d4aa] animate-pulse" />
+                    <span className="font-mono text-[10px] text-[#00d4aa]/60 tracking-wider">LIVE</span>
+                  </div>
+                </div>
+
+                {/* Command modules grid with watermark */}
+                <div className="relative p-4 sm:p-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {/* Market State */}
+                    <div className="bg-[#111820] border border-white/5 rounded-lg p-4">
+                      <p className="font-mono text-[9px] text-[#00d4aa]/50 tracking-widest mb-3">MARKET STATE</p>
+                      <div className="space-y-2" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                        <div className="flex justify-between text-xs"><span className="text-white/30">Bias</span><span className="text-[#22c55e]">Bullish</span></div>
+                        <div className="flex justify-between text-xs"><span className="text-white/30">Volatility</span><span className="text-white/50">Normal</span></div>
+                        <div className="flex justify-between text-xs"><span className="text-white/30">Breadth</span><span className="text-[#22c55e]">Strong</span></div>
+                      </div>
+                    </div>
+
+                    {/* Trade Readiness */}
+                    <div className="bg-[#111820] border border-white/5 rounded-lg p-4">
+                      <p className="font-mono text-[9px] text-[#00d4aa]/50 tracking-widest mb-3">TRADE READINESS</p>
+                      <div className="space-y-2" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                        <div className="flex justify-between text-xs"><span className="text-white/30">Decision</span><span className="text-[#00d4aa]">Review</span></div>
+                        <div className="flex justify-between text-xs"><span className="text-white/30">Conviction</span><span className="text-white/60">B</span></div>
+                        <div className="flex justify-between text-xs"><span className="text-white/30">Setup Quality</span><span className="text-[#22c55e]">Strong</span></div>
+                      </div>
+                    </div>
+
+                    {/* Opportunity Stack */}
+                    <div className="bg-[#111820] border border-white/5 rounded-lg p-4">
+                      <p className="font-mono text-[9px] text-[#00d4aa]/50 tracking-widest mb-3">OPPORTUNITY STACK</p>
+                      <div className="space-y-2" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                        <div className="flex justify-between text-xs"><span className="text-white/30">Ticker</span><span className="text-white/70 font-bold">QQQ</span></div>
+                        <div className="flex justify-between text-xs"><span className="text-white/30">Setup</span><span className="text-white/50">Premium Pullback</span></div>
+                        <div className="flex justify-between text-xs"><span className="text-white/30">Direction</span><span className="text-[#22c55e]">Neutral Bullish</span></div>
+                      </div>
+                    </div>
+
+                    {/* Options Lens */}
+                    <div className="bg-[#111820] border border-white/5 rounded-lg p-4">
+                      <p className="font-mono text-[9px] text-[#00d4aa]/50 tracking-widest mb-3">OPTIONS LENS</p>
+                      <div className="space-y-2" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                        <div className="flex justify-between text-xs"><span className="text-white/30">Contract</span><span className="text-white/50">QQQ 666P</span></div>
+                        <div className="flex justify-between text-xs"><span className="text-white/30">Credit</span><span className="text-[#00d4aa]">$5.22 / $522</span></div>
+                        <div className="flex justify-between text-xs"><span className="text-white/30">Delta</span><span className="text-white/50">-0.21</span></div>
+                        <div className="flex justify-between text-xs"><span className="text-white/30">DTE / OTM</span><span className="text-white/40">8d / 4.0%</span></div>
+                      </div>
+                    </div>
+
+                    {/* Risk Console */}
+                    <div className="bg-[#111820] border border-white/5 rounded-lg p-4">
+                      <p className="font-mono text-[9px] text-[#00d4aa]/50 tracking-widest mb-3">RISK CONSOLE</p>
+                      <div className="space-y-2" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                        <div className="flex justify-between text-xs"><span className="text-white/30">Support Buffer</span><span className="text-[#22c55e]">Acceptable</span></div>
+                        <div className="flex justify-between text-xs"><span className="text-white/30">Event Risk</span><span className="text-[#22c55e]">Clear</span></div>
+                        <div className="flex justify-between text-xs"><span className="text-white/30">Liquidity</span><span className="text-[#22c55e]">Tradable</span></div>
+                      </div>
+                    </div>
+
+                    {/* Final Read */}
+                    <div className="bg-[#111820] border border-white/5 rounded-lg p-4">
+                      <p className="font-mono text-[9px] text-[#00d4aa]/50 tracking-widest mb-3">FINAL READ</p>
+                      <p className="text-xs text-white/40 leading-relaxed" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                        Review candidate; verify live chain and chart before entry. Premium qualifies, cushion acceptable, event risk clear.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Diagonal SAMPLE watermark — repeating grid */}
+                  <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 2 }}>
+                    <div style={{
+                      position: "absolute", top: "-50%", left: "-50%", width: "200%", height: "200%",
+                      display: "flex", flexWrap: "wrap", alignContent: "center", justifyContent: "center",
+                      gap: "60px 80px", transform: "rotate(-35deg)",
+                    }}>
+                      {Array.from({ length: 20 }).map((_, i) => (
+                        <span key={i} style={{
+                          fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(2rem, 5vw, 3.5rem)",
+                          fontWeight: 900, letterSpacing: "0.2em", color: "rgba(255,255,255,0.07)",
+                          textTransform: "uppercase", userSelect: "none", whiteSpace: "nowrap",
+                        }}>SAMPLE</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <p className="text-center text-white/20 text-xs font-mono mt-4 tracking-wider">
+                Sample readout — live data available to private-access subscribers only
+              </p>
+            </div>
+          </section>
+
+          {/* ── COMMAND LAYERS ── */}
+          <section className="pb-12 sm:pb-16">
+            <div className="text-center mb-10">
+              <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">INTELLIGENCE DIMENSIONS</p>
+              <h2 className="font-['Space_Grotesk'] font-bold text-2xl sm:text-3xl text-white">
+                Five Command Layers
+              </h2>
+            </div>
+
+            <div className="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {[
+                { tag: "CONTEXT", title: "Market Context", desc: "Reads the broader environment before a trade idea is evaluated. Bias, volatility regime, and breadth in one glance." },
+                { tag: "TECHNICAL", title: "Technical Condition", desc: "Frames trend, structure, momentum, support, and risk zones. Filters out obvious breakdowns." },
+                { tag: "OPTIONS", title: "Options Opportunity", desc: "Highlights contracts with meaningful premium and tradable liquidity. Minimum $150/contract threshold enforced." },
+                { tag: "RISK", title: "Risk Cushion", desc: "Measures distance, delta, support buffer, and event exposure before any action is considered." },
+                { tag: "DECISION", title: "Decision Readiness", desc: "Turns scattered signals into a clean read: act, wait, avoid, or review. One cockpit, one decision." },
+              ].map((item, i) => (
+                <div key={i} className={`relative bg-[#111820] border border-white/5 rounded-xl p-6 hover:border-[#00d4aa]/20 transition-all group ${i === 4 ? "sm:col-span-2 lg:col-span-1 sm:max-w-md sm:mx-auto lg:max-w-none" : ""}`}>
+                  <span className="font-mono text-[9px] text-[#00d4aa]/50 tracking-widest bg-[#00d4aa]/5 border border-[#00d4aa]/10 rounded px-2 py-0.5 mb-4 inline-block">{item.tag}</span>
+                  <div className="absolute top-5 right-5 font-['Space_Grotesk'] text-4xl font-bold text-white/[0.03]">{String(i + 1).padStart(2, "0")}</div>
+                  <h3 className="font-['Space_Grotesk'] font-semibold text-base text-white mb-3 group-hover:text-[#00d4aa] transition-colors">{item.title}</h3>
+                  <p className="text-white/40 text-sm leading-relaxed">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-4 items-start">
 
           {/* ═══ LEFT: Active Signals ═══ */}
@@ -1013,10 +1176,15 @@ function DashboardContent() {
             />
           </div>
 
-          {/* Disclaimer */}
-          <p className="text-center text-white/15 text-xs mt-4 font-mono tracking-wide">
-            EDUCATIONAL ANALYSIS ONLY. NOT FINANCIAL ADVICE. NOT A RECOMMENDATION TO BUY, SELL, OR HOLD.
-          </p>
+          {/* ── DISCLAIMER ── */}
+          <div className="mt-12 mb-8 max-w-4xl mx-auto bg-[#111820] border border-white/5 rounded-xl px-5 sm:px-6 py-4 flex items-start gap-3">
+            <svg className="w-4 h-4 text-[#f59e0b] shrink-0 mt-0.5" fill="none" viewBox="0 0 16 16">
+              <path d="M8 2l1.5 4.5H14l-3.7 2.7 1.4 4.3L8 11 4.3 13.5l1.4-4.3L2 6.5h4.5z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
+            </svg>
+            <p className="text-white/35 text-xs leading-relaxed">
+              <span className="text-white/55 font-semibold">Research Disclosure:</span> AI Cockpit and Weekly Income Scanner are educational and analytical intelligence tools. Signals, scores, candidate lists, premiums, directional labels, and all visual readouts are derived from data analysis and may be delayed, incomplete, or inaccurate depending on source availability. They are provided for informational purposes only and do not constitute financial advice or a recommendation to buy, sell, hold, or trade any security or derivative. Every trade idea must be independently reviewed before action.
+            </p>
+          </div>
         </div>
       </section>
 
