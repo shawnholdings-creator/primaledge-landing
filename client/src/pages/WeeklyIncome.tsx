@@ -78,6 +78,8 @@ interface Candidate {
   contract_symbol: string;
   reasons: string[];
   score_details?: ScoreDetails;
+  setup_type?: string;
+  premium_label?: string;
 }
 
 interface ScanData {
@@ -275,9 +277,10 @@ function LoadingSkeleton() {
 
 /* ─── Grade helpers ─────────────────────────────────────────── */
 function gradeFromScore(score: number): string {
-  if (score >= 80) return "A";
+  if (score >= 85) return "A";
   if (score >= 75) return "B";
-  return "C";
+  if (score >= 65) return "C";
+  return "D";
 }
 
 function gradeStyle(grade: string): { bg: string; text: string } {
@@ -297,6 +300,22 @@ function statusColor(status: string): string {
     case "Review":     return "#f97316";
     default:           return "#6b7280";
   }
+}
+
+/* ─── Premium Label Helper ─────────────────────────────────── */
+function premiumLabel(credit: number): { text: string; color: string; bg: string } | null {
+  const contractValue = credit * 100;
+  if (contractValue >= 500) return { text: "Juicy Premium", color: "#22c55e", bg: "rgba(34,197,94,0.12)" };
+  if (contractValue >= 250) return { text: "Strong Premium", color: "#3b82f6", bg: "rgba(59,130,246,0.12)" };
+  if (contractValue >= 150) return { text: "Meets Minimum", color: "#00d4aa", bg: "rgba(0,212,170,0.12)" };
+  return null;
+}
+
+function setupTypeColor(setupType: string): string {
+  if (setupType.includes("Juicy")) return "#22c55e";
+  if (setupType.includes("Balanced")) return "#3b82f6";
+  if (setupType.includes("Conservative")) return "#00d4aa";
+  return "#6b7280";
 }
 
 /* ─── Score Detail Panel ───────────────────────────────────── */
@@ -633,6 +652,30 @@ function WeeklyIncomeContent() {
                 >
                   SHORT PUT / CALL SCANNER · PREMIUM SETUPS
                 </p>
+                <div className="flex items-center gap-2 mt-2">
+                  <span
+                    className="text-[10px] tracking-wider px-2.5 py-1 rounded-full"
+                    style={{
+                      fontFamily: "'JetBrains Mono', monospace",
+                      color: "#00d4aa",
+                      background: "rgba(0,212,170,0.08)",
+                      border: "1px solid rgba(0,212,170,0.15)",
+                    }}
+                  >
+                    MIN PREMIUM: $150/contract
+                  </span>
+                  <span
+                    className="text-[10px] tracking-wider px-2.5 py-1 rounded-full"
+                    style={{
+                      fontFamily: "'JetBrains Mono', monospace",
+                      color: "#6b7280",
+                      background: "rgba(107,114,128,0.08)",
+                      border: "1px solid rgba(107,114,128,0.15)",
+                    }}
+                  >
+                    PUT FOCUSED
+                  </span>
+                </div>
               </div>
               {/* Market status pill */}
               <div
@@ -879,12 +922,25 @@ function WeeklyIncomeContent() {
                       </div>
 
                       {/* Ticker */}
-                      <span
-                        className="text-base font-black text-white"
-                        style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                      >
-                        {c.ticker}
-                      </span>
+                      <div>
+                        <span
+                          className="text-base font-black text-white"
+                          style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                        >
+                          {c.ticker}
+                        </span>
+                        {c.setup_type && (
+                          <span
+                            className="text-[8px] tracking-wider opacity-60 block mt-0.5"
+                            style={{
+                              fontFamily: "'JetBrains Mono', monospace",
+                              color: setupTypeColor(c.setup_type),
+                            }}
+                          >
+                            {c.setup_type}
+                          </span>
+                        )}
+                      </div>
 
                       {/* Strike */}
                       <span
@@ -896,18 +952,36 @@ function WeeklyIncomeContent() {
 
                       {/* Credit */}
                       <div>
-                        <span
-                          className="text-sm font-bold"
-                          style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00d4aa" }}
-                        >
-                          ${c.credit.toFixed(2)}
-                        </span>
-                        <span
-                          className="text-xs text-white/30 ml-1.5"
-                          style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                        >
-                          / ${creditPer100}
-                        </span>
+                        <div>
+                          <span
+                            className="text-sm font-bold"
+                            style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00d4aa" }}
+                          >
+                            ${c.credit.toFixed(2)}
+                          </span>
+                          <span
+                            className="text-xs text-white/30 ml-1.5"
+                            style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                          >
+                            / ${creditPer100}
+                          </span>
+                        </div>
+                        {(() => {
+                          const pl = premiumLabel(c.credit);
+                          return pl ? (
+                            <span
+                              className="text-[8px] font-bold tracking-wider px-1.5 py-0.5 rounded-full mt-0.5 inline-block"
+                              style={{
+                                fontFamily: "'JetBrains Mono', monospace",
+                                color: pl.color,
+                                background: pl.bg,
+                                border: `1px solid ${pl.color}25`,
+                              }}
+                            >
+                              {pl.text}
+                            </span>
+                          ) : null;
+                        })()}
                       </div>
 
                       {/* Score + Grade */}
@@ -1070,6 +1144,22 @@ function WeeklyIncomeContent() {
                             >
                               ${c.credit.toFixed(2)}
                             </span>
+                            {(() => {
+                              const pl = premiumLabel(c.credit);
+                              return pl ? (
+                                <span
+                                  className="text-[8px] font-bold tracking-wider px-1.5 py-0.5 rounded-full inline-block"
+                                  style={{
+                                    fontFamily: "'JetBrains Mono', monospace",
+                                    color: pl.color,
+                                    background: pl.bg,
+                                    border: `1px solid ${pl.color}25`,
+                                  }}
+                                >
+                                  {pl.text}
+                                </span>
+                              ) : null;
+                            })()}
                           </div>
                           <div className="flex items-center gap-3">
                             <span
@@ -1092,6 +1182,17 @@ function WeeklyIncomeContent() {
                             </span>
                           </div>
                         </div>
+                        {c.setup_type && (
+                          <span
+                            className="text-[8px] tracking-wider opacity-60 block mt-1"
+                            style={{
+                              fontFamily: "'JetBrains Mono', monospace",
+                              color: setupTypeColor(c.setup_type),
+                            }}
+                          >
+                            {c.setup_type}
+                          </span>
+                        )}
                       </div>
 
                       {/* Mobile expansion panel */}
@@ -1147,9 +1248,10 @@ function WeeklyIncomeContent() {
               </div>
               <div className="flex flex-wrap gap-2">
                 {[
-                  { grade: "A", label: "Strong", score: "80+", bg: "#22c55e", text: "#fff", where: "ENTRY" },
-                  { grade: "B", label: "Good", score: "75–79", bg: "#00d4aa", text: "#0a0e14", where: "ENTRY" },
-                  { grade: "C", label: "Marginal", score: "70–74", bg: "#f59e0b", text: "#0a0e14", where: "FORMING" },
+                  { grade: "A", label: "Strong", score: "85+", bg: "#22c55e", text: "#fff", where: "ENTRY" },
+                  { grade: "B", label: "Good", score: "75–84", bg: "#00d4aa", text: "#0a0e14", where: "ENTRY" },
+                  { grade: "C", label: "Moderate", score: "65–74", bg: "#f59e0b", text: "#0a0e14", where: "FORMING" },
+                  { grade: "D", label: "Weak", score: "<65", bg: "#ef4444", text: "#fff", where: "AVOID" },
                 ].map((g) => (
                   <div
                     key={g.grade}
