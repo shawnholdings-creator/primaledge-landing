@@ -8,6 +8,7 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { Link } from "wouter";
 import Navbar from "@/components/Navbar";
 import PrimalEdgeLogo from "@/components/PrimalEdgeLogo";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 // GitHub Gist — replace with real ID later
 const GIST_ID = "2bd50c8183b50e72c3d52fd2c3dbf04f";
@@ -262,8 +263,8 @@ function gradeStyle(grade: string): { bg: string; text: string } {
   return { bg: "#f59e0b", text: "#0a0e14" };
 }
 
-/* ─── Dashboard Content ────────────────────────────────────── */
-export default function WeeklyIncome() {
+/* ─── Dashboard Content (shown after auth + approval) ──────── */
+function WeeklyIncomeContent() {
   const [data, setData] = useState<ScanData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -972,5 +973,14 @@ export default function WeeklyIncome() {
         </div>
       </footer>
     </div>
+  );
+}
+
+/* ─── Main Export — Auth Protected ───────────────────── */
+export default function WeeklyIncome() {
+  return (
+    <ProtectedRoute>
+      <WeeklyIncomeContent />
+    </ProtectedRoute>
   );
 }
