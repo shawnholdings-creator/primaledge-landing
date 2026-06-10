@@ -18,6 +18,7 @@ import DevRequests from "./pages/DevRequests";
 import AIDashboard from "./pages/AIDashboard";
 import OptionsDashboard from "./pages/OptionsDashboard";
 import ComingSoonPage from "./pages/ComingSoonPage";
+import WeeklyIncome from "./pages/WeeklyIncome";
 import GlobalDisclaimer from "./components/GlobalDisclaimer";
 
 function Router() {
@@ -35,7 +36,7 @@ function Router() {
       <Route path={"/dev-requests"} component={DevRequests} />
       <Route path={"/ai-dashboard"} component={AIDashboard} />
       <Route path={"/options-prep"} component={OptionsDashboard} />
-      <Route path={"/weekly-income"} component={ComingSoonPage} />
+      <Route path={"/weekly-income"} component={WeeklyIncome} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>
