@@ -249,7 +249,6 @@ function SentimentDashboardContent() {
   if (!data) return null;
 
   const ms = data.market_state;
-  const sc = scoreColor(data.score);
 
   /* ─── Session badge color ─── */
   const sessionBadge = () => {
@@ -295,7 +294,7 @@ function SentimentDashboardContent() {
                   MARKET SENTIMENT ENGINE
                 </h1>
                 <p className="text-white/20 text-[10px] font-mono tracking-[0.35em] uppercase mt-1.5">
-                  COMPOSITE INTELLIGENCE · DIRECTIONAL CONTEXT
+                  MARKET SENTIMENT ENGINE
                 </p>
               </div>
 
@@ -354,30 +353,24 @@ function SentimentDashboardContent() {
             {/* Score Gauge */}
             <div className="flex flex-col items-center justify-center bg-[#0d1117] border border-white/[0.06] rounded-xl px-4 sm:px-8 py-4 sm:py-6">
               <div className="text-[9px] text-white/20 tracking-widest uppercase mb-3" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                COMPOSITE SCORE
+                SIGNAL STRENGTH
               </div>
               <ScoreGauge score={data.score} />
-              <div
-                className="text-xs font-bold tracking-wider mt-3"
-                style={{ fontFamily: "'JetBrains Mono', monospace", color: sc }}
-              >
-                {data.score >= 75 ? "STRONG BULL" : data.score >= 55 ? "LEAN BULL" : data.score >= 45 ? "NEUTRAL" : data.score >= 30 ? "LEAN BEAR" : "STRONG BEAR"}
-              </div>
             </div>
 
             {/* Market State Grid — 5×2 */}
             <div className="bg-[#0d1117] border border-white/[0.06] rounded-xl p-4">
               <div className="text-[9px] text-white/20 tracking-widest uppercase mb-3" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                MARKET STATE
+                MARKET DETAILS
               </div>
               <div className="grid grid-cols-2 gap-2">
-                <StateCell title="IDX TREND" label={ms.idx_trend.label} sub={ms.idx_trend.value !== undefined ? `Score: ${ms.idx_trend.value}` : undefined} color={ms.idx_trend.color} />
+                <StateCell title="OVERALL TREND" label={ms.idx_trend.label} sub={ms.idx_trend.value !== undefined ? `Score: ${ms.idx_trend.value}` : undefined} color={ms.idx_trend.color} />
                 <StateCell title="BREADTH" label={`${ms.breadth.value}/${ms.breadth.total}`} color={ms.breadth.color} />
-                <StateCell title="IDX NOW" label={ms.idx_now.label} sub={ms.idx_now.avg_score !== undefined ? `Avg: ${ms.idx_now.avg_score}` : undefined} color={ms.idx_now.color} />
+                <StateCell title="INDEX DIRECTION" label={ms.idx_now.label} sub={ms.idx_now.avg_score !== undefined ? `Avg: ${ms.idx_now.avg_score}` : undefined} color={ms.idx_now.color} />
                 <StateCell title="FLOW" label={ms.flow.label} color={ms.flow.color} />
-                <StateCell title="LEADER" label={ms.leader.label} color={ms.leader.color} />
+                <StateCell title="STRENGTH" label={ms.leader.label} color={ms.leader.color} />
                 <StateCell title="DAY TYPE" label={ms.day_type.label} color={ms.day_type.color} />
-                <StateCell title="HTF BIAS" label={ms.htf_bias.label} sub={ms.htf_bias.bull_count !== undefined ? `Bull: ${ms.htf_bias.bull_count}/4` : undefined} color={ms.htf_bias.color} />
+                <StateCell title="BACKGROUND TREND" label={ms.htf_bias.label} sub={ms.htf_bias.bull_count !== undefined ? `Bull: ${ms.htf_bias.bull_count}/4` : undefined} color={ms.htf_bias.color} />
                 <StateCell title="VIX" label={ms.vix.label} sub={ms.vix.value !== undefined ? `${ms.vix.value.toFixed(1)}` : undefined} color={ms.vix.color} />
                 <StateCell title="EXTENSION" label={ms.extension.label} sub={ms.extension.avg_chg !== undefined ? `Avg: ${ms.extension.avg_chg > 0 ? "+" : ""}${ms.extension.avg_chg.toFixed(2)}%` : undefined} color={ms.extension.color} />
                 <StateCell title="RISK" label={ms.risk.label} color={ms.risk.color} />
