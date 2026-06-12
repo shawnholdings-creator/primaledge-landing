@@ -22,6 +22,10 @@ const PRODUCT_LABELS: Record<keyof ProductAccess, { title: string; subtitle: str
     title: "Weekly Income Scanner",
     subtitle: "Sign in to access the income intelligence layer.",
   },
+  sentiment: {
+    title: "Market Sentiment Engine",
+    subtitle: "Sign in to access the live sentiment intelligence.",
+  },
 };
 
 interface ProtectedRouteProps {

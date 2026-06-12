@@ -24,6 +24,7 @@ import { supabase } from "../lib/supabaseClient";
 export interface ProductAccess {
   cockpit: boolean | null;
   income: boolean | null;
+  sentiment: boolean | null;
 }
 
 interface AuthState {
@@ -41,7 +42,7 @@ interface AuthState {
 
 const AuthContext = createContext<AuthState | undefined>(undefined);
 
-const INITIAL_ACCESS: ProductAccess = { cockpit: null, income: null };
+const INITIAL_ACCESS: ProductAccess = { cockpit: null, income: null, sentiment: null };
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -54,12 +55,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const { data, error } = await supabase
         .from("user_access")
-        .select("approved, cockpit_access, income_access")
+        .select("approved, cockpit_access, income_access, sentiment_access")
         .eq("email", email)
         .single();
 
       if (error || !data) {
-        setProductAccess({ cockpit: false, income: false });
+        setProductAccess({ cockpit: false, income: false, sentiment: false });
         return;
       }
 
@@ -68,9 +69,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setProductAccess({
         cockpit: data.cockpit_access != null ? data.cockpit_access === true : legacy,
         income: data.income_access != null ? data.income_access === true : legacy,
+        sentiment: data.sentiment_access != null ? data.sentiment_access === true : legacy,
       });
     } catch {
-      setProductAccess({ cockpit: false, income: false });
+      setProductAccess({ cockpit: false, income: false, sentiment: false });
     }
   }, []);
 
@@ -122,9 +124,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Legacy compat: isApproved = true if ANY product is approved
   const isApproved =
-    productAccess.cockpit === null && productAccess.income === null
+    productAccess.cockpit === null && productAccess.income === null && productAccess.sentiment === null
       ? null
-      : (productAccess.cockpit === true || productAccess.income === true);
+      : (productAccess.cockpit === true || productAccess.income === true || productAccess.sentiment === true);
 
   return (
     <AuthContext.Provider

@@ -5,6 +5,7 @@
    ============================================================ */
 
 import Navbar from "../components/Navbar";
+import ProtectedRoute from "../components/ProtectedRoute";
 import { Link } from "wouter";
 
 const PILLARS = [
@@ -52,7 +53,7 @@ const PILLARS = [
   },
 ];
 
-export default function MarketSentiment() {
+function MarketSentimentContent() {
   return (
     <>
       <Navbar />
@@ -310,5 +311,14 @@ export default function MarketSentiment() {
 
       </main>
     </>
+  );
+}
+
+/* ─── Main Export — Auth Protected ─────────────────────────── */
+export default function MarketSentiment() {
+  return (
+    <ProtectedRoute product="sentiment">
+      <MarketSentimentContent />
+    </ProtectedRoute>
   );
 }
