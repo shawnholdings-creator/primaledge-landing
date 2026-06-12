@@ -13,8 +13,7 @@ const GIST_ID = "c89dd974e4e74107b5afb88807c12579";
 const GIST_API = `https://api.github.com/gists/${GIST_ID}`;
 const GIST_FILENAME = "sentiment_dashboard.json";
 
-const REFRESH_MARKET_MS = 60 * 1000;     // 60 s during market hours
-const REFRESH_OFF_HOURS_MS = 5 * 60 * 1000; // 5 min outside
+const REFRESH_MS = 30 * 1000;             // 30 s auto-refresh
 
 /* ─── Market-Hours Helper ─────────────────────────────────── */
 function isMarketOpen(): boolean {
@@ -219,9 +218,7 @@ function SentimentDashboardContent() {
   // Auto-refresh
   useEffect(() => {
     fetchData();
-    const interval = setInterval(() => {
-      fetchData();
-    }, isMarketOpen() ? REFRESH_MARKET_MS : REFRESH_OFF_HOURS_MS);
+    const interval = setInterval(fetchData, REFRESH_MS);
     return () => clearInterval(interval);
   }, [fetchData]);
 
