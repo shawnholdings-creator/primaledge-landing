@@ -766,18 +766,7 @@ function DashboardBody({ data }: { data: SentimentData | null }) {
           </div>
         )}
 
-        {/* ═══ BRANDING ═══ */}
-        <div className="text-center py-6 mb-4">
-          <div className="inline-flex items-center gap-2 opacity-20 hover:opacity-40 transition-opacity">
-            <span className="text-[10px] tracking-[0.3em] uppercase" style={{ fontFamily: "'Space Grotesk', sans-serif", color: "#FFD700" }}>
-              TRADEMONKEYS
-            </span>
-            <span className="text-[8px] text-white/20">·</span>
-            <span className="text-[9px] tracking-[0.2em] uppercase text-white/20" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-              PRIMAL EDGE
-            </span>
-          </div>
-        </div>
+
 
         {/* ═══ RESEARCH DISCLAIMER ═══ */}
         <div className="max-w-4xl mx-auto bg-[#0d1117] border border-white/5 rounded-xl px-5 sm:px-6 py-4 flex items-start gap-3 mb-8">
