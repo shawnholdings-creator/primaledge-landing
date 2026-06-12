@@ -193,19 +193,14 @@ function TickerTape({ data }: { data: SentimentData | null }) {
   if (!data) return null;
 
   const items: { symbol: string; price: number; chg_pct?: number }[] = [];
-
-  // Indices
   for (const idx of data.indices) {
     items.push({ symbol: idx.symbol, price: idx.price, chg_pct: idx.chg_pct });
   }
-  // Mega caps
   for (const mc of data.mega_caps) {
     items.push({ symbol: mc.symbol, price: mc.price, chg_pct: mc.chg_pct });
   }
-  // VIX
   items.push({ symbol: "VIX", price: data.vix_value });
 
-  // Duplicate for seamless loop
   const duped = [...items, ...items];
 
   return (
@@ -215,41 +210,45 @@ function TickerTape({ data }: { data: SentimentData | null }) {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
+        .ticker-track:hover { animation-play-state: paused; }
       `}</style>
       <div
         className="sticky top-20 z-40 overflow-hidden"
         style={{
           background: "#0a0a0f",
-          borderTop: "1px solid #f0b42930",
-          borderBottom: "1px solid #f0b42930",
+          borderTop: "1px solid rgba(240,180,41,0.18)",
+          borderBottom: "1px solid rgba(240,180,41,0.18)",
         }}
       >
         <div
-          className="flex items-center whitespace-nowrap py-1.5"
-          style={{
-            animation: "ticker-scroll 45s linear infinite",
-          }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.animationPlayState = "paused"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.animationPlayState = "running"; }}
+          className="ticker-track flex items-center whitespace-nowrap py-2"
+          style={{ animation: "ticker-scroll 50s linear infinite" }}
         >
           {duped.map((item, i) => {
             const isVix = item.symbol === "VIX";
             const chg = item.chg_pct;
-            const isPositive = chg !== undefined && chg > 0;
-            const isNegative = chg !== undefined && chg < 0;
-            const chgColor = isPositive ? "#22c55e" : isNegative ? "#ef4444" : "#6b7280";
-            const arrow = isPositive ? "▲" : isNegative ? "▼" : "";
+            const isUp = chg !== undefined && chg > 0;
+            const isDown = chg !== undefined && chg < 0;
+            const chgColor = isUp ? "#22c55e" : isDown ? "#ef4444" : "#9ca3af";
 
             return (
-              <span key={i} className="flex items-center" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "12px" }}>
-                <span className="text-white/70 font-bold">{item.symbol}</span>
-                <span className="text-white/50 ml-2">${item.price.toFixed(2)}</span>
+              <span
+                key={i}
+                className="inline-flex items-center gap-1.5 px-4"
+                style={{ fontFamily: "monospace, 'Courier New'", fontSize: "13px", letterSpacing: "0.02em" }}
+              >
+                <span style={{ color: "#e2e8f0", fontWeight: 700 }}>{item.symbol}</span>
+                <span style={{ color: "#94a3b8" }}>
+                  {"$"}{item.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </span>
                 {!isVix && chg !== undefined && (
-                  <span className="ml-2" style={{ color: chgColor }}>
-                    {arrow} {chg >= 0 ? "+" : ""}{chg.toFixed(1)}%
+                  <span style={{ color: chgColor, fontWeight: 600 }}>
+                    {isUp ? "+" : ""}{chg.toFixed(2)}%
                   </span>
                 )}
-                <span className="mx-3" style={{ color: "#f0b42960" }}>│</span>
+                <span style={{ color: "rgba(240,180,41,0.35)", margin: "0 4px", fontWeight: 300 }}>
+                  {"|"}
+                </span>
               </span>
             );
           })}
