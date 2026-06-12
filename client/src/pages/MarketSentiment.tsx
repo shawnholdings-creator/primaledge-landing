@@ -352,7 +352,7 @@ function SentimentDashboardContent() {
           <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-6 mb-6">
 
             {/* Score Gauge */}
-            <div className="flex flex-col items-center justify-center bg-[#0d1117] border border-white/[0.06] rounded-xl px-8 py-6">
+            <div className="flex flex-col items-center justify-center bg-[#0d1117] border border-white/[0.06] rounded-xl px-4 sm:px-8 py-4 sm:py-6">
               <div className="text-[9px] text-white/20 tracking-widest uppercase mb-3" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                 COMPOSITE SCORE
               </div>
@@ -390,7 +390,7 @@ function SentimentDashboardContent() {
             <div className="text-[9px] text-white/20 tracking-widest uppercase mb-3" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
               SECTOR HEAT
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               {/* Hot */}
               <div className="flex-1 rounded-lg px-4 py-3 border" style={{ backgroundColor: "#22c55e10", borderColor: "#22c55e25" }}>
                 <div className="flex items-center justify-between">
@@ -453,40 +453,65 @@ function SentimentDashboardContent() {
             </div>
 
             {data.indices.map((idx, i) => (
-              <div
-                key={idx.symbol}
-                className="grid gap-3 px-4 py-3 border-b border-white/[0.03] items-center hover:bg-white/[0.02] transition-colors"
-                style={{
-                  fontFamily: "'JetBrains Mono', monospace",
-                  gridTemplateColumns: "1fr 1.2fr 0.8fr 1fr 0.6fr 0.6fr 0.8fr",
-                  animationDelay: `${i * 0.05}s`,
-                }}
-              >
-                <span className="text-sm font-bold text-white/90">{idx.symbol}</span>
-                <span className="text-xs font-bold truncate" style={{ color: idx.now_color }}>{idx.now}</span>
-                <span className="text-xs text-white/50 text-right">${idx.price.toFixed(2)}</span>
-                <span className="text-xs font-bold text-right" style={{ color: idx.chg_color }}>
-                  {idx.chg_pct >= 0 ? "+" : ""}{idx.chg_pct.toFixed(2)}%
-                </span>
-                <div className="flex justify-center">
-                  <div className={`w-3 h-3 rounded-sm ${idx.daily_trail ? "bg-[#22c55e]" : "bg-white/8"}`}
-                    style={idx.daily_trail ? { boxShadow: "0 0 6px #22c55e50" } : {}}
-                    title={idx.daily_trail ? "Daily Trail Active" : "No Daily Trail"}
-                  />
+              <div key={idx.symbol}>
+                {/* Mobile card */}
+                <div
+                  className="sm:hidden px-4 py-3 border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors"
+                  style={{ fontFamily: "'JetBrains Mono', monospace", animationDelay: `${i * 0.05}s` }}
+                >
+                  <div className="flex items-center justify-between mb-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-bold text-white/90">{idx.symbol}</span>
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded" style={{ color: idx.now_color, background: `${idx.now_color}15` }}>{idx.now}</span>
+                    </div>
+                    <span className="text-xs font-bold" style={{ color: idx.chg_color }}>
+                      {idx.chg_pct >= 0 ? "+" : ""}{idx.chg_pct.toFixed(2)}%
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-[10px] text-white/40">
+                    <span>${idx.price.toFixed(2)}</span>
+                    <div className="flex items-center gap-2">
+                      <div className={`w-2.5 h-2.5 rounded-sm ${idx.daily_trail ? "bg-[#22c55e]" : "bg-white/8"}`} title="D-Trail" />
+                      <div className={`w-2.5 h-2.5 rounded-sm ${idx.weekly_trail ? "bg-[#3b82f6]" : "bg-white/8"}`} title="W-Trail" />
+                      <span className="text-[10px] font-bold" style={{ color: idx.range_color }}>{idx.range_label}</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex justify-center">
-                  <div className={`w-3 h-3 rounded-sm ${idx.weekly_trail ? "bg-[#3b82f6]" : "bg-white/8"}`}
-                    style={idx.weekly_trail ? { boxShadow: "0 0 6px #3b82f650" } : {}}
-                    title={idx.weekly_trail ? "Weekly Trail Active" : "No Weekly Trail"}
-                  />
-                </div>
-                <div className="text-right">
-                  <span className="text-[10px] font-bold" style={{ color: idx.range_color }}>{idx.range_label}</span>
-                  <div className="w-full h-1 bg-white/5 rounded-full mt-1 overflow-hidden">
-                    <div
-                      className="h-full rounded-full transition-all duration-500"
-                      style={{ width: `${Math.max(2, Math.min(100, idx.range_pos))}%`, backgroundColor: idx.range_color }}
+                {/* Desktop row */}
+                <div
+                  className="hidden sm:grid gap-3 px-4 py-3 border-b border-white/[0.03] items-center hover:bg-white/[0.02] transition-colors"
+                  style={{
+                    fontFamily: "'JetBrains Mono', monospace",
+                    gridTemplateColumns: "1fr 1.2fr 0.8fr 1fr 0.6fr 0.6fr 0.8fr",
+                    animationDelay: `${i * 0.05}s`,
+                  }}
+                >
+                  <span className="text-sm font-bold text-white/90">{idx.symbol}</span>
+                  <span className="text-xs font-bold truncate" style={{ color: idx.now_color }}>{idx.now}</span>
+                  <span className="text-xs text-white/50 text-right">${idx.price.toFixed(2)}</span>
+                  <span className="text-xs font-bold text-right" style={{ color: idx.chg_color }}>
+                    {idx.chg_pct >= 0 ? "+" : ""}{idx.chg_pct.toFixed(2)}%
+                  </span>
+                  <div className="flex justify-center">
+                    <div className={`w-3 h-3 rounded-sm ${idx.daily_trail ? "bg-[#22c55e]" : "bg-white/8"}`}
+                      style={idx.daily_trail ? { boxShadow: "0 0 6px #22c55e50" } : {}}
+                      title={idx.daily_trail ? "Daily Trail Active" : "No Daily Trail"}
                     />
+                  </div>
+                  <div className="flex justify-center">
+                    <div className={`w-3 h-3 rounded-sm ${idx.weekly_trail ? "bg-[#3b82f6]" : "bg-white/8"}`}
+                      style={idx.weekly_trail ? { boxShadow: "0 0 6px #3b82f650" } : {}}
+                      title={idx.weekly_trail ? "Weekly Trail Active" : "No Weekly Trail"}
+                    />
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[10px] font-bold" style={{ color: idx.range_color }}>{idx.range_label}</span>
+                    <div className="w-full h-1 bg-white/5 rounded-full mt-1 overflow-hidden">
+                      <div
+                        className="h-full rounded-full transition-all duration-500"
+                        style={{ width: `${Math.max(2, Math.min(100, idx.range_pos))}%`, backgroundColor: idx.range_color }}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -514,28 +539,49 @@ function SentimentDashboardContent() {
             </div>
 
             {data.mega_caps.map((mc, i) => (
-              <div
-                key={mc.symbol}
-                className="grid gap-3 px-4 py-3 border-b border-white/[0.03] items-center hover:bg-white/[0.02] transition-colors"
-                style={{
-                  fontFamily: "'JetBrains Mono', monospace",
-                  gridTemplateColumns: "1fr 1.2fr 0.8fr 1fr 1fr",
-                  animationDelay: `${i * 0.05}s`,
-                }}
-              >
-                <span className="text-sm font-bold text-white/90">{mc.symbol}</span>
-                <span className="text-xs font-bold truncate" style={{ color: mc.status_color }}>{mc.status}</span>
-                <span className="text-xs text-white/50 text-right">${mc.price.toFixed(2)}</span>
-                <span className="text-xs font-bold text-right" style={{ color: mc.chg_color }}>
-                  {mc.chg_pct >= 0 ? "+" : ""}{mc.chg_pct.toFixed(2)}%
-                </span>
-                <div className="text-right">
-                  <span className="text-[10px] font-bold" style={{ color: mc.range_color }}>{mc.range_label}</span>
-                  <div className="w-full h-1 bg-white/5 rounded-full mt-1 overflow-hidden">
-                    <div
-                      className="h-full rounded-full transition-all duration-500"
-                      style={{ width: `${Math.max(2, Math.min(100, mc.range_pos))}%`, backgroundColor: mc.range_color }}
-                    />
+              <div key={mc.symbol}>
+                {/* Mobile card */}
+                <div
+                  className="sm:hidden px-4 py-3 border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors"
+                  style={{ fontFamily: "'JetBrains Mono', monospace", animationDelay: `${i * 0.05}s` }}
+                >
+                  <div className="flex items-center justify-between mb-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-bold text-white/90">{mc.symbol}</span>
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded" style={{ color: mc.status_color, background: `${mc.status_color}15` }}>{mc.status}</span>
+                    </div>
+                    <span className="text-xs font-bold" style={{ color: mc.chg_color }}>
+                      {mc.chg_pct >= 0 ? "+" : ""}{mc.chg_pct.toFixed(2)}%
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-[10px] text-white/40">
+                    <span>${mc.price.toFixed(2)}</span>
+                    <span className="text-[10px] font-bold" style={{ color: mc.range_color }}>{mc.range_label}</span>
+                  </div>
+                </div>
+                {/* Desktop row */}
+                <div
+                  className="hidden sm:grid gap-3 px-4 py-3 border-b border-white/[0.03] items-center hover:bg-white/[0.02] transition-colors"
+                  style={{
+                    fontFamily: "'JetBrains Mono', monospace",
+                    gridTemplateColumns: "1fr 1.2fr 0.8fr 1fr 1fr",
+                    animationDelay: `${i * 0.05}s`,
+                  }}
+                >
+                  <span className="text-sm font-bold text-white/90">{mc.symbol}</span>
+                  <span className="text-xs font-bold truncate" style={{ color: mc.status_color }}>{mc.status}</span>
+                  <span className="text-xs text-white/50 text-right">${mc.price.toFixed(2)}</span>
+                  <span className="text-xs font-bold text-right" style={{ color: mc.chg_color }}>
+                    {mc.chg_pct >= 0 ? "+" : ""}{mc.chg_pct.toFixed(2)}%
+                  </span>
+                  <div className="text-right">
+                    <span className="text-[10px] font-bold" style={{ color: mc.range_color }}>{mc.range_label}</span>
+                    <div className="w-full h-1 bg-white/5 rounded-full mt-1 overflow-hidden">
+                      <div
+                        className="h-full rounded-full transition-all duration-500"
+                        style={{ width: `${Math.max(2, Math.min(100, mc.range_pos))}%`, backgroundColor: mc.range_color }}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

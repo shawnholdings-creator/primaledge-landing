@@ -1,4 +1,4 @@
-﻿/* ============================================================
+/* ============================================================
    AIDashboard.tsx â€” Primal Edge AI Cockpit (Live Feed)
    Auth: Protected by Supabase auth + user_access approval
    Data: Fetches live signal data from GitHub Gist
@@ -816,7 +816,7 @@ function DashboardContent() {
             </div>
 
             {/* Footer */}
-            <div className="flex items-center justify-between px-6 py-3 border-t border-white/5">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 px-4 sm:px-6 py-3 border-t border-white/5">
               <span
                 className="text-xs text-white/20"
                 style={{ fontFamily: "'JetBrains Mono', monospace" }}

@@ -1,4 +1,4 @@
-﻿/* ============================================================
+/* ============================================================
    WeeklyIncome.tsx â€” Weekly Income Scanner (Short Put/Call)
    Auth: Public â€” no login required
    Data: Fetches live scan data from GitHub Gist
@@ -670,7 +670,7 @@ function WeeklyIncomeContent() {
                 >
                   SHORT PUT / CALL SCANNER Â· PREMIUM SETUPS
                 </p>
-                <div className="flex items-center gap-2 mt-2">
+                <div className="flex items-center gap-2 mt-2 flex-wrap">
                   <span
                     className="text-[10px] tracking-wider px-2.5 py-1 rounded-full"
                     style={{
@@ -890,7 +890,7 @@ function WeeklyIncomeContent() {
 
               {/* Header Row â€” desktop */}
               <div
-                className="hidden sm:grid gap-3 px-4 py-3 text-xs text-white/30 tracking-widest uppercase"
+                className="hidden md:grid gap-3 px-4 py-3 text-xs text-white/30 tracking-widest uppercase"
                 style={{
                   fontFamily: "'JetBrains Mono', monospace",
                   gridTemplateColumns: "0.5fr 0.7fr 0.8fr 0.9fr 0.6fr 0.5fr 0.5fr 1fr auto",
@@ -969,7 +969,7 @@ function WeeklyIncomeContent() {
                   <div key={`${c.contract_symbol}-${i}`}>
                     {/* Desktop row */}
                     <div
-                      className="hidden sm:grid gap-3 px-4 py-4 border-b border-white/[0.04] items-center hover:bg-white/[0.02] transition-colors cursor-pointer select-none"
+                      className="hidden md:grid gap-3 px-4 py-4 border-b border-white/[0.04] items-center hover:bg-white/[0.02] transition-colors cursor-pointer select-none"
                       style={{
                         animationDelay: `${i * 0.06}s`,
                         gridTemplateColumns: "0.5fr 0.7fr 0.8fr 0.9fr 0.6fr 0.5fr 0.5fr 1fr auto",
@@ -1125,7 +1125,7 @@ function WeeklyIncomeContent() {
 
                     {/* Desktop expansion panel */}
                     <div
-                      className="hidden sm:block overflow-hidden transition-all duration-300 ease-in-out"
+                      className="hidden md:block overflow-hidden transition-all duration-300 ease-in-out"
                       style={{
                         maxHeight: isExpanded ? "1200px" : "0px",
                         opacity: isExpanded ? 1 : 0,
@@ -1136,7 +1136,7 @@ function WeeklyIncomeContent() {
 
                     {/* Mobile card */}
                     <div
-                      className="sm:hidden border-b border-white/[0.04] cursor-pointer select-none"
+                      className="md:hidden border-b border-white/[0.04] cursor-pointer select-none"
                       style={{ animationDelay: `${i * 0.06}s` }}
                       onClick={() => toggleRow(i)}
                     >
@@ -1199,8 +1199,8 @@ function WeeklyIncomeContent() {
                           </div>
                         </div>
                         {/* Bottom row: strike, credit, dte, delta */}
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
+                        <div className="flex flex-wrap items-center justify-between gap-y-1.5">
+                          <div className="flex items-center gap-2 flex-wrap">
                             <span
                               className="text-xs text-white/50"
                               style={{ fontFamily: "'JetBrains Mono', monospace" }}
@@ -1230,7 +1230,7 @@ function WeeklyIncomeContent() {
                               ) : null;
                             })()}
                           </div>
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2">
                             <span
                               className="text-xs text-white/40"
                               style={{ fontFamily: "'JetBrains Mono', monospace" }}
