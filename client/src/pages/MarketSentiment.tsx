@@ -368,6 +368,11 @@ function InsightCards({ insights }: { insights?: string[] }) {
 function SectorHeatStrip({ sectors }: { sectors: Array<{ symbol: string; name: string; perf: number }> }) {
   if (!sectors || sectors.length === 0) return null;
 
+  const SECTOR_NAMES: Record<string, string> = {
+    XLK: "Technology", XLF: "Financials", XLE: "Energy",
+    XLRE: "Real Estate", XLV: "Healthcare", XLI: "Industrials", XLU: "Utilities",
+  };
+
   const maxPerf = Math.max(...sectors.map((s) => s.perf));
   const minPerf = Math.min(...sectors.map((s) => s.perf));
 
@@ -417,7 +422,7 @@ function SectorHeatStrip({ sectors }: { sectors: Array<{ symbol: string; name: s
         {sectors.map((sec) => (
           <div key={sec.symbol} style={pillStyle(sec.perf)} className="text-center">
             <div className="text-white/70 truncate" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "10px" }}>
-              {sec.name}
+              {SECTOR_NAMES[sec.symbol] || sec.name}
             </div>
             <div
               className="font-bold text-white mt-0.5"
@@ -433,6 +438,11 @@ function SectorHeatStrip({ sectors }: { sectors: Array<{ symbol: string; name: s
 }
 
 /* ─── Dashboard Body (Protected Content) ──────────────────── */
+const SECTOR_NAMES: Record<string, string> = {
+  XLK: "Technology", XLF: "Financials", XLE: "Energy",
+  XLRE: "Real Estate", XLV: "Healthcare", XLI: "Industrials", XLU: "Utilities",
+};
+
 function DashboardBody({ data }: { data: SentimentData | null }) {
   if (!data) return null;
 
@@ -714,7 +724,7 @@ function DashboardBody({ data }: { data: SentimentData | null }) {
                 >
                   <div className="flex items-center justify-between mb-1.5">
                     <span className="text-[10px] font-bold text-white/60" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                      {sec.symbol}
+                      {SECTOR_NAMES[sec.symbol] || sec.name}
                     </span>
                     <span className="text-[10px] font-bold" style={{ fontFamily: "'JetBrains Mono', monospace", color: perfColor }}>
                       {isPos ? "+" : ""}{sec.perf.toFixed(2)}%
@@ -726,8 +736,8 @@ function DashboardBody({ data }: { data: SentimentData | null }) {
                       style={{ width: `${Math.max(4, barWidth)}%`, backgroundColor: perfColor }}
                     />
                   </div>
-                  <div className="text-[8px] text-white/15 mt-1 truncate" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                    {sec.name}
+                  <div className="text-[8px] text-white/25 mt-1 truncate" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                    {sec.symbol}
                   </div>
                 </div>
               );
