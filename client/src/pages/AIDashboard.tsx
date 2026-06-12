@@ -1204,7 +1204,7 @@ function DashboardContent() {
 /* ─── Main Export — Auth Protected ─────────────────────────── */
 export default function AIDashboard() {
   return (
-    <ProtectedRoute>
+    <ProtectedRoute product="cockpit">
       <DashboardContent />
     </ProtectedRoute>
   );

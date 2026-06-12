@@ -1,18 +1,40 @@
 /* ============================================================
    ProtectedRoute.tsx — Auth gate for protected pages
    States: loading → login form → pending approval → children
-   Replaces the old PinGate component
+   Supports per-product access: product="cockpit" | "income"
    ============================================================ */
 
 import { useState } from "react";
 import { Link } from "wouter";
 import { toast } from "sonner";
 import { useAuth } from "../contexts/AuthContext";
+import type { ProductAccess } from "../contexts/AuthContext";
 import Navbar from "./Navbar";
 import type { ReactNode } from "react";
 
-export default function ProtectedRoute({ children }: { children: ReactNode }) {
-  const { user, loading, isApproved, signIn, signUp, signOut } = useAuth();
+/** Product display names for copy */
+const PRODUCT_LABELS: Record<keyof ProductAccess, { title: string; subtitle: string }> = {
+  cockpit: {
+    title: "Primal Edge AI Cockpit",
+    subtitle: "Sign in to access the live signal engine.",
+  },
+  income: {
+    title: "Weekly Income Scanner",
+    subtitle: "Sign in to access the income intelligence layer.",
+  },
+};
+
+interface ProtectedRouteProps {
+  children: ReactNode;
+  /** Which product this route guards. Defaults to "cockpit" for backward compat. */
+  product?: keyof ProductAccess;
+}
+
+export default function ProtectedRoute({ children, product = "cockpit" }: ProtectedRouteProps) {
+  const { user, loading, productAccess, signIn, signUp, signOut } = useAuth();
+
+  const isApproved = productAccess[product];
+  const label = PRODUCT_LABELS[product];
 
   // ─── Loading ────────────────────────────────────────────────
   if (loading) {
@@ -31,10 +53,10 @@ export default function ProtectedRoute({ children }: { children: ReactNode }) {
 
   // ─── Not Authenticated → Login/Register Form ───────────────
   if (!user) {
-    return <LoginForm />;
+    return <LoginForm product={product} />;
   }
 
-  // ─── Authenticated but NOT approved ─────────────────────────
+  // ─── Authenticated but NOT approved for this product ───────
   if (isApproved === false) {
     return (
       <div className="min-h-screen bg-[#0a0e14] text-white flex flex-col">
@@ -58,11 +80,14 @@ export default function ProtectedRoute({ children }: { children: ReactNode }) {
             >
               Access Pending
             </h1>
+            <p className="text-white/40 text-sm mb-1">
+              <span className="text-[#00d4aa]">{label.title}</span>
+            </p>
             <p className="text-white/40 text-sm mb-3">
               Your account <span className="text-[#00d4aa]">{user.email}</span> has been registered successfully.
             </p>
             <p className="text-white/30 text-sm mb-8">
-              Your access is currently under review. You'll receive a confirmation email once approved. This typically takes less than 24 hours.
+              Your access to {label.title} is currently under review. You'll receive a confirmation email once approved. This typically takes less than 24 hours.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -91,18 +116,20 @@ export default function ProtectedRoute({ children }: { children: ReactNode }) {
     );
   }
 
-  // ─── Approved → Render children (Cockpit) ──────────────────
+  // ─── Approved → Render children ─────────────────────────────
   return <>{children}</>;
 }
 
 /* ─── Login / Register Form ─────────────────────────────────── */
-function LoginForm() {
+function LoginForm({ product }: { product: keyof ProductAccess }) {
   const { signIn, signUp } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mode, setMode] = useState<"login" | "register">("login");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const label = PRODUCT_LABELS[product];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -151,10 +178,10 @@ function LoginForm() {
             className="text-3xl md:text-4xl font-black text-white mb-3 leading-tight"
             style={{ fontFamily: "'Space Grotesk', sans-serif" }}
           >
-            Primal Edge AI Cockpit
+            {label.title}
           </h1>
           <p className="text-white/40 text-sm mb-8">
-            {mode === "login" ? "Sign in to access the live signal engine." : "Create an account to request access."}
+            {mode === "login" ? label.subtitle : "Create an account to request access."}
           </p>
 
           {/* Form */}

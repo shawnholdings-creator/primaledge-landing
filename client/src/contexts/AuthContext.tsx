@@ -1,8 +1,8 @@
 /* ============================================================
    AuthContext.tsx — Supabase Auth provider
-   Exposes: user, session, loading, isApproved,
+   Exposes: user, session, loading, productAccess,
             signIn(), signUp(), signOut()
-   Checks user_access table for approval status
+   Checks user_access table for per-product approval status
    ============================================================ */
 
 import {
@@ -16,11 +16,24 @@ import {
 import type { User, Session } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabaseClient";
 
+/**
+ * Per-product access map.
+ * Each key is a product identifier; value is whether the user is approved.
+ * `null` means "not checked yet".
+ */
+export interface ProductAccess {
+  cockpit: boolean | null;
+  income: boolean | null;
+}
+
 interface AuthState {
   user: User | null;
   session: Session | null;
   loading: boolean;
-  isApproved: boolean | null; // null = not checked yet
+  /** @deprecated — kept for backward compat; true when ANY product is approved */
+  isApproved: boolean | null;
+  /** Per-product access map */
+  productAccess: ProductAccess;
   signIn: (email: string, password: string) => Promise<{ error: string | null }>;
   signUp: (email: string, password: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
@@ -28,28 +41,36 @@ interface AuthState {
 
 const AuthContext = createContext<AuthState | undefined>(undefined);
 
+const INITIAL_ACCESS: ProductAccess = { cockpit: null, income: null };
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-  const [isApproved, setIsApproved] = useState<boolean | null>(null);
+  const [productAccess, setProductAccess] = useState<ProductAccess>(INITIAL_ACCESS);
 
-  // Check user_access table for approval
+  // Check user_access table for per-product approval
   const checkApproval = useCallback(async (email: string) => {
     try {
       const { data, error } = await supabase
         .from("user_access")
-        .select("approved")
+        .select("approved, cockpit_access, income_access")
         .eq("email", email)
         .single();
 
       if (error || !data) {
-        setIsApproved(false);
+        setProductAccess({ cockpit: false, income: false });
         return;
       }
-      setIsApproved(data.approved === true);
+
+      // Product-specific columns with fallback to legacy `approved` column
+      const legacy = data.approved === true;
+      setProductAccess({
+        cockpit: data.cockpit_access != null ? data.cockpit_access === true : legacy,
+        income: data.income_access != null ? data.income_access === true : legacy,
+      });
     } catch {
-      setIsApproved(false);
+      setProductAccess({ cockpit: false, income: false });
     }
   }, []);
 
@@ -72,7 +93,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (s?.user?.email) {
         checkApproval(s.user.email);
       } else {
-        setIsApproved(null);
+        setProductAccess(INITIAL_ACCESS);
       }
     });
 
@@ -96,12 +117,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await supabase.auth.signOut();
     setUser(null);
     setSession(null);
-    setIsApproved(null);
+    setProductAccess(INITIAL_ACCESS);
   };
+
+  // Legacy compat: isApproved = true if ANY product is approved
+  const isApproved =
+    productAccess.cockpit === null && productAccess.income === null
+      ? null
+      : (productAccess.cockpit === true || productAccess.income === true);
 
   return (
     <AuthContext.Provider
-      value={{ user, session, loading, isApproved, signIn, signUp, signOut }}
+      value={{ user, session, loading, isApproved, productAccess, signIn, signUp, signOut }}
     >
       {children}
     </AuthContext.Provider>

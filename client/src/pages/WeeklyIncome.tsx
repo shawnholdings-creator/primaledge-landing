@@ -1564,7 +1564,7 @@ function WeeklyIncomeContent() {
 /* ─── Main Export — Auth Protected ───────────────────── */
 export default function WeeklyIncome() {
   return (
-    <ProtectedRoute>
+    <ProtectedRoute product="income">
       <WeeklyIncomeContent />
     </ProtectedRoute>
   );
