@@ -125,10 +125,7 @@ function ScoreGauge({ score }: { score: number }) {
           className="text-4xl font-black leading-none"
           style={{ fontFamily: "'JetBrains Mono', monospace", color, textShadow: `0 0 20px ${color}40` }}
         >
-          {score}
-        </span>
-        <span className="text-[9px] text-white/25 tracking-widest mt-1 uppercase" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-          / 100
+          {score}<span className="text-lg font-bold ml-0.5">%</span>
         </span>
       </div>
     </div>
