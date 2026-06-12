@@ -1,5 +1,5 @@
-/* ============================================================
-   AIDashboard.tsx — Primal Edge AI Cockpit (Live Feed)
+﻿/* ============================================================
+   AIDashboard.tsx â€” Primal Edge AI Cockpit (Live Feed)
    Auth: Protected by Supabase auth + user_access approval
    Data: Fetches live signal data from GitHub Gist
    Prices: Real-time via /api/prices (FMP, server-side key)
@@ -17,7 +17,7 @@ const GIST_API = `https://api.github.com/gists/${GIST_ID}`;
 
 const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes during market hours
 
-/* ─── Market Hours Helper ──────────────────────────────────── */
+/* â”€â”€â”€ Market Hours Helper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 function isMarketOpen(): boolean {
   const now = new Date();
   // Convert to ET (handles DST automatically)
@@ -46,7 +46,7 @@ function marketStatusLabel(): { text: string; color: string; subtext: string } {
   return { text: "AFTER HOURS", color: "#6b7280", subtext: "Next scan at open" };
 }
 
-/* ─── Types ─────────────────────────────────────────────────── */
+/* â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 interface Signal {
   ticker: string;
   signal: string;
@@ -79,7 +79,7 @@ interface LivePrice {
   change: number;
 }
 
-/* ─── Loading Skeleton ─────────────────────────────────────── */
+/* â”€â”€â”€ Loading Skeleton â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 function LoadingSkeleton() {
   return (
     <div className="min-h-screen bg-[#0a0e14] text-white">
@@ -104,7 +104,7 @@ function LoadingSkeleton() {
   );
 }
 
-/* ─── Archive Panel (with search) ──────────────────────────── */
+/* â”€â”€â”€ Archive Panel (with search) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 function ArchivePanel({
   history,
   activeVersion,
@@ -127,7 +127,7 @@ function ArchivePanel({
       const d = new Date(h.committed_at);
       const dateStr = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
       const timeStr = d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
-      const label = `${dateStr} · ${timeStr}`;
+      const label = `${dateStr} Â· ${timeStr}`;
       return { ...h, label };
     }),
     [history]
@@ -174,7 +174,7 @@ function ArchivePanel({
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Filter dates…"
+                placeholder="Filter datesâ€¦"
                 className="w-full bg-white/[0.03] border border-white/5 rounded-lg pl-8 pr-7 py-1.5 text-[11px] text-white/70 placeholder-white/15 focus:outline-none focus:border-[#00d4aa]/30 transition-colors"
                 style={{ fontFamily: "'JetBrains Mono', monospace" }}
               />
@@ -183,7 +183,7 @@ function ArchivePanel({
                   onClick={() => setSearch("")}
                   className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/20 hover:text-white/50 transition-colors text-[10px]"
                 >
-                  ✕
+                  âœ•
                 </button>
               )}
             </div>
@@ -205,7 +205,7 @@ function ArchivePanel({
                   className="text-xs text-[#28c840] tracking-wide"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
-                  ← Back to Live
+                  â† Back to Live
                 </span>
               </button>
             )}
@@ -263,7 +263,7 @@ function ArchivePanel({
   );
 }
 
-/* ─── Dashboard Content (shown after auth + approval) ──────── */
+/* â”€â”€â”€ Dashboard Content (shown after auth + approval) â”€â”€â”€â”€â”€â”€â”€â”€ */
 function DashboardContent() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -310,7 +310,7 @@ function DashboardContent() {
     if (tickers.length === 0) return;
     try {
       const resp = await fetch(`/api/prices?tickers=${tickers.join(",")}`);
-      if (!resp.ok) return; // silently fail — scan-time prices remain
+      if (!resp.ok) return; // silently fail â€” scan-time prices remain
       const result = await resp.json();
       if (result.prices) {
         setLivePrices(result.prices);
@@ -391,7 +391,7 @@ function DashboardContent() {
     .filter((s) => !MAIN_GRADES.has(s.grade))
     .sort((a, b) => b.score - a.score);
 
-  // Display verdict: READY → WATCH, COIL stays
+  // Display verdict: READY â†’ WATCH, COIL stays
   const displayVerdict = (v: string) => (v === "READY" ? "WATCH" : v);
 
   // Near-tradable count (grade C = one step from B promotion)
@@ -446,12 +446,12 @@ function DashboardContent() {
       <section className="flex-1 pt-28 pb-16 px-4 relative z-10">
         <div className="container max-w-6xl mx-auto">
 
-          {/* ─── Command Header ─── */}
+          {/* â”€â”€â”€ Command Header â”€â”€â”€ */}
           <div className="mb-8">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mb-6">
               <div className="text-center sm:text-left">
                 <h1 className="text-3xl sm:text-4xl font-black tracking-tight gradient-text leading-none" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>AI COCKPIT</h1>
-                <p className="text-white/20 text-[10px] font-mono tracking-[0.35em] uppercase mt-1.5">ADAPTIVE INTELLIGENCE · DECISIVE SIGNALS</p>
+                <p className="text-white/20 text-[10px] font-mono tracking-[0.35em] uppercase mt-1.5">ADAPTIVE INTELLIGENCE Â· DECISIVE SIGNALS</p>
               </div>
               {/* Market status pill */}
               {(() => {
@@ -472,7 +472,7 @@ function DashboardContent() {
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
               <div className="cmd-stat text-center">
                 <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Scanned</div>
-                <div className="text-lg font-bold text-white/60 font-mono leading-none">{data?.tickers_scanned || '—'}</div>
+                <div className="text-lg font-bold text-white/60 font-mono leading-none">{data?.tickers_scanned || 'â€”'}</div>
               </div>
               <div className={`cmd-stat text-center ${tradable.length > 0 ? 'cmd-stat-active' : ''}`}>
                 <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Active</div>
@@ -493,12 +493,12 @@ function DashboardContent() {
             </div>
           </div>
 
-          {/* ── PRODUCT INTRO COPY ── */}
+          {/* â”€â”€ PRODUCT INTRO COPY â”€â”€ */}
           <section className="pb-8 sm:pb-12">
             <div className="max-w-3xl mx-auto text-center">
               <div className="inline-flex items-center gap-2 font-mono text-[10px] text-[#00d4aa]/70 tracking-widest bg-[#00d4aa]/8 border border-[#00d4aa]/15 rounded-full px-4 py-1.5 mb-6">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#00d4aa] animate-pulse" />
-                PRIVATE ACCESS · TRADING COMMAND LAYER
+                PRIVATE ACCESS Â· TRADING COMMAND LAYER
               </div>
 
               <p className="font-['Space_Grotesk'] text-lg sm:text-xl text-[#00d4aa]/80 mb-6">
@@ -515,121 +515,8 @@ function DashboardContent() {
             </div>
           </section>
 
-          {/* ── SAMPLE COMMAND DASHBOARD PREVIEW ── */}
-          <section id="preview" className="pb-12 sm:pb-16">
-            <div className="max-w-5xl mx-auto">
-              {/* Preview label */}
-              <div className="flex items-center justify-center gap-3 mb-6">
-                <div className="h-px flex-1 bg-gradient-to-r from-transparent to-white/10" />
-                <span className="font-mono text-[10px] text-white/25 tracking-widest">SAMPLE READOUT</span>
-                <div className="h-px flex-1 bg-gradient-to-l from-transparent to-white/10" />
-              </div>
 
-              {/* Sample dashboard frame */}
-              <div className="relative rounded-2xl overflow-hidden border border-white/8 bg-[#0d1117]">
-                {/* Top bar */}
-                <div className="flex items-center gap-2 px-4 py-2.5 bg-[#0d1117] border-b border-white/5">
-                  <div className="flex gap-1.5">
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
-                  </div>
-                  <span className="font-mono text-[10px] text-white/20 ml-3 tracking-wider">AI COCKPIT — PRIVATE TRADING COMMAND LAYER</span>
-                  <div className="ml-auto flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#00d4aa] animate-pulse" />
-                    <span className="font-mono text-[10px] text-[#00d4aa]/60 tracking-wider">LIVE</span>
-                  </div>
-                </div>
-
-                {/* Command modules grid with watermark */}
-                <div className="relative p-4 sm:p-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {/* Market State */}
-                    <div className="bg-[#111820] border border-white/5 rounded-lg p-4">
-                      <p className="font-mono text-[9px] text-[#00d4aa]/50 tracking-widest mb-3">MARKET STATE</p>
-                      <div className="space-y-2" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                        <div className="flex justify-between text-xs"><span className="text-white/30">Bias</span><span className="text-[#22c55e]">Bullish</span></div>
-                        <div className="flex justify-between text-xs"><span className="text-white/30">Volatility</span><span className="text-white/50">Normal</span></div>
-                        <div className="flex justify-between text-xs"><span className="text-white/30">Breadth</span><span className="text-[#22c55e]">Strong</span></div>
-                      </div>
-                    </div>
-
-                    {/* Trade Readiness */}
-                    <div className="bg-[#111820] border border-white/5 rounded-lg p-4">
-                      <p className="font-mono text-[9px] text-[#00d4aa]/50 tracking-widest mb-3">TRADE READINESS</p>
-                      <div className="space-y-2" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                        <div className="flex justify-between text-xs"><span className="text-white/30">Decision</span><span className="text-[#00d4aa]">Review</span></div>
-                        <div className="flex justify-between text-xs"><span className="text-white/30">Conviction</span><span className="text-white/60">B</span></div>
-                        <div className="flex justify-between text-xs"><span className="text-white/30">Setup Quality</span><span className="text-[#22c55e]">Strong</span></div>
-                      </div>
-                    </div>
-
-                    {/* Opportunity Stack */}
-                    <div className="bg-[#111820] border border-white/5 rounded-lg p-4">
-                      <p className="font-mono text-[9px] text-[#00d4aa]/50 tracking-widest mb-3">OPPORTUNITY STACK</p>
-                      <div className="space-y-2" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                        <div className="flex justify-between text-xs"><span className="text-white/30">Ticker</span><span className="text-white/70 font-bold">QQQ</span></div>
-                        <div className="flex justify-between text-xs"><span className="text-white/30">Setup</span><span className="text-white/50">Premium Pullback</span></div>
-                        <div className="flex justify-between text-xs"><span className="text-white/30">Direction</span><span className="text-[#22c55e]">Neutral Bullish</span></div>
-                      </div>
-                    </div>
-
-                    {/* Options Lens */}
-                    <div className="bg-[#111820] border border-white/5 rounded-lg p-4">
-                      <p className="font-mono text-[9px] text-[#00d4aa]/50 tracking-widest mb-3">OPTIONS LENS</p>
-                      <div className="space-y-2" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                        <div className="flex justify-between text-xs"><span className="text-white/30">Contract</span><span className="text-white/50">QQQ 666P</span></div>
-                        <div className="flex justify-between text-xs"><span className="text-white/30">Credit</span><span className="text-[#00d4aa]">$5.22 / $522</span></div>
-                        <div className="flex justify-between text-xs"><span className="text-white/30">Delta</span><span className="text-white/50">-0.21</span></div>
-                        <div className="flex justify-between text-xs"><span className="text-white/30">DTE / OTM</span><span className="text-white/40">8d / 4.0%</span></div>
-                      </div>
-                    </div>
-
-                    {/* Risk Console */}
-                    <div className="bg-[#111820] border border-white/5 rounded-lg p-4">
-                      <p className="font-mono text-[9px] text-[#00d4aa]/50 tracking-widest mb-3">RISK CONSOLE</p>
-                      <div className="space-y-2" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                        <div className="flex justify-between text-xs"><span className="text-white/30">Support Buffer</span><span className="text-[#22c55e]">Acceptable</span></div>
-                        <div className="flex justify-between text-xs"><span className="text-white/30">Event Risk</span><span className="text-[#22c55e]">Clear</span></div>
-                        <div className="flex justify-between text-xs"><span className="text-white/30">Liquidity</span><span className="text-[#22c55e]">Tradable</span></div>
-                      </div>
-                    </div>
-
-                    {/* Final Read */}
-                    <div className="bg-[#111820] border border-white/5 rounded-lg p-4">
-                      <p className="font-mono text-[9px] text-[#00d4aa]/50 tracking-widest mb-3">FINAL READ</p>
-                      <p className="text-xs text-white/40 leading-relaxed" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                        Review candidate; verify live chain and chart before entry. Premium qualifies, cushion acceptable, event risk clear.
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Diagonal SAMPLE watermark — repeating grid */}
-                  <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 2 }}>
-                    <div style={{
-                      position: "absolute", top: "-50%", left: "-50%", width: "200%", height: "200%",
-                      display: "flex", flexWrap: "wrap", alignContent: "center", justifyContent: "center",
-                      gap: "60px 80px", transform: "rotate(-35deg)",
-                    }}>
-                      {Array.from({ length: 20 }).map((_, i) => (
-                        <span key={i} style={{
-                          fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(2rem, 5vw, 3.5rem)",
-                          fontWeight: 900, letterSpacing: "0.2em", color: "rgba(255,255,255,0.07)",
-                          textTransform: "uppercase", userSelect: "none", whiteSpace: "nowrap",
-                        }}>SAMPLE</span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <p className="text-center text-white/20 text-xs font-mono mt-4 tracking-wider">
-                Sample readout — live data available to private-access subscribers only
-              </p>
-            </div>
-          </section>
-
-          {/* ── COMMAND LAYERS ── */}
+          {/* â”€â”€ COMMAND LAYERS â”€â”€ */}
           <section className="pb-12 sm:pb-16">
             <div className="text-center mb-10">
               <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">INTELLIGENCE DIMENSIONS</p>
@@ -658,7 +545,7 @@ function DashboardContent() {
 
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-4 items-start">
 
-          {/* ═══ LEFT: Active Signals ═══ */}
+          {/* â•â•â• LEFT: Active Signals â•â•â• */}
           <div className="animated-border">
           <div className="glass-card-accent rounded-2xl overflow-hidden relative">
             {/* Scan sweep line */}
@@ -720,13 +607,13 @@ function DashboardContent() {
             {archiveLoading && (
               <div className="flex items-center justify-center py-3 bg-[#f59e0b]/5 border-b border-[#f59e0b]/10">
                 <div className="w-4 h-4 border-2 border-[#f59e0b] border-t-transparent rounded-full animate-spin mr-2" />
-                <span className="text-xs text-[#f59e0b]/60 font-mono">Loading archive…</span>
+                <span className="text-xs text-[#f59e0b]/60 font-mono">Loading archiveâ€¦</span>
               </div>
             )}
 
             {/* Table */}
             <div className="px-2 sm:px-4 py-2">
-              {/* Header Row — hidden on mobile, shown on sm+ */}
+              {/* Header Row â€” hidden on mobile, shown on sm+ */}
               <div
                 className="hidden sm:grid gap-4 px-4 py-3 text-xs text-white/30 tracking-widest uppercase"
                 style={{
@@ -745,7 +632,7 @@ function DashboardContent() {
               {/* Divider */}
               <div className="border-b border-white/5 mx-2" />
 
-              {/* Empty State — Market Standby */}
+              {/* Empty State â€” Market Standby */}
               {tradable.length === 0 && !error && (
                 <div className="px-4 py-20 text-center">
                   <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/[0.03] border border-white/[0.06] mb-4">
@@ -762,7 +649,7 @@ function DashboardContent() {
                   </p>
                   <p className="text-white/12 text-xs max-w-xs mx-auto leading-relaxed">
                     {watchlist.length > 0
-                      ? `${watchlist.length} developing setup${watchlist.length > 1 ? "s" : ""} in the Watchlist — monitoring for breakout conditions.`
+                      ? `${watchlist.length} developing setup${watchlist.length > 1 ? "s" : ""} in the Watchlist â€” monitoring for breakout conditions.`
                       : "No actionable setups detected. The scanner will re-evaluate at the next interval."
                     }
                   </p>
@@ -778,7 +665,7 @@ function DashboardContent() {
                     onClick={fetchData}
                     className="mt-4 text-xs text-[#00d4aa] font-mono hover:underline"
                   >
-                    Retry →
+                    Retry â†’
                   </button>
                 </div>
               )}
@@ -794,7 +681,7 @@ function DashboardContent() {
 
                 return (
                   <>
-                    {/* Desktop row — hidden on mobile */}
+                    {/* Desktop row â€” hidden on mobile */}
                     <div
                       key={`${s.ticker}-${i}`}
                       className="hidden sm:grid gap-4 px-4 py-5 border-b border-white/[0.04] items-center scan-row signal-row"
@@ -803,7 +690,7 @@ function DashboardContent() {
                         gridTemplateColumns: "0.4fr 1fr 1.5fr 0.7fr 0.7fr 1fr",
                       }}
                     >
-                      {/* Direction — Traffic Light */}
+                      {/* Direction â€” Traffic Light */}
                       <div className="flex justify-center">
                         <div
                           className="w-3 h-3 rounded-full"
@@ -815,7 +702,7 @@ function DashboardContent() {
                         />
                       </div>
 
-                      {/* Ticker — colored by direction */}
+                      {/* Ticker â€” colored by direction */}
                       <span
                         className="text-base font-bold"
                         style={{
@@ -856,7 +743,7 @@ function DashboardContent() {
                         </div>
                       </div>
 
-                      {/* Price — live or scan-time */}
+                      {/* Price â€” live or scan-time */}
                       <div className="text-right">
                         <span
                           className="text-base text-white/70"
@@ -864,7 +751,7 @@ function DashboardContent() {
                         >
                           {displayPrice
                             ? `$${displayPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-                            : "—"}
+                            : "â€”"}
                         </span>
                         {priceChange != null && (
                           <span
@@ -880,7 +767,7 @@ function DashboardContent() {
                       </div>
                     </div>
 
-                    {/* Mobile card — shown on small screens only */}
+                    {/* Mobile card â€” shown on small screens only */}
                     <div
                       key={`m-${s.ticker}-${i}`}
                       className="sm:hidden px-4 py-4 border-b border-white/[0.04] scan-row signal-row"
@@ -907,7 +794,7 @@ function DashboardContent() {
                         </div>
                         <div className="text-right">
                           <span className="text-sm text-white/70 block" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                            {displayPrice ? `$${displayPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : "—"}
+                            {displayPrice ? `$${displayPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : "â€”"}
                           </span>
                           {priceChange != null && (
                             <span className="text-[10px] block" style={{ fontFamily: "'JetBrains Mono', monospace", color: priceChange >= 0 ? "#22c55e" : "#ef4444" }}>
@@ -935,8 +822,8 @@ function DashboardContent() {
                 style={{ fontFamily: "'JetBrains Mono', monospace" }}
               >
                 {priceTimestamp && !activeVersion
-                  ? `Prices as of ${new Date(priceTimestamp).toLocaleTimeString()} • Scanned ${timestamp}`
-                  : `Premium universe scanned • ${timestamp}`
+                  ? `Prices as of ${new Date(priceTimestamp).toLocaleTimeString()} â€¢ Scanned ${timestamp}`
+                  : `Premium universe scanned â€¢ ${timestamp}`
                 }
               </span>
               <span
@@ -950,7 +837,7 @@ function DashboardContent() {
               </span>
             </div>
 
-            {/* ── LEGEND: Conviction Grade ── */}
+            {/* â”€â”€ LEGEND: Conviction Grade â”€â”€ */}
             <div className="px-4 sm:px-6 py-3 border-t border-white/5">
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-[9px] text-[#00d4aa] tracking-widest uppercase font-bold" style={{ fontFamily: "'JetBrains Mono', monospace" }}>CONVICTION</span>
@@ -959,9 +846,9 @@ function DashboardContent() {
               <div className="flex flex-wrap gap-2">
                 {[
                   { grade: "A", label: "Elite", score: "75+", bg: "#22c55e", text: "#fff", where: "ENTRY" },
-                  { grade: "B", label: "Good", score: "50–74", bg: "#3b82f6", text: "#fff", where: "ENTRY" },
-                  { grade: "C", label: "Early", score: "30–49", bg: "#f59e0b", text: "#0a0e14", where: "FORMING" },
-                  { grade: "D", label: "Hot", score: "20–34", bg: "#ff6b35", text: "#fff", where: "FORMING" },
+                  { grade: "B", label: "Good", score: "50â€“74", bg: "#3b82f6", text: "#fff", where: "ENTRY" },
+                  { grade: "C", label: "Early", score: "30â€“49", bg: "#f59e0b", text: "#0a0e14", where: "FORMING" },
+                  { grade: "D", label: "Hot", score: "20â€“34", bg: "#ff6b35", text: "#fff", where: "FORMING" },
                 ].map((g) => (
                   <div key={g.grade} className="flex items-center gap-1.5 px-2 py-1 rounded-full" style={{ background: `${g.bg}08`, border: `1px solid ${g.bg}15` }}>
                     <div
@@ -991,7 +878,7 @@ function DashboardContent() {
               </div>
             </div>
 
-            {/* ── LEGEND: Setup Type ── */}
+            {/* â”€â”€ LEGEND: Setup Type â”€â”€ */}
             <div className="px-4 sm:px-6 py-3 border-t border-white/5">
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-[9px] text-[#00d4aa] tracking-widest uppercase font-bold" style={{ fontFamily: "'JetBrains Mono', monospace" }}>SETUP</span>
@@ -999,12 +886,12 @@ function DashboardContent() {
               </div>
               <div className="flex flex-wrap gap-2">
                 {[
-                  { label: "SLINGSHOT", color: "#22c55e", desc: "Coil → breakout + MTF aligned" },
+                  { label: "SLINGSHOT", color: "#22c55e", desc: "Coil â†’ breakout + MTF aligned" },
                   { label: "FIRE",      color: "#f97316", desc: "Triple aligned + expanding" },
                   { label: "TRIGGER",   color: "#f97316", desc: "Fresh flip + 3+ TFs agree" },
                   { label: "COIL",      color: "#f59e0b", desc: "Compressed near ALMA21" },
                   { label: "ACTIVE",    color: "#3b82f6", desc: "Trending but extended" },
-                  { label: "WATCH",     color: "#6b7280", desc: "Developing — not ready" },
+                  { label: "WATCH",     color: "#6b7280", desc: "Developing â€” not ready" },
                 ].map((v) => (
                   <div key={v.label} className="flex items-center gap-1.5 px-2 py-1 rounded-full" style={{ background: `${v.color}08`, border: `1px solid ${v.color}12` }}>
                     <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: v.color }} />
@@ -1044,7 +931,7 @@ function DashboardContent() {
           </div>
           </div>
 
-          {/* ═══ RIGHT: Developing Watchlist ═══ */}
+          {/* â•â•â• RIGHT: Developing Watchlist â•â•â• */}
           <div className={`${showMobileWatchlist ? "block" : "hidden"} lg:block`} id="watchlist">
             <div className="glass-card rounded-2xl overflow-hidden">
               {/* Watchlist Header */}
@@ -1136,7 +1023,7 @@ function DashboardContent() {
                         >
                           {displayPrice
                             ? `$${displayPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-                            : "—"}
+                            : "â€”"}
                         </span>
                         {lp?.change != null && (
                           <span
@@ -1166,7 +1053,7 @@ function DashboardContent() {
 
           </div> {/* end grid */}
 
-          {/* Archive Panel — below terminal, right-aligned */}
+          {/* Archive Panel â€” below terminal, right-aligned */}
           <div className="flex justify-end mt-1">
             <ArchivePanel
               history={history}
@@ -1176,7 +1063,7 @@ function DashboardContent() {
             />
           </div>
 
-          {/* ── DISCLAIMER ── */}
+          {/* â”€â”€ DISCLAIMER â”€â”€ */}
           <div className="mt-12 mb-8 max-w-4xl mx-auto bg-[#111820] border border-white/5 rounded-xl px-5 sm:px-6 py-4 flex items-start gap-3">
             <svg className="w-4 h-4 text-[#f59e0b] shrink-0 mt-0.5" fill="none" viewBox="0 0 16 16">
               <path d="M8 2l1.5 4.5H14l-3.7 2.7 1.4 4.3L8 11 4.3 13.5l1.4-4.3L2 6.5h4.5z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
@@ -1194,14 +1081,14 @@ function DashboardContent() {
           <Link href="/">
             <PrimalEdgeLogo size="md" />
           </Link>
-          <p className="text-white/20 text-sm">© {new Date().getFullYear()} Primal Edge. All rights reserved.</p>
+          <p className="text-white/20 text-sm">Â© {new Date().getFullYear()} Primal Edge. All rights reserved.</p>
         </div>
       </footer>
     </div>
   );
 }
 
-/* ─── Main Export — Auth Protected ─────────────────────────── */
+/* â”€â”€â”€ Main Export â€” Auth Protected â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 export default function AIDashboard() {
   return (
     <ProtectedRoute product="cockpit">

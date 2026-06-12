@@ -1,6 +1,6 @@
-/* ============================================================
-   WeeklyIncome.tsx — Weekly Income Scanner (Short Put/Call)
-   Auth: Public — no login required
+﻿/* ============================================================
+   WeeklyIncome.tsx â€” Weekly Income Scanner (Short Put/Call)
+   Auth: Public â€” no login required
    Data: Fetches live scan data from GitHub Gist
    ============================================================ */
 
@@ -10,13 +10,13 @@ import Navbar from "@/components/Navbar";
 import PrimalEdgeLogo from "@/components/PrimalEdgeLogo";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
-// GitHub Gist — replace with real ID later
+// GitHub Gist â€” replace with real ID later
 const GIST_ID = "2bd50c8183b50e72c3d52fd2c3dbf04f";
 const GIST_API = `https://api.github.com/gists/${GIST_ID}`;
 
 const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
-/* ─── Market Hours Helper ──────────────────────────────────── */
+/* â”€â”€â”€ Market Hours Helper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 function isMarketOpen(): boolean {
   const now = new Date();
   const et = new Date(now.toLocaleString("en-US", { timeZone: "America/New_York" }));
@@ -35,7 +35,7 @@ function marketStatusLabel(): { text: string; color: string } {
   return { text: "AFTER HOURS", color: "#6b7280" };
 }
 
-/* ─── Types ─────────────────────────────────────────────────── */
+/* â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 interface ScoreCategory {
   name: string;
   score: number;
@@ -98,7 +98,7 @@ interface GistHistoryEntry {
   committed_at: string;
 }
 
-/* ─── Archive Panel ────────────────────────────────────────── */
+/* â”€â”€â”€ Archive Panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 function ArchivePanel({
   history,
   activeVersion,
@@ -248,7 +248,7 @@ function ArchivePanel({
   );
 }
 
-/* ─── Loading Skeleton ─────────────────────────────────────── */
+/* â”€â”€â”€ Loading Skeleton â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 function LoadingSkeleton() {
   return (
     <div className="min-h-screen bg-[#0a0e14] text-white">
@@ -277,7 +277,7 @@ function LoadingSkeleton() {
   );
 }
 
-/* ─── Grade helpers ─────────────────────────────────────────── */
+/* â”€â”€â”€ Grade helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 function gradeFromScore(score: number): string {
   if (score >= 85) return "A";
   if (score >= 75) return "B";
@@ -291,7 +291,7 @@ function gradeStyle(grade: string): { bg: string; text: string } {
   return { bg: "#f59e0b", text: "#0a0e14" };
 }
 
-/* ─── Status Badge Color ───────────────────────────────────── */
+/* â”€â”€â”€ Status Badge Color â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 function statusColor(status: string): string {
   switch (status) {
     case "Strong":     return "#22c55e";
@@ -304,7 +304,7 @@ function statusColor(status: string): string {
   }
 }
 
-/* ─── Premium Label Helper ─────────────────────────────────── */
+/* â”€â”€â”€ Premium Label Helper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 function premiumLabel(credit: number): { text: string; color: string; bg: string } | null {
   const contractValue = credit * 100;
   if (contractValue >= 500) return { text: "Juicy Premium", color: "#22c55e", bg: "rgba(34,197,94,0.12)" };
@@ -320,11 +320,11 @@ function setupTypeColor(setupType: string): string {
   return "#6b7280";
 }
 
-/* ─── Score Detail Panel ───────────────────────────────────── */
+/* â”€â”€â”€ Score Detail Panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: string } }) {
   const sd = candidate.score_details;
 
-  /* Fallback: no score_details — show reasons list */
+  /* Fallback: no score_details â€” show reasons list */
   if (!sd) {
     return (
       <div
@@ -343,7 +343,7 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
               className="text-xs text-white/40 flex items-start gap-2"
               style={{ fontFamily: "'JetBrains Mono', monospace" }}
             >
-              <span className="text-[#00d4aa] mt-px">•</span>
+              <span className="text-[#00d4aa] mt-px">â€¢</span>
               {r}
             </li>
           ))}
@@ -357,7 +357,7 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
   return (
     <div className="px-4 sm:px-6 py-5 bg-white/[0.02] border-t border-white/[0.06] space-y-5">
 
-      {/* ── Score Breakdown ── */}
+      {/* â”€â”€ Score Breakdown â”€â”€ */}
       <div>
         <div
           className="text-[10px] text-white/25 tracking-widest uppercase mb-3"
@@ -418,7 +418,7 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
         </div>
       </div>
 
-      {/* ── Hard Gates ── */}
+      {/* â”€â”€ Hard Gates â”€â”€ */}
       {sd.gates.length > 0 && (
         <div>
           <div
@@ -435,7 +435,7 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
                 style={{ fontFamily: "'JetBrains Mono', monospace" }}
               >
                 <span style={{ color: g.passed ? "#22c55e" : "#ef4444" }}>
-                  {g.passed ? "✓" : "✗"}
+                  {g.passed ? "âœ“" : "âœ—"}
                 </span>
                 <span className={g.passed ? "text-white/40" : "text-red-400/70"}>
                   {g.label}
@@ -446,7 +446,7 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
         </div>
       )}
 
-      {/* ── Warnings ── */}
+      {/* â”€â”€ Warnings â”€â”€ */}
       {sd.warnings.length > 0 && (
         <div className="space-y-1">
           {sd.warnings.map((w, i) => (
@@ -455,14 +455,14 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
               className="flex items-start gap-2 text-[11px]"
               style={{ fontFamily: "'JetBrains Mono', monospace", color: "#f59e0b" }}
             >
-              <span className="mt-px">⚠</span>
+              <span className="mt-px">âš </span>
               <span className="text-amber-400/70">{w}</span>
             </div>
           ))}
         </div>
       )}
 
-      {/* ── Technical Indicators ── */}
+      {/* â”€â”€ Technical Indicators â”€â”€ */}
       {hasIndicators && (
         <div className="flex flex-wrap gap-2">
           {sd.indicators.sma20 != null && (
@@ -510,7 +510,7 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
               className="text-[10px] font-bold tracking-wider bg-green-500/10 border border-green-500/20 rounded-full px-2.5 py-1"
               style={{ fontFamily: "'JetBrains Mono', monospace", color: "#22c55e" }}
             >
-              ⚡ COMPRESSION
+              âš¡ COMPRESSION
             </span>
           )}
           {sd.indicators.bb_width != null && (
@@ -524,7 +524,7 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
         </div>
       )}
 
-      {/* ── Final Summary ── */}
+      {/* â”€â”€ Final Summary â”€â”€ */}
       {sd.final_summary && (
         <div
           className="text-xs text-white/40 leading-relaxed border-l-2 border-[#00d4aa]/30 pl-3"
@@ -537,7 +537,7 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
   );
 }
 
-/* ─── Dashboard Content (shown after auth + approval) ──────── */
+/* â”€â”€â”€ Dashboard Content (shown after auth + approval) â”€â”€â”€â”€â”€â”€â”€â”€ */
 function WeeklyIncomeContent() {
   const [data, setData] = useState<ScanData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -633,14 +633,14 @@ function WeeklyIncomeContent() {
   const ms = marketStatusLabel();
   const scanTimestamp = data?.scan_timestamp
     ? new Date(data.scan_timestamp).toLocaleString()
-    : "—";
+    : "â€”";
   const scanDate = data?.scan_timestamp
     ? new Date(data.scan_timestamp).toLocaleDateString("en-US", {
         month: "short",
         day: "numeric",
         year: "numeric",
       })
-    : "—";
+    : "â€”";
 
   return (
     <div className="min-h-screen bg-[#0a0e14] text-white flex flex-col">
@@ -649,7 +649,7 @@ function WeeklyIncomeContent() {
       <section className="flex-1 pt-28 pb-16 px-4 relative z-10">
         <div className="container max-w-5xl mx-auto">
 
-          {/* ─── Command Header ─── */}
+          {/* â”€â”€â”€ Command Header â”€â”€â”€ */}
           <div className="mb-8">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mb-6">
               <div className="text-center sm:text-left">
@@ -668,7 +668,7 @@ function WeeklyIncomeContent() {
                   className="text-white/20 text-[10px] tracking-[0.35em] uppercase mt-1.5"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
-                  SHORT PUT / CALL SCANNER · PREMIUM SETUPS
+                  SHORT PUT / CALL SCANNER Â· PREMIUM SETUPS
                 </p>
                 <div className="flex items-center gap-2 mt-2">
                   <span
@@ -736,7 +736,7 @@ function WeeklyIncomeContent() {
                   className="text-lg font-bold text-white/60 leading-none"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
-                  {data?.tickers_scanned || "—"}
+                  {data?.tickers_scanned || "â€”"}
                 </div>
               </div>
               <div className="bg-[#0d1520] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
@@ -758,7 +758,7 @@ function WeeklyIncomeContent() {
                   className="text-lg font-bold text-white/60 leading-none"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
-                  {data?.unique_alerts ?? "—"}
+                  {data?.unique_alerts ?? "â€”"}
                 </div>
               </div>
               <div className="bg-[#0d1520] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
@@ -767,18 +767,18 @@ function WeeklyIncomeContent() {
                   className="text-lg font-bold text-white/40 leading-none"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
-                  {data?.market_condition || "—"}
+                  {data?.market_condition || "â€”"}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* ── PRODUCT INTRO COPY ── */}
+          {/* â”€â”€ PRODUCT INTRO COPY â”€â”€ */}
           <section className="pb-8 sm:pb-12">
             <div className="max-w-3xl mx-auto text-center">
               <div className="inline-flex items-center gap-2 font-mono text-[10px] text-[#00d4aa]/70 tracking-widest bg-[#00d4aa]/8 border border-[#00d4aa]/15 rounded-full px-4 py-1.5 mb-6">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#00d4aa] animate-pulse" />
-                PRIVATE ACCESS · INCOME INTELLIGENCE
+                PRIVATE ACCESS Â· INCOME INTELLIGENCE
               </div>
 
               <p className="font-['Space_Grotesk'] text-lg sm:text-xl text-[#00d4aa]/80 mb-6">
@@ -795,102 +795,8 @@ function WeeklyIncomeContent() {
             </div>
           </section>
 
-          {/* ── SAMPLE DASHBOARD PREVIEW ── */}
-          <section id="preview" className="pb-12 sm:pb-16">
-            <div className="max-w-5xl mx-auto">
-              {/* Preview label */}
-              <div className="flex items-center justify-center gap-3 mb-6">
-                <div className="h-px flex-1 bg-gradient-to-r from-transparent to-white/10" />
-                <span className="font-mono text-[10px] text-white/25 tracking-widest">SAMPLE DASHBOARD</span>
-                <div className="h-px flex-1 bg-gradient-to-l from-transparent to-white/10" />
-              </div>
 
-              {/* Sample dashboard frame */}
-              <div className="relative rounded-2xl overflow-hidden border border-white/8 bg-[#0d1117]">
-                {/* Top bar */}
-                <div className="flex items-center gap-2 px-4 py-2.5 bg-[#0d1117] border-b border-white/5">
-                  <div className="flex gap-1.5">
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
-                  </div>
-                  <span className="font-mono text-[10px] text-white/20 ml-3 tracking-wider">WEEKLY INCOME SCANNER — PRIVATE INCOME INTELLIGENCE</span>
-                  <div className="ml-auto flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#00d4aa] animate-pulse" />
-                    <span className="font-mono text-[10px] text-[#00d4aa]/60 tracking-wider">LIVE</span>
-                  </div>
-                </div>
-
-                {/* Sample table with watermark */}
-                <div className="relative p-4 sm:p-6">
-                  {/* The sample scanner table */}
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                      <thead>
-                        <tr className="text-[10px] text-white/25 tracking-widest border-b border-white/5">
-                          <th className="pb-3 pr-4">SIDE</th>
-                          <th className="pb-3 pr-4">TICKER</th>
-                          <th className="pb-3 pr-4">STRIKE</th>
-                          <th className="pb-3 pr-4">DTE</th>
-                          <th className="pb-3 pr-4">DELTA</th>
-                          <th className="pb-3 pr-4">CREDIT</th>
-                          <th className="pb-3 pr-4">PREMIUM</th>
-                          <th className="pb-3 pr-4">OTM %</th>
-                          <th className="pb-3 pr-4">SCORE</th>
-                          <th className="pb-3 pr-4">GRADE</th>
-                          <th className="pb-3">SETUP</th>
-                        </tr>
-                      </thead>
-                      <tbody className="text-xs">
-                        {[
-                          { side: "PUT", ticker: "QQQ", strike: "666P", dte: "8d", delta: "-0.21", credit: "$5.22", premium: "$522", otm: "4.0%", score: "79", grade: "B", setup: "Juicy Premium", gradeColor: "#00d4aa", setupColor: "#22c55e" },
-                          { side: "PUT", ticker: "SPY", strike: "704P", dte: "8d", delta: "-0.18", credit: "$3.19", premium: "$319", otm: "3.0%", score: "76", grade: "B", setup: "Strong Premium", gradeColor: "#00d4aa", setupColor: "#3b82f6" },
-                          { side: "PUT", ticker: "IWM", strike: "270P", dte: "8d", delta: "-0.17", credit: "$1.57", premium: "$157", otm: "4.3%", score: "77", grade: "B", setup: "Meets Minimum", gradeColor: "#00d4aa", setupColor: "#00d4aa" },
-                        ].map((row, i) => (
-                          <tr key={i} className="border-b border-white/[0.03] hover:bg-white/[0.02]">
-                            <td className="py-3 pr-4"><span className="text-[#22c55e] font-bold">{row.side}</span></td>
-                            <td className="py-3 pr-4 text-white/70 font-bold">{row.ticker}</td>
-                            <td className="py-3 pr-4 text-white/50">{row.strike}</td>
-                            <td className="py-3 pr-4 text-white/40">{row.dte}</td>
-                            <td className="py-3 pr-4 text-white/40">{row.delta}</td>
-                            <td className="py-3 pr-4 text-[#00d4aa]">{row.credit}</td>
-                            <td className="py-3 pr-4 text-white/50">{row.premium}</td>
-                            <td className="py-3 pr-4 text-white/40">{row.otm}</td>
-                            <td className="py-3 pr-4 text-white/60">{row.score}</td>
-                            <td className="py-3 pr-4"><span className="text-[9px] font-bold px-1.5 py-0.5 rounded" style={{ color: row.gradeColor, background: `${row.gradeColor}15`, border: `1px solid ${row.gradeColor}25` }}>{row.grade}</span></td>
-                            <td className="py-3"><span className="text-[9px] tracking-wider" style={{ color: row.setupColor }}>{row.setup}</span></td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-
-                  {/* Diagonal SAMPLE watermark — repeating grid */}
-                  <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 2 }}>
-                    <div style={{
-                      position: "absolute", top: "-50%", left: "-50%", width: "200%", height: "200%",
-                      display: "flex", flexWrap: "wrap", alignContent: "center", justifyContent: "center",
-                      gap: "60px 80px", transform: "rotate(-35deg)",
-                    }}>
-                      {Array.from({ length: 20 }).map((_, i) => (
-                        <span key={i} style={{
-                          fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(2rem, 5vw, 3.5rem)",
-                          fontWeight: 900, letterSpacing: "0.2em", color: "rgba(255,255,255,0.07)",
-                          textTransform: "uppercase", userSelect: "none", whiteSpace: "nowrap",
-                        }}>SAMPLE</span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <p className="text-center text-white/20 text-xs font-mono mt-4 tracking-wider">
-                Sample readout — live data available to private-access subscribers only
-              </p>
-            </div>
-          </section>
-
-          {/* ── INCOME INTELLIGENCE DIMENSIONS ── */}
+          {/* â”€â”€ INCOME INTELLIGENCE DIMENSIONS â”€â”€ */}
           <section className="pb-12 sm:pb-16">
             <div className="text-center mb-10">
               <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">INTELLIGENCE DIMENSIONS</p>
@@ -918,7 +824,7 @@ function WeeklyIncomeContent() {
             </div>
           </section>
 
-          {/* ═══ MAIN TERMINAL CARD ═══ */}
+          {/* â•â•â• MAIN TERMINAL CARD â•â•â• */}
           <div className="animated-border">
           <div className="bg-[#0d1520] border border-white/10 rounded-2xl overflow-hidden relative">
             {/* Scan sweep line */}
@@ -979,10 +885,10 @@ function WeeklyIncomeContent() {
               </div>
             </div>
 
-            {/* ── Table ── */}
+            {/* â”€â”€ Table â”€â”€ */}
             <div className="px-2 sm:px-4 py-2">
 
-              {/* Header Row — desktop */}
+              {/* Header Row â€” desktop */}
               <div
                 className="hidden sm:grid gap-3 px-4 py-3 text-xs text-white/30 tracking-widest uppercase"
                 style={{
@@ -1012,7 +918,7 @@ function WeeklyIncomeContent() {
                     onClick={fetchData}
                     className="mt-4 text-xs text-[#00d4aa] font-mono hover:underline"
                   >
-                    Retry →
+                    Retry â†’
                   </button>
                 </div>
               )}
@@ -1335,7 +1241,7 @@ function WeeklyIncomeContent() {
                               className="text-xs text-white/40"
                               style={{ fontFamily: "'JetBrains Mono', monospace" }}
                             >
-                              Δ{c.delta.toFixed(2)}
+                              Î”{c.delta.toFixed(2)}
                             </span>
                             <span
                               className="text-xs text-white/40"
@@ -1374,13 +1280,13 @@ function WeeklyIncomeContent() {
               })}
             </div>
 
-            {/* ── Info Footer ── */}
+            {/* â”€â”€ Info Footer â”€â”€ */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-6 py-3 border-t border-white/5 gap-1">
               <span
                 className="text-xs text-white/20"
                 style={{ fontFamily: "'JetBrains Mono', monospace" }}
               >
-                Prices as of {scanTimestamp} · Scanned {scanDate}
+                Prices as of {scanTimestamp} Â· Scanned {scanDate}
               </span>
               <span
                 className="text-xs"
@@ -1393,7 +1299,7 @@ function WeeklyIncomeContent() {
               </span>
             </div>
 
-            {/* ── LEGEND: Conviction ── */}
+            {/* â”€â”€ LEGEND: Conviction â”€â”€ */}
             <div className="px-4 sm:px-6 py-3 border-t border-white/5">
               <div className="flex items-center gap-2 mb-2">
                 <span
@@ -1412,8 +1318,8 @@ function WeeklyIncomeContent() {
               <div className="flex flex-wrap gap-2">
                 {[
                   { grade: "A", label: "Strong", score: "85+", bg: "#22c55e", text: "#fff", where: "ENTRY" },
-                  { grade: "B", label: "Good", score: "75–84", bg: "#00d4aa", text: "#0a0e14", where: "ENTRY" },
-                  { grade: "C", label: "Moderate", score: "65–74", bg: "#f59e0b", text: "#0a0e14", where: "FORMING" },
+                  { grade: "B", label: "Good", score: "75â€“84", bg: "#00d4aa", text: "#0a0e14", where: "ENTRY" },
+                  { grade: "C", label: "Moderate", score: "65â€“74", bg: "#f59e0b", text: "#0a0e14", where: "FORMING" },
                   { grade: "D", label: "Weak", score: "<65", bg: "#ef4444", text: "#fff", where: "AVOID" },
                 ].map((g) => (
                   <div
@@ -1457,7 +1363,7 @@ function WeeklyIncomeContent() {
               </div>
             </div>
 
-            {/* ── LEGEND: Strategy ── */}
+            {/* â”€â”€ LEGEND: Strategy â”€â”€ */}
             <div className="px-4 sm:px-6 py-3 border-t border-white/5">
               <div className="flex items-center gap-2 mb-2">
                 <span
@@ -1517,7 +1423,7 @@ function WeeklyIncomeContent() {
           </div>
           </div>
 
-          {/* ── DISCLAIMER ── */}
+          {/* â”€â”€ DISCLAIMER â”€â”€ */}
           <div className="mt-12 mb-8 max-w-4xl mx-auto bg-[#111820] border border-white/5 rounded-xl px-5 sm:px-6 py-4 flex items-start gap-3">
             <svg className="w-4 h-4 text-[#f59e0b] shrink-0 mt-0.5" fill="none" viewBox="0 0 16 16">
               <path d="M8 2l1.5 4.5H14l-3.7 2.7 1.4 4.3L8 11 4.3 13.5l1.4-4.3L2 6.5h4.5z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
@@ -1553,7 +1459,7 @@ function WeeklyIncomeContent() {
             <PrimalEdgeLogo size="md" />
           </Link>
           <p className="text-white/20 text-sm">
-            © {new Date().getFullYear()} Primal Edge. All rights reserved.
+            Â© {new Date().getFullYear()} Primal Edge. All rights reserved.
           </p>
         </div>
       </footer>
@@ -1561,7 +1467,7 @@ function WeeklyIncomeContent() {
   );
 }
 
-/* ─── Main Export — Auth Protected ───────────────────── */
+/* â”€â”€â”€ Main Export â€” Auth Protected â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 export default function WeeklyIncome() {
   return (
     <ProtectedRoute product="income">
