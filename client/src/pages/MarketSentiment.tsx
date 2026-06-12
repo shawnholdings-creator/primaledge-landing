@@ -723,7 +723,7 @@ function DashboardBody({ data }: { data: SentimentData | null }) {
                   className="bg-[#0a0e14]/60 border border-white/[0.06] rounded-lg px-3 py-2.5 hover:border-white/10 transition-colors"
                 >
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-[10px] font-bold text-white/60" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                    <span className="text-[11px] font-bold text-white/90" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                       {SECTOR_NAMES[sec.symbol] || sec.name}
                     </span>
                     <span className="text-[10px] font-bold" style={{ fontFamily: "'JetBrains Mono', monospace", color: perfColor }}>
@@ -736,7 +736,7 @@ function DashboardBody({ data }: { data: SentimentData | null }) {
                       style={{ width: `${Math.max(4, barWidth)}%`, backgroundColor: perfColor }}
                     />
                   </div>
-                  <div className="text-[8px] text-white/25 mt-1 truncate" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                  <div className="text-[9px] text-white/40 mt-1 truncate" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                     {sec.symbol}
                   </div>
                 </div>
