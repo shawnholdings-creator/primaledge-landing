@@ -169,7 +169,7 @@ function LoadingSkeleton() {
 function StateCell({ title, label, sub, color }: { title: string; label: string; sub?: string; color: string }) {
   return (
     <div className="bg-[#0a0e14]/60 border border-white/[0.06] rounded-lg px-3 py-2.5 hover:border-white/10 transition-colors">
-      <div className="text-[9px] text-white/20 tracking-widest uppercase mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+      <div className="text-[10px] tracking-[0.18em] uppercase mb-1" style={{ fontFamily: "'JetBrains Mono', monospace", color: "#B8962E" }}>
         {title}
       </div>
       <div
@@ -464,7 +464,7 @@ function DashboardBody({ data }: { data: SentimentData | null }) {
 
           {/* Score Gauge */}
           <div className="flex flex-col items-center justify-center bg-[#0d1117] border border-white/[0.06] rounded-xl px-4 sm:px-8 py-4 sm:py-6">
-            <div className="text-[9px] text-white/20 tracking-widest uppercase mb-3" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+            <div className="text-[10px] tracking-[0.18em] uppercase mb-3" style={{ fontFamily: "'JetBrains Mono', monospace", color: "#B8962E" }}>
               SIGNAL STRENGTH
             </div>
             <ScoreGauge score={data.score} />
@@ -472,7 +472,7 @@ function DashboardBody({ data }: { data: SentimentData | null }) {
 
           {/* Market State Grid — 5×2 */}
           <div className="bg-[#0d1117] border border-white/[0.06] rounded-xl p-4">
-            <div className="text-[9px] text-white/20 tracking-widest uppercase mb-3" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+            <div className="text-[10px] tracking-[0.18em] uppercase mb-3" style={{ fontFamily: "'JetBrains Mono', monospace", color: "#B8962E" }}>
               MARKET DETAILS
             </div>
             <div className="grid grid-cols-2 gap-2">
@@ -492,7 +492,7 @@ function DashboardBody({ data }: { data: SentimentData | null }) {
 
         {/* ═══ HOT / COLD SECTOR BAR ═══ */}
         <div className="bg-[#0d1117] border border-white/[0.06] rounded-xl p-4 mb-6">
-          <div className="text-[9px] text-white/20 tracking-widest uppercase mb-3" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+          <div className="text-[10px] tracking-[0.18em] uppercase mb-3" style={{ fontFamily: "'JetBrains Mono', monospace", color: "#B8962E" }}>
             SECTOR HEAT
           </div>
           <div className="flex flex-col sm:flex-row gap-2">
@@ -698,7 +698,7 @@ function DashboardBody({ data }: { data: SentimentData | null }) {
 
         {/* ═══ SECTORS STRIP ═══ */}
         <div className="bg-[#0d1117] border border-white/[0.06] rounded-xl p-4 mb-6">
-          <div className="text-[9px] text-white/20 tracking-widest uppercase mb-3" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+          <div className="text-[10px] tracking-[0.18em] uppercase mb-3" style={{ fontFamily: "'JetBrains Mono', monospace", color: "#B8962E" }}>
             SECTOR PERFORMANCE
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-2">
@@ -739,7 +739,7 @@ function DashboardBody({ data }: { data: SentimentData | null }) {
         {data.vix_value !== undefined && (
           <div className="bg-[#0d1117] border border-white/[0.06] rounded-xl px-4 py-3 mb-6 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <span className="text-[9px] text-white/20 tracking-widest uppercase" style={{ fontFamily: "'JetBrains Mono', monospace" }}>VIX</span>
+              <span className="text-[10px] tracking-[0.18em] uppercase" style={{ fontFamily: "'JetBrains Mono', monospace", color: "#B8962E" }}>VIX</span>
               <span
                 className="text-xl font-black"
                 style={{
