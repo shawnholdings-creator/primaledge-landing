@@ -184,6 +184,82 @@ function Hero() {
           A private intelligence platform that reads the market before you choose the trade — so you spend less time searching and more time deciding.
         </p>
 
+        {/* AI Confidence Block */}
+        <div
+          className="flex flex-col items-center px-4 sm:px-0"
+          style={{ gap: "14px", maxWidth: "520px", margin: "28px auto 28px" }}
+        >
+          {/* Confidence statement */}
+          <p
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontWeight: 400,
+              fontSize: "0.9rem",
+              color: "rgba(255,255,255,0.42)",
+              textAlign: "center",
+              lineHeight: 1.6,
+              fontStyle: "italic",
+              margin: 0,
+              animation: "heroFadeIn 0.4s ease-out 0.5s both",
+            }}
+          >
+            Every setup is scored by a machine learning algorithm — not a human opinion.
+          </p>
+
+          {/* Credential tag row */}
+          <div
+            className="flex flex-wrap justify-center items-center"
+            style={{ gap: "8px 16px", animation: "heroFadeIn 0.35s ease-out 0.6s both" }}
+          >
+            {["ML SCORING", "ADAPTIVE INTELLIGENCE", "ALWAYS RUNNING"].map((tag, i) => (
+              <div key={tag} className="flex items-center" style={{ gap: "16px", animation: `heroFadeIn 0.35s ease-out ${0.6 + i * 0.06}s both` }}>
+                {i > 0 && (
+                  <span
+                    className="hidden lg:inline"
+                    style={{
+                      fontFamily: "'JetBrains Mono', monospace",
+                      fontSize: "0.65rem",
+                      color: "rgba(255,255,255,0.15)",
+                      userSelect: "none",
+                    }}
+                  >
+                    ·
+                  </span>
+                )}
+                <span
+                  className="transition-all"
+                  style={{
+                    fontFamily: "'JetBrains Mono', monospace",
+                    fontWeight: 500,
+                    fontSize: "0.62rem",
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    color: "#00e5a0",
+                    background: "rgba(0,229,160,0.06)",
+                    border: "1px solid rgba(0,229,160,0.2)",
+                    padding: "4px 10px",
+                    borderRadius: "4px",
+                    minHeight: "32px",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    cursor: "default",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "rgba(0,229,160,0.12)";
+                    e.currentTarget.style.borderColor = "rgba(0,229,160,0.4)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "rgba(0,229,160,0.06)";
+                    e.currentTarget.style.borderColor = "rgba(0,229,160,0.2)";
+                  }}
+                >
+                  {tag}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Product Navigation Row */}
         <div
           className="flex flex-col sm:flex-row items-center justify-center"
