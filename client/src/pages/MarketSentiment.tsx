@@ -7,6 +7,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Navbar from "@/components/Navbar";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import MobileCTA from "@/components/MobileCTA";
 
 /* ─── Gist Config ─────────────────────────────────────────── */
 const GIST_ID = "c89dd974e4e74107b5afb88807c12579";
@@ -446,12 +447,12 @@ function DashboardBody({ data }: { data: SentimentData | null }) {
   const ms = data.market_state;
 
   return (
-    <section className="px-4 pb-16">
+    <section className="px-4 sm:px-6 lg:px-8 pb-16">
       <div className="container max-w-5xl mx-auto">
 
         {/* ═══ VERDICT BANNER ═══ */}
         <div
-          className="rounded-xl px-6 py-4 mb-6 text-center border"
+          className="rounded-xl px-4 sm:px-6 py-4 mb-6 text-center border"
           style={{
             backgroundColor: data.verdict_bg,
             borderColor: `${data.verdict_tx}30`,
@@ -459,7 +460,7 @@ function DashboardBody({ data }: { data: SentimentData | null }) {
           }}
         >
           <div
-            className="text-2xl sm:text-3xl font-black tracking-wide"
+            className="text-xl sm:text-2xl lg:text-3xl font-black tracking-wide"
             style={{ fontFamily: "'Space Grotesk', sans-serif", color: data.verdict_tx }}
           >
             {data.verdict}
@@ -482,7 +483,7 @@ function DashboardBody({ data }: { data: SentimentData | null }) {
             <div className="text-[10px] tracking-[0.18em] uppercase mb-3" style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00e5a0" }}>
               MARKET DETAILS
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-2">
               <StateCell title="OVERALL TREND" label={ms.idx_trend.label} color={ms.idx_trend.color} />
               <StateCell title="BREADTH" label={ms.breadth.value !== undefined && ms.breadth.total !== undefined ? (ms.breadth.value / ms.breadth.total >= 0.7 ? "Expanding" : ms.breadth.value / ms.breadth.total >= 0.4 ? "Moderate" : "Narrow") : ms.breadth.label || "--"} color={ms.breadth.color} />
               <StateCell title="INDEX DIRECTION" label={ms.idx_now.label} sub={ms.idx_now.avg_score !== undefined ? `Avg: ${ms.idx_now.avg_score}` : undefined} color={ms.idx_now.color} />
@@ -858,12 +859,12 @@ export default function MarketSentiment() {
     : "";
 
   return (
-    <div className="min-h-screen bg-[#0a0d12] text-white">
+    <div className="min-h-screen bg-[#0a0d12] text-white overflow-x-hidden pb-14 lg:pb-0">
       <Navbar />
       <TickerTape data={data} />
 
       {/* Public hero header */}
-      <section className="pt-[116px] pb-4 px-4"> {/* 80px navbar + 36px ticker */}
+      <section className="pt-[116px] pb-4 px-4 sm:px-6 lg:px-8"> {/* 80px navbar + 36px ticker */}
         <div className="container max-w-5xl mx-auto">
 
           {/* ═══ HEADER ═══ */}
@@ -871,7 +872,7 @@ export default function MarketSentiment() {
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mb-4">
               <div className="text-center sm:text-left">
                 <h1
-                  className="text-3xl sm:text-4xl font-black tracking-tight leading-none"
+                  className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight leading-tight sm:leading-none"
                   style={{
                     fontFamily: "'Space Grotesk', sans-serif",
                     background: "linear-gradient(135deg, #00e5a0, #00e5a0)",
@@ -881,7 +882,7 @@ export default function MarketSentiment() {
                 >
                   MARKET SENTIMENT ENGINE
                 </h1>
-                <p className="text-white/20 text-[10px] font-mono tracking-[0.35em] uppercase mt-1.5">
+                <p className="text-white/20 text-[0.55rem] sm:text-[0.6rem] lg:text-[0.65rem] font-mono tracking-[0.1em] sm:tracking-[0.15em] lg:tracking-[0.35em] uppercase mt-1.5">
                   MARKET SENTIMENT ENGINE
                 </p>
               </div>
@@ -902,7 +903,7 @@ export default function MarketSentiment() {
                   <span className="relative inline-flex rounded-full h-2 w-2" style={{ backgroundColor: badge.color }} />
                 </span>
                 <span
-                  className="text-[10px] font-bold tracking-wider"
+                  className="text-[0.6rem] font-bold tracking-wider"
                   style={{ fontFamily: "'JetBrains Mono', monospace", color: badge.color }}
                 >
                   {data?.session}
@@ -911,7 +912,7 @@ export default function MarketSentiment() {
             </div>
 
             {/* Scan timestamp / last updated */}
-            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-[10px] text-white/20" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+            <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center sm:justify-start gap-1 sm:gap-4 text-[0.65rem] sm:text-[10px] text-white/20" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
               <span>SCAN: {scanTime}</span>
               {lastUpdatedStr && <span>FETCHED: {lastUpdatedStr}</span>}
               {error && <span className="text-red-400/60">⚠ {error}</span>}
@@ -926,6 +927,7 @@ export default function MarketSentiment() {
       <ProtectedRoute product="sentiment">
         <DashboardBody data={data} />
       </ProtectedRoute>
+      <MobileCTA />
     </div>
   );
 }

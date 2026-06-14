@@ -10,6 +10,7 @@ import { Link } from "wouter";
 import PrimalEdgeLogo from "@/components/PrimalEdgeLogo";
 import Navbar from "@/components/Navbar";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import MobileCTA from "@/components/MobileCTA";
 
 // GitHub Gist raw URL
 const GIST_ID = "a490177229d88de297de0bf4746fdff8";
@@ -440,18 +441,18 @@ function DashboardContent() {
 
 
   return (
-    <div className="min-h-screen cockpit-bg text-white flex flex-col">
+    <div className="min-h-screen cockpit-bg text-white flex flex-col overflow-x-hidden pb-14 lg:pb-0">
       <Navbar />
 
-      <section className="flex-1 pt-28 pb-16 px-4 relative z-10">
+      <section className="flex-1 pt-28 pb-16 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="container max-w-6xl mx-auto">
 
           {/* ─── Command Header ─── */}
           <div className="mb-8">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mb-6">
               <div className="text-center sm:text-left">
-                <h1 className="text-3xl sm:text-4xl font-black tracking-tight gradient-text leading-none" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>AI COCKPIT</h1>
-                <p className="text-white/20 text-[10px] font-mono tracking-[0.35em] uppercase mt-1.5">ADAPTIVE INTELLIGENCE · DECISIVE SIGNALS</p>
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight gradient-text leading-none" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>AI COCKPIT</h1>
+                <p className="text-white/20 text-[0.6rem] sm:text-[0.65rem] lg:text-[0.7rem] font-mono tracking-[0.1em] sm:tracking-[0.15em] lg:tracking-[0.35em] uppercase mt-1.5">ADAPTIVE INTELLIGENCE · DECISIVE SIGNALS</p>
               </div>
               {/* Market status pill */}
               {(() => {
@@ -469,22 +470,22 @@ function DashboardContent() {
             </div>
 
             {/* Stat pills row */}
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-2.5">
               <div className="cmd-stat text-center">
-                <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Scanned</div>
+                <div className="text-[10px] sm:text-[11px] text-white/15 tracking-widest uppercase mb-1">Scanned</div>
                 <div className="text-lg font-bold text-white/60 font-mono leading-none">{data?.tickers_scanned || '—'}</div>
               </div>
               <div className={`cmd-stat text-center ${tradable.length > 0 ? 'cmd-stat-active' : ''}`}>
-                <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Active</div>
+                <div className="text-[10px] sm:text-[11px] text-white/15 tracking-widest uppercase mb-1">Active</div>
                 <div className="text-lg font-bold font-mono leading-none" style={{ color: tradable.length > 0 ? '#00e5a0' : 'rgba(255,255,255,0.2)', textShadow: tradable.length > 0 ? '0 0 12px rgba(0,229,160,0.3)' : 'none' }}>{tradable.length}</div>
               </div>
               {/* Near Trade stat hidden */}
               <div className="cmd-stat text-center">
-                <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Watchlist</div>
+                <div className="text-[10px] sm:text-[11px] text-white/15 tracking-widest uppercase mb-1">Watchlist</div>
                 <div className="text-lg font-bold text-white/30 font-mono leading-none">{watchlist.length}</div>
               </div>
               <div className="cmd-stat text-center col-span-2 sm:col-span-1">
-                <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Next Scan</div>
+                <div className="text-[10px] sm:text-[11px] text-white/15 tracking-widest uppercase mb-1">Next Scan</div>
                 <div className="text-lg font-bold text-white/30 font-mono leading-none">{nextScanTime()}</div>
               </div>
             </div>
@@ -540,7 +541,7 @@ function DashboardContent() {
             </div>
           </section>
 
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-4 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-4 items-start overflow-hidden">
 
           {/* ═══ LEFT: Active Signals ═══ */}
           <div className="animated-border">
@@ -1081,6 +1082,7 @@ function DashboardContent() {
           <p className="text-white/20 text-sm">© {new Date().getFullYear()} Primal Edge. All rights reserved.</p>
         </div>
       </footer>
+      <MobileCTA />
     </div>
   );
 }
