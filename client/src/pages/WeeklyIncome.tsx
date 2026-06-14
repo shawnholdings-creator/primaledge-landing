@@ -320,6 +320,60 @@ function setupTypeColor(setupType: string): string {
   return "#6b7280";
 }
 
+/* ─── Copy Protection: sanitize score explanations ─────────── */
+function sanitizeExplanation(text: string): string {
+  if (!text) return text;
+  let s = text;
+  // Strip dollar amounts: $123.45, $1,234
+  s = s.replace(/\$[\d,]+\.?\d*/g, "");
+  // Strip percentages: 22%, ~22%, 3.6%
+  s = s.replace(/~?\d+\.?\d*%/g, "");
+  // Strip parenthetical numbers: (55), (5,668), (14), ($722)
+  s = s.replace(/\(\$?[\d,.]+\)/g, "");
+  // Strip indicator references: RSI, ATR, SMA, MA with values
+  s = s.replace(/\bRSI\s*\(?[\d.]*\)?/gi, "momentum indicator");
+  s = s.replace(/\bATR\s*(buffer:?)?\s*[\d.x]*\s*\(?\$?[\d,.]*\)?/gi, "volatility buffer");
+  s = s.replace(/\b\d+-day\s*MA/gi, "moving average");
+  s = s.replace(/\bSMA\d+/gi, "trend average");
+  // Strip OTM references
+  s = s.replace(/\d+\.?\d*\s*OTM/gi, "out-of-the-money");
+  // Strip DTE references
+  s = s.replace(/\bDTE\s*\(?\d*\)?\s*(is)?/gi, "Time window");
+  // Strip volume/OI numbers
+  s = s.replace(/\b\d{1,3}(,\d{3})*(\.\d+)?\s*(M|K|shares|contracts)?\b/g, "");
+  // Strip bid/ask spread values
+  s = s.replace(/\$\d+\.\d+\/\$\d+\.\d+/g, "");
+  // Strip "verify manually"
+  s = s.replace(/verify manually/gi, "review before acting");
+  // Strip annualized return references
+  s = s.replace(/annualized return/gi, "income potential");
+  // Clean up double spaces and orphaned punctuation
+  s = s.replace(/\s*—\s*—/g, " —");
+  s = s.replace(/\(\s*\)/g, "");
+  s = s.replace(/\s{2,}/g, " ");
+  s = s.replace(/\s+\./g, ".");
+  s = s.replace(/\s+,/g, ",");
+  s = s.replace(/^\s+|\s+$/g, "");
+  return s;
+}
+
+/* ─── Qualitative delta label ──────────────────────────────── */
+function deltaLabel(delta: number): { text: string; color: string } {
+  const d = Math.abs(delta);
+  if (d >= 0.30) return { text: "Wide", color: "#22c55e" };
+  if (d >= 0.20) return { text: "Adequate", color: "#00e5a0" };
+  return { text: "Tight", color: "#f59e0b" };
+}
+
+/* ─── Qualitative OTM label ────────────────────────────────── */
+function otmLabel(otmPct: number): string {
+  const pct = Math.abs(otmPct * 100);
+  if (pct >= 5) return "Wide cushion";
+  if (pct >= 3) return "Good room";
+  if (pct >= 1.5) return "Adequate";
+  return "Tight";
+}
+
 /* ─── Score Detail Panel ───────────────────────────────────── */
 function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: string } }) {
   const sd = candidate.score_details;
@@ -344,7 +398,7 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
               style={{ fontFamily: "'JetBrains Mono', monospace" }}
             >
               <span className="text-[#00e5a0] mt-px">•</span>
-              {r}
+              {sanitizeExplanation(r)}
             </li>
           ))}
         </ul>
@@ -410,7 +464,7 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
                   className="text-[10px] text-white/25 leading-snug"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
-                  {cat.explanation}
+                  {sanitizeExplanation(cat.explanation)}
                 </p>
               </div>
             );
@@ -438,7 +492,7 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
                   {g.passed ? "✓" : "✗"}
                 </span>
                 <span className={g.passed ? "text-white/40" : "text-red-400/70"}>
-                  {g.label}
+                  {sanitizeExplanation(g.label)}
                 </span>
               </div>
             ))}
@@ -456,55 +510,15 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
               style={{ fontFamily: "'JetBrains Mono', monospace", color: "#f59e0b" }}
             >
               <span className="mt-px">⚠</span>
-              <span className="text-amber-400/70">{w}</span>
+              <span className="text-amber-400/70">{sanitizeExplanation(w)}</span>
             </div>
           ))}
         </div>
       )}
 
-      {/* ── Technical Indicators ── */}
+      {/* ── Technical Indicators (qualitative only) ── */}
       {hasIndicators && (
         <div className="flex flex-wrap gap-2">
-          {sd.indicators.sma20 != null && (
-            <span
-              className="text-[10px] text-white/30 bg-white/[0.04] border border-white/[0.06] rounded-full px-2.5 py-1"
-              style={{ fontFamily: "'JetBrains Mono', monospace" }}
-            >
-              SMA20 {sd.indicators.sma20.toFixed(2)}
-            </span>
-          )}
-          {sd.indicators.sma50 != null && (
-            <span
-              className="text-[10px] text-white/30 bg-white/[0.04] border border-white/[0.06] rounded-full px-2.5 py-1"
-              style={{ fontFamily: "'JetBrains Mono', monospace" }}
-            >
-              SMA50 {sd.indicators.sma50.toFixed(2)}
-            </span>
-          )}
-          {sd.indicators.rsi != null && (
-            <span
-              className="text-[10px] text-white/30 bg-white/[0.04] border border-white/[0.06] rounded-full px-2.5 py-1"
-              style={{ fontFamily: "'JetBrains Mono', monospace" }}
-            >
-              RSI {sd.indicators.rsi.toFixed(1)}
-            </span>
-          )}
-          {sd.indicators.atr != null && (
-            <span
-              className="text-[10px] text-white/30 bg-white/[0.04] border border-white/[0.06] rounded-full px-2.5 py-1"
-              style={{ fontFamily: "'JetBrains Mono', monospace" }}
-            >
-              ATR {sd.indicators.atr.toFixed(2)}
-            </span>
-          )}
-          {sd.indicators.avg_volume != null && (
-            <span
-              className="text-[10px] text-white/30 bg-white/[0.04] border border-white/[0.06] rounded-full px-2.5 py-1"
-              style={{ fontFamily: "'JetBrains Mono', monospace" }}
-            >
-              AvgVol {(sd.indicators.avg_volume / 1e6).toFixed(1)}M
-            </span>
-          )}
           {sd.indicators.compression && (
             <span
               className="text-[10px] font-bold tracking-wider bg-green-500/10 border border-green-500/20 rounded-full px-2.5 py-1"
@@ -513,14 +527,12 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
               ⚡ COMPRESSION
             </span>
           )}
-          {sd.indicators.bb_width != null && (
-            <span
-              className="text-[10px] text-white/30 bg-white/[0.04] border border-white/[0.06] rounded-full px-2.5 py-1"
-              style={{ fontFamily: "'JetBrains Mono', monospace" }}
-            >
-              BB Width {(sd.indicators.bb_width * 100).toFixed(1)}%
-            </span>
-          )}
+          <span
+            className="text-[10px] text-white/30 bg-white/[0.04] border border-white/[0.06] rounded-full px-2.5 py-1"
+            style={{ fontFamily: "'JetBrains Mono', monospace" }}
+          >
+            This setup has cleared all platform quality gates required for member review.
+          </span>
         </div>
       )}
 
@@ -530,7 +542,7 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
           className="text-xs text-white/40 leading-relaxed border-l-2 border-[#00e5a0]/30 pl-3"
           style={{ fontFamily: "'JetBrains Mono', monospace" }}
         >
-          {sd.final_summary}
+          {sanitizeExplanation(sd.final_summary)}
         </div>
       )}
     </div>
@@ -798,9 +810,9 @@ function WeeklyIncomeContent() {
               {[
                 { tag: "PREMIUM", title: "Premium Strength", desc: "Prioritizes contracts that meet or exceed a meaningful income quality threshold before being surfaced as tradable." },
                 { tag: "QUALITY", title: "Opportunity Quality", desc: "Filters for high-probability setups with favorable risk-reward characteristics and appropriate directional cushion." },
-                { tag: "LIQUIDITY", title: "Liquidity Quality", desc: "Checks spread, open interest, and tradability before a contract is surfaced. Wide spreads are flagged or rejected." },
-                { tag: "RISK", title: "Risk Cushion", desc: "Evaluates OTM distance, ATR buffer, support location, and price cushion before any contract qualifies." },
-                { tag: "EVENT", title: "Event Awareness", desc: "Flags earnings and known risk events before expiration. No candidate with confirmed earnings before expiry is marked tradable." },
+                { tag: "LIQUIDITY", title: "Liquidity Quality", desc: "Evaluates participation depth and execution quality before a contract is surfaced. Illiquid contracts are flagged or excluded." },
+                { tag: "RISK", title: "Risk Cushion", desc: "Measures directional buffer, volatility context, and structural support before any contract qualifies for review." },
+                { tag: "EVENT", title: "Event Awareness", desc: "Identifies scheduled market events within the trade window. Elevated-risk setups are flagged for additional review." },
                 { tag: "SCORE", title: "Score Explanation", desc: "Shows why a candidate qualifies, where it is strong, what still needs review, and the final conviction read." },
               ].map((item, i) => (
                 <div key={i} className="relative bg-[#10151d] border border-white/5 rounded-xl p-6 hover:border-[#00e5a0]/20 transition-all group">
@@ -891,7 +903,7 @@ function WeeklyIncomeContent() {
                 <span>Credit</span>
                 <span className="text-center">Score</span>
                 <span className="text-center">TIMING</span>
-                <span className="text-center">Cushion</span>
+                <span className="text-center">Buffer</span>
                 <span className="text-right">Price</span>
                 <span className="w-5" />
               </div>
@@ -1066,12 +1078,12 @@ function WeeklyIncomeContent() {
                         {c.dte}d
                       </span>
 
-                      {/* Cushion */}
+                      {/* Buffer */}
                       <span
-                        className="text-center text-sm text-white/50"
-                        style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                        className="text-center text-sm"
+                        style={{ fontFamily: "'JetBrains Mono', monospace", color: deltaLabel(c.delta).color }}
                       >
-                        {c.delta.toFixed(2)}
+                        {deltaLabel(c.delta).text}
                       </span>
 
                       {/* Price + OTM */}
@@ -1089,7 +1101,7 @@ function WeeklyIncomeContent() {
                             color: "#00e5a0",
                           }}
                         >
-                          {otmDisplay}% OTM
+                          {otmLabel(c.otm_pct)}
                         </span>
                       </div>
 
@@ -1168,7 +1180,7 @@ function WeeklyIncomeContent() {
                                 className="text-[10px] block"
                                 style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00e5a0" }}
                               >
-                                {otmDisplay}% OTM
+                                {otmLabel(c.otm_pct)}
                               </span>
                             </div>
                             <svg
@@ -1227,10 +1239,10 @@ function WeeklyIncomeContent() {
                               {c.dte}d
                             </span>
                             <span
-                              className="text-xs text-white/40"
-                              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                              className="text-xs"
+                              style={{ fontFamily: "'JetBrains Mono', monospace", color: deltaLabel(c.delta).color }}
                             >
-                              {c.delta.toFixed(2)}
+                              {deltaLabel(c.delta).text}
                             </span>
                             <span
                               className="text-xs text-white/40"
