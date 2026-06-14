@@ -103,171 +103,228 @@ function TickerTape() {
 
 // ── Hero ──────────────────────────────────────────────────────
 function Hero() {
-  const [visibleRows, setVisibleRows] = useState(0);
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setVisibleRows(v => {
-        if (v >= SCAN_ROWS.length) { clearInterval(id); return v; }
-        return v + 1;
-      });
-    }, 600);
-    return () => clearInterval(id);
-  }, []);
-
   return (
     <section
-      className="relative min-h-screen flex items-center pt-32 sm:pt-36 pb-16 overflow-hidden"
-      style={{ background: "linear-gradient(135deg, #0a0d12 0%, #0d1118 50%, #0a0d12 100%)" }}
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      style={{ backgroundColor: "#0a0d12" }}
     >
-      <div className="absolute inset-0 opacity-20" style={{ backgroundImage: `url(https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/hero-bg-WRuxyzjuQc2Zg7wTqtkdku.webp)`, backgroundSize: "cover", backgroundPosition: "center" }} />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#0a0d12] via-[#0a0d12]/80 to-transparent" />
+      {/* Dot-grid neural texture */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: "radial-gradient(rgba(0,229,160,0.04) 1px, transparent 1px)",
+          backgroundSize: "24px 24px",
+        }}
+      />
 
-      <div className="container relative z-10">
-        <div className="grid lg:grid-cols-2 gap-10 xl:gap-16 items-center">
-          {/* Left: Copy */}
-          <div>
-            {/* Hero brand logo */}
-            <div className="mb-6 fade-up fade-up-delay-1">
-              <PrimalEdgeLogo size="lg" />
-            </div>
+      {/* Content */}
+      <div className="relative z-10 max-w-[680px] mx-auto px-5 text-center" style={{ paddingTop: "140px", paddingBottom: "80px" }}>
 
-            <div className="inline-flex items-center gap-2 bg-[#00e5a0]/10 border border-[#00e5a0]/20 rounded-full px-4 py-1.5 mb-6 fade-up fade-up-delay-2">
-              <span className="w-2 h-2 rounded-full bg-[#00e5a0] animate-pulse" />
-              <span className="font-mono text-xs text-[#00e5a0] tracking-wider">AI ENGINE ACTIVE — LIVE</span>
-            </div>
-
-            <h1 className="font-['Space_Grotesk'] font-bold text-4xl sm:text-5xl lg:text-6xl xl:text-7xl text-white leading-[1.05] mb-6 fade-up fade-up-delay-2">
-              AI-Powered.<br />
-              <span className="text-[#00e5a0] teal-text-glow">Slingshot</span><br />
-              Precision.
-            </h1>
-
-            <p className="text-white/60 text-base sm:text-lg leading-relaxed mb-8 max-w-lg fade-up fade-up-delay-3" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-              A proprietary adaptive intelligence engine that continuously monitors market microstructure across a curated premium universe. The system processes multi-dimensional feature spaces in real time — isolating statistically anomalous setups with institutional-grade precision. Every qualifying signal is scored, graded, and dispatched to your device in seconds. The architecture is proprietary. The output speaks for itself.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-3 fade-up fade-up-delay-4">
-              <a href="#how-it-works" className="shimmer-btn pulse-glow bg-[#00e5a0] text-[#0a0d12] font-['Space_Grotesk'] font-bold text-base px-8 py-3.5 rounded hover:bg-[#00bfa0] transition-all text-center overflow-hidden relative">
-                <span className="absolute inset-0 bg-gradient-to-r from-[#00e5a0]/0 via-white/15 to-[#00e5a0]/0 animate-shimmer" />
-                <span className="relative flex items-center justify-center gap-2">
-                  See How It Works
-                  <svg className="w-4 h-4 animate-bounce" fill="none" viewBox="0 0 16 16"><path d="M8 3v10M4 9l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                </span>
-              </a>
-              <Link href="/subscribe" className="border border-white/15 text-white/70 font-['Space_Grotesk'] font-medium text-base px-8 py-3.5 rounded hover:border-white/30 hover:text-white transition-all text-center">
-                Access the AI Scanner →
-              </Link>
-            </div>
-
-            <div className="flex items-center gap-4 mt-8 fade-up fade-up-delay-5">
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#00e5a0]/20 border border-[#00e5a0]/40">
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                    <path d="M6 1L7.5 4.5H11L8.5 6.5L9.5 10L6 8L2.5 10L3.5 6.5L1 4.5H4.5L6 1Z" fill="#00e5a0"/>
-                  </svg>
-                </span>
-                <p className="text-white/60 text-sm font-medium tracking-wide">Exclusive <span className="text-[#00e5a0] font-semibold">Elite Members</span> Only</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Right: Live scan mock — hidden on mobile, shown lg+ */}
-          <div className="hidden lg:block">
-            <div className="bg-[#10151d] border border-white/8 rounded-xl overflow-hidden teal-glow">
-              <div className="flex items-center justify-between px-4 py-3 bg-[#0d1118] border-b border-white/5">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-[#ef4444]" />
-                  <div className="w-3 h-3 rounded-full bg-[#f59e0b]" />
-                  <div className="w-3 h-3 rounded-full bg-[#22c55e]" />
-                </div>
-                <span className="font-mono text-xs text-white/40">PRIMAL EDGE — SIGNAL ENGINE</span>
-                <span className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#00e5a0] animate-pulse" />
-                  <span className="font-mono text-[10px] text-[#00e5a0]">SCANNING LIVE MARKET</span>
-                </span>
-              </div>
-              <div className="grid grid-cols-5 gap-2 px-4 py-2 bg-[#0d1118]/50 border-b border-white/5">
-                {["TICKER","VERDICT","SCORE","GRADE","PRICE"].map(h => (
-                  <span key={h} className="font-mono text-[10px] text-white/30 tracking-widest">{h}</span>
-                ))}
-              </div>
-              <div className="divide-y divide-white/5">
-                {SCAN_ROWS.slice(0, visibleRows).map((row, i) => (
-                  <div key={i} className="scan-row grid grid-cols-5 gap-2 px-4 py-3 hover:bg-white/3 transition-colors">
-                    <span className="font-mono text-sm font-bold text-white">{row.sym}</span>
-                    <VerdictLabel verdict={row.verdict} />
-                    <span className="font-mono text-sm text-white/70">{row.score}</span>
-                    <GradeBadge grade={row.grade} />
-                    <span className="font-mono text-sm text-white/70">${row.price}</span>
-                  </div>
-                ))}
-                {visibleRows < SCAN_ROWS.length && (
-                  <div className="px-4 py-3 flex items-center gap-2">
-                    <span className="font-mono text-xs text-white/30 animate-pulse">Scanning...</span>
-                    <span className="font-mono text-xs text-[#00e5a0] animate-pulse">▋</span>
-                  </div>
-                )}
-              </div>
-              <div className="px-4 py-2 bg-[#0d1118]/50 border-t border-white/5 flex items-center justify-between">
-                <span className="font-mono text-[10px] text-white/25">Premium universe scanned</span>
-                <span className="font-mono text-[10px] text-[#00e5a0]">{visibleRows} setups found</span>
-              </div>
-            </div>
-          </div>
+        {/* Badge */}
+        <div
+          className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-4"
+          style={{
+            border: "1px solid rgba(0,229,160,0.3)",
+            animation: "heroFadeIn 0.4s ease-out 0.1s both",
+          }}
+        >
+          <span
+            className="text-[#00e5a0]"
+            style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.6rem", letterSpacing: "0.18em", textTransform: "uppercase" }}
+          >
+            ● PRIVATE ACCESS — BY INVITATION
+          </span>
         </div>
 
-        {/* Mobile scan preview — shown below copy on small screens */}
-        <div className="lg:hidden mt-10">
-          <div className="bg-[#10151d] border border-white/8 rounded-xl overflow-hidden">
-            <div className="flex items-center justify-between px-3 py-2.5 bg-[#0d1118] border-b border-white/5">
-              <span className="font-mono text-[10px] text-white/40">PRIMAL EDGE ENGINE</span>
-              <span className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#00e5a0] animate-pulse" />
-                <span className="font-mono text-[10px] text-[#00e5a0]">LIVE</span>
-              </span>
-            </div>
-            <div className="divide-y divide-white/5">
-              {SCAN_ROWS.slice(0, 3).map((row, i) => (
-                <div key={i} className="flex items-center justify-between px-3 py-2.5">
-                  <span className="font-mono text-sm font-bold text-white w-14">{row.sym}</span>
-                  <VerdictLabel verdict={row.verdict} />
-                  <GradeBadge grade={row.grade} />
-                  <span className="font-mono text-xs text-white/60">${row.price}</span>
+        {/* Headline */}
+        <h1
+          style={{
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontWeight: 700,
+            fontSize: "clamp(2.4rem, 6vw, 4.2rem)",
+            color: "#ffffff",
+            letterSpacing: "-0.03em",
+            lineHeight: 1.1,
+            marginTop: "16px",
+            animation: "heroSlideUp 0.6s ease-out 0.2s both",
+          }}
+        >
+          What if you already knew which setups deserved your attention today?
+        </h1>
+
+        {/* Subline */}
+        <p
+          style={{
+            fontFamily: "'JetBrains Mono', monospace",
+            fontWeight: 400,
+            fontSize: "0.72rem",
+            color: "#00e5a0",
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            marginTop: "20px",
+            animation: "heroFadeIn 0.5s ease-out 0.35s both",
+          }}
+        >
+          PRIMAL EDGE — INTELLIGENCE FOR SERIOUS TRADERS
+        </p>
+
+        {/* Body */}
+        <p
+          style={{
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontWeight: 400,
+            fontSize: "clamp(1rem, 2.2vw, 1.15rem)",
+            color: "rgba(255,255,255,0.62)",
+            maxWidth: "520px",
+            margin: "28px auto 0",
+            lineHeight: 1.65,
+            animation: "heroFadeIn 0.5s ease-out 0.45s both",
+          }}
+        >
+          A private intelligence platform that reads the market before you choose the trade — so you spend less time searching and more time deciding.
+        </p>
+
+        {/* Stats Row */}
+        <div
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-0"
+          style={{ marginTop: "36px", animation: "heroFadeIn 0.5s ease-out 0.55s both" }}
+        >
+          {[
+            { top: "LIVE SIGNALS", bottom: "DELIVERED DAILY" },
+            { top: "RANKED QUALITY", bottom: "SIGNAL FILTERED" },
+            { top: "PRIVATE ACCESS", bottom: "MEMBERS ONLY" },
+          ].map((item, i) => (
+            <div key={i} className="flex items-center">
+              {i > 0 && (
+                <div
+                  className="hidden sm:block mx-5"
+                  style={{ width: "1px", height: "32px", background: "rgba(255,255,255,0.1)" }}
+                />
+              )}
+              <div className="text-center">
+                <div
+                  style={{
+                    fontFamily: "'JetBrains Mono', monospace",
+                    fontSize: "0.65rem",
+                    color: "#00e5a0",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.14em",
+                    marginBottom: "4px",
+                  }}
+                >
+                  {item.top}
                 </div>
-              ))}
+                <div
+                  style={{
+                    fontFamily: "'Space Grotesk', sans-serif",
+                    fontSize: "0.72rem",
+                    color: "rgba(255,255,255,0.4)",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.08em",
+                  }}
+                >
+                  {item.bottom}
+                </div>
+              </div>
             </div>
-          </div>
+          ))}
+        </div>
+
+        {/* CTA Row */}
+        <div
+          className="flex flex-col sm:flex-row items-center justify-center gap-3"
+          style={{ marginTop: "40px", animation: "heroFadeIn 0.5s ease-out 0.65s both" }}
+        >
+          <a
+            href="#how-it-works"
+            className="w-full sm:w-auto text-center transition-all"
+            style={{
+              border: "1px solid rgba(0,229,160,0.4)",
+              background: "transparent",
+              color: "#00e5a0",
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontWeight: 500,
+              fontSize: "0.9rem",
+              padding: "14px 28px",
+              borderRadius: "6px",
+              minHeight: "48px",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = "#00e5a0";
+              e.currentTarget.style.background = "rgba(0,229,160,0.06)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = "rgba(0,229,160,0.4)";
+              e.currentTarget.style.background = "transparent";
+            }}
+          >
+            See What's Inside
+          </a>
+          <Link
+            href="/subscribe"
+            className="w-full sm:w-auto text-center transition-all"
+            style={{
+              background: "#00e5a0",
+              color: "#0a0d12",
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontWeight: 700,
+              fontSize: "0.9rem",
+              padding: "14px 28px",
+              borderRadius: "6px",
+              minHeight: "48px",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "#00ffb3";
+              e.currentTarget.style.transform = "scale(1.02)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "#00e5a0";
+              e.currentTarget.style.transform = "scale(1)";
+            }}
+          >
+            Request Access
+          </Link>
         </div>
       </div>
+
+      {/* Scroll indicator */}
+      <div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        style={{ animation: "heroChevronBounce 2s ease-in-out infinite" }}
+      >
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ opacity: 0.5 }}>
+          <path d="M4 7l6 6 6-6" stroke="#00e5a0" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </div>
+
+      {/* Hero keyframes */}
+      <style>{`
+        @keyframes heroFadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes heroSlideUp {
+          from { opacity: 0; transform: translateY(12px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes heroChevronBounce {
+          0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.5; }
+          50% { transform: translateX(-50%) translateY(6px); opacity: 0.3; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          [style*="animation"] { animation: none !important; }
+        }
+      `}</style>
     </section>
   );
 }
 
-// ── Stats ─────────────────────────────────────────────────────
-function Stats() {
-  const { ref, inView } = useInView();
-  const stats = [
-    { label: "Symbols Scanned Per Cycle", value: 1500, suffix: "+" },
-    { label: "Autonomous Cycles / Market Day", value: 9, suffix: "x" },
-    { label: "Multi-Dimensional Feature Space", value: 7, suffix: "+" },
-    { label: "Signal-to-Device Latency", value: 3, suffix: "s" },
-  ];
-  return (
-    <section ref={ref} className="py-12 sm:py-16 bg-[#0d1118] border-y border-white/5">
-      <div className="container grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-        {stats.map((s, i) => (
-          <div key={i} className="text-center">
-            <div className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-[#00e5a0] mb-2">
-              {inView ? <Counter to={s.value} suffix={s.suffix} /> : `0${s.suffix}`}
-            </div>
-            <p className="text-white/40 text-xs sm:text-sm">{s.label}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
 
 // ── How It Works ──────────────────────────────────────────────
 function HowItWorks() {
@@ -800,7 +857,6 @@ export default function Home() {
       <SharedNavbar />
       <TickerTape />
       <Hero />
-      <Stats />
       <HowItWorks />
       <Features />
       <Technology />
