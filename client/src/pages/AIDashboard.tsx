@@ -478,10 +478,7 @@ function DashboardContent() {
                 <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Active</div>
                 <div className="text-lg font-bold font-mono leading-none" style={{ color: tradable.length > 0 ? '#00e5a0' : 'rgba(255,255,255,0.2)', textShadow: tradable.length > 0 ? '0 0 12px rgba(0,229,160,0.3)' : 'none' }}>{tradable.length}</div>
               </div>
-              <div className={`cmd-stat text-center ${nearCount > 0 ? 'cmd-stat-warn' : ''}`}>
-                <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Near Trade</div>
-                <div className="text-lg font-bold font-mono leading-none" style={{ color: nearCount > 0 ? '#f59e0b' : 'rgba(255,255,255,0.2)', textShadow: nearCount > 0 ? '0 0 12px rgba(245,158,11,0.3)' : 'none' }}>{nearCount}</div>
-              </div>
+              {/* Near Trade stat hidden */}
               <div className="cmd-stat text-center">
                 <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Watchlist</div>
                 <div className="text-lg font-bold text-white/30 font-mono leading-none">{watchlist.length}</div>
@@ -506,7 +503,7 @@ function DashboardContent() {
               </p>
 
               <p className="text-white/45 text-base sm:text-lg leading-relaxed mb-4 max-w-2xl mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                AI Cockpit is a private-access trading command layer built to help traders evaluate opportunities with speed, structure, and discipline. It brings together market context, technical condition, options premium, risk cushion, event exposure, and setup quality into a single decision cockpit designed for fast interpretation.
+                AI Cockpit is a private-access trading command layer built to help traders evaluate opportunities with speed, structure, and discipline. It brings together market context, technical condition, opportunity quality, risk awareness, and timing conditions, and setup quality into a single decision cockpit designed for fast interpretation.
               </p>
 
               <p className="text-white/35 text-sm leading-relaxed max-w-2xl mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
@@ -527,10 +524,10 @@ function DashboardContent() {
 
             <div className="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {[
-                { tag: "CONTEXT", title: "Market Context", desc: "Reads the broader environment before a trade idea is evaluated. Bias, volatility regime, and breadth in one glance." },
+                { tag: "CONTEXT", title: "Market Context", desc: "Reads the broader environment before a trade idea is evaluated. Bias, volatility regime, and market conditions in one glance." },
                 { tag: "TECHNICAL", title: "Technical Condition", desc: "Frames trend, structure, momentum, support, and risk zones. Filters out obvious breakdowns." },
-                { tag: "OPTIONS", title: "Options Opportunity", desc: "Highlights contracts with meaningful premium and tradable liquidity. Minimum $150/contract threshold enforced." },
-                { tag: "RISK", title: "Risk Cushion", desc: "Measures distance, delta, support buffer, and event exposure before any action is considered." },
+                { tag: "OPTIONS", title: "Options Opportunity", desc: "Identifies contracts with meaningful income quality and tradable liquidity. Minimum quality gates are applied automatically." },
+                { tag: "RISK", title: "Risk Cushion", desc: "Measures directional cushion, support structure, and event exposure before any action is considered." },
                 { tag: "DECISION", title: "Decision Readiness", desc: "Turns scattered signals into a clean read: act, wait, avoid, or review. One cockpit, one decision." },
               ].map((item, i) => (
                 <div key={i} className={`relative bg-[#10151d] border border-white/5 rounded-xl p-6 hover:border-[#00e5a0]/20 transition-all group ${i === 4 ? "sm:col-span-2 lg:col-span-1 sm:max-w-md sm:mx-auto lg:max-w-none" : ""}`}>
@@ -994,7 +991,7 @@ function DashboardContent() {
                       </span>
                       {/* Verdict + Near Tradable badge */}
                       <div className="flex items-center gap-1.5">
-                        {nearTradable && (
+                        {false && nearTradable && (
                           <span
                             className="text-[7px] font-bold tracking-wider px-1.5 py-0.5 rounded-full"
                             style={{

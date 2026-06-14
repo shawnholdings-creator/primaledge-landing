@@ -483,13 +483,13 @@ function DashboardBody({ data }: { data: SentimentData | null }) {
               MARKET DETAILS
             </div>
             <div className="grid grid-cols-2 gap-2">
-              <StateCell title="OVERALL TREND" label={ms.idx_trend.label} sub={ms.idx_trend.value !== undefined ? `Score: ${ms.idx_trend.value}` : undefined} color={ms.idx_trend.color} />
-              <StateCell title="BREADTH" label={`${ms.breadth.value}/${ms.breadth.total}`} color={ms.breadth.color} />
+              <StateCell title="OVERALL TREND" label={ms.idx_trend.label} color={ms.idx_trend.color} />
+              <StateCell title="BREADTH" label={ms.breadth.value !== undefined && ms.breadth.total !== undefined ? (ms.breadth.value / ms.breadth.total >= 0.7 ? "Expanding" : ms.breadth.value / ms.breadth.total >= 0.4 ? "Moderate" : "Narrow") : ms.breadth.label || "--"} color={ms.breadth.color} />
               <StateCell title="INDEX DIRECTION" label={ms.idx_now.label} sub={ms.idx_now.avg_score !== undefined ? `Avg: ${ms.idx_now.avg_score}` : undefined} color={ms.idx_now.color} />
               <StateCell title="FLOW" label={ms.flow.label} color={ms.flow.color} />
               <StateCell title="STRENGTH" label={ms.leader.label} color={ms.leader.color} />
               <StateCell title="DAY TYPE" label={ms.day_type.label} color={ms.day_type.color} />
-              <StateCell title="BACKGROUND TREND" label={ms.htf_bias.label} sub={ms.htf_bias.bull_count !== undefined ? `Bull: ${ms.htf_bias.bull_count}/4` : undefined} color={ms.htf_bias.color} />
+              <StateCell title="BACKGROUND TREND" label={ms.htf_bias.label} sub={ms.htf_bias.bull_count !== undefined ? (ms.htf_bias.bull_count >= 3 ? "Strong" : ms.htf_bias.bull_count >= 2 ? "Mixed" : "Weak") : undefined} color={ms.htf_bias.color} />
               <StateCell title="VIX" label={ms.vix.label} sub={ms.vix.value !== undefined ? `${ms.vix.value.toFixed(1)}` : undefined} color={ms.vix.color} />
               <StateCell title="EXTENSION" label={ms.extension.label} sub={ms.extension.avg_chg !== undefined ? `Avg: ${ms.extension.avg_chg > 0 ? "+" : ""}${ms.extension.avg_chg.toFixed(2)}%` : undefined} color={ms.extension.color} />
               <StateCell title="RISK" label={ms.risk.label} color={ms.risk.color} />

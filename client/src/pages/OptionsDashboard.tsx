@@ -1,5 +1,5 @@
 /* ============================================================
-   OptionsDashboard.tsx — 0/1DTE Options Prep Dashboard
+   OptionsDashboard.tsx -- Same-Day Options Prep Dashboard
    Auth: Protected by Supabase auth + user_access approval
    Purpose: Manual trade-prep reference, educational only
    ============================================================ */
@@ -329,7 +329,7 @@ function OptionsDashboardContent() {
                   OPTIONS PREP
                 </h1>
                 <p className="text-white/20 text-[10px] font-mono tracking-[0.35em] uppercase mt-1.5">
-                  0DTE / 1DTE · TRADE PREPARATION · EDUCATIONAL ONLY
+                  SAME-DAY OPTIONS · TRADE PREPARATION · EDUCATIONAL ONLY
                 </p>
               </div>
 
@@ -625,7 +625,7 @@ function OptionsDashboardContent() {
             <p className="text-white/15 text-[10px] font-mono tracking-wide max-w-2xl mx-auto leading-relaxed">
               EDUCATIONAL ANALYSIS & TRADE PREPARATION REFERENCE ONLY. NOT FINANCIAL ADVICE.
               NOT A RECOMMENDATION TO BUY, SELL, OR HOLD ANY SECURITY OR OPTIONS CONTRACT.
-              OPTIONS TRADING INVOLVES SUBSTANTIAL RISK OF LOSS. 0DTE/1DTE OPTIONS CAN EXPIRE WORTHLESS.
+              OPTIONS TRADING INVOLVES SUBSTANTIAL RISK OF LOSS. SHORT-DURATION OPTIONS CAN EXPIRE WORTHLESS.
               ALWAYS DO YOUR OWN RESEARCH AND CONSULT A LICENSED FINANCIAL ADVISOR.
             </p>
           </div>

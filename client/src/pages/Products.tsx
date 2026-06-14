@@ -53,8 +53,8 @@ const PRODUCTS = [
     tag: "LIVE",
     tagColor: "#00e5a0",
     description:
-      "Automated bi-directional scanner for weekly income opportunities. Finds conservative short put candidates on bullish names and short call candidates on bearish names — generating income in any market condition.",
-    features: ["Short puts + short calls", "100-point scoring model", "Real-time phone alerts", "Blue-chip universe only"],
+      "Automated bi-directional scanner for weekly income opportunities. Identifies conservative bullish income setups and bearish income setups with institutional-grade quality gates.",
+    features: ["Income opportunities", "100-point scoring model", "Real-time phone alerts", "Blue-chip universe only"],
     cta: "View Dashboard",
     ctaHref: "/weekly-income",
     icon: (
@@ -106,8 +106,8 @@ const PRODUCTS = [
     tag: "COMING SOON",
     tagColor: "#f59e0b",
     description:
-      "Quantify expected move, IV rank, and historical earnings drift to identify the highest-probability earnings plays. Know exactly which setups offer edge before the catalyst hits.",
-    features: ["Expected move analysis", "IV rank & percentile", "Historical drift scoring", "Pre-earnings setups"],
+      "Quantify expected move, volatility conditions, and historical earnings drift to identify the highest-probability earnings plays. Know exactly which setups offer edge before the catalyst hits.",
+    features: ["Expected range analysis", "Volatility regime analysis", "Historical drift scoring", "Pre-earnings setups"],
     cta: "Join Waitlist",
     ctaHref: "/subscribe",
     icon: (

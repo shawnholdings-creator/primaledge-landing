@@ -11,7 +11,7 @@ import PrimalEdgeLogo from "./PrimalEdgeLogo";
 const PRODUCTS_LINKS = [
   { label: "Primal Edge AI Cockpit", href: "/ai-dashboard", badge: "LIVE", badgeColor: "#00e5a0" },
   { label: "Weekly Income Dashboard", href: "/weekly-income", badge: "LIVE", badgeColor: "#00e5a0" },
-  { label: "Options Prep (0DTE)", href: "/options-prep", badge: "IN DEV", badgeColor: "#3b82f6" },
+  { label: "Options Prep", href: "/options-prep", badge: "IN DEV", badgeColor: "#3b82f6" },
   { label: "Market Sentiment", href: "/market-sentiment", badge: "LIVE", badgeColor: "#00e5a0" },
   { label: "Sectors", href: "/sectors", badge: "COMING SOON", badgeColor: "#f59e0b" },
   { label: "All Products", href: "/products", badge: null, badgeColor: "" },

@@ -1,5 +1,5 @@
 /* ============================================================
-   WeeklyIncome.tsx — Weekly Income Scanner (Short Put/Call)
+   WeeklyIncome.tsx — Weekly Income Scanner (Income Intelligence)
    Auth: Public — no login required
    Data: Fetches live scan data from GitHub Gist
    ============================================================ */
@@ -309,7 +309,7 @@ function premiumLabel(credit: number): { text: string; color: string; bg: string
   const contractValue = credit * 100;
   if (contractValue >= 500) return { text: "Juicy Premium", color: "#22c55e", bg: "rgba(34,197,94,0.12)" };
   if (contractValue >= 250) return { text: "Strong Premium", color: "#3b82f6", bg: "rgba(59,130,246,0.12)" };
-  if (contractValue >= 150) return { text: "Meets Minimum", color: "#00e5a0", bg: "rgba(0,229,160,0.12)" };
+  if (contractValue >= 1) return { text: "Qualifying", color: "#00e5a0", bg: "rgba(0,229,160,0.12)" };
   return null;
 }
 
@@ -668,20 +668,9 @@ function WeeklyIncomeContent() {
                   className="text-white/20 text-[10px] tracking-[0.35em] uppercase mt-1.5"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
-                  SHORT PUT / CALL SCANNER · PREMIUM SETUPS
+                  INCOME INTELLIGENCE · PRIVATE ACCESS
                 </p>
                 <div className="flex items-center gap-2 mt-2 flex-wrap">
-                  <span
-                    className="text-[10px] tracking-wider px-2.5 py-1 rounded-full"
-                    style={{
-                      fontFamily: "'JetBrains Mono', monospace",
-                      color: "#00e5a0",
-                      background: "rgba(0,229,160,0.08)",
-                      border: "1px solid rgba(0,229,160,0.15)",
-                    }}
-                  >
-                    MIN PREMIUM: $150/contract
-                  </span>
                   <span
                     className="text-[10px] tracking-wider px-2.5 py-1 rounded-full"
                     style={{
@@ -691,7 +680,7 @@ function WeeklyIncomeContent() {
                       border: "1px solid rgba(107,114,128,0.15)",
                     }}
                   >
-                    PUTS + CALLS
+                    PRIVATE ACCESS
                   </span>
                 </div>
               </div>
@@ -786,7 +775,7 @@ function WeeklyIncomeContent() {
               </p>
 
               <p className="text-white/45 text-base sm:text-lg leading-relaxed mb-4 max-w-2xl mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                Weekly Income Scanner is a private-access income intelligence layer built to surface high-quality option-selling opportunities from a curated universe of liquid, premium names. It evaluates credit quality, delta, distance from price, liquidity, trend condition, event risk, and risk-adjusted reward so traders can focus on the contracts that deserve review.
+                Weekly Income Scanner is a private-access income intelligence layer built to surface high-quality option-selling opportunities from a curated universe of liquid, premium names. It evaluates credit quality, opportunity quality, risk cushion, and timing conditions, trend condition, event risk, and risk-adjusted reward so traders can focus on the contracts that deserve review.
               </p>
 
               <p className="text-white/35 text-sm leading-relaxed max-w-2xl mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
@@ -807,8 +796,8 @@ function WeeklyIncomeContent() {
 
             <div className="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {[
-                { tag: "PREMIUM", title: "Premium Strength", desc: "Prioritizes contracts that meet or exceed the minimum income threshold. No contract below $150 per contract is surfaced as tradable." },
-                { tag: "DELTA", title: "Conservative Delta", desc: "Filters for controlled probability exposure instead of reckless premium chasing. Preferred range: -0.18 to -0.25 delta." },
+                { tag: "PREMIUM", title: "Premium Strength", desc: "Prioritizes contracts that meet or exceed a meaningful income quality threshold before being surfaced as tradable." },
+                { tag: "QUALITY", title: "Opportunity Quality", desc: "Filters for high-probability setups with favorable risk-reward characteristics and appropriate directional cushion." },
                 { tag: "LIQUIDITY", title: "Liquidity Quality", desc: "Checks spread, open interest, and tradability before a contract is surfaced. Wide spreads are flagged or rejected." },
                 { tag: "RISK", title: "Risk Cushion", desc: "Evaluates OTM distance, ATR buffer, support location, and price cushion before any contract qualifies." },
                 { tag: "EVENT", title: "Event Awareness", desc: "Flags earnings and known risk events before expiration. No candidate with confirmed earnings before expiry is marked tradable." },
@@ -901,8 +890,8 @@ function WeeklyIncomeContent() {
                 <span>Strike</span>
                 <span>Credit</span>
                 <span className="text-center">Score</span>
-                <span className="text-center">DTE</span>
-                <span className="text-center">Delta</span>
+                <span className="text-center">TIMING</span>
+                <span className="text-center">Cushion</span>
                 <span className="text-right">Price</span>
                 <span className="w-5" />
               </div>
@@ -1069,7 +1058,7 @@ function WeeklyIncomeContent() {
                         </div>
                       </div>
 
-                      {/* DTE */}
+                      {/* Timing */}
                       <span
                         className="text-center text-sm text-white/60"
                         style={{ fontFamily: "'JetBrains Mono', monospace" }}
@@ -1077,7 +1066,7 @@ function WeeklyIncomeContent() {
                         {c.dte}d
                       </span>
 
-                      {/* Delta */}
+                      {/* Cushion */}
                       <span
                         className="text-center text-sm text-white/50"
                         style={{ fontFamily: "'JetBrains Mono', monospace" }}
@@ -1198,7 +1187,7 @@ function WeeklyIncomeContent() {
                             </svg>
                           </div>
                         </div>
-                        {/* Bottom row: strike, credit, dte, delta */}
+                        {/* Bottom row: strike, credit, timing, quality */}
                         <div className="flex flex-wrap items-center justify-between gap-y-1.5">
                           <div className="flex items-center gap-2 flex-wrap">
                             <span
@@ -1241,13 +1230,13 @@ function WeeklyIncomeContent() {
                               className="text-xs text-white/40"
                               style={{ fontFamily: "'JetBrains Mono', monospace" }}
                             >
-                              Δ{c.delta.toFixed(2)}
+                              {c.delta.toFixed(2)}
                             </span>
                             <span
                               className="text-xs text-white/40"
                               style={{ fontFamily: "'JetBrains Mono', monospace" }}
                             >
-                              Score {c.total_score}
+                              Quality {c.total_score}
                             </span>
                           </div>
                         </div>
@@ -1376,7 +1365,7 @@ function WeeklyIncomeContent() {
                   className="text-[8px] text-white/35"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
-                  Short premium approach based on directional bias
+                  Income approach based on directional bias
                 </span>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -1384,12 +1373,12 @@ function WeeklyIncomeContent() {
                   {
                     label: "PUT",
                     color: "#00e5a0",
-                    desc: "Sell OTM put on bullish names",
+                    desc: "Bullish income setup on strong names",
                   },
                   {
                     label: "CALL",
                     color: "#ef4444",
-                    desc: "Sell OTM call on bearish names",
+                    desc: "Bearish income setup on weak names",
                   },
                 ].map((v) => (
                   <div
