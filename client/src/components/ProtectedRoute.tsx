@@ -162,7 +162,10 @@ function LoginForm({ product }: { product: keyof ProductAccess }) {
   };
 
   /* Pre-login curiosity message copy per product */
-  const curiosity: Record<keyof ProductAccess, { badge: string; headline: string; body: string }> = {
+  const curiosity: Record<keyof ProductAccess, {
+    badge: string; headline: string; body: string;
+    detail?: string; tags?: string[];
+  }> = {
     sentiment: {
       badge: "● MARKET INTELLIGENCE — DAILY",
       headline: "What if the first thing you saw every morning told you exactly what kind of day the market is setting up for?",
@@ -170,8 +173,10 @@ function LoginForm({ product }: { product: keyof ProductAccess }) {
     },
     income: {
       badge: "● INCOME INTELLIGENCE — PRIVATE ACCESS",
-      headline: "Not every income opportunity is worth the same attention.",
+      headline: "Not every income opportunity\nis worth the same attention.",
       body: "The Weekly Income Scanner ranks what deserves your time this week — and keeps everything else out of your way.",
+      detail: "Members receive the exact ticker, expiry, and strike to evaluate — not a vague signal. No interpretation required. No chart hunting. Works with any broker, any platform.",
+      tags: ["EXACT STRIKE", "EXACT EXPIRY", "PLATFORM INDEPENDENT"],
     },
     cockpit: {
       badge: "● AI COCKPIT — PRIVATE ACCESS",
@@ -220,23 +225,24 @@ function LoginForm({ product }: { product: keyof ProductAccess }) {
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
               fontWeight: 700,
-              fontSize: "clamp(1.6rem, 4vw, 2.2rem)",
+              fontSize: "clamp(1.5rem, 3.5vw, 2rem)",
               color: "#ffffff",
               letterSpacing: "-0.02em",
-              lineHeight: 1.2,
+              lineHeight: 1.25,
+              whiteSpace: "pre-line",
               animation: "preSlideUp 0.5s ease-out 0.2s both",
             }}
           >
             {cm.headline}
           </h2>
 
-          {/* Body */}
+          {/* Subline */}
           <p
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
               fontWeight: 400,
               fontSize: "1rem",
-              color: "rgba(255,255,255,0.58)",
+              color: "rgba(255,255,255,0.45)",
               lineHeight: 1.7,
               maxWidth: "480px",
               margin: "20px auto 0",
@@ -245,6 +251,57 @@ function LoginForm({ product }: { product: keyof ProductAccess }) {
           >
             {cm.body}
           </p>
+
+          {/* Detail Block (income-specific) */}
+          {cm.detail && (
+            <div
+              style={{
+                maxWidth: "520px",
+                margin: "24px auto 32px",
+                borderLeft: "2px solid rgba(0,229,160,0.35)",
+                padding: "16px 20px",
+                background: "rgba(0,229,160,0.04)",
+                borderRadius: "0 8px 8px 0",
+                textAlign: "left",
+                animation: "preFadeIn 0.4s ease-out 0.35s both",
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontWeight: 400,
+                  fontSize: "0.92rem",
+                  color: "rgba(255,255,255,0.6)",
+                  lineHeight: 1.7,
+                  margin: 0,
+                }}
+              >
+                {cm.detail}
+              </p>
+              {cm.tags && (
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "14px" }}>
+                  {cm.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      style={{
+                        fontFamily: "'JetBrains Mono', monospace",
+                        fontSize: "0.62rem",
+                        letterSpacing: "0.1em",
+                        color: "#00e5a0",
+                        border: "1px solid rgba(0,229,160,0.25)",
+                        background: "rgba(0,229,160,0.06)",
+                        padding: "4px 10px",
+                        borderRadius: "4px",
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* CTA */}
           <div style={{ marginTop: "32px", animation: "preFadeIn 0.4s ease-out 0.4s both" }}>
