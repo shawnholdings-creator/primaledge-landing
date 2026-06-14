@@ -161,11 +161,130 @@ function LoginForm({ product }: { product: keyof ProductAccess }) {
     setLoading(false);
   };
 
+  /* Pre-login curiosity message copy per product */
+  const curiosity: Record<keyof ProductAccess, { badge: string; headline: string; body: string }> = {
+    sentiment: {
+      badge: "● MARKET INTELLIGENCE — DAILY",
+      headline: "What if the first thing you saw every morning told you exactly what kind of day the market is setting up for?",
+      body: "That is what the Market Sentiment Engine does.",
+    },
+    income: {
+      badge: "● INCOME INTELLIGENCE — PRIVATE ACCESS",
+      headline: "Not every income opportunity is worth the same attention.",
+      body: "The Weekly Income Scanner ranks what deserves your time this week — and keeps everything else out of your way.",
+    },
+    cockpit: {
+      badge: "● AI COCKPIT — PRIVATE ACCESS",
+      headline: "What if every signal came pre-ranked, pre-scored, and ready to review in seconds?",
+      body: "The AI Cockpit evaluates the full market so you can focus on the setups that matter most.",
+    },
+  };
+
+  const cm = curiosity[product];
+
   return (
     <div className="min-h-screen bg-[#0a0d12] text-white flex flex-col">
       <Navbar />
-      <div className="flex-1 flex items-center justify-center px-4">
-        <div className="text-center max-w-md w-full">
+      <div className="flex-1 flex flex-col items-center justify-center px-4">
+
+        {/* ── Pre-Login Curiosity Message ── */}
+        <div
+          className="w-full text-center"
+          style={{ maxWidth: "560px", padding: "48px 24px 0" }}
+        >
+          {/* Badge */}
+          <div
+            className="inline-flex items-center gap-2 rounded-full mb-6"
+            style={{
+              border: "1px solid rgba(0,229,160,0.3)",
+              padding: "4px 12px",
+              borderRadius: "20px",
+              animation: "preFadeIn 0.4s ease-out 0.1s both",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: "0.65rem",
+                color: "#00e5a0",
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
+              }}
+            >
+              {cm.badge}
+            </span>
+          </div>
+
+          {/* Headline */}
+          <h2
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontWeight: 700,
+              fontSize: "clamp(1.6rem, 4vw, 2.2rem)",
+              color: "#ffffff",
+              letterSpacing: "-0.02em",
+              lineHeight: 1.2,
+              animation: "preSlideUp 0.5s ease-out 0.2s both",
+            }}
+          >
+            {cm.headline}
+          </h2>
+
+          {/* Body */}
+          <p
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontWeight: 400,
+              fontSize: "1rem",
+              color: "rgba(255,255,255,0.58)",
+              lineHeight: 1.7,
+              maxWidth: "480px",
+              margin: "20px auto 0",
+              animation: "preFadeIn 0.4s ease-out 0.3s both",
+            }}
+          >
+            {cm.body}
+          </p>
+
+          {/* CTA */}
+          <div style={{ marginTop: "32px", animation: "preFadeIn 0.4s ease-out 0.4s both" }}>
+            <Link href="/subscribe">
+              <button
+                className="transition-all"
+                style={{
+                  background: "#00e5a0",
+                  color: "#0a0d12",
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontWeight: 700,
+                  fontSize: "0.9rem",
+                  padding: "14px 36px",
+                  borderRadius: "6px",
+                  minHeight: "48px",
+                  width: "100%",
+                  maxWidth: "280px",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "#00ffb3";
+                  e.currentTarget.style.transform = "scale(1.02)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "#00e5a0";
+                  e.currentTarget.style.transform = "scale(1)";
+                }}
+              >
+                Request Access
+              </button>
+            </Link>
+          </div>
+
+          {/* Separator */}
+          <div style={{ margin: "40px 0 32px", height: "1px", background: "rgba(255,255,255,0.08)" }} />
+        </div>
+
+        {/* ── Login Form ── */}
+        <div className="text-center max-w-md w-full" style={{ paddingBottom: "48px" }}>
           {/* Lock Icon */}
           <div className="flex justify-center mb-8">
             <div className="p-6 bg-[#00e5a0]/10 border border-[#00e5a0]/20 rounded-2xl">
@@ -275,6 +394,21 @@ function LoginForm({ product }: { product: keyof ProductAccess }) {
           </p>
         </div>
       </div>
+
+      {/* Pre-message animation keyframes */}
+      <style>{`
+        @keyframes preFadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes preSlideUp {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          [style*="animation"] { animation: none !important; }
+        }
+      `}</style>
     </div>
   );
 }
