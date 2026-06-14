@@ -184,48 +184,65 @@ function Hero() {
           A private intelligence platform that reads the market before you choose the trade — so you spend less time searching and more time deciding.
         </p>
 
-        {/* Stats Row */}
+        {/* Product Navigation Row */}
         <div
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-0"
-          style={{ marginTop: "36px", animation: "heroFadeIn 0.5s ease-out 0.55s both" }}
+          className="flex flex-col sm:flex-row items-center justify-center"
+          style={{ marginTop: "32px", gap: "0" }}
         >
           {[
-            { top: "LIVE SIGNALS", bottom: "DELIVERED DAILY" },
-            { top: "RANKED QUALITY", bottom: "SIGNAL FILTERED" },
-            { top: "PRIVATE ACCESS", bottom: "MEMBERS ONLY" },
+            { label: "AI COCKPIT", route: "/ai-dashboard" },
+            { label: "MARKET SENTIMENT", route: "/market-sentiment" },
+            { label: "WEEKLY INCOME", route: "/weekly-income" },
           ].map((item, i) => (
-            <div key={i} className="flex items-center">
+            <div key={i} className="flex items-center" style={{ animation: `heroFadeIn 0.4s ease-out ${0.6 + i * 0.08}s both` }}>
               {i > 0 && (
-                <div
-                  className="hidden sm:block mx-5"
-                  style={{ width: "1px", height: "32px", background: "rgba(255,255,255,0.1)" }}
-                />
+                <span
+                  className="hidden sm:inline-block mx-4"
+                  style={{ color: "rgba(255,255,255,0.15)", fontSize: "0.7rem", userSelect: "none" }}
+                >
+                  |
+                </span>
               )}
-              <div className="text-center">
-                <div
+              <Link
+                href={item.route}
+                className="group flex items-center gap-1.5 transition-colors"
+                style={{
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontWeight: 500,
+                  fontSize: "0.65rem",
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "rgba(255,255,255,0.5)",
+                  textDecoration: "none",
+                  padding: "10px 0",
+                  minHeight: "44px",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  cursor: "pointer",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = "rgba(255,255,255,0.9)";
+                  const arrow = e.currentTarget.querySelector('[data-arrow]') as HTMLElement;
+                  if (arrow) arrow.style.transform = "translateX(3px)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = "rgba(255,255,255,0.5)";
+                  const arrow = e.currentTarget.querySelector('[data-arrow]') as HTMLElement;
+                  if (arrow) arrow.style.transform = "translateX(0)";
+                }}
+              >
+                {item.label}
+                <span
+                  data-arrow
                   style={{
-                    fontFamily: "'JetBrains Mono', monospace",
-                    fontSize: "0.65rem",
                     color: "#00e5a0",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.14em",
-                    marginBottom: "4px",
+                    transition: "transform 180ms ease-out",
+                    display: "inline-block",
                   }}
                 >
-                  {item.top}
-                </div>
-                <div
-                  style={{
-                    fontFamily: "'Space Grotesk', sans-serif",
-                    fontSize: "0.72rem",
-                    color: "rgba(255,255,255,0.4)",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.08em",
-                  }}
-                >
-                  {item.bottom}
-                </div>
-              </div>
+                  →
+                </span>
+              </Link>
             </div>
           ))}
         </div>
@@ -289,6 +306,59 @@ function Hero() {
             }}
           >
             Request Access
+          </Link>
+        </div>
+
+        {/* Secondary explore link */}
+        <div
+          className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-1.5"
+          style={{ marginTop: "20px", animation: "heroFadeIn 0.4s ease-out 0.75s both" }}
+        >
+          <span
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontWeight: 400,
+              fontSize: "0.85rem",
+              color: "rgba(255,255,255,0.38)",
+            }}
+          >
+            Already curious about what's inside?
+          </span>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-1 transition-all"
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontWeight: 500,
+              fontSize: "0.85rem",
+              color: "#00e5a0",
+              opacity: 0.85,
+              textDecoration: "none",
+              minHeight: "44px",
+              display: "inline-flex",
+              alignItems: "center",
+              cursor: "pointer",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = "#00ffb3";
+              e.currentTarget.style.opacity = "1";
+              const arrow = e.currentTarget.querySelector('[data-explore-arrow]') as HTMLElement;
+              if (arrow) arrow.style.transform = "translateX(3px)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = "#00e5a0";
+              e.currentTarget.style.opacity = "0.85";
+              const arrow = e.currentTarget.querySelector('[data-explore-arrow]') as HTMLElement;
+              if (arrow) arrow.style.transform = "translateX(0)";
+            }}
+          >
+            Explore the full product suite
+            <span
+              data-explore-arrow
+              style={{ display: "inline-block", transition: "transform 160ms ease-out" }}
+            >
+              →
+            </span>
           </Link>
         </div>
       </div>
