@@ -82,11 +82,11 @@ interface LivePrice {
 /* ─── Loading Skeleton ─────────────────────────────────────── */
 function LoadingSkeleton() {
   return (
-    <div className="min-h-screen bg-[#0a0e14] text-white">
+    <div className="min-h-screen bg-[#0a0d12] text-white">
       <Navbar />
       <section className="pt-32 pb-12 px-4">
         <div className="container max-w-4xl mx-auto">
-          <div className="bg-[#0d1520] border border-white/10 rounded-2xl overflow-hidden">
+          <div className="bg-[#0d1118] border border-white/10 rounded-2xl overflow-hidden">
             <div className="flex items-center gap-2 px-5 py-3 border-b border-white/10">
               <div className="w-3 h-3 rounded-full bg-red-500/40 animate-pulse" />
               <div className="w-3 h-3 rounded-full bg-yellow-500/40 animate-pulse" />
@@ -157,7 +157,7 @@ function ArchivePanel({
 
       {open && (
         <div
-          className="mt-2 bg-[#0d1520] border border-white/10 rounded-xl overflow-hidden"
+          className="mt-2 bg-[#0d1118] border border-white/10 rounded-xl overflow-hidden"
           style={{ scrollbarWidth: "thin", scrollbarColor: "rgba(255,255,255,0.1) transparent" }}
         >
           {/* Archive Search */}
@@ -175,7 +175,7 @@ function ArchivePanel({
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Filter dates…"
-                className="w-full bg-white/[0.03] border border-white/5 rounded-lg pl-8 pr-7 py-1.5 text-[11px] text-white/70 placeholder-white/15 focus:outline-none focus:border-[#00d4aa]/30 transition-colors"
+                className="w-full bg-white/[0.03] border border-white/5 rounded-lg pl-8 pr-7 py-1.5 text-[11px] text-white/70 placeholder-white/15 focus:outline-none focus:border-[#00e5a0]/30 transition-colors"
                 style={{ fontFamily: "'JetBrains Mono', monospace" }}
               />
               {search && (
@@ -228,15 +228,15 @@ function ArchivePanel({
                   onClick={() => onSelect(h.version)}
                   className={`w-full flex items-center gap-3 px-4 py-2 text-left hover:bg-white/[0.04] transition-colors border-b border-white/5 last:border-b-0 ${
                     isActive ? "bg-white/[0.04]" : ""
-                  } ${isHighlighted ? "bg-[#00d4aa]/[0.04]" : ""}`}
+                  } ${isHighlighted ? "bg-[#00e5a0]/[0.04]" : ""}`}
                 >
                   <div
                     className="w-1.5 h-1.5 rounded-full shrink-0"
                     style={{
                       backgroundColor: isActive
-                        ? "#00d4aa"
+                        ? "#00e5a0"
                         : isHighlighted
-                        ? "#00d4aa"
+                        ? "#00e5a0"
                         : "rgba(255,255,255,0.15)",
                     }}
                   />
@@ -245,9 +245,9 @@ function ArchivePanel({
                     style={{
                       fontFamily: "'JetBrains Mono', monospace",
                       color: isActive
-                        ? "#00d4aa"
+                        ? "#00e5a0"
                         : isHighlighted
-                        ? "#00d4aa"
+                        ? "#00e5a0"
                         : "rgba(255,255,255,0.3)",
                     }}
                   >
@@ -416,7 +416,7 @@ function DashboardContent() {
   const gradeStyle: Record<string, { bg: string; text: string }> = {
     A: { bg: "#22c55e", text: "#fff" },
     B: { bg: "#3b82f6", text: "#fff" },
-    C: { bg: "#f59e0b", text: "#0a0e14" },
+    C: { bg: "#f59e0b", text: "#0a0d12" },
     D: { bg: "#ff6b35", text: "#fff" },
   };
 
@@ -476,7 +476,7 @@ function DashboardContent() {
               </div>
               <div className={`cmd-stat text-center ${tradable.length > 0 ? 'cmd-stat-active' : ''}`}>
                 <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Active</div>
-                <div className="text-lg font-bold font-mono leading-none" style={{ color: tradable.length > 0 ? '#00d4aa' : 'rgba(255,255,255,0.2)', textShadow: tradable.length > 0 ? '0 0 12px rgba(0,212,170,0.3)' : 'none' }}>{tradable.length}</div>
+                <div className="text-lg font-bold font-mono leading-none" style={{ color: tradable.length > 0 ? '#00e5a0' : 'rgba(255,255,255,0.2)', textShadow: tradable.length > 0 ? '0 0 12px rgba(0,229,160,0.3)' : 'none' }}>{tradable.length}</div>
               </div>
               <div className={`cmd-stat text-center ${nearCount > 0 ? 'cmd-stat-warn' : ''}`}>
                 <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Near Trade</div>
@@ -496,12 +496,12 @@ function DashboardContent() {
           {/* ── PRODUCT INTRO COPY ── */}
           <section className="pb-8 sm:pb-12">
             <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-flex items-center gap-2 font-mono text-[10px] text-[#00d4aa]/70 tracking-widest bg-[#00d4aa]/8 border border-[#00d4aa]/15 rounded-full px-4 py-1.5 mb-6">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#00d4aa] animate-pulse" />
+              <div className="inline-flex items-center gap-2 font-mono text-[10px] text-[#00e5a0]/70 tracking-widest bg-[#00e5a0]/8 border border-[#00e5a0]/15 rounded-full px-4 py-1.5 mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00e5a0] animate-pulse" />
                 PRIVATE ACCESS · TRADING COMMAND LAYER
               </div>
 
-              <p className="font-['Space_Grotesk'] text-lg sm:text-xl text-[#00d4aa]/80 mb-6">
+              <p className="font-['Space_Grotesk'] text-lg sm:text-xl text-[#00e5a0]/80 mb-6">
                 From market noise to trade-ready intelligence.
               </p>
 
@@ -519,7 +519,7 @@ function DashboardContent() {
           {/* ── COMMAND LAYERS ── */}
           <section className="pb-12 sm:pb-16">
             <div className="text-center mb-10">
-              <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">INTELLIGENCE DIMENSIONS</p>
+              <p className="font-mono text-xs text-[#00e5a0] tracking-widest mb-3">INTELLIGENCE DIMENSIONS</p>
               <h2 className="font-['Space_Grotesk'] font-bold text-2xl sm:text-3xl text-white">
                 Five Command Layers
               </h2>
@@ -533,10 +533,10 @@ function DashboardContent() {
                 { tag: "RISK", title: "Risk Cushion", desc: "Measures distance, delta, support buffer, and event exposure before any action is considered." },
                 { tag: "DECISION", title: "Decision Readiness", desc: "Turns scattered signals into a clean read: act, wait, avoid, or review. One cockpit, one decision." },
               ].map((item, i) => (
-                <div key={i} className={`relative bg-[#111820] border border-white/5 rounded-xl p-6 hover:border-[#00d4aa]/20 transition-all group ${i === 4 ? "sm:col-span-2 lg:col-span-1 sm:max-w-md sm:mx-auto lg:max-w-none" : ""}`}>
-                  <span className="font-mono text-[9px] text-[#00d4aa]/50 tracking-widest bg-[#00d4aa]/5 border border-[#00d4aa]/10 rounded px-2 py-0.5 mb-4 inline-block">{item.tag}</span>
+                <div key={i} className={`relative bg-[#10151d] border border-white/5 rounded-xl p-6 hover:border-[#00e5a0]/20 transition-all group ${i === 4 ? "sm:col-span-2 lg:col-span-1 sm:max-w-md sm:mx-auto lg:max-w-none" : ""}`}>
+                  <span className="font-mono text-[9px] text-[#00e5a0]/50 tracking-widest bg-[#00e5a0]/5 border border-[#00e5a0]/10 rounded px-2 py-0.5 mb-4 inline-block">{item.tag}</span>
                   <div className="absolute top-5 right-5 font-['Space_Grotesk'] text-4xl font-bold text-white/[0.03]">{String(i + 1).padStart(2, "0")}</div>
-                  <h3 className="font-['Space_Grotesk'] font-semibold text-base text-white mb-3 group-hover:text-[#00d4aa] transition-colors">{item.title}</h3>
+                  <h3 className="font-['Space_Grotesk'] font-semibold text-base text-white mb-3 group-hover:text-[#00e5a0] transition-colors">{item.title}</h3>
                   <p className="text-white/40 text-sm leading-relaxed">{item.desc}</p>
                 </div>
               ))}
@@ -560,7 +560,7 @@ function DashboardContent() {
                   <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
                 </div>
                 <span
-                  className="text-xs text-[#00d4aa] tracking-[0.2em] uppercase font-bold"
+                  className="text-xs text-[#00e5a0] tracking-[0.2em] uppercase font-bold"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
                   Active Signals
@@ -663,7 +663,7 @@ function DashboardContent() {
                   <p className="text-white/15 text-xs">{error}</p>
                   <button
                     onClick={fetchData}
-                    className="mt-4 text-xs text-[#00d4aa] font-mono hover:underline"
+                    className="mt-4 text-xs text-[#00e5a0] font-mono hover:underline"
                   >
                     Retry →
                   </button>
@@ -830,7 +830,7 @@ function DashboardContent() {
                 className="text-xs"
                 style={{
                   fontFamily: "'JetBrains Mono', monospace",
-                  color: tradable.length > 0 ? "#00d4aa" : "rgba(255,255,255,0.2)",
+                  color: tradable.length > 0 ? "#00e5a0" : "rgba(255,255,255,0.2)",
                 }}
               >
                 {tradable.length > 0 ? `${tradable.length} tradable` : "0 tradable"}
@@ -840,14 +840,14 @@ function DashboardContent() {
             {/* ── LEGEND: Conviction Grade ── */}
             <div className="px-4 sm:px-6 py-3 border-t border-white/5">
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-[9px] text-[#00d4aa] tracking-widest uppercase font-bold" style={{ fontFamily: "'JetBrains Mono', monospace" }}>CONVICTION</span>
+                <span className="text-[9px] text-[#00e5a0] tracking-widest uppercase font-bold" style={{ fontFamily: "'JetBrains Mono', monospace" }}>CONVICTION</span>
                 <span className="text-[8px] text-white/35" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Quality score from STRUCT + MOMT + RS pillars</span>
               </div>
               <div className="flex flex-wrap gap-2">
                 {[
                   { grade: "A", label: "Elite", score: "75+", bg: "#22c55e", text: "#fff", where: "ENTRY" },
                   { grade: "B", label: "Good", score: "50–74", bg: "#3b82f6", text: "#fff", where: "ENTRY" },
-                  { grade: "C", label: "Early", score: "30–49", bg: "#f59e0b", text: "#0a0e14", where: "FORMING" },
+                  { grade: "C", label: "Early", score: "30–49", bg: "#f59e0b", text: "#0a0d12", where: "FORMING" },
                   { grade: "D", label: "Hot", score: "20–34", bg: "#ff6b35", text: "#fff", where: "FORMING" },
                 ].map((g) => (
                   <div key={g.grade} className="flex items-center gap-1.5 px-2 py-1 rounded-full" style={{ background: `${g.bg}08`, border: `1px solid ${g.bg}15` }}>
@@ -867,8 +867,8 @@ function DashboardContent() {
                       className="text-[7px] font-bold tracking-wider px-1 py-px rounded"
                       style={{
                         fontFamily: "'JetBrains Mono', monospace",
-                        color: g.where === "MAIN" ? "#00d4aa" : "#f59e0b",
-                        background: g.where === "MAIN" ? "rgba(0,212,170,0.08)" : "rgba(245,158,11,0.08)",
+                        color: g.where === "MAIN" ? "#00e5a0" : "#f59e0b",
+                        background: g.where === "MAIN" ? "rgba(0,229,160,0.08)" : "rgba(245,158,11,0.08)",
                       }}
                     >
                       {g.where}
@@ -881,7 +881,7 @@ function DashboardContent() {
             {/* ── LEGEND: Setup Type ── */}
             <div className="px-4 sm:px-6 py-3 border-t border-white/5">
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-[9px] text-[#00d4aa] tracking-widest uppercase font-bold" style={{ fontFamily: "'JetBrains Mono', monospace" }}>SETUP</span>
+                <span className="text-[9px] text-[#00e5a0] tracking-widest uppercase font-bold" style={{ fontFamily: "'JetBrains Mono', monospace" }}>SETUP</span>
                 <span className="text-[8px] text-white/35" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Pattern detected by the AI Cockpit engine</span>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -938,7 +938,7 @@ function DashboardContent() {
               <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
                 <div className="flex items-center gap-2">
                   <span
-                    className="text-[11px] text-[#00d4aa] tracking-widest uppercase font-bold"
+                    className="text-[11px] text-[#00e5a0] tracking-widest uppercase font-bold"
                     style={{ fontFamily: "'JetBrains Mono', monospace" }}
                   >
                     Forming
@@ -1064,7 +1064,7 @@ function DashboardContent() {
           </div>
 
           {/* ── DISCLAIMER ── */}
-          <div className="mt-12 mb-8 max-w-4xl mx-auto bg-[#111820] border border-white/5 rounded-xl px-5 sm:px-6 py-4 flex items-start gap-3">
+          <div className="mt-12 mb-8 max-w-4xl mx-auto bg-[#10151d] border border-white/5 rounded-xl px-5 sm:px-6 py-4 flex items-start gap-3">
             <svg className="w-4 h-4 text-[#f59e0b] shrink-0 mt-0.5" fill="none" viewBox="0 0 16 16">
               <path d="M8 2l1.5 4.5H14l-3.7 2.7 1.4 4.3L8 11 4.3 13.5l1.4-4.3L2 6.5h4.5z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
             </svg>
@@ -1076,7 +1076,7 @@ function DashboardContent() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#0d1520] border-t border-white/5 py-10">
+      <footer className="bg-[#0d1118] border-t border-white/5 py-10">
         <div className="container flex flex-col sm:flex-row items-center justify-between gap-4">
           <Link href="/">
             <PrimalEdgeLogo size="md" />

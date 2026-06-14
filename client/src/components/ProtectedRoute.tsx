@@ -43,11 +43,11 @@ export default function ProtectedRoute({ children, product = "cockpit" }: Protec
   // ─── Loading ────────────────────────────────────────────────
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0e14] text-white flex flex-col">
+      <div className="min-h-screen bg-[#0a0d12] text-white flex flex-col">
         <Navbar />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
-            <div className="w-8 h-8 border-2 border-[#00d4aa] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+            <div className="w-8 h-8 border-2 border-[#00e5a0] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
             <p className="text-white/30 text-sm font-mono">Authenticating...</p>
           </div>
         </div>
@@ -63,7 +63,7 @@ export default function ProtectedRoute({ children, product = "cockpit" }: Protec
   // ─── Authenticated but NOT approved for this product ───────
   if (isApproved === false) {
     return (
-      <div className="min-h-screen bg-[#0a0e14] text-white flex flex-col">
+      <div className="min-h-screen bg-[#0a0d12] text-white flex flex-col">
         <Navbar />
         <div className="flex-1 flex items-center justify-center px-4">
           <div className="text-center max-w-md w-full">
@@ -85,10 +85,10 @@ export default function ProtectedRoute({ children, product = "cockpit" }: Protec
               Access Pending
             </h1>
             <p className="text-white/40 text-sm mb-1">
-              <span className="text-[#00d4aa]">{label.title}</span>
+              <span className="text-[#00e5a0]">{label.title}</span>
             </p>
             <p className="text-white/40 text-sm mb-3">
-              Your account <span className="text-[#00d4aa]">{user.email}</span> has been registered successfully.
+              Your account <span className="text-[#00e5a0]">{user.email}</span> has been registered successfully.
             </p>
             <p className="text-white/30 text-sm mb-8">
               Your access to {label.title} is currently under review. You'll receive a confirmation email once approved. This typically takes less than 24 hours.
@@ -96,7 +96,7 @@ export default function ProtectedRoute({ children, product = "cockpit" }: Protec
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link href="/subscribe">
-                <button className="bg-[#00d4aa] text-[#0a0e14] font-bold text-sm px-8 py-3 rounded-xl hover:bg-[#00d4aa]/90 transition-all">
+                <button className="bg-[#00e5a0] text-[#0a0d12] font-bold text-sm px-8 py-3 rounded-xl hover:bg-[#00e5a0]/90 transition-all">
                   Request Priority Access →
                 </button>
               </Link>
@@ -110,7 +110,7 @@ export default function ProtectedRoute({ children, product = "cockpit" }: Protec
 
             <p className="text-white/20 text-xs mt-8">
               Need help?{" "}
-              <a href="mailto:support@primaledge.io" className="text-[#00d4aa]/50 hover:text-[#00d4aa] transition-colors">
+              <a href="mailto:support@primaledge.io" className="text-[#00e5a0]/50 hover:text-[#00e5a0] transition-colors">
                 support@primaledge.io
               </a>
             </p>
@@ -162,18 +162,18 @@ function LoginForm({ product }: { product: keyof ProductAccess }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0e14] text-white flex flex-col">
+    <div className="min-h-screen bg-[#0a0d12] text-white flex flex-col">
       <Navbar />
       <div className="flex-1 flex items-center justify-center px-4">
         <div className="text-center max-w-md w-full">
           {/* Lock Icon */}
           <div className="flex justify-center mb-8">
-            <div className="p-6 bg-[#00d4aa]/10 border border-[#00d4aa]/20 rounded-2xl">
+            <div className="p-6 bg-[#00e5a0]/10 border border-[#00e5a0]/20 rounded-2xl">
               <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                <rect x="8" y="22" width="32" height="22" rx="4" stroke="#00d4aa" strokeWidth="2.5" />
-                <path d="M16 22V14a8 8 0 0 1 16 0v8" stroke="#00d4aa" strokeWidth="2.5" strokeLinecap="round" />
-                <circle cx="24" cy="33" r="3" fill="#00d4aa" />
-                <path d="M24 36v3" stroke="#00d4aa" strokeWidth="2.5" strokeLinecap="round" />
+                <rect x="8" y="22" width="32" height="22" rx="4" stroke="#00e5a0" strokeWidth="2.5" />
+                <path d="M16 22V14a8 8 0 0 1 16 0v8" stroke="#00e5a0" strokeWidth="2.5" strokeLinecap="round" />
+                <circle cx="24" cy="33" r="3" fill="#00e5a0" />
+                <path d="M24 36v3" stroke="#00e5a0" strokeWidth="2.5" strokeLinecap="round" />
               </svg>
             </div>
           </div>
@@ -197,7 +197,7 @@ function LoginForm({ product }: { product: keyof ProductAccess }) {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full bg-[#0d1520] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#00d4aa]/50 transition-colors"
+                className="w-full bg-[#0d1118] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#00e5a0]/50 transition-colors"
                 required
               />
             </div>
@@ -208,7 +208,7 @@ function LoginForm({ product }: { product: keyof ProductAccess }) {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full bg-[#0d1520] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#00d4aa]/50 transition-colors"
+                className="w-full bg-[#0d1118] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#00e5a0]/50 transition-colors"
                 required
                 minLength={6}
               />
@@ -221,7 +221,7 @@ function LoginForm({ product }: { product: keyof ProductAccess }) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#00d4aa] text-[#0a0e14] font-bold text-base py-3.5 rounded-xl hover:bg-[#00d4aa]/90 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full bg-[#00e5a0] text-[#0a0d12] font-bold text-base py-3.5 rounded-xl hover:bg-[#00e5a0]/90 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -244,14 +244,14 @@ function LoginForm({ product }: { product: keyof ProductAccess }) {
             {mode === "login" ? (
               <>
                 Don't have an account?{" "}
-                <button onClick={() => { setMode("register"); setError(null); }} className="text-[#00d4aa] hover:underline">
+                <button onClick={() => { setMode("register"); setError(null); }} className="text-[#00e5a0] hover:underline">
                   Register
                 </button>
               </>
             ) : (
               <>
                 Already have an account?{" "}
-                <button onClick={() => { setMode("login"); setError(null); }} className="text-[#00d4aa] hover:underline">
+                <button onClick={() => { setMode("login"); setError(null); }} className="text-[#00e5a0] hover:underline">
                   Sign in
                 </button>
               </>
@@ -269,7 +269,7 @@ function LoginForm({ product }: { product: keyof ProductAccess }) {
 
           <p className="text-white/20 text-xs mt-6">
             Need help?{" "}
-            <a href="mailto:support@primaledge.io" className="text-[#00d4aa]/50 hover:text-[#00d4aa] transition-colors">
+            <a href="mailto:support@primaledge.io" className="text-[#00e5a0]/50 hover:text-[#00e5a0] transition-colors">
               support@primaledge.io
             </a>
           </p>

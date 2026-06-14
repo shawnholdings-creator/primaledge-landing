@@ -8,10 +8,10 @@ export default function Podcasts() {
       description="Real conversations about trading, market structure, AI-driven analysis, and the mindset it takes to find consistent edge. No fluff, no hype — just signal."
       icon={
         <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-          <rect x="18" y="4" width="12" height="24" rx="6" stroke="#00d4aa" strokeWidth="3"/>
-          <path d="M10 24c0 7.7 6.3 14 14 14s14-6.3 14-14" stroke="#00d4aa" strokeWidth="3" strokeLinecap="round"/>
-          <line x1="24" y1="38" x2="24" y2="44" stroke="#00d4aa" strokeWidth="3" strokeLinecap="round"/>
-          <line x1="18" y1="44" x2="30" y2="44" stroke="#00d4aa" strokeWidth="3" strokeLinecap="round"/>
+          <rect x="18" y="4" width="12" height="24" rx="6" stroke="#00e5a0" strokeWidth="3"/>
+          <path d="M10 24c0 7.7 6.3 14 14 14s14-6.3 14-14" stroke="#00e5a0" strokeWidth="3" strokeLinecap="round"/>
+          <line x1="24" y1="38" x2="24" y2="44" stroke="#00e5a0" strokeWidth="3" strokeLinecap="round"/>
+          <line x1="18" y1="44" x2="30" y2="44" stroke="#00e5a0" strokeWidth="3" strokeLinecap="round"/>
         </svg>
       }
       teaserItems={[

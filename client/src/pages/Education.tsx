@@ -8,9 +8,9 @@ export default function Education() {
       description="Structured trading education from the ground up — covering market mechanics, risk management, trade psychology, and the quantitative frameworks that power the Primal Edge signal engine."
       icon={
         <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-          <path d="M24 6L44 16l-20 10L4 16 24 6z" stroke="#00d4aa" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M12 22v10c0 4 5.4 8 12 8s12-4 12-8V22" stroke="#00d4aa" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-          <line x1="44" y1="16" x2="44" y2="28" stroke="#00d4aa" strokeWidth="3" strokeLinecap="round"/>
+          <path d="M24 6L44 16l-20 10L4 16 24 6z" stroke="#00e5a0" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M12 22v10c0 4 5.4 8 12 8s12-4 12-8V22" stroke="#00e5a0" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+          <line x1="44" y1="16" x2="44" y2="28" stroke="#00e5a0" strokeWidth="3" strokeLinecap="round"/>
         </svg>
       }
       teaserItems={[

@@ -1,6 +1,6 @@
 /* ============================================================
    ComingSoonPage.tsx — Reusable placeholder page
-   Design: Elastic Signal — dark #0a0e14, teal #00d4aa accent
+   Design: Elastic Signal — dark #0a0d12, teal #00e5a0 accent
    ============================================================ */
 
 import { Link } from "wouter";
@@ -24,14 +24,14 @@ export default function ComingSoonPage({
   teaserItems,
 }: ComingSoonPageProps) {
   return (
-    <div className="min-h-screen bg-[#0a0e14] text-white">
+    <div className="min-h-screen bg-[#0a0d12] text-white">
       <Navbar />
 
       {/* Hero */}
       <section className="pt-40 pb-16 px-4">
         <div className="container max-w-3xl text-center">
           <div className="flex justify-center mb-8">
-            <div className="p-6 bg-[#00d4aa]/10 border border-[#00d4aa]/20 rounded-2xl">
+            <div className="p-6 bg-[#00e5a0]/10 border border-[#00e5a0]/20 rounded-2xl">
               {icon}
             </div>
           </div>
@@ -42,7 +42,7 @@ export default function ComingSoonPage({
           <h1 className="text-4xl md:text-6xl font-black text-white mb-4 leading-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
             {title}
           </h1>
-          <p className="text-[#00d4aa] font-semibold text-lg mb-6 tracking-wide">{subtitle}</p>
+          <p className="text-[#00e5a0] font-semibold text-lg mb-6 tracking-wide">{subtitle}</p>
           <p className="text-white/50 text-base leading-relaxed max-w-2xl mx-auto">{description}</p>
         </div>
       </section>
@@ -53,9 +53,9 @@ export default function ComingSoonPage({
           <p className="text-white/30 text-xs font-mono tracking-widest text-center mb-8 uppercase">What's Coming</p>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
             {teaserItems.map((item) => (
-              <div key={item.label} className="bg-[#0d1520] border border-white/5 rounded-xl p-6 hover:border-[#00d4aa]/20 transition-all">
-                <div className="w-8 h-8 rounded-lg bg-[#00d4aa]/10 border border-[#00d4aa]/20 flex items-center justify-center mb-4">
-                  <div className="w-2 h-2 rounded-full bg-[#00d4aa]" />
+              <div key={item.label} className="bg-[#0d1118] border border-white/5 rounded-xl p-6 hover:border-[#00e5a0]/20 transition-all">
+                <div className="w-8 h-8 rounded-lg bg-[#00e5a0]/10 border border-[#00e5a0]/20 flex items-center justify-center mb-4">
+                  <div className="w-2 h-2 rounded-full bg-[#00e5a0]" />
                 </div>
                 <h4 className="text-white font-semibold text-sm mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{item.label}</h4>
                 <p className="text-white/40 text-xs leading-relaxed">{item.desc}</p>
@@ -64,13 +64,13 @@ export default function ComingSoonPage({
           </div>
 
           {/* Notify CTA */}
-          <div className="mt-16 text-center bg-[#0d1520] border border-[#00d4aa]/20 rounded-2xl p-10">
+          <div className="mt-16 text-center bg-[#0d1118] border border-[#00e5a0]/20 rounded-2xl p-10">
             <h3 className="text-2xl font-bold text-white mb-3" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
               Be First to Know
             </h3>
             <p className="text-white/40 text-sm mb-6">Join the Primal Edge elite access list and get notified the moment this launches.</p>
             <Link href="/subscribe">
-              <button className="bg-[#00d4aa] text-[#0a0e14] font-bold px-8 py-3 rounded-xl hover:bg-[#00d4aa]/90 transition-colors">
+              <button className="bg-[#00e5a0] text-[#0a0d12] font-bold px-8 py-3 rounded-xl hover:bg-[#00e5a0]/90 transition-colors">
                 Request Early Access →
               </button>
             </Link>
@@ -79,7 +79,7 @@ export default function ComingSoonPage({
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#0d1520] border-t border-white/5 py-10">
+      <footer className="bg-[#0d1118] border-t border-white/5 py-10">
         <div className="container flex flex-col sm:flex-row items-center justify-between gap-4">
           <Link href="/">
             <PrimalEdgeLogo size="md" />

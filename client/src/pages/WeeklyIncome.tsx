@@ -150,7 +150,7 @@ function ArchivePanel({
 
       {open && (
         <div
-          className="mt-2 bg-[#0d1520] border border-white/10 rounded-xl overflow-hidden"
+          className="mt-2 bg-[#0d1118] border border-white/10 rounded-xl overflow-hidden"
           style={{ scrollbarWidth: "thin", scrollbarColor: "rgba(255,255,255,0.1) transparent" }}
         >
           {/* Search */}
@@ -168,7 +168,7 @@ function ArchivePanel({
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Filter dates\u2026"
-                className="w-full bg-white/[0.03] border border-white/5 rounded-lg pl-8 pr-7 py-1.5 text-[11px] text-white/70 placeholder-white/15 focus:outline-none focus:border-[#00d4aa]/30 transition-colors"
+                className="w-full bg-white/[0.03] border border-white/5 rounded-lg pl-8 pr-7 py-1.5 text-[11px] text-white/70 placeholder-white/15 focus:outline-none focus:border-[#00e5a0]/30 transition-colors"
                 style={{ fontFamily: "'JetBrains Mono', monospace" }}
               />
               {search && (
@@ -217,13 +217,13 @@ function ArchivePanel({
                   onClick={() => onSelect(h.version)}
                   className={`w-full flex items-center gap-3 px-4 py-2 text-left hover:bg-white/[0.04] transition-colors border-b border-white/5 last:border-b-0 ${
                     isActive ? "bg-white/[0.04]" : ""
-                  } ${isHighlighted ? "bg-[#00d4aa]/[0.04]" : ""}`}
+                  } ${isHighlighted ? "bg-[#00e5a0]/[0.04]" : ""}`}
                 >
                   <div
                     className="w-1.5 h-1.5 rounded-full shrink-0"
                     style={{
                       backgroundColor: isActive || isHighlighted
-                        ? "#00d4aa"
+                        ? "#00e5a0"
                         : "rgba(255,255,255,0.15)",
                     }}
                   />
@@ -232,7 +232,7 @@ function ArchivePanel({
                     style={{
                       fontFamily: "'JetBrains Mono', monospace",
                       color: isActive || isHighlighted
-                        ? "#00d4aa"
+                        ? "#00e5a0"
                         : "rgba(255,255,255,0.3)",
                     }}
                   >
@@ -251,11 +251,11 @@ function ArchivePanel({
 /* ─── Loading Skeleton ─────────────────────────────────────── */
 function LoadingSkeleton() {
   return (
-    <div className="min-h-screen bg-[#0a0e14] text-white">
+    <div className="min-h-screen bg-[#0a0d12] text-white">
       <Navbar />
       <section className="pt-32 pb-12 px-4">
         <div className="container max-w-5xl mx-auto">
-          <div className="bg-[#0d1520] border border-white/10 rounded-2xl overflow-hidden">
+          <div className="bg-[#0d1118] border border-white/10 rounded-2xl overflow-hidden">
             <div className="flex items-center gap-2 px-5 py-3 border-b border-white/10">
               <div className="w-3 h-3 rounded-full bg-red-500/40 animate-pulse" />
               <div className="w-3 h-3 rounded-full bg-yellow-500/40 animate-pulse" />
@@ -287,15 +287,15 @@ function gradeFromScore(score: number): string {
 
 function gradeStyle(grade: string): { bg: string; text: string } {
   if (grade === "A") return { bg: "#22c55e", text: "#fff" };
-  if (grade === "B") return { bg: "#00d4aa", text: "#0a0e14" };
-  return { bg: "#f59e0b", text: "#0a0e14" };
+  if (grade === "B") return { bg: "#00e5a0", text: "#0a0d12" };
+  return { bg: "#f59e0b", text: "#0a0d12" };
 }
 
 /* ─── Status Badge Color ───────────────────────────────────── */
 function statusColor(status: string): string {
   switch (status) {
     case "Strong":     return "#22c55e";
-    case "Good":       return "#00d4aa";
+    case "Good":       return "#00e5a0";
     case "Acceptable": return "#3b82f6";
     case "Moderate":   return "#f59e0b";
     case "Weak":       return "#ef4444";
@@ -309,14 +309,14 @@ function premiumLabel(credit: number): { text: string; color: string; bg: string
   const contractValue = credit * 100;
   if (contractValue >= 500) return { text: "Juicy Premium", color: "#22c55e", bg: "rgba(34,197,94,0.12)" };
   if (contractValue >= 250) return { text: "Strong Premium", color: "#3b82f6", bg: "rgba(59,130,246,0.12)" };
-  if (contractValue >= 150) return { text: "Meets Minimum", color: "#00d4aa", bg: "rgba(0,212,170,0.12)" };
+  if (contractValue >= 150) return { text: "Meets Minimum", color: "#00e5a0", bg: "rgba(0,229,160,0.12)" };
   return null;
 }
 
 function setupTypeColor(setupType: string): string {
   if (setupType.includes("Juicy")) return "#22c55e";
   if (setupType.includes("Balanced")) return "#3b82f6";
-  if (setupType.includes("Conservative")) return "#00d4aa";
+  if (setupType.includes("Conservative")) return "#00e5a0";
   return "#6b7280";
 }
 
@@ -343,7 +343,7 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
               className="text-xs text-white/40 flex items-start gap-2"
               style={{ fontFamily: "'JetBrains Mono', monospace" }}
             >
-              <span className="text-[#00d4aa] mt-px">•</span>
+              <span className="text-[#00e5a0] mt-px">•</span>
               {r}
             </li>
           ))}
@@ -368,7 +368,7 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
           {sd.categories.map((cat) => {
             const pct = cat.max > 0 ? cat.score / cat.max : 0;
-            const barColor = pct >= 0.8 ? "#00d4aa" : pct >= 0.6 ? "#f59e0b" : "#ef4444";
+            const barColor = pct >= 0.8 ? "#00e5a0" : pct >= 0.6 ? "#f59e0b" : "#ef4444";
             const sc = statusColor(cat.status);
             return (
               <div key={cat.name}>
@@ -527,7 +527,7 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
       {/* ── Final Summary ── */}
       {sd.final_summary && (
         <div
-          className="text-xs text-white/40 leading-relaxed border-l-2 border-[#00d4aa]/30 pl-3"
+          className="text-xs text-white/40 leading-relaxed border-l-2 border-[#00e5a0]/30 pl-3"
           style={{ fontFamily: "'JetBrains Mono', monospace" }}
         >
           {sd.final_summary}
@@ -643,7 +643,7 @@ function WeeklyIncomeContent() {
     : "—";
 
   return (
-    <div className="min-h-screen bg-[#0a0e14] text-white flex flex-col">
+    <div className="min-h-screen bg-[#0a0d12] text-white flex flex-col">
       <Navbar />
 
       <section className="flex-1 pt-28 pb-16 px-4 relative z-10">
@@ -657,7 +657,7 @@ function WeeklyIncomeContent() {
                   className="text-3xl sm:text-4xl font-black tracking-tight leading-none"
                   style={{
                     fontFamily: "'Space Grotesk', sans-serif",
-                    background: "linear-gradient(135deg, #00d4aa, #00b894)",
+                    background: "linear-gradient(135deg, #00e5a0, #00b894)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                   }}
@@ -675,9 +675,9 @@ function WeeklyIncomeContent() {
                     className="text-[10px] tracking-wider px-2.5 py-1 rounded-full"
                     style={{
                       fontFamily: "'JetBrains Mono', monospace",
-                      color: "#00d4aa",
-                      background: "rgba(0,212,170,0.08)",
-                      border: "1px solid rgba(0,212,170,0.15)",
+                      color: "#00e5a0",
+                      background: "rgba(0,229,160,0.08)",
+                      border: "1px solid rgba(0,229,160,0.15)",
                     }}
                   >
                     MIN PREMIUM: $150/contract
@@ -730,7 +730,7 @@ function WeeklyIncomeContent() {
 
             {/* Stat pills */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-              <div className="bg-[#0d1520] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
+              <div className="bg-[#0d1118] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
                 <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Scanned</div>
                 <div
                   className="text-lg font-bold text-white/60 leading-none"
@@ -739,20 +739,20 @@ function WeeklyIncomeContent() {
                   {data?.tickers_scanned || "—"}
                 </div>
               </div>
-              <div className="bg-[#0d1520] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
+              <div className="bg-[#0d1118] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
                 <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Candidates</div>
                 <div
                   className="text-lg font-bold leading-none"
                   style={{
                     fontFamily: "'JetBrains Mono', monospace",
-                    color: tradableCount > 0 ? "#00d4aa" : "rgba(255,255,255,0.2)",
-                    textShadow: tradableCount > 0 ? "0 0 12px rgba(0,212,170,0.3)" : "none",
+                    color: tradableCount > 0 ? "#00e5a0" : "rgba(255,255,255,0.2)",
+                    textShadow: tradableCount > 0 ? "0 0 12px rgba(0,229,160,0.3)" : "none",
                   }}
                 >
                   {tradableCount}
                 </div>
               </div>
-              <div className="bg-[#0d1520] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
+              <div className="bg-[#0d1118] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
                 <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Unique Alerts</div>
                 <div
                   className="text-lg font-bold text-white/60 leading-none"
@@ -761,7 +761,7 @@ function WeeklyIncomeContent() {
                   {data?.unique_alerts ?? "—"}
                 </div>
               </div>
-              <div className="bg-[#0d1520] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
+              <div className="bg-[#0d1118] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
                 <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Market</div>
                 <div
                   className="text-lg font-bold text-white/40 leading-none"
@@ -776,12 +776,12 @@ function WeeklyIncomeContent() {
           {/* ── PRODUCT INTRO COPY ── */}
           <section className="pb-8 sm:pb-12">
             <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-flex items-center gap-2 font-mono text-[10px] text-[#00d4aa]/70 tracking-widest bg-[#00d4aa]/8 border border-[#00d4aa]/15 rounded-full px-4 py-1.5 mb-6">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#00d4aa] animate-pulse" />
+              <div className="inline-flex items-center gap-2 font-mono text-[10px] text-[#00e5a0]/70 tracking-widest bg-[#00e5a0]/8 border border-[#00e5a0]/15 rounded-full px-4 py-1.5 mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00e5a0] animate-pulse" />
                 PRIVATE ACCESS · INCOME INTELLIGENCE
               </div>
 
-              <p className="font-['Space_Grotesk'] text-lg sm:text-xl text-[#00d4aa]/80 mb-6">
+              <p className="font-['Space_Grotesk'] text-lg sm:text-xl text-[#00e5a0]/80 mb-6">
                 Find the premium. Measure the risk. Trade with discipline.
               </p>
 
@@ -799,7 +799,7 @@ function WeeklyIncomeContent() {
           {/* ── INCOME INTELLIGENCE DIMENSIONS ── */}
           <section className="pb-12 sm:pb-16">
             <div className="text-center mb-10">
-              <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">INTELLIGENCE DIMENSIONS</p>
+              <p className="font-mono text-xs text-[#00e5a0] tracking-widest mb-3">INTELLIGENCE DIMENSIONS</p>
               <h2 className="font-['Space_Grotesk'] font-bold text-2xl sm:text-3xl text-white">
                 Six Layers of<br />Income Intelligence
               </h2>
@@ -814,10 +814,10 @@ function WeeklyIncomeContent() {
                 { tag: "EVENT", title: "Event Awareness", desc: "Flags earnings and known risk events before expiration. No candidate with confirmed earnings before expiry is marked tradable." },
                 { tag: "SCORE", title: "Score Explanation", desc: "Shows why a candidate qualifies, where it is strong, what still needs review, and the final conviction read." },
               ].map((item, i) => (
-                <div key={i} className="relative bg-[#111820] border border-white/5 rounded-xl p-6 hover:border-[#00d4aa]/20 transition-all group">
-                  <span className="font-mono text-[9px] text-[#00d4aa]/50 tracking-widest bg-[#00d4aa]/5 border border-[#00d4aa]/10 rounded px-2 py-0.5 mb-4 inline-block">{item.tag}</span>
+                <div key={i} className="relative bg-[#10151d] border border-white/5 rounded-xl p-6 hover:border-[#00e5a0]/20 transition-all group">
+                  <span className="font-mono text-[9px] text-[#00e5a0]/50 tracking-widest bg-[#00e5a0]/5 border border-[#00e5a0]/10 rounded px-2 py-0.5 mb-4 inline-block">{item.tag}</span>
                   <div className="absolute top-5 right-5 font-['Space_Grotesk'] text-4xl font-bold text-white/[0.03]">{String(i + 1).padStart(2, "0")}</div>
-                  <h3 className="font-['Space_Grotesk'] font-semibold text-base text-white mb-3 group-hover:text-[#00d4aa] transition-colors">{item.title}</h3>
+                  <h3 className="font-['Space_Grotesk'] font-semibold text-base text-white mb-3 group-hover:text-[#00e5a0] transition-colors">{item.title}</h3>
                   <p className="text-white/40 text-sm leading-relaxed">{item.desc}</p>
                 </div>
               ))}
@@ -826,7 +826,7 @@ function WeeklyIncomeContent() {
 
           {/* ═══ MAIN TERMINAL CARD ═══ */}
           <div className="animated-border">
-          <div className="bg-[#0d1520] border border-white/10 rounded-2xl overflow-hidden relative">
+          <div className="bg-[#0d1118] border border-white/10 rounded-2xl overflow-hidden relative">
             {/* Scan sweep line */}
             {!activeVersion && isMarketOpen() && <div className="scan-sweep" />}
 
@@ -839,7 +839,7 @@ function WeeklyIncomeContent() {
                   <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
                 </div>
                 <span
-                  className="text-xs text-[#00d4aa] tracking-[0.2em] uppercase font-bold"
+                  className="text-xs text-[#00e5a0] tracking-[0.2em] uppercase font-bold"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
                   WEEKLY INCOME SCANNER
@@ -916,7 +916,7 @@ function WeeklyIncomeContent() {
                   <p className="text-white/15 text-xs">{error}</p>
                   <button
                     onClick={fetchData}
-                    className="mt-4 text-xs text-[#00d4aa] font-mono hover:underline"
+                    className="mt-4 text-xs text-[#00e5a0] font-mono hover:underline"
                   >
                     Retry →
                   </button>
@@ -956,7 +956,7 @@ function WeeklyIncomeContent() {
               {/* Signal Rows */}
               {candidates.map((c, i) => {
                 const isPut = c.side.toLowerCase() === "put";
-                const sideColor = isPut ? "#00d4aa" : "#ef4444";
+                const sideColor = isPut ? "#00e5a0" : "#ef4444";
                 const grade = c._grade;
                 const gs = gradeStyle(grade);
                 const otmDisplay = (c.otm_pct * 100).toFixed(1);
@@ -1024,7 +1024,7 @@ function WeeklyIncomeContent() {
                         <div>
                           <span
                             className="text-sm font-bold"
-                            style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00d4aa" }}
+                            style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00e5a0" }}
                           >
                             ${c.credit.toFixed(2)}
                           </span>
@@ -1097,7 +1097,7 @@ function WeeklyIncomeContent() {
                           className="block text-[10px] mt-0.5"
                           style={{
                             fontFamily: "'JetBrains Mono', monospace",
-                            color: "#00d4aa",
+                            color: "#00e5a0",
                           }}
                         >
                           {otmDisplay}% OTM
@@ -1177,7 +1177,7 @@ function WeeklyIncomeContent() {
                               </span>
                               <span
                                 className="text-[10px] block"
-                                style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00d4aa" }}
+                                style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00e5a0" }}
                               >
                                 {otmDisplay}% OTM
                               </span>
@@ -1209,7 +1209,7 @@ function WeeklyIncomeContent() {
                             </span>
                             <span
                               className="text-xs font-bold"
-                              style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00d4aa" }}
+                              style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00e5a0" }}
                             >
                               ${c.credit.toFixed(2)}
                             </span>
@@ -1292,7 +1292,7 @@ function WeeklyIncomeContent() {
                 className="text-xs"
                 style={{
                   fontFamily: "'JetBrains Mono', monospace",
-                  color: tradableCount > 0 ? "#00d4aa" : "rgba(255,255,255,0.2)",
+                  color: tradableCount > 0 ? "#00e5a0" : "rgba(255,255,255,0.2)",
                 }}
               >
                 {tradableCount > 0 ? `${tradableCount} tradable` : "0 tradable"}
@@ -1303,7 +1303,7 @@ function WeeklyIncomeContent() {
             <div className="px-4 sm:px-6 py-3 border-t border-white/5">
               <div className="flex items-center gap-2 mb-2">
                 <span
-                  className="text-[9px] text-[#00d4aa] tracking-widest uppercase font-bold"
+                  className="text-[9px] text-[#00e5a0] tracking-widest uppercase font-bold"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
                   CONVICTION
@@ -1318,8 +1318,8 @@ function WeeklyIncomeContent() {
               <div className="flex flex-wrap gap-2">
                 {[
                   { grade: "A", label: "Strong", score: "85+", bg: "#22c55e", text: "#fff", where: "ENTRY" },
-                  { grade: "B", label: "Good", score: "75–84", bg: "#00d4aa", text: "#0a0e14", where: "ENTRY" },
-                  { grade: "C", label: "Moderate", score: "65–74", bg: "#f59e0b", text: "#0a0e14", where: "FORMING" },
+                  { grade: "B", label: "Good", score: "75–84", bg: "#00e5a0", text: "#0a0d12", where: "ENTRY" },
+                  { grade: "C", label: "Moderate", score: "65–74", bg: "#f59e0b", text: "#0a0d12", where: "FORMING" },
                   { grade: "D", label: "Weak", score: "<65", bg: "#ef4444", text: "#fff", where: "AVOID" },
                 ].map((g) => (
                   <div
@@ -1349,10 +1349,10 @@ function WeeklyIncomeContent() {
                       className="text-[7px] font-bold tracking-wider px-1 py-px rounded"
                       style={{
                         fontFamily: "'JetBrains Mono', monospace",
-                        color: g.where === "ENTRY" ? "#00d4aa" : "#f59e0b",
+                        color: g.where === "ENTRY" ? "#00e5a0" : "#f59e0b",
                         background:
                           g.where === "ENTRY"
-                            ? "rgba(0,212,170,0.08)"
+                            ? "rgba(0,229,160,0.08)"
                             : "rgba(245,158,11,0.08)",
                       }}
                     >
@@ -1367,7 +1367,7 @@ function WeeklyIncomeContent() {
             <div className="px-4 sm:px-6 py-3 border-t border-white/5">
               <div className="flex items-center gap-2 mb-2">
                 <span
-                  className="text-[9px] text-[#00d4aa] tracking-widest uppercase font-bold"
+                  className="text-[9px] text-[#00e5a0] tracking-widest uppercase font-bold"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
                   STRATEGY
@@ -1383,7 +1383,7 @@ function WeeklyIncomeContent() {
                 {[
                   {
                     label: "PUT",
-                    color: "#00d4aa",
+                    color: "#00e5a0",
                     desc: "Sell OTM put on bullish names",
                   },
                   {
@@ -1424,7 +1424,7 @@ function WeeklyIncomeContent() {
           </div>
 
           {/* ── DISCLAIMER ── */}
-          <div className="mt-12 mb-8 max-w-4xl mx-auto bg-[#111820] border border-white/5 rounded-xl px-5 sm:px-6 py-4 flex items-start gap-3">
+          <div className="mt-12 mb-8 max-w-4xl mx-auto bg-[#10151d] border border-white/5 rounded-xl px-5 sm:px-6 py-4 flex items-start gap-3">
             <svg className="w-4 h-4 text-[#f59e0b] shrink-0 mt-0.5" fill="none" viewBox="0 0 16 16">
               <path d="M8 2l1.5 4.5H14l-3.7 2.7 1.4 4.3L8 11 4.3 13.5l1.4-4.3L2 6.5h4.5z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
             </svg>
@@ -1453,7 +1453,7 @@ function WeeklyIncomeContent() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#0d1520] border-t border-white/5 py-10">
+      <footer className="bg-[#0d1118] border-t border-white/5 py-10">
         <div className="container flex flex-col sm:flex-row items-center justify-between gap-4">
           <Link href="/">
             <PrimalEdgeLogo size="md" />

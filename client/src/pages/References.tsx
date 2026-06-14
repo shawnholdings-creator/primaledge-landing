@@ -8,11 +8,11 @@ export default function References() {
       description="A curated, always-updated reference library covering trading terminology, market structure definitions, indicator formulas, options Greeks, and the quantitative concepts behind the Primal Edge signal engine."
       icon={
         <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-          <rect x="8" y="4" width="26" height="36" rx="3" stroke="#00d4aa" strokeWidth="3"/>
-          <path d="M34 8h4a2 2 0 0 1 2 2v30a2 2 0 0 1-2 2H14" stroke="#00d4aa" strokeWidth="3" strokeLinecap="round"/>
-          <line x1="14" y1="14" x2="28" y2="14" stroke="#00d4aa" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.6"/>
-          <line x1="14" y1="20" x2="28" y2="20" stroke="#00d4aa" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.6"/>
-          <line x1="14" y1="26" x2="22" y2="26" stroke="#00d4aa" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.6"/>
+          <rect x="8" y="4" width="26" height="36" rx="3" stroke="#00e5a0" strokeWidth="3"/>
+          <path d="M34 8h4a2 2 0 0 1 2 2v30a2 2 0 0 1-2 2H14" stroke="#00e5a0" strokeWidth="3" strokeLinecap="round"/>
+          <line x1="14" y1="14" x2="28" y2="14" stroke="#00e5a0" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.6"/>
+          <line x1="14" y1="20" x2="28" y2="20" stroke="#00e5a0" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.6"/>
+          <line x1="14" y1="26" x2="22" y2="26" stroke="#00e5a0" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.6"/>
         </svg>
       }
       teaserItems={[

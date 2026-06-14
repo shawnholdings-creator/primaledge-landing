@@ -1,6 +1,6 @@
 /* ============================================================
    DevRequests.tsx — Development Requests page
-   Design: Elastic Signal — dark #0a0e14, teal #00d4aa accent
+   Design: Elastic Signal — dark #0a0d12, teal #00e5a0 accent
    ============================================================ */
 
 import { useState } from "react";
@@ -29,7 +29,7 @@ const EXISTING_REQUESTS = [
 ];
 
 const STATUS_COLORS: Record<string, string> = {
-  "In Development": "#00d4aa",
+  "In Development": "#00e5a0",
   "Planned": "#f59e0b",
   "Under Review": "#a78bfa",
 };
@@ -48,18 +48,18 @@ export default function DevRequests() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0e14] text-white">
+    <div className="min-h-screen bg-[#0a0d12] text-white">
       <Navbar />
 
       {/* Hero */}
       <section className="pt-40 pb-12 px-4">
         <div className="container max-w-4xl">
-          <div className="inline-flex items-center gap-2 bg-[#00d4aa]/10 border border-[#00d4aa]/20 rounded-full px-4 py-1.5 mb-6">
-            <span className="w-2 h-2 rounded-full bg-[#00d4aa] animate-pulse" />
-            <span className="font-mono text-xs text-[#00d4aa] tracking-wider">COMMUNITY DRIVEN DEVELOPMENT</span>
+          <div className="inline-flex items-center gap-2 bg-[#00e5a0]/10 border border-[#00e5a0]/20 rounded-full px-4 py-1.5 mb-6">
+            <span className="w-2 h-2 rounded-full bg-[#00e5a0] animate-pulse" />
+            <span className="font-mono text-xs text-[#00e5a0] tracking-wider">COMMUNITY DRIVEN DEVELOPMENT</span>
           </div>
           <h1 className="text-4xl md:text-6xl font-black text-white mb-4 leading-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-            Shape the<br /><span className="text-[#00d4aa]">Primal Edge</span> Roadmap.
+            Shape the<br /><span className="text-[#00e5a0]">Primal Edge</span> Roadmap.
           </h1>
           <p className="text-white/50 text-lg leading-relaxed max-w-2xl">
             Elite members drive what gets built next. Submit your feature requests, vote on existing ideas, and watch the platform evolve around what matters most to you.
@@ -76,15 +76,15 @@ export default function DevRequests() {
               Submit a Request
             </h2>
             {submitted ? (
-              <div className="bg-[#00d4aa]/10 border border-[#00d4aa]/30 rounded-2xl p-8 text-center">
-                <div className="w-14 h-14 rounded-full bg-[#00d4aa]/20 flex items-center justify-center mx-auto mb-4">
+              <div className="bg-[#00e5a0]/10 border border-[#00e5a0]/30 rounded-2xl p-8 text-center">
+                <div className="w-14 h-14 rounded-full bg-[#00e5a0]/20 flex items-center justify-center mx-auto mb-4">
                   <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                    <path d="M5 14l6 6L23 8" stroke="#00d4aa" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M5 14l6 6L23 8" stroke="#00e5a0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </div>
                 <h3 className="text-white font-bold text-lg mb-2">Request Received!</h3>
                 <p className="text-white/50 text-sm mb-6">Your request has been submitted for review. Elite members will be able to vote on it shortly.</p>
-                <button onClick={() => setSubmitted(false)} className="text-[#00d4aa] text-sm font-medium hover:underline">
+                <button onClick={() => setSubmitted(false)} className="text-[#00e5a0] text-sm font-medium hover:underline">
                   Submit another request →
                 </button>
               </div>
@@ -97,7 +97,7 @@ export default function DevRequests() {
                     value={form.title}
                     onChange={e => setForm({ ...form, title: e.target.value })}
                     placeholder="e.g. Weekly Options Flow Heatmap"
-                    className="w-full bg-[#0d1520] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#00d4aa]/50 transition-colors"
+                    className="w-full bg-[#0d1118] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#00e5a0]/50 transition-colors"
                   />
                 </div>
                 <div>
@@ -105,7 +105,7 @@ export default function DevRequests() {
                   <select
                     value={form.category}
                     onChange={e => setForm({ ...form, category: e.target.value })}
-                    className="w-full bg-[#0d1520] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#00d4aa]/50 transition-colors"
+                    className="w-full bg-[#0d1118] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#00e5a0]/50 transition-colors"
                   >
                     {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
@@ -117,7 +117,7 @@ export default function DevRequests() {
                     onChange={e => setForm({ ...form, description: e.target.value })}
                     placeholder="Describe what you'd like to see and why it would be valuable..."
                     rows={4}
-                    className="w-full bg-[#0d1520] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#00d4aa]/50 transition-colors resize-none"
+                    className="w-full bg-[#0d1118] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#00e5a0]/50 transition-colors resize-none"
                   />
                 </div>
                 <div>
@@ -127,7 +127,7 @@ export default function DevRequests() {
                     value={form.email}
                     onChange={e => setForm({ ...form, email: e.target.value })}
                     placeholder="Get notified when your request is reviewed"
-                    className="w-full bg-[#0d1520] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#00d4aa]/50 transition-colors"
+                    className="w-full bg-[#0d1118] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#00e5a0]/50 transition-colors"
                   />
                 </div>
 
@@ -137,7 +137,7 @@ export default function DevRequests() {
                     type="checkbox"
                     checked={form.agree}
                     onChange={e => setForm({ ...form, agree: e.target.checked })}
-                    className="mt-0.5 w-4 h-4 rounded border-white/20 bg-[#0d1520] accent-[#00d4aa] shrink-0"
+                    className="mt-0.5 w-4 h-4 rounded border-white/20 bg-[#0d1118] accent-[#00e5a0] shrink-0"
                   />
                   <span className="text-white/55 text-sm leading-snug">
                     I understand this is for educational and analytical purposes only. Not financial advice.
@@ -148,7 +148,7 @@ export default function DevRequests() {
                     type="checkbox"
                     checked={form.agreeDocusign}
                     onChange={e => setForm({ ...form, agreeDocusign: e.target.checked })}
-                    className="mt-0.5 w-4 h-4 rounded border-white/20 bg-[#0d1520] accent-[#00d4aa] shrink-0"
+                    className="mt-0.5 w-4 h-4 rounded border-white/20 bg-[#0d1118] accent-[#00e5a0] shrink-0"
                   />
                   <span className="text-white/55 text-sm leading-snug">
                     I agree to read and sign the required disclosures via DocuSign upon approval.
@@ -157,7 +157,7 @@ export default function DevRequests() {
 
                 <button
                   type="submit"
-                  className="w-full bg-[#00d4aa] text-[#0a0e14] font-bold py-3.5 rounded-xl hover:bg-[#00d4aa]/90 transition-colors"
+                  className="w-full bg-[#00e5a0] text-[#0a0d12] font-bold py-3.5 rounded-xl hover:bg-[#00e5a0]/90 transition-colors"
                 >
                   Submit Request →
                 </button>
@@ -172,14 +172,14 @@ export default function DevRequests() {
             </h2>
             <div className="space-y-3">
               {EXISTING_REQUESTS.map((req) => (
-                <div key={req.id} className="bg-[#0d1520] border border-white/5 rounded-xl p-4 flex items-center gap-4 hover:border-[#00d4aa]/20 transition-all group">
+                <div key={req.id} className="bg-[#0d1118] border border-white/5 rounded-xl p-4 flex items-center gap-4 hover:border-[#00e5a0]/20 transition-all group">
                   {/* Vote button */}
                   <button
                     onClick={() => toast.success("Vote recorded!")}
-                    className="flex flex-col items-center gap-0.5 min-w-[40px] p-2 rounded-lg bg-white/5 hover:bg-[#00d4aa]/10 hover:border-[#00d4aa]/30 border border-transparent transition-all"
+                    className="flex flex-col items-center gap-0.5 min-w-[40px] p-2 rounded-lg bg-white/5 hover:bg-[#00e5a0]/10 hover:border-[#00e5a0]/30 border border-transparent transition-all"
                   >
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                      <path d="M6 2L10 8H2L6 2Z" fill="#00d4aa"/>
+                      <path d="M6 2L10 8H2L6 2Z" fill="#00e5a0"/>
                     </svg>
                     <span className="text-white font-bold text-xs">{req.votes}</span>
                   </button>
@@ -202,7 +202,7 @@ export default function DevRequests() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#0d1520] border-t border-white/5 py-10">
+      <footer className="bg-[#0d1118] border-t border-white/5 py-10">
         <div className="container flex flex-col sm:flex-row items-center justify-between gap-4">
           <Link href="/">
             <PrimalEdgeLogo size="md" />

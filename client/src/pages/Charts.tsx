@@ -8,10 +8,10 @@ export default function Charts() {
       description="A comprehensive library of chart pattern guides, technical indicator breakdowns, and setup tutorials — built specifically for traders who want to understand the signals behind the signals."
       icon={
         <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-          <path d="M6 36L18 22l8 8 16-20" stroke="#00d4aa" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M34 16h8v8" stroke="#00d4aa" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-          <line x1="6" y1="42" x2="42" y2="42" stroke="#00d4aa" strokeWidth="2" strokeOpacity="0.3"/>
-          <line x1="6" y1="6" x2="6" y2="42" stroke="#00d4aa" strokeWidth="2" strokeOpacity="0.3"/>
+          <path d="M6 36L18 22l8 8 16-20" stroke="#00e5a0" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M34 16h8v8" stroke="#00e5a0" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+          <line x1="6" y1="42" x2="42" y2="42" stroke="#00e5a0" strokeWidth="2" strokeOpacity="0.3"/>
+          <line x1="6" y1="6" x2="6" y2="42" stroke="#00e5a0" strokeWidth="2" strokeOpacity="0.3"/>
         </svg>
       }
       teaserItems={[

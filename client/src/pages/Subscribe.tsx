@@ -12,7 +12,7 @@ function GradeBadge({ grade, size = "sm" }: { grade: string; size?: "sm" | "md" 
   const colors: Record<string, { bg: string; text: string }> = {
     A: { bg: "#22c55e", text: "#fff" },
     B: { bg: "#3b82f6", text: "#fff" },
-    C: { bg: "#f59e0b", text: "#0a0e14" },
+    C: { bg: "#f59e0b", text: "#0a0d12" },
   };
   const c = colors[grade] || colors["B"];
   const dim = size === "md" ? "w-7 h-7 text-xs" : "w-5 h-5 text-[10px]";
@@ -93,9 +93,9 @@ export default function Subscribe() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0e14]">
+    <div className="min-h-screen bg-[#0a0d12]">
       {/* Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0e14]/95 backdrop-blur-md border-b border-white/5">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0d12]/95 backdrop-blur-md border-b border-white/5">
         <div className="container flex items-center justify-between h-20">
           <Link href="/" className="flex items-center">
             <PrimalEdgeLogo size="sm" />
@@ -114,14 +114,14 @@ export default function Subscribe() {
 
           {/* ── HERO HEADER ── */}
           <div className="text-center mb-14 sm:mb-20">
-            <div className="inline-flex items-center gap-2 bg-[#00d4aa]/10 border border-[#00d4aa]/20 rounded-full px-4 py-1.5 mb-6">
-              <span className="w-2 h-2 rounded-full bg-[#00d4aa] animate-pulse" />
-              <span className="font-mono text-[10px] text-[#00d4aa] tracking-wider">PRIVATE ACCESS</span>
+            <div className="inline-flex items-center gap-2 bg-[#00e5a0]/10 border border-[#00e5a0]/20 rounded-full px-4 py-1.5 mb-6">
+              <span className="w-2 h-2 rounded-full bg-[#00e5a0] animate-pulse" />
+              <span className="font-mono text-[10px] text-[#00e5a0] tracking-wider">PRIVATE ACCESS</span>
             </div>
 
             <h1 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white mb-3 leading-tight">
               Adaptive Multi-Timeframe<br />
-              <span className="text-[#00d4aa]">Signal Intelligence</span>
+              <span className="text-[#00e5a0]">Signal Intelligence</span>
             </h1>
 
             <p className="text-white/50 text-base sm:text-lg max-w-2xl mx-auto mb-4" style={{ fontFamily: "'DM Sans', sans-serif" }}>
@@ -136,9 +136,9 @@ export default function Subscribe() {
           {submitted ? (
             /* ── SUCCESS STATE ── */
             <div className="max-w-lg mx-auto text-center">
-              <div className="bg-[#111820] border border-[#00d4aa]/30 rounded-2xl p-8 sm:p-10" style={{ boxShadow: "0 0 60px rgba(0,212,170,0.08)" }}>
-                <div className="w-16 h-16 rounded-full bg-[#00d4aa]/15 border border-[#00d4aa]/30 flex items-center justify-center mx-auto mb-6">
-                  <svg className="w-8 h-8 text-[#00d4aa]" fill="none" viewBox="0 0 24 24">
+              <div className="bg-[#10151d] border border-[#00e5a0]/30 rounded-2xl p-8 sm:p-10" style={{ boxShadow: "0 0 60px rgba(0,229,160,0.08)" }}>
+                <div className="w-16 h-16 rounded-full bg-[#00e5a0]/15 border border-[#00e5a0]/30 flex items-center justify-center mx-auto mb-6">
+                  <svg className="w-8 h-8 text-[#00e5a0]" fill="none" viewBox="0 0 24 24">
                     <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </div>
@@ -146,9 +146,9 @@ export default function Subscribe() {
                   Request Received
                 </h2>
                 <p className="text-white/55 text-base leading-relaxed mb-6">
-                  Thank you, <span className="text-white font-semibold">{form.firstName}</span>. We've received your access request. You'll receive onboarding instructions at <span className="text-[#00d4aa]">{form.email}</span> within 24 hours.
+                  Thank you, <span className="text-white font-semibold">{form.firstName}</span>. We've received your access request. You'll receive onboarding instructions at <span className="text-[#00e5a0]">{form.email}</span> within 24 hours.
                 </p>
-                <div className="bg-[#0d1520] rounded-xl p-4 mb-6 text-left space-y-2">
+                <div className="bg-[#0d1118] rounded-xl p-4 mb-6 text-left space-y-2">
                   <p className="font-mono text-[10px] text-white/30 tracking-widest mb-3">NEXT STEPS</p>
                   {[
                     "Check your email for onboarding instructions",
@@ -157,12 +157,12 @@ export default function Subscribe() {
                     "Access the live Primal Edge AI Cockpit",
                   ].map((step, i) => (
                     <div key={i} className="flex items-start gap-3">
-                      <span className="font-mono text-xs text-[#00d4aa] shrink-0 mt-0.5">0{i + 1}</span>
+                      <span className="font-mono text-xs text-[#00e5a0] shrink-0 mt-0.5">0{i + 1}</span>
                       <span className="text-white/60 text-sm">{step}</span>
                     </div>
                   ))}
                 </div>
-                <Link href="/" className="inline-block text-[#00d4aa] font-['Space_Grotesk'] font-medium text-sm hover:underline">
+                <Link href="/" className="inline-block text-[#00e5a0] font-['Space_Grotesk'] font-medium text-sm hover:underline">
                   ← Return to Home
                 </Link>
               </div>
@@ -173,7 +173,7 @@ export default function Subscribe() {
 
               {/* LEFT: FORM — 3 cols */}
               <div className="lg:col-span-3">
-                <form onSubmit={handleSubmit} className="bg-[#111820] border border-white/5 rounded-2xl p-6 sm:p-8 space-y-5">
+                <form onSubmit={handleSubmit} className="bg-[#10151d] border border-white/5 rounded-2xl p-6 sm:p-8 space-y-5">
                   <h2 className="font-['Space_Grotesk'] font-semibold text-lg text-white mb-1">Request Access</h2>
                   <p className="text-white/30 text-xs font-mono tracking-wider mb-4">PRIVATE · LIMITED SEATS · BY APPLICATION</p>
 
@@ -184,7 +184,7 @@ export default function Subscribe() {
                       <input
                         type="text" name="firstName" value={form.firstName} onChange={handleChange} required
                         placeholder="First name"
-                        className="w-full bg-[#0d1520] border border-white/10 rounded-lg px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#00d4aa]/50 transition-colors"
+                        className="w-full bg-[#0d1118] border border-white/10 rounded-lg px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#00e5a0]/50 transition-colors"
                       />
                     </div>
                     <div>
@@ -192,7 +192,7 @@ export default function Subscribe() {
                       <input
                         type="text" name="lastName" value={form.lastName} onChange={handleChange}
                         placeholder="Last name"
-                        className="w-full bg-[#0d1520] border border-white/10 rounded-lg px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#00d4aa]/50 transition-colors"
+                        className="w-full bg-[#0d1118] border border-white/10 rounded-lg px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#00e5a0]/50 transition-colors"
                       />
                     </div>
                   </div>
@@ -203,7 +203,7 @@ export default function Subscribe() {
                     <input
                       type="email" name="email" value={form.email} onChange={handleChange} required
                       placeholder="you@example.com"
-                      className="w-full bg-[#0d1520] border border-white/10 rounded-lg px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#00d4aa]/50 transition-colors"
+                      className="w-full bg-[#0d1118] border border-white/10 rounded-lg px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#00e5a0]/50 transition-colors"
                     />
                   </div>
 
@@ -213,7 +213,7 @@ export default function Subscribe() {
                     <input
                       type="tel" name="phone" value={form.phone} onChange={handleChange}
                       placeholder="+1 (555) 000-0000"
-                      className="w-full bg-[#0d1520] border border-white/10 rounded-lg px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#00d4aa]/50 transition-colors"
+                      className="w-full bg-[#0d1118] border border-white/10 rounded-lg px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#00e5a0]/50 transition-colors"
                     />
                   </div>
 
@@ -222,7 +222,7 @@ export default function Subscribe() {
                     <label className="font-mono text-[10px] text-white/40 tracking-widest block mb-1.5">TRADING EXPERIENCE *</label>
                     <select
                       name="tradingExp" value={form.tradingExp} onChange={handleChange} required
-                      className="w-full bg-[#0d1520] border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-[#00d4aa]/50 transition-colors appearance-none"
+                      className="w-full bg-[#0d1118] border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-[#00e5a0]/50 transition-colors appearance-none"
                     >
                       <option value="" disabled className="text-white/30">Select your experience level</option>
                       <option value="beginner">Beginner (0–1 years)</option>
@@ -238,14 +238,14 @@ export default function Subscribe() {
                     <input
                       type="text" name="ntfyTopic" value={form.ntfyTopic} onChange={handleChange}
                       placeholder="e.g. johndoe_alerts"
-                      className="w-full bg-[#0d1520] border border-white/10 rounded-lg px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#00d4aa]/50 transition-colors font-mono"
+                      className="w-full bg-[#0d1118] border border-white/10 rounded-lg px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#00e5a0]/50 transition-colors font-mono"
                     />
                     <p className="text-white/20 text-xs mt-1.5">Used to configure your private alert channel. Leave blank and we'll assign one.</p>
                   </div>
 
                   {/* Agreement */}
                   <div className="border-t border-white/5 pt-5">
-                    <div className="bg-[#0d1520] rounded-xl p-4 mb-4">
+                    <div className="bg-[#0d1118] rounded-xl p-4 mb-4">
                       <p className="text-white/40 text-xs leading-relaxed">
                         Primal Edge is an <strong className="text-white/60">educational and analytical tool only</strong>. Scan results, scores, and grades do not constitute financial advice, investment recommendations, or solicitations to buy or sell any security. All analysis is for educational purposes only. You are solely responsible for your own decisions.
                       </p>
@@ -253,7 +253,7 @@ export default function Subscribe() {
                     <label className="flex items-start gap-3 cursor-pointer">
                       <input
                         type="checkbox" name="agree" checked={form.agree} onChange={handleChange}
-                        className="mt-0.5 w-4 h-4 rounded border-white/20 bg-[#0d1520] accent-[#00d4aa] shrink-0"
+                        className="mt-0.5 w-4 h-4 rounded border-white/20 bg-[#0d1118] accent-[#00e5a0] shrink-0"
                       />
                       <span className="text-white/55 text-sm leading-snug">
                         I understand this is for educational and analytical purposes only. Not financial advice.
@@ -262,7 +262,7 @@ export default function Subscribe() {
                     <label className="flex items-start gap-3 cursor-pointer">
                       <input
                         type="checkbox" name="agreeDocusign" checked={form.agreeDocusign} onChange={handleChange}
-                        className="mt-0.5 w-4 h-4 rounded border-white/20 bg-[#0d1520] accent-[#00d4aa] shrink-0"
+                        className="mt-0.5 w-4 h-4 rounded border-white/20 bg-[#0d1118] accent-[#00e5a0] shrink-0"
                       />
                       <span className="text-white/55 text-sm leading-snug">
                         I agree to read and sign the required disclosures via DocuSign upon approval.
@@ -273,8 +273,8 @@ export default function Subscribe() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-[#00d4aa] text-[#0a0e14] font-['Space_Grotesk'] font-bold text-base py-4 rounded-lg hover:bg-[#00bfa0] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
-                    style={{ boxShadow: "0 0 30px rgba(0,212,170,0.15)" }}
+                    className="w-full bg-[#00e5a0] text-[#0a0d12] font-['Space_Grotesk'] font-bold text-base py-4 rounded-lg hover:bg-[#00bfa0] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                    style={{ boxShadow: "0 0 30px rgba(0,229,160,0.15)" }}
                   >
                     {loading ? (
                       <span className="flex items-center justify-center gap-2">
@@ -294,10 +294,10 @@ export default function Subscribe() {
                 <div className="sticky top-24 space-y-4">
 
                   {/* What's Included */}
-                  <div className="bg-[#111820] border border-[#00d4aa]/20 rounded-2xl p-6" style={{ boxShadow: "0 0 40px rgba(0,212,170,0.06)" }}>
+                  <div className="bg-[#10151d] border border-[#00e5a0]/20 rounded-2xl p-6" style={{ boxShadow: "0 0 40px rgba(0,229,160,0.06)" }}>
                     <div className="flex items-center justify-between mb-5">
                       <span className="font-['Space_Grotesk'] font-semibold text-white text-sm">Private Access</span>
-                      <span className="font-mono text-[10px] text-[#00d4aa] bg-[#00d4aa]/10 border border-[#00d4aa]/20 px-2 py-0.5 rounded-full">BY INVITATION</span>
+                      <span className="font-mono text-[10px] text-[#00e5a0] bg-[#00e5a0]/10 border border-[#00e5a0]/20 px-2 py-0.5 rounded-full">BY INVITATION</span>
                     </div>
                     <div className="space-y-2.5 mb-5">
                       {[
@@ -309,7 +309,7 @@ export default function Subscribe() {
                         "Mobile-first experience",
                       ].map((item, i) => (
                         <div key={i} className="flex items-center gap-2.5">
-                          <svg className="w-3.5 h-3.5 text-[#00d4aa] shrink-0" fill="none" viewBox="0 0 16 16">
+                          <svg className="w-3.5 h-3.5 text-[#00e5a0] shrink-0" fill="none" viewBox="0 0 16 16">
                             <path d="M3 8l3.5 3.5L13 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>
                           <span className="text-white/55 text-xs">{item}</span>
@@ -319,7 +319,7 @@ export default function Subscribe() {
                   </div>
 
                   {/* Capabilities */}
-                  <div className="bg-[#111820] border border-white/5 rounded-2xl p-5">
+                  <div className="bg-[#10151d] border border-white/5 rounded-2xl p-5">
                     <p className="font-mono text-[10px] text-white/30 tracking-widest mb-4">ENGINE CAPABILITIES</p>
                     <div className="space-y-2.5">
                       {[
@@ -333,7 +333,7 @@ export default function Subscribe() {
                         "Continuous scanner evolution",
                       ].map((item, i) => (
                         <div key={i} className="flex items-center gap-2.5">
-                          <span className="w-1 h-1 rounded-full bg-[#00d4aa]/50 shrink-0" />
+                          <span className="w-1 h-1 rounded-full bg-[#00e5a0]/50 shrink-0" />
                           <span className="text-white/40 text-xs">{item}</span>
                         </div>
                       ))}
@@ -341,7 +341,7 @@ export default function Subscribe() {
                   </div>
 
                   {/* Sample Alert */}
-                  <div className="bg-[#111820] border border-white/5 rounded-2xl p-5">
+                  <div className="bg-[#10151d] border border-white/5 rounded-2xl p-5">
                     <p className="font-mono text-[10px] text-white/30 tracking-widest mb-4">SAMPLE ALERT OUTPUT</p>
 
                     {/* Bullish */}
@@ -355,7 +355,7 @@ export default function Subscribe() {
                           { sym: "NVDA", tier: "FIRE", score: 91, grade: "A" },
                           { sym: "AMZN", tier: "PREP", score: 82, grade: "B" },
                         ].map((r, i) => (
-                          <div key={i} className="flex items-center justify-between bg-[#0d1520] rounded-lg px-3 py-2">
+                          <div key={i} className="flex items-center justify-between bg-[#0d1118] rounded-lg px-3 py-2">
                             <span className="font-mono text-sm font-bold text-white w-12">{r.sym}</span>
                             <span className="font-mono text-[10px] text-[#f97316] font-bold tracking-wider">{r.tier}</span>
                             <span className="font-mono text-xs text-white/50">{r.score}</span>
@@ -375,7 +375,7 @@ export default function Subscribe() {
                         {[
                           { sym: "AAPL", tier: "FIRE", score: 88, grade: "A" },
                         ].map((r, i) => (
-                          <div key={i} className="flex items-center justify-between bg-[#0d1520] rounded-lg px-3 py-2">
+                          <div key={i} className="flex items-center justify-between bg-[#0d1118] rounded-lg px-3 py-2">
                             <span className="font-mono text-sm font-bold text-white w-12">{r.sym}</span>
                             <span className="font-mono text-[10px] text-[#f97316] font-bold tracking-wider">{r.tier}</span>
                             <span className="font-mono text-xs text-white/50">{r.score}</span>
@@ -387,7 +387,7 @@ export default function Subscribe() {
                   </div>
 
                   {/* Who This Is For */}
-                  <div className="bg-[#111820] border border-white/5 rounded-2xl p-5">
+                  <div className="bg-[#10151d] border border-white/5 rounded-2xl p-5">
                     <p className="font-mono text-[10px] text-white/30 tracking-widest mb-4">WHO THIS IS FOR</p>
                     <div className="space-y-2.5">
                       {[
@@ -398,7 +398,7 @@ export default function Subscribe() {
                         "Traders wanting mobile-ready alerts",
                       ].map((item, i) => (
                         <div key={i} className="flex items-center gap-2.5">
-                          <svg className="w-3 h-3 text-[#00d4aa]/60 shrink-0" fill="none" viewBox="0 0 12 12">
+                          <svg className="w-3 h-3 text-[#00e5a0]/60 shrink-0" fill="none" viewBox="0 0 12 12">
                             <path d="M2 6h8M6 2v8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                           </svg>
                           <span className="text-white/45 text-xs">{item}</span>
@@ -408,7 +408,7 @@ export default function Subscribe() {
                   </div>
 
                   {/* Trust */}
-                  <div className="bg-[#111820] border border-white/5 rounded-2xl p-5 space-y-3">
+                  <div className="bg-[#10151d] border border-white/5 rounded-2xl p-5 space-y-3">
                     {[
                       { icon: "🔒", text: "Secure & private — your data is never shared" },
                       { icon: "⚡", text: "Onboarded within 24 hours of approval" },

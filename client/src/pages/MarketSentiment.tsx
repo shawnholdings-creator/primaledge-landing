@@ -90,7 +90,7 @@ interface SentimentData {
 /* ─── Score Color ─────────────────────────────────────────── */
 function scoreColor(score: number): string {
   if (score >= 75) return "#22c55e";
-  if (score >= 55) return "#00d4aa";
+  if (score >= 55) return "#00e5a0";
   if (score >= 45) return "#f59e0b";
   if (score >= 30) return "#f97316";
   return "#ef4444";
@@ -135,11 +135,11 @@ function ScoreGauge({ score }: { score: number }) {
 /* ─── Loading Skeleton ────────────────────────────────────── */
 function LoadingSkeleton() {
   return (
-    <div className="min-h-screen bg-[#0a0e14] text-white">
+    <div className="min-h-screen bg-[#0a0d12] text-white">
       <Navbar />
       <section className="pt-32 pb-12 px-4">
         <div className="container max-w-5xl mx-auto">
-          <div className="bg-[#0d1117] border border-white/10 rounded-2xl overflow-hidden">
+          <div className="bg-[#0c1016] border border-white/10 rounded-2xl overflow-hidden">
             <div className="flex items-center gap-2 px-5 py-3 border-b border-white/10">
               <div className="w-3 h-3 rounded-full bg-red-500/40 animate-pulse" />
               <div className="w-3 h-3 rounded-full bg-yellow-500/40 animate-pulse" />
@@ -165,8 +165,8 @@ function LoadingSkeleton() {
 /* ─── Market State Cell ───────────────────────────────────── */
 function StateCell({ title, label, sub, color }: { title: string; label: string; sub?: string; color: string }) {
   return (
-    <div className="bg-[#0a0e14]/60 border border-white/[0.06] rounded-lg px-3 py-2.5 hover:border-white/10 transition-colors">
-      <div className="text-[10px] tracking-[0.18em] uppercase mb-1" style={{ fontFamily: "'JetBrains Mono', monospace", color: "#B8962E" }}>
+    <div className="bg-[#0a0d12]/60 border border-white/[0.06] rounded-lg px-3 py-2.5 hover:border-white/10 transition-colors">
+      <div className="text-[10px] tracking-[0.18em] uppercase mb-1" style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00e5a0" }}>
         {title}
       </div>
       <div
@@ -212,9 +212,9 @@ function TickerTape({ data }: { data: SentimentData | null }) {
       <div
         className="sticky top-20 z-40 overflow-hidden"
         style={{
-          background: "#0a0a0f",
-          borderTop: "1px solid rgba(240,180,41,0.18)",
-          borderBottom: "1px solid rgba(240,180,41,0.18)",
+          background: "#0a0d12",
+          borderTop: "1px solid rgba(0,229,160,0.18)",
+          borderBottom: "1px solid rgba(0,229,160,0.18)",
         }}
       >
         <div
@@ -243,7 +243,7 @@ function TickerTape({ data }: { data: SentimentData | null }) {
                     {isUp ? "+" : ""}{chg.toFixed(2)}%
                   </span>
                 )}
-                <span style={{ color: "rgba(240,180,41,0.35)", margin: "0 4px", fontWeight: 300 }}>
+                <span style={{ color: "rgba(0,229,160,0.35)", margin: "0 4px", fontWeight: 300 }}>
                   {"|"}
                 </span>
               </span>
@@ -305,7 +305,7 @@ function InsightCards({ insights }: { insights?: string[] }) {
     <div className="mt-4">
       <div
         className="text-[9px] tracking-widest uppercase mb-2 font-bold"
-        style={{ fontFamily: "'JetBrains Mono', monospace", color: "#FFD700" }}
+        style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00e5a0" }}
       >
         TODAY'S MARKET INSIGHTS
       </div>
@@ -322,7 +322,7 @@ function InsightCards({ insights }: { insights?: string[] }) {
               width: "280px",
               minWidth: "280px",
               background: "#111118",
-              borderLeft: "3px solid #f0b429",
+              borderLeft: "3px solid #00e5a0",
               scrollSnapAlign: "start",
             }}
           >
@@ -340,7 +340,7 @@ function InsightCards({ insights }: { insights?: string[] }) {
               style={{
                 width: i === activeIdx ? "8px" : "6px",
                 height: i === activeIdx ? "8px" : "6px",
-                backgroundColor: i === activeIdx ? "#FFD700" : "rgba(255,255,255,0.2)",
+                backgroundColor: i === activeIdx ? "#00e5a0" : "rgba(255,255,255,0.2)",
               }}
               onClick={() => {
                 setActiveIdx(i);
@@ -398,8 +398,8 @@ function SectorHeatStrip({ sectors }: { sectors: Array<{ symbol: string; name: s
       border: "1px solid transparent",
     };
     if (perf === maxPerf) {
-      base.boxShadow = "0 0 8px #f0b42940";
-      base.borderColor = "#f0b429";
+      base.boxShadow = "0 0 8px #00e5a040";
+      base.borderColor = "#00e5a0";
     } else if (perf === minPerf) {
       base.boxShadow = "0 0 8px #ef444440";
       base.borderColor = "#ef4444";
@@ -408,10 +408,10 @@ function SectorHeatStrip({ sectors }: { sectors: Array<{ symbol: string; name: s
   }
 
   return (
-    <div className="bg-[#0d1117] border border-white/[0.06] rounded-xl p-4 mb-4">
+    <div className="bg-[#0c1016] border border-white/[0.06] rounded-xl p-4 mb-4">
       <div
         className="text-[9px] tracking-widest uppercase mb-3 font-bold"
-        style={{ fontFamily: "'JetBrains Mono', monospace", color: "#FFD700" }}
+        style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00e5a0" }}
       >
         SECTOR FLOW TODAY
       </div>
@@ -470,16 +470,16 @@ function DashboardBody({ data }: { data: SentimentData | null }) {
         <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-6 mb-6">
 
           {/* Score Gauge */}
-          <div className="flex flex-col items-center justify-center bg-[#0d1117] border border-white/[0.06] rounded-xl px-4 sm:px-8 py-4 sm:py-6">
-            <div className="text-[10px] tracking-[0.18em] uppercase mb-3" style={{ fontFamily: "'JetBrains Mono', monospace", color: "#B8962E" }}>
+          <div className="flex flex-col items-center justify-center bg-[#0c1016] border border-white/[0.06] rounded-xl px-4 sm:px-8 py-4 sm:py-6">
+            <div className="text-[10px] tracking-[0.18em] uppercase mb-3" style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00e5a0" }}>
               SIGNAL STRENGTH
             </div>
             <ScoreGauge score={data.score} />
           </div>
 
           {/* Market State Grid — 5×2 */}
-          <div className="bg-[#0d1117] border border-white/[0.06] rounded-xl p-4">
-            <div className="text-[10px] tracking-[0.18em] uppercase mb-3" style={{ fontFamily: "'JetBrains Mono', monospace", color: "#B8962E" }}>
+          <div className="bg-[#0c1016] border border-white/[0.06] rounded-xl p-4">
+            <div className="text-[10px] tracking-[0.18em] uppercase mb-3" style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00e5a0" }}>
               MARKET DETAILS
             </div>
             <div className="grid grid-cols-2 gap-2">
@@ -498,8 +498,8 @@ function DashboardBody({ data }: { data: SentimentData | null }) {
         </div>
 
         {/* ═══ HOT / COLD SECTOR BAR ═══ */}
-        <div className="bg-[#0d1117] border border-white/[0.06] rounded-xl p-4 mb-6">
-          <div className="text-[10px] tracking-[0.18em] uppercase mb-3" style={{ fontFamily: "'JetBrains Mono', monospace", color: "#B8962E" }}>
+        <div className="bg-[#0c1016] border border-white/[0.06] rounded-xl p-4 mb-6">
+          <div className="text-[10px] tracking-[0.18em] uppercase mb-3" style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00e5a0" }}>
             SECTOR HEAT
           </div>
           <div className="flex flex-col sm:flex-row gap-2">
@@ -542,9 +542,9 @@ function DashboardBody({ data }: { data: SentimentData | null }) {
         <SectorHeatStrip sectors={data.sectors} />
 
         {/* ═══ SYMBOL GRID — INDICES ═══ */}
-        <div className="bg-[#0d1117] border border-white/[0.06] rounded-xl overflow-hidden mb-4">
+        <div className="bg-[#0c1016] border border-white/[0.06] rounded-xl overflow-hidden mb-4">
           <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06]">
-            <span className="text-[10px] text-[#FFD700] tracking-[0.2em] uppercase font-bold" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+            <span className="text-[10px] text-[#00e5a0] tracking-[0.2em] uppercase font-bold" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
               INDEX TRACKER
             </span>
             <div className="flex items-center gap-3 text-[9px] text-white/15" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
@@ -634,9 +634,9 @@ function DashboardBody({ data }: { data: SentimentData | null }) {
         </div>
 
         {/* ═══ SYMBOL GRID — MEGA CAPS ═══ */}
-        <div className="bg-[#0d1117] border border-white/[0.06] rounded-xl overflow-hidden mb-6">
+        <div className="bg-[#0c1016] border border-white/[0.06] rounded-xl overflow-hidden mb-6">
           <div className="px-4 py-3 border-b border-white/[0.06]">
-            <span className="text-[10px] text-[#FFD700] tracking-[0.2em] uppercase font-bold" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+            <span className="text-[10px] text-[#00e5a0] tracking-[0.2em] uppercase font-bold" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
               MEGA CAP MONITOR
             </span>
           </div>
@@ -704,8 +704,8 @@ function DashboardBody({ data }: { data: SentimentData | null }) {
         </div>
 
         {/* ═══ SECTORS STRIP ═══ */}
-        <div className="bg-[#0d1117] border border-white/[0.06] rounded-xl p-4 mb-6">
-          <div className="text-[10px] tracking-[0.18em] uppercase mb-3" style={{ fontFamily: "'JetBrains Mono', monospace", color: "#B8962E" }}>
+        <div className="bg-[#0c1016] border border-white/[0.06] rounded-xl p-4 mb-6">
+          <div className="text-[10px] tracking-[0.18em] uppercase mb-3" style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00e5a0" }}>
             SECTOR PERFORMANCE
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-2">
@@ -717,7 +717,7 @@ function DashboardBody({ data }: { data: SentimentData | null }) {
               return (
                 <div
                   key={sec.symbol}
-                  className="bg-[#0a0e14]/60 border border-white/[0.06] rounded-lg px-3 py-2.5 hover:border-white/10 transition-colors"
+                  className="bg-[#0a0d12]/60 border border-white/[0.06] rounded-lg px-3 py-2.5 hover:border-white/10 transition-colors"
                 >
                   <div className="flex items-center justify-between mb-1.5">
                     <span className="text-[11px] font-bold text-white/90" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
@@ -744,9 +744,9 @@ function DashboardBody({ data }: { data: SentimentData | null }) {
 
         {/* ═══ VIX QUICK STAT ═══ */}
         {data.vix_value !== undefined && (
-          <div className="bg-[#0d1117] border border-white/[0.06] rounded-xl px-4 py-3 mb-6 flex items-center justify-between">
+          <div className="bg-[#0c1016] border border-white/[0.06] rounded-xl px-4 py-3 mb-6 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <span className="text-[10px] tracking-[0.18em] uppercase" style={{ fontFamily: "'JetBrains Mono', monospace", color: "#B8962E" }}>VIX</span>
+              <span className="text-[10px] tracking-[0.18em] uppercase" style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00e5a0" }}>VIX</span>
               <span
                 className="text-xl font-black"
                 style={{
@@ -766,7 +766,7 @@ function DashboardBody({ data }: { data: SentimentData | null }) {
 
 
         {/* ═══ RESEARCH DISCLAIMER ═══ */}
-        <div className="max-w-4xl mx-auto bg-[#0d1117] border border-white/5 rounded-xl px-5 sm:px-6 py-4 flex items-start gap-3 mb-8">
+        <div className="max-w-4xl mx-auto bg-[#0c1016] border border-white/5 rounded-xl px-5 sm:px-6 py-4 flex items-start gap-3 mb-8">
           <svg className="w-4 h-4 text-[#f59e0b] shrink-0 mt-0.5" fill="none" viewBox="0 0 16 16">
             <path d="M8 2l1.5 4.5H14l-3.7 2.7 1.4 4.3L8 11 4.3 13.5l1.4-4.3L2 6.5h4.5z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
           </svg>
@@ -819,14 +819,14 @@ export default function MarketSentiment() {
 
   if (error && !data) {
     return (
-      <div className="min-h-screen bg-[#0a0e14] text-white">
+      <div className="min-h-screen bg-[#0a0d12] text-white">
         <Navbar />
         <section className="pt-32 pb-12 px-4">
           <div className="container max-w-4xl mx-auto text-center">
-            <div className="bg-[#0d1117] border border-red-500/20 rounded-2xl p-12">
+            <div className="bg-[#0c1016] border border-red-500/20 rounded-2xl p-12">
               <p className="text-red-400/80 text-lg font-mono mb-2">Connection Error</p>
               <p className="text-white/30 text-sm mb-6">{error}</p>
-              <button onClick={fetchData} className="text-sm text-[#00d4aa] font-mono hover:underline">
+              <button onClick={fetchData} className="text-sm text-[#00e5a0] font-mono hover:underline">
                 Retry →
               </button>
             </div>
@@ -858,7 +858,7 @@ export default function MarketSentiment() {
     : "";
 
   return (
-    <div className="min-h-screen bg-[#0a0e14] text-white">
+    <div className="min-h-screen bg-[#0a0d12] text-white">
       <Navbar />
       <TickerTape data={data} />
 
@@ -874,7 +874,7 @@ export default function MarketSentiment() {
                   className="text-3xl sm:text-4xl font-black tracking-tight leading-none"
                   style={{
                     fontFamily: "'Space Grotesk', sans-serif",
-                    background: "linear-gradient(135deg, #FFD700, #00d4aa)",
+                    background: "linear-gradient(135deg, #00e5a0, #00e5a0)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                   }}

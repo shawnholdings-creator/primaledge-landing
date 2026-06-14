@@ -1,7 +1,7 @@
 /* ============================================================
    ELASTIC SIGNAL DESIGN SYSTEM — Home Page
    Mobile-first responsive layout
-   Colors: #0a0e14 bg, #00d4aa teal, #22c55e bull, #ef4444 bear
+   Colors: #0a0d12 bg, #00e5a0 teal, #22c55e bull, #ef4444 bear
    Fonts: Space Grotesk (h), DM Sans (body), JetBrains Mono (data)
    ============================================================ */
 
@@ -85,7 +85,7 @@ function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
 function TickerTape() {
   const items = [...TICKER_ITEMS, ...TICKER_ITEMS];
   return (
-    <div className="fixed top-20 left-0 right-0 z-40 bg-[#0d1520] border-b border-white/5 overflow-hidden h-8">
+    <div className="fixed top-20 left-0 right-0 z-40 bg-[#0d1118] border-b border-white/5 overflow-hidden h-8">
       <div className="ticker-tape flex items-center h-full gap-8 px-4">
         {items.map((item, i) => (
           <span key={i} className="flex items-center gap-2 shrink-0">
@@ -118,10 +118,10 @@ function Hero() {
   return (
     <section
       className="relative min-h-screen flex items-center pt-32 sm:pt-36 pb-16 overflow-hidden"
-      style={{ background: "linear-gradient(135deg, #0a0e14 0%, #0d1520 50%, #0a0e14 100%)" }}
+      style={{ background: "linear-gradient(135deg, #0a0d12 0%, #0d1118 50%, #0a0d12 100%)" }}
     >
       <div className="absolute inset-0 opacity-20" style={{ backgroundImage: `url(https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/hero-bg-WRuxyzjuQc2Zg7wTqtkdku.webp)`, backgroundSize: "cover", backgroundPosition: "center" }} />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#0a0e14] via-[#0a0e14]/80 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#0a0d12] via-[#0a0d12]/80 to-transparent" />
 
       <div className="container relative z-10">
         <div className="grid lg:grid-cols-2 gap-10 xl:gap-16 items-center">
@@ -132,14 +132,14 @@ function Hero() {
               <PrimalEdgeLogo size="lg" />
             </div>
 
-            <div className="inline-flex items-center gap-2 bg-[#00d4aa]/10 border border-[#00d4aa]/20 rounded-full px-4 py-1.5 mb-6 fade-up fade-up-delay-2">
-              <span className="w-2 h-2 rounded-full bg-[#00d4aa] animate-pulse" />
-              <span className="font-mono text-xs text-[#00d4aa] tracking-wider">AI ENGINE ACTIVE — LIVE</span>
+            <div className="inline-flex items-center gap-2 bg-[#00e5a0]/10 border border-[#00e5a0]/20 rounded-full px-4 py-1.5 mb-6 fade-up fade-up-delay-2">
+              <span className="w-2 h-2 rounded-full bg-[#00e5a0] animate-pulse" />
+              <span className="font-mono text-xs text-[#00e5a0] tracking-wider">AI ENGINE ACTIVE — LIVE</span>
             </div>
 
             <h1 className="font-['Space_Grotesk'] font-bold text-4xl sm:text-5xl lg:text-6xl xl:text-7xl text-white leading-[1.05] mb-6 fade-up fade-up-delay-2">
               AI-Powered.<br />
-              <span className="text-[#00d4aa] teal-text-glow">Slingshot</span><br />
+              <span className="text-[#00e5a0] teal-text-glow">Slingshot</span><br />
               Precision.
             </h1>
 
@@ -148,8 +148,8 @@ function Hero() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 fade-up fade-up-delay-4">
-              <a href="#how-it-works" className="shimmer-btn pulse-glow bg-[#00d4aa] text-[#0a0e14] font-['Space_Grotesk'] font-bold text-base px-8 py-3.5 rounded hover:bg-[#00bfa0] transition-all text-center overflow-hidden relative">
-                <span className="absolute inset-0 bg-gradient-to-r from-[#00d4aa]/0 via-white/15 to-[#00d4aa]/0 animate-shimmer" />
+              <a href="#how-it-works" className="shimmer-btn pulse-glow bg-[#00e5a0] text-[#0a0d12] font-['Space_Grotesk'] font-bold text-base px-8 py-3.5 rounded hover:bg-[#00bfa0] transition-all text-center overflow-hidden relative">
+                <span className="absolute inset-0 bg-gradient-to-r from-[#00e5a0]/0 via-white/15 to-[#00e5a0]/0 animate-shimmer" />
                 <span className="relative flex items-center justify-center gap-2">
                   See How It Works
                   <svg className="w-4 h-4 animate-bounce" fill="none" viewBox="0 0 16 16"><path d="M8 3v10M4 9l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -162,20 +162,20 @@ function Hero() {
 
             <div className="flex items-center gap-4 mt-8 fade-up fade-up-delay-5">
               <div className="flex items-center gap-2">
-                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#00d4aa]/20 border border-[#00d4aa]/40">
+                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#00e5a0]/20 border border-[#00e5a0]/40">
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                    <path d="M6 1L7.5 4.5H11L8.5 6.5L9.5 10L6 8L2.5 10L3.5 6.5L1 4.5H4.5L6 1Z" fill="#00d4aa"/>
+                    <path d="M6 1L7.5 4.5H11L8.5 6.5L9.5 10L6 8L2.5 10L3.5 6.5L1 4.5H4.5L6 1Z" fill="#00e5a0"/>
                   </svg>
                 </span>
-                <p className="text-white/60 text-sm font-medium tracking-wide">Exclusive <span className="text-[#00d4aa] font-semibold">Elite Members</span> Only</p>
+                <p className="text-white/60 text-sm font-medium tracking-wide">Exclusive <span className="text-[#00e5a0] font-semibold">Elite Members</span> Only</p>
               </div>
             </div>
           </div>
 
           {/* Right: Live scan mock — hidden on mobile, shown lg+ */}
           <div className="hidden lg:block">
-            <div className="bg-[#111820] border border-white/8 rounded-xl overflow-hidden teal-glow">
-              <div className="flex items-center justify-between px-4 py-3 bg-[#0d1520] border-b border-white/5">
+            <div className="bg-[#10151d] border border-white/8 rounded-xl overflow-hidden teal-glow">
+              <div className="flex items-center justify-between px-4 py-3 bg-[#0d1118] border-b border-white/5">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-[#ef4444]" />
                   <div className="w-3 h-3 rounded-full bg-[#f59e0b]" />
@@ -183,11 +183,11 @@ function Hero() {
                 </div>
                 <span className="font-mono text-xs text-white/40">PRIMAL EDGE — SIGNAL ENGINE</span>
                 <span className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#00d4aa] animate-pulse" />
-                  <span className="font-mono text-[10px] text-[#00d4aa]">SCANNING LIVE MARKET</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00e5a0] animate-pulse" />
+                  <span className="font-mono text-[10px] text-[#00e5a0]">SCANNING LIVE MARKET</span>
                 </span>
               </div>
-              <div className="grid grid-cols-5 gap-2 px-4 py-2 bg-[#0d1520]/50 border-b border-white/5">
+              <div className="grid grid-cols-5 gap-2 px-4 py-2 bg-[#0d1118]/50 border-b border-white/5">
                 {["TICKER","VERDICT","SCORE","GRADE","PRICE"].map(h => (
                   <span key={h} className="font-mono text-[10px] text-white/30 tracking-widest">{h}</span>
                 ))}
@@ -205,13 +205,13 @@ function Hero() {
                 {visibleRows < SCAN_ROWS.length && (
                   <div className="px-4 py-3 flex items-center gap-2">
                     <span className="font-mono text-xs text-white/30 animate-pulse">Scanning...</span>
-                    <span className="font-mono text-xs text-[#00d4aa] animate-pulse">▋</span>
+                    <span className="font-mono text-xs text-[#00e5a0] animate-pulse">▋</span>
                   </div>
                 )}
               </div>
-              <div className="px-4 py-2 bg-[#0d1520]/50 border-t border-white/5 flex items-center justify-between">
+              <div className="px-4 py-2 bg-[#0d1118]/50 border-t border-white/5 flex items-center justify-between">
                 <span className="font-mono text-[10px] text-white/25">Premium universe scanned</span>
-                <span className="font-mono text-[10px] text-[#00d4aa]">{visibleRows} setups found</span>
+                <span className="font-mono text-[10px] text-[#00e5a0]">{visibleRows} setups found</span>
               </div>
             </div>
           </div>
@@ -219,12 +219,12 @@ function Hero() {
 
         {/* Mobile scan preview — shown below copy on small screens */}
         <div className="lg:hidden mt-10">
-          <div className="bg-[#111820] border border-white/8 rounded-xl overflow-hidden">
-            <div className="flex items-center justify-between px-3 py-2.5 bg-[#0d1520] border-b border-white/5">
+          <div className="bg-[#10151d] border border-white/8 rounded-xl overflow-hidden">
+            <div className="flex items-center justify-between px-3 py-2.5 bg-[#0d1118] border-b border-white/5">
               <span className="font-mono text-[10px] text-white/40">PRIMAL EDGE ENGINE</span>
               <span className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#00d4aa] animate-pulse" />
-                <span className="font-mono text-[10px] text-[#00d4aa]">LIVE</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00e5a0] animate-pulse" />
+                <span className="font-mono text-[10px] text-[#00e5a0]">LIVE</span>
               </span>
             </div>
             <div className="divide-y divide-white/5">
@@ -254,11 +254,11 @@ function Stats() {
     { label: "Signal-to-Device Latency", value: 3, suffix: "s" },
   ];
   return (
-    <section ref={ref} className="py-12 sm:py-16 bg-[#0d1520] border-y border-white/5">
+    <section ref={ref} className="py-12 sm:py-16 bg-[#0d1118] border-y border-white/5">
       <div className="container grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
         {stats.map((s, i) => (
           <div key={i} className="text-center">
-            <div className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-[#00d4aa] mb-2">
+            <div className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-[#00e5a0] mb-2">
               {inView ? <Counter to={s.value} suffix={s.suffix} /> : `0${s.suffix}`}
             </div>
             <p className="text-white/40 text-xs sm:text-sm">{s.label}</p>
@@ -280,11 +280,11 @@ function HowItWorks() {
   ];
 
   return (
-    <section id="how-it-works" className="py-16 sm:py-24 bg-[#0a0e14]">
+    <section id="how-it-works" className="py-16 sm:py-24 bg-[#0a0d12]">
       <div className="container">
         {/* Bridge headline */}
         <div className="mb-10 sm:mb-16" ref={ref}>
-          <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">HOW THE ENGINE WORKS</p>
+          <p className="font-mono text-xs text-[#00e5a0] tracking-widest mb-3">HOW THE ENGINE WORKS</p>
           <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white">
             From Market Noise<br />to Ranked Setups
           </h2>
@@ -292,21 +292,21 @@ function HowItWorks() {
         </div>
 
         <div className="relative">
-          <div className="hidden lg:block absolute top-12 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00d4aa]/20 to-transparent" />
+          <div className="hidden lg:block absolute top-12 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00e5a0]/20 to-transparent" />
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {steps.map((step, i) => (
               <div key={i} className={`relative ${inView ? `fade-up fade-up-delay-${i + 1}` : "opacity-0"}`}>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full border border-[#00d4aa]/30 bg-[#00d4aa]/10 flex items-center justify-center shrink-0">
-                    <span className="font-mono text-xs font-bold text-[#00d4aa]">{step.num}</span>
+                  <div className="w-10 h-10 rounded-full border border-[#00e5a0]/30 bg-[#00e5a0]/10 flex items-center justify-center shrink-0">
+                    <span className="font-mono text-xs font-bold text-[#00e5a0]">{step.num}</span>
                   </div>
                 </div>
                 <div className="text-2xl mb-3">{step.icon}</div>
                 <h3 className="font-['Space_Grotesk'] font-semibold text-base sm:text-lg text-white mb-2">{step.title}</h3>
                 <p className="text-white/50 text-sm leading-relaxed mb-3">{step.desc}</p>
                 {/* Trader Value translation */}
-                <div className="bg-[#00d4aa]/5 border border-[#00d4aa]/10 rounded-lg px-3 py-2.5 mt-auto">
-                  <p className="font-mono text-[10px] text-[#00d4aa]/70 tracking-widest mb-1">WHY TRADERS CARE</p>
+                <div className="bg-[#00e5a0]/5 border border-[#00e5a0]/10 rounded-lg px-3 py-2.5 mt-auto">
+                  <p className="font-mono text-[10px] text-[#00e5a0]/70 tracking-widest mb-1">WHY TRADERS CARE</p>
                   <p className="text-white/55 text-xs leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>{step.traderValue}</p>
                 </div>
               </div>
@@ -338,10 +338,10 @@ function Features() {
   ];
 
   return (
-    <section id="features" className="py-16 sm:py-24 bg-[#0d1520]">
+    <section id="features" className="py-16 sm:py-24 bg-[#0d1118]">
       <div className="container">
         <div className="mb-10 sm:mb-16" ref={ref}>
-          <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">ENGINEERED FEATURES</p>
+          <p className="font-mono text-xs text-[#00e5a0] tracking-widest mb-3">ENGINEERED FEATURES</p>
           <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white max-w-2xl">
             Institutional-Grade Analysis.<br />Retail Simplicity.
           </h2>
@@ -350,15 +350,15 @@ function Features() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {features.map((f, i) => (
-            <div key={i} className={`relative bg-[#111820] border border-white/5 rounded-xl p-5 sm:p-6 hover:border-[#00d4aa]/30 hover:bg-[#111820]/80 transition-all group ${inView ? `fade-up fade-up-delay-${Math.min(i + 1, 5)}` : "opacity-0"}`}>
+            <div key={i} className={`relative bg-[#10151d] border border-white/5 rounded-xl p-5 sm:p-6 hover:border-[#00e5a0]/30 hover:bg-[#10151d]/80 transition-all group ${inView ? `fade-up fade-up-delay-${Math.min(i + 1, 5)}` : "opacity-0"}`}>
               <span className="absolute top-4 right-4 font-['Space_Grotesk'] font-bold text-4xl sm:text-5xl text-white/4 leading-none pointer-events-none">{f.num}</span>
-              <span className="font-mono text-[10px] text-[#00d4aa]/70 tracking-widest bg-[#00d4aa]/8 border border-[#00d4aa]/15 rounded px-2 py-0.5 mb-4 inline-block">{f.tag}</span>
-              <div className="absolute left-0 top-6 bottom-6 w-0.5 bg-[#00d4aa] opacity-0 group-hover:opacity-100 transition-opacity rounded-full" />
-              <h3 className="font-['Space_Grotesk'] font-semibold text-base sm:text-lg text-white mb-3 group-hover:text-[#00d4aa] transition-colors">{f.title}</h3>
+              <span className="font-mono text-[10px] text-[#00e5a0]/70 tracking-widest bg-[#00e5a0]/8 border border-[#00e5a0]/15 rounded px-2 py-0.5 mb-4 inline-block">{f.tag}</span>
+              <div className="absolute left-0 top-6 bottom-6 w-0.5 bg-[#00e5a0] opacity-0 group-hover:opacity-100 transition-opacity rounded-full" />
+              <h3 className="font-['Space_Grotesk'] font-semibold text-base sm:text-lg text-white mb-3 group-hover:text-[#00e5a0] transition-colors">{f.title}</h3>
               <p className="text-white/45 text-sm leading-relaxed mb-3">{f.desc}</p>
               {/* Trader Value translation */}
-              <div className="bg-[#00d4aa]/5 border border-[#00d4aa]/10 rounded-lg px-3 py-2.5 mt-auto">
-                <p className="font-mono text-[10px] text-[#00d4aa]/70 tracking-widest mb-1">TRADER VALUE</p>
+              <div className="bg-[#00e5a0]/5 border border-[#00e5a0]/10 rounded-lg px-3 py-2.5 mt-auto">
+                <p className="font-mono text-[10px] text-[#00e5a0]/70 tracking-widest mb-1">TRADER VALUE</p>
                 <p className="text-white/55 text-xs leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>{f.traderValue}</p>
               </div>
             </div>
@@ -443,11 +443,11 @@ function Technology() {
   const active = content[activeTab];
 
   return (
-    <section id="technology" className="py-16 sm:py-24 bg-[#0a0e14]">
+    <section id="technology" className="py-16 sm:py-24 bg-[#0a0d12]">
       <div className="container">
         {/* Header */}
         <div className="mb-10 sm:mb-14" ref={ref}>
-          <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">UNDER THE HOOD</p>
+          <p className="font-mono text-xs text-[#00e5a0] tracking-widest mb-3">UNDER THE HOOD</p>
           <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white max-w-3xl">
             Institutional-Grade Technology.<br />Retail-Accessible Delivery.
           </h2>
@@ -464,8 +464,8 @@ function Technology() {
               onClick={() => setActiveTab(tab.id)}
               className={`font-['Space_Grotesk'] font-semibold text-sm px-4 py-2.5 rounded-lg border transition-all ${
                 activeTab === tab.id
-                  ? "bg-[#00d4aa] text-[#0a0e14] border-[#00d4aa]"
-                  : "bg-transparent text-white/50 border-white/10 hover:border-[#00d4aa]/40 hover:text-white"
+                  ? "bg-[#00e5a0] text-[#0a0d12] border-[#00e5a0]"
+                  : "bg-transparent text-white/50 border-white/10 hover:border-[#00e5a0]/40 hover:text-white"
               }`}
             >
               <span className="hidden sm:inline">{tab.label}</span>
@@ -490,18 +490,18 @@ function Technology() {
 
           {/* Stats — 2 cols */}
           <div className="lg:col-span-2">
-            <div className="bg-[#111820] border border-white/5 rounded-2xl p-6 space-y-4">
+            <div className="bg-[#10151d] border border-white/5 rounded-2xl p-6 space-y-4">
               <p className="font-mono text-[10px] text-white/30 tracking-widest mb-2">KEY METRICS</p>
               {active.stats.map((stat, i) => (
                 <div key={i} className="flex items-center justify-between border-b border-white/5 pb-3 last:border-0 last:pb-0">
                   <span className="text-white/45 text-sm">{stat.label}</span>
-                  <span className="font-mono font-bold text-[#00d4aa] text-sm">{stat.val}</span>
+                  <span className="font-mono font-bold text-[#00e5a0] text-sm">{stat.val}</span>
                 </div>
               ))}
 
               {/* Divider */}
               <div className="pt-2">
-                <div className="bg-[#0d1520] rounded-xl p-4">
+                <div className="bg-[#0d1118] rounded-xl p-4">
                   <p className="font-mono text-[10px] text-white/25 tracking-widest mb-3">PIPELINE OVERVIEW</p>
                   <div className="space-y-2">
                     {[
@@ -513,16 +513,16 @@ function Technology() {
                       { step: "06", label: "Dual-Channel Signal Dispatch", active: activeTab === "signal" },
                     ].map((item, i) => (
                       <div key={i} className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
-                        item.active ? "bg-[#00d4aa]/10 border border-[#00d4aa]/20" : ""
+                        item.active ? "bg-[#00e5a0]/10 border border-[#00e5a0]/20" : ""
                       }`}>
                         <span className={`font-mono text-[10px] font-bold shrink-0 ${
-                          item.active ? "text-[#00d4aa]" : "text-white/20"
+                          item.active ? "text-[#00e5a0]" : "text-white/20"
                         }`}>{item.step}</span>
                         <span className={`text-xs ${
                           item.active ? "text-white/80" : "text-white/25"
                         }`}>{item.label}</span>
                         {item.active && (
-                          <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[#00d4aa] animate-pulse shrink-0" />
+                          <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[#00e5a0] animate-pulse shrink-0" />
                         )}
                       </div>
                     ))}
@@ -534,7 +534,7 @@ function Technology() {
         </div>
 
         {/* Bottom disclaimer bar */}
-        <div className={`mt-10 bg-[#111820] border border-white/5 rounded-xl px-5 sm:px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center gap-3 ${inView ? "fade-up fade-up-delay-3" : "opacity-0"}`}>
+        <div className={`mt-10 bg-[#10151d] border border-white/5 rounded-xl px-5 sm:px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center gap-3 ${inView ? "fade-up fade-up-delay-3" : "opacity-0"}`}>
           <svg className="w-4 h-4 text-[#f59e0b] shrink-0 mt-0.5 sm:mt-0" fill="none" viewBox="0 0 16 16">
             <path d="M8 2l1.5 4.5H14l-3.7 2.7 1.4 4.3L8 11 4.3 13.5l1.4-4.3L2 6.5h4.5z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
           </svg>
@@ -551,12 +551,12 @@ function Technology() {
 function AlertPreview() {
   const { ref, inView } = useInView();
   return (
-    <section className="py-16 sm:py-24 bg-[#0a0e14]">
+    <section className="py-16 sm:py-24 bg-[#0a0d12]">
       <div className="container">
         <div className="grid lg:grid-cols-2 gap-10 sm:gap-16 items-center">
           {/* Left: Alert detail list */}
           <div className={`order-2 lg:order-1 ${inView ? "fade-up fade-up-delay-1" : "opacity-0"}`} ref={ref}>
-            <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">INSTANT ANALYSIS</p>
+            <p className="font-mono text-xs text-[#00e5a0] tracking-widest mb-3">INSTANT ANALYSIS</p>
             <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white mb-6">
               Your Phone Buzzes<br />When the Setup Fires
             </h2>
@@ -583,20 +583,20 @@ function AlertPreview() {
           <div className={`order-1 lg:order-2 flex justify-center ${inView ? "fade-up fade-up-delay-2" : "opacity-0"}`}>
             <div className="relative w-full max-w-xs sm:max-w-sm">
               {/* Simulated phone notification card */}
-              <div className="bg-[#111820] border border-[#00d4aa]/20 rounded-2xl p-5 teal-glow">
+              <div className="bg-[#10151d] border border-[#00e5a0]/20 rounded-2xl p-5 teal-glow">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#00d4aa] flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 rounded-xl bg-[#00e5a0] flex items-center justify-center shrink-0">
                     <svg width="20" height="20" viewBox="0 0 18 18" fill="none">
-                      <path d="M2 14 Q5 4 9 9 Q13 14 16 4" stroke="#0a0e14" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
+                      <path d="M2 14 Q5 4 9 9 Q13 14 16 4" stroke="#0a0d12" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
                     </svg>
                   </div>
                   <div>
                     <p className="font-['Space_Grotesk'] font-bold text-white text-sm">Primal Edge</p>
                     <p className="font-mono text-[10px] text-white/40">just now</p>
                   </div>
-                  <span className="ml-auto w-2 h-2 rounded-full bg-[#00d4aa] animate-pulse" />
+                  <span className="ml-auto w-2 h-2 rounded-full bg-[#00e5a0] animate-pulse" />
                 </div>
-                <div className="bg-[#0d1520] rounded-xl p-4 space-y-2">
+                <div className="bg-[#0d1118] rounded-xl p-4 space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="font-mono text-lg font-bold text-white">NVDA</span>
                     <GradeBadge grade="A" />
@@ -619,7 +619,7 @@ function AlertPreview() {
                 </div>
                 <div className="mt-3 flex items-center justify-between">
                   <span className="font-mono text-[10px] text-white/25">AI Cockpit slingshot confirmed</span>
-                  <span className="font-mono text-[10px] text-[#00d4aa]">&lt; 3s delivery</span>
+                  <span className="font-mono text-[10px] text-[#00e5a0]">&lt; 3s delivery</span>
                 </div>
               </div>
             </div>
@@ -634,10 +634,10 @@ function AlertPreview() {
 function Pricing() {
   const { ref, inView } = useInView();
   return (
-    <section id="pricing" className="py-16 sm:py-24 bg-[#0a0e14]">
+    <section id="pricing" className="py-16 sm:py-24 bg-[#0a0d12]">
       <div className="container">
         <div className="text-center mb-10 sm:mb-16" ref={ref}>
-          <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">MEMBERSHIP PRICING</p>
+          <p className="font-mono text-xs text-[#00e5a0] tracking-widest mb-3">MEMBERSHIP PRICING</p>
           <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white mb-4">
             Full Access.<br />One Flat Rate.
           </h2>
@@ -647,12 +647,12 @@ function Pricing() {
         </div>
 
         <div className={`max-w-md mx-auto ${inView ? "fade-up fade-up-delay-2" : "opacity-0"}`}>
-          <div className="bg-[#111820] border border-[#00d4aa]/30 rounded-2xl p-6 sm:p-8 teal-glow relative overflow-hidden">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-32 bg-[#00d4aa]/5 blur-3xl rounded-full" />
+          <div className="bg-[#10151d] border border-[#00e5a0]/30 rounded-2xl p-6 sm:p-8 teal-glow relative overflow-hidden">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-32 bg-[#00e5a0]/5 blur-3xl rounded-full" />
             <div className="relative">
               <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
                 <span className="font-['Space_Grotesk'] font-semibold text-base sm:text-lg text-white">Primal Edge — AI Cockpit Access</span>
-                <span className="font-mono text-xs text-[#00d4aa] bg-[#00d4aa]/10 border border-[#00d4aa]/20 px-3 py-1 rounded-full whitespace-nowrap">PRIVATE GROUP</span>
+                <span className="font-mono text-xs text-[#00e5a0] bg-[#00e5a0]/10 border border-[#00e5a0]/20 px-3 py-1 rounded-full whitespace-nowrap">PRIVATE GROUP</span>
               </div>
               <div className="mb-6">
                 <span className="font-['Space_Grotesk'] font-bold text-4xl sm:text-5xl text-white">$49</span>
@@ -670,14 +670,14 @@ function Pricing() {
                   "Intelligent signal deduplication",
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3">
-                    <svg className="w-4 h-4 text-[#00d4aa] shrink-0" fill="none" viewBox="0 0 16 16">
+                    <svg className="w-4 h-4 text-[#00e5a0] shrink-0" fill="none" viewBox="0 0 16 16">
                       <path d="M3 8l3.5 3.5L13 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                     <span className="text-white/65 text-sm">{item}</span>
                   </div>
                 ))}
               </div>
-              <Link href="/subscribe" className="shimmer-btn block w-full bg-[#00d4aa] text-[#0a0e14] font-['Space_Grotesk'] font-bold text-base py-4 rounded-lg hover:bg-[#00bfa0] transition-all pulse-glow text-center">
+              <Link href="/subscribe" className="shimmer-btn block w-full bg-[#00e5a0] text-[#0a0d12] font-['Space_Grotesk'] font-bold text-base py-4 rounded-lg hover:bg-[#00bfa0] transition-all pulse-glow text-center">
                 Get Access Now →
               </Link>
               <p className="text-center text-white/30 text-xs mt-4">Cancel anytime. Billed monthly.</p>
@@ -704,18 +704,18 @@ function FAQ() {
   ];
 
   return (
-    <section id="faq" className="py-16 sm:py-24 bg-[#0d1520]">
+    <section id="faq" className="py-16 sm:py-24 bg-[#0d1118]">
       <div className="container max-w-3xl">
         <div className="mb-10 sm:mb-16 text-center" ref={ref}>
-          <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-3">FAQ</p>
+          <p className="font-mono text-xs text-[#00e5a0] tracking-widest mb-3">FAQ</p>
           <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white">Common Questions</h2>
         </div>
         <div className="space-y-3">
           {faqs.map((faq, i) => (
-            <div key={i} className={`bg-[#111820] border rounded-xl overflow-hidden transition-all ${open === i ? "border-[#00d4aa]/30" : "border-white/5"} ${inView ? `fade-up fade-up-delay-${Math.min(i + 1, 5)}` : "opacity-0"}`}>
+            <div key={i} className={`bg-[#10151d] border rounded-xl overflow-hidden transition-all ${open === i ? "border-[#00e5a0]/30" : "border-white/5"} ${inView ? `fade-up fade-up-delay-${Math.min(i + 1, 5)}` : "opacity-0"}`}>
               <button onClick={() => setOpen(open === i ? null : i)} className="w-full flex items-start justify-between px-5 sm:px-6 py-4 text-left gap-4">
                 <span className="font-['Space_Grotesk'] font-medium text-white text-sm leading-snug">{faq.q}</span>
-                <svg className={`w-4 h-4 text-[#00d4aa] shrink-0 mt-0.5 transition-transform ${open === i ? "rotate-45" : ""}`} fill="none" viewBox="0 0 16 16">
+                <svg className={`w-4 h-4 text-[#00e5a0] shrink-0 mt-0.5 transition-transform ${open === i ? "rotate-45" : ""}`} fill="none" viewBox="0 0 16 16">
                   <path d="M8 3v10M3 8h10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                 </svg>
               </button>
@@ -736,20 +736,20 @@ function FAQ() {
 function CTABanner() {
   const { ref, inView } = useInView();
   return (
-    <section className="py-16 sm:py-24 bg-[#0a0e14]">
+    <section className="py-16 sm:py-24 bg-[#0a0d12]">
       <div className="container">
-        <div ref={ref} className={`relative bg-gradient-to-br from-[#0d1a14] to-[#0a0e14] border border-[#00d4aa]/20 rounded-2xl p-8 sm:p-12 text-center overflow-hidden ${inView ? "fade-up" : "opacity-0"}`}>
+        <div ref={ref} className={`relative bg-gradient-to-br from-[#0d1a14] to-[#0a0d12] border border-[#00e5a0]/20 rounded-2xl p-8 sm:p-12 text-center overflow-hidden ${inView ? "fade-up" : "opacity-0"}`}>
           <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url(https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/hero-bg-WRuxyzjuQc2Zg7wTqtkdku.webp)`, backgroundSize: "cover", backgroundPosition: "center" }} />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0a0e14]/80" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0a0d12]/80" />
           <div className="relative">
-            <p className="font-mono text-xs text-[#00d4aa] tracking-widest mb-4">PRIVATE MEMBERSHIP — LIMITED SEATS</p>
+            <p className="font-mono text-xs text-[#00e5a0] tracking-widest mb-4">PRIVATE MEMBERSHIP — LIMITED SEATS</p>
             <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white mb-6">
               Stop Guessing.<br />Let the Engine Find the Edge.
             </h2>
             <p className="text-white/55 text-base sm:text-lg max-w-xl mx-auto mb-8">
               Join a private community of systematic market enthusiasts using Primal Edge's adaptive intelligence to study high-conviction setups before the move — scored, graded, and delivered as real-time educational analysis.
             </p>
-            <Link href="/subscribe" className="shimmer-btn pulse-glow inline-block bg-[#00d4aa] text-[#0a0e14] font-['Space_Grotesk'] font-bold text-base sm:text-lg px-8 sm:px-10 py-4 rounded-lg hover:bg-[#00bfa0] transition-all">
+            <Link href="/subscribe" className="shimmer-btn pulse-glow inline-block bg-[#00e5a0] text-[#0a0d12] font-['Space_Grotesk'] font-bold text-base sm:text-lg px-8 sm:px-10 py-4 rounded-lg hover:bg-[#00bfa0] transition-all">
               Access the AI Scanner →
             </Link>
           </div>
@@ -762,7 +762,7 @@ function CTABanner() {
 // ── Footer ────────────────────────────────────────────────────
 function Footer() {
   return (
-    <footer className="bg-[#0d1520] border-t border-white/5 py-10 sm:py-12">
+    <footer className="bg-[#0d1118] border-t border-white/5 py-10 sm:py-12">
       <div className="container">
         <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
           <div className="flex items-center">
@@ -780,7 +780,7 @@ function Footer() {
             <Link href="/podcasts" className="hover:text-white/60 transition-colors">Podcasts</Link>
             <Link href="/references" className="hover:text-white/60 transition-colors">References</Link>
             <Link href="/dev-requests" className="hover:text-white/60 transition-colors">Dev Requests</Link>
-            <Link href="/subscribe" className="hover:text-[#00d4aa] transition-colors">Subscribe</Link>
+            <Link href="/subscribe" className="hover:text-[#00e5a0] transition-colors">Subscribe</Link>
           </div>
           <p className="text-white/20 text-xs text-center">
             © 2025 Primal Edge — Adaptive Intelligence. Decisive Signals. For educational purposes only. Not financial advice.
@@ -796,7 +796,7 @@ function Footer() {
 // ── Page ──────────────────────────────────────────────────────
 export default function Home() {
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#0a0e14" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "#0a0d12" }}>
       <SharedNavbar />
       <TickerTape />
       <Hero />

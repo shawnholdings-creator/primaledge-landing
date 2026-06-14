@@ -1,6 +1,6 @@
 /**
  * PrimalEdgeLogo — Inline logo component
- * Design: Elastic Signal — dark charcoal, teal #00d4aa accent
+ * Design: Elastic Signal — dark charcoal, teal #00e5a0 accent
  * Uses the P-icon image alongside crisp HTML text so the wordmark
  * and byline are always fully legible at any size.
  */
@@ -38,7 +38,7 @@ export default function PrimalEdgeLogo({ size = "sm", className = "" }: PrimalEd
           style={{
             fontFamily: "'Space Grotesk', sans-serif",
             letterSpacing: "0.12em",
-            color: "#00d4aa",
+            color: "#00e5a0",
           }}
         >
           ADAPTIVE INTELLIGENCE. DECISIVE SIGNALS.

@@ -73,7 +73,7 @@ function TVChart({
       style: "1",
       locale: "en",
       backgroundColor: "rgba(10, 14, 20, 1)",
-      gridColor: "rgba(0, 212, 170, 0.04)",
+      gridColor: "rgba(0, 229, 160, 0.04)",
       hide_top_toolbar: false,
       hide_legend: false,
       allow_symbol_change: true,
@@ -149,19 +149,19 @@ function CheckItem({
       onClick={onChange}
       className="flex items-start gap-3 w-full text-left px-3 py-2.5 rounded-lg transition-all group"
       style={{
-        background: checked ? "rgba(0,212,170,0.06)" : "rgba(255,255,255,0.015)",
-        border: `1px solid ${checked ? "rgba(0,212,170,0.15)" : "rgba(255,255,255,0.04)"}`,
+        background: checked ? "rgba(0,229,160,0.06)" : "rgba(255,255,255,0.015)",
+        border: `1px solid ${checked ? "rgba(0,229,160,0.15)" : "rgba(255,255,255,0.04)"}`,
       }}
     >
       <div
         className="w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 mt-0.5 transition-all"
         style={{
-          borderColor: checked ? "#00d4aa" : "rgba(255,255,255,0.15)",
-          background: checked ? "rgba(0,212,170,0.2)" : "transparent",
+          borderColor: checked ? "#00e5a0" : "rgba(255,255,255,0.15)",
+          background: checked ? "rgba(0,229,160,0.2)" : "transparent",
         }}
       >
         {checked && (
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#00d4aa" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#00e5a0" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="20 6 9 17 4 12" />
           </svg>
         )}
@@ -171,7 +171,7 @@ function CheckItem({
           className="text-sm font-medium transition-colors"
           style={{
             fontFamily: "'JetBrains Mono', monospace",
-            color: checked ? "#00d4aa" : "rgba(255,255,255,0.5)",
+            color: checked ? "#00e5a0" : "rgba(255,255,255,0.5)",
             textDecoration: checked ? "line-through" : "none",
           }}
         >
@@ -193,7 +193,7 @@ function VerdictBadge({ verdict, description }: { verdict: string; description: 
     "Bullish Bias": { color: "#22c55e", bg: "rgba(34,197,94,0.08)", border: "rgba(34,197,94,0.2)", glow: "0 0 12px rgba(34,197,94,0.15)" },
     "Bearish Bias": { color: "#ef4444", bg: "rgba(239,68,68,0.08)", border: "rgba(239,68,68,0.2)", glow: "0 0 12px rgba(239,68,68,0.15)" },
     "Neutral / No Trade": { color: "#6b7280", bg: "rgba(107,114,128,0.08)", border: "rgba(107,114,128,0.2)", glow: "none" },
-    "Trend Confirmed": { color: "#00d4aa", bg: "rgba(0,212,170,0.08)", border: "rgba(0,212,170,0.2)", glow: "0 0 12px rgba(0,212,170,0.15)" },
+    "Trend Confirmed": { color: "#00e5a0", bg: "rgba(0,229,160,0.08)", border: "rgba(0,229,160,0.2)", glow: "0 0 12px rgba(0,229,160,0.15)" },
     "Chop Risk": { color: "#f59e0b", bg: "rgba(245,158,11,0.08)", border: "rgba(245,158,11,0.2)", glow: "0 0 12px rgba(245,158,11,0.15)" },
     "Breakout Watch": { color: "#3b82f6", bg: "rgba(59,130,246,0.08)", border: "rgba(59,130,246,0.2)", glow: "0 0 12px rgba(59,130,246,0.15)" },
     "Rejection Watch": { color: "#f97316", bg: "rgba(249,115,22,0.08)", border: "rgba(249,115,22,0.2)", glow: "0 0 12px rgba(249,115,22,0.15)" },
@@ -231,7 +231,7 @@ function SectionHead({ icon, title, subtitle }: { icon: string; title: string; s
       <span className="text-lg">{icon}</span>
       <div>
         <h3
-          className="text-[11px] text-[#00d4aa] tracking-[0.2em] uppercase font-bold"
+          className="text-[11px] text-[#00e5a0] tracking-[0.2em] uppercase font-bold"
           style={{ fontFamily: "'JetBrains Mono', monospace" }}
         >
           {title}
@@ -366,7 +366,7 @@ function OptionsDashboardContent() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
               <div className="cmd-stat text-center">
                 <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Primary</div>
-                <div className="text-lg font-bold text-[#00d4aa] font-mono leading-none">SPY / SPX</div>
+                <div className="text-lg font-bold text-[#00e5a0] font-mono leading-none">SPY / SPX</div>
               </div>
               <div className="cmd-stat text-center">
                 <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Confirm</div>
@@ -380,7 +380,7 @@ function OptionsDashboardContent() {
                 <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Prep</div>
                 <div
                   className="text-lg font-bold font-mono leading-none"
-                  style={{ color: checkCount === totalChecks ? "#00d4aa" : "rgba(255,255,255,0.3)" }}
+                  style={{ color: checkCount === totalChecks ? "#00e5a0" : "rgba(255,255,255,0.3)" }}
                 >
                   {checkCount}/{totalChecks}
                 </div>
@@ -406,7 +406,7 @@ function OptionsDashboardContent() {
                         <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
                       </div>
                       <span
-                        className="text-xs text-[#00d4aa] tracking-[0.2em] uppercase font-bold"
+                        className="text-xs text-[#00e5a0] tracking-[0.2em] uppercase font-bold"
                         style={{ fontFamily: "'JetBrains Mono', monospace" }}
                       >
                         SPY — Execution View
@@ -509,9 +509,9 @@ function OptionsDashboardContent() {
                       className="text-[9px] font-bold tracking-wider px-2 py-1 rounded-full"
                       style={{
                         fontFamily: "'JetBrains Mono', monospace",
-                        color: "#00d4aa",
-                        background: "rgba(0,212,170,0.1)",
-                        border: "1px solid rgba(0,212,170,0.2)",
+                        color: "#00e5a0",
+                        background: "rgba(0,229,160,0.1)",
+                        border: "1px solid rgba(0,229,160,0.2)",
                       }}
                     >
                       READY
@@ -537,10 +537,10 @@ function OptionsDashboardContent() {
                       style={{
                         width: `${(checkCount / totalChecks) * 100}%`,
                         background: checkCount === totalChecks
-                          ? "linear-gradient(90deg, #00d4aa, #3b82f6)"
+                          ? "linear-gradient(90deg, #00e5a0, #3b82f6)"
                           : "linear-gradient(90deg, #f59e0b, #f97316)",
                         boxShadow: checkCount === totalChecks
-                          ? "0 0 12px rgba(0,212,170,0.4)"
+                          ? "0 0 12px rgba(0,229,160,0.4)"
                           : "0 0 8px rgba(245,158,11,0.3)",
                       }}
                     />
@@ -558,7 +558,7 @@ function OptionsDashboardContent() {
                     { label: "21 ALMA", desc: "Trend direction filter", color: "#f59e0b" },
                     { label: "PM High/Low", desc: "Pre-market range extremes", color: "#22c55e" },
                     { label: "Prior Day H/L/C", desc: "Yesterday's key reaction zones", color: "#ef4444" },
-                    { label: "Opening Range", desc: "First 15-30 min high/low", color: "#00d4aa" },
+                    { label: "Opening Range", desc: "First 15-30 min high/low", color: "#00e5a0" },
                     { label: "Expected Move", desc: "ATM straddle implied range", color: "#f97316" },
                   ].map((level) => (
                     <div
@@ -634,7 +634,7 @@ function OptionsDashboardContent() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#0d1520] border-t border-white/5 py-10">
+      <footer className="bg-[#0d1118] border-t border-white/5 py-10">
         <div className="container flex flex-col sm:flex-row items-center justify-between gap-4">
           <Link href="/">
             <PrimalEdgeLogo size="md" />

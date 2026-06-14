@@ -1,6 +1,6 @@
 /* ============================================================
    Navbar.tsx — Shared navigation component
-   Design: Elastic Signal — dark #0a0e14, teal #00d4aa accent
+   Design: Elastic Signal — dark #0a0d12, teal #00e5a0 accent
    Features: Dropdown menus for Products & Resources, mobile hamburger
    ============================================================ */
 
@@ -9,10 +9,10 @@ import { Link, useLocation } from "wouter";
 import PrimalEdgeLogo from "./PrimalEdgeLogo";
 
 const PRODUCTS_LINKS = [
-  { label: "Primal Edge AI Cockpit", href: "/ai-dashboard", badge: "LIVE", badgeColor: "#00d4aa" },
-  { label: "Weekly Income Dashboard", href: "/weekly-income", badge: "LIVE", badgeColor: "#00d4aa" },
+  { label: "Primal Edge AI Cockpit", href: "/ai-dashboard", badge: "LIVE", badgeColor: "#00e5a0" },
+  { label: "Weekly Income Dashboard", href: "/weekly-income", badge: "LIVE", badgeColor: "#00e5a0" },
   { label: "Options Prep (0DTE)", href: "/options-prep", badge: "IN DEV", badgeColor: "#3b82f6" },
-  { label: "Market Sentiment", href: "/market-sentiment", badge: "LIVE", badgeColor: "#00d4aa" },
+  { label: "Market Sentiment", href: "/market-sentiment", badge: "LIVE", badgeColor: "#00e5a0" },
   { label: "Sectors", href: "/sectors", badge: "COMING SOON", badgeColor: "#f59e0b" },
   { label: "All Products", href: "/products", badge: null, badgeColor: "" },
 ];
@@ -41,7 +41,7 @@ function ChevronDown({ open }: { open: boolean }) {
 
 function DropdownMenu({ links }: { links: { label: string; href: string; badge?: string | null; badgeColor?: string }[] }) {
   return (
-    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-56 bg-[#0d1520] border border-white/10 rounded-xl shadow-2xl shadow-black/50 overflow-hidden z-50">
+    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-56 bg-[#0d1118] border border-white/10 rounded-xl shadow-2xl shadow-black/50 overflow-hidden z-50">
       {links.map((link) => (
         <Link key={link.href} href={link.href}>
           <div className="flex items-center justify-between px-4 py-3 hover:bg-white/5 transition-colors cursor-pointer group">
@@ -100,7 +100,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0e14]/95 backdrop-blur-md border-b border-white/5">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0d12]/95 backdrop-blur-md border-b border-white/5">
         <div className="container flex items-center justify-between h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center">
@@ -114,7 +114,7 @@ export default function Navbar() {
               <button
                 onClick={() => { setProductsOpen(!productsOpen); setResourcesOpen(false); }}
                 className={`flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors ${
-                  isProductsActive ? "text-[#00d4aa]" : "text-white/60 hover:text-white hover:bg-white/5"
+                  isProductsActive ? "text-[#00e5a0]" : "text-white/60 hover:text-white hover:bg-white/5"
                 }`}
               >
                 Products
@@ -128,7 +128,7 @@ export default function Navbar() {
               <button
                 onClick={() => { setResourcesOpen(!resourcesOpen); setProductsOpen(false); }}
                 className={`flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors ${
-                  isResourcesActive ? "text-[#00d4aa]" : "text-white/60 hover:text-white hover:bg-white/5"
+                  isResourcesActive ? "text-[#00e5a0]" : "text-white/60 hover:text-white hover:bg-white/5"
                 }`}
               >
                 Resources
@@ -140,7 +140,7 @@ export default function Navbar() {
             {/* Dev Requests */}
             <Link href="/dev-requests">
               <span className={`px-3 py-2 rounded-lg transition-colors cursor-pointer ${
-                location === "/dev-requests" ? "text-[#00d4aa]" : "text-white/60 hover:text-white hover:bg-white/5"
+                location === "/dev-requests" ? "text-[#00e5a0]" : "text-white/60 hover:text-white hover:bg-white/5"
               }`}>
                 Dev Requests
               </span>
@@ -151,7 +151,7 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             {location !== "/ai-dashboard" && (
               <Link href="/subscribe" className="hidden sm:block">
-                <button className="bg-[#00d4aa] text-[#0a0e14] font-bold text-sm px-5 py-2.5 rounded-lg hover:bg-[#00d4aa]/90 transition-colors">
+                <button className="bg-[#00e5a0] text-[#0a0d12] font-bold text-sm px-5 py-2.5 rounded-lg hover:bg-[#00e5a0]/90 transition-colors">
                   Get Access
                 </button>
               </Link>
@@ -178,7 +178,7 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {mobileOpen && (
-          <div className="md:hidden bg-[#0d1520] border-t border-white/5 px-4 py-4 space-y-1">
+          <div className="md:hidden bg-[#0d1118] border-t border-white/5 px-4 py-4 space-y-1">
             {/* Products */}
             <button
               onClick={() => setMobileProductsOpen(!mobileProductsOpen)}
@@ -235,7 +235,7 @@ export default function Navbar() {
             {location !== "/ai-dashboard" && (
               <div className="pt-2">
                 <Link href="/subscribe">
-                  <button className="w-full bg-[#00d4aa] text-[#0a0e14] font-bold py-3 rounded-xl text-sm">
+                  <button className="w-full bg-[#00e5a0] text-[#0a0d12] font-bold py-3 rounded-xl text-sm">
                     Get Access →
                   </button>
                 </Link>

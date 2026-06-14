@@ -20,6 +20,7 @@ import OptionsDashboard from "./pages/OptionsDashboard";
 import ComingSoonPage from "./pages/ComingSoonPage";
 import WeeklyIncome from "./pages/WeeklyIncome";
 import GlobalDisclaimer from "./components/GlobalDisclaimer";
+import MobileCTA from "./components/MobileCTA";
 
 function Router() {
   return (
@@ -51,6 +52,7 @@ function App() {
           <TooltipProvider>
             <Toaster />
             <Router />
+            <MobileCTA />
             <GlobalDisclaimer />
           </TooltipProvider>
         </AuthProvider>

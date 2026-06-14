@@ -1,6 +1,6 @@
 /* ============================================================
    Products.tsx — Primal Edge Product Suite
-   Design: Elastic Signal — dark #0a0e14, teal #00d4aa accent
+   Design: Elastic Signal — dark #0a0d12, teal #00e5a0 accent
    Fonts: Space Grotesk (h), DM Sans (body), JetBrains Mono (data)
    ============================================================ */
 
@@ -34,7 +34,7 @@ const PRODUCTS = [
     id: "ai-cockpit-scanner",
     name: "AI Cockpit Scanner",
     tag: "LIVE",
-    tagColor: "#00d4aa",
+    tagColor: "#00e5a0",
     description:
       "The flagship Primal Edge AI signal engine. Scans thousands of premium symbols across multiple indices in real time, identifying high-probability breakout setups graded A–D by adaptive intelligence.",
     features: ["Real-time AI scanning", "A–D signal grading", "Instant push alerts", "Premium symbol universe"],
@@ -42,8 +42,8 @@ const PRODUCTS = [
     ctaHref: "/subscribe",
     icon: (
       <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-        <path d="M4 24L12 14l6 6 10-14" stroke="#00d4aa" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M22 10h6v6" stroke="#00d4aa" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M4 24L12 14l6 6 10-14" stroke="#00e5a0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M22 10h6v6" stroke="#00e5a0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
   },
@@ -51,7 +51,7 @@ const PRODUCTS = [
     id: "weekly-income",
     name: "Weekly Income Dashboard",
     tag: "LIVE",
-    tagColor: "#00d4aa",
+    tagColor: "#00e5a0",
     description:
       "Automated bi-directional scanner for weekly income opportunities. Finds conservative short put candidates on bullish names and short call candidates on bearish names — generating income in any market condition.",
     features: ["Short puts + short calls", "100-point scoring model", "Real-time phone alerts", "Blue-chip universe only"],
@@ -59,10 +59,10 @@ const PRODUCTS = [
     ctaHref: "/weekly-income",
     icon: (
       <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-        <path d="M16 4v24" stroke="#00d4aa" strokeWidth="2.5" strokeLinecap="round"/>
-        <path d="M10 12l6-6 6 6" stroke="#00d4aa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M10 20l6 6 6-6" stroke="#00d4aa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        <rect x="4" y="13" width="24" height="6" rx="3" stroke="#00d4aa" strokeWidth="1.5" opacity="0.4"/>
+        <path d="M16 4v24" stroke="#00e5a0" strokeWidth="2.5" strokeLinecap="round"/>
+        <path d="M10 12l6-6 6 6" stroke="#00e5a0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M10 20l6 6 6-6" stroke="#00e5a0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <rect x="4" y="13" width="24" height="6" rx="3" stroke="#00e5a0" strokeWidth="1.5" opacity="0.4"/>
       </svg>
     ),
   },
@@ -123,18 +123,18 @@ const PRODUCTS = [
 
 export default function Products() {
   return (
-    <div className="min-h-screen bg-[#0a0e14] text-white">
+    <div className="min-h-screen bg-[#0a0d12] text-white">
       <Navbar />
 
       {/* Hero */}
       <section className="pt-40 pb-20 px-4">
         <div className="container max-w-4xl">
-          <div className="inline-flex items-center gap-2 bg-[#00d4aa]/10 border border-[#00d4aa]/20 rounded-full px-4 py-1.5 mb-6">
-            <span className="w-2 h-2 rounded-full bg-[#00d4aa] animate-pulse" />
-            <span className="font-mono text-xs text-[#00d4aa] tracking-wider">PRIMAL EDGE PRODUCT SUITE</span>
+          <div className="inline-flex items-center gap-2 bg-[#00e5a0]/10 border border-[#00e5a0]/20 rounded-full px-4 py-1.5 mb-6">
+            <span className="w-2 h-2 rounded-full bg-[#00e5a0] animate-pulse" />
+            <span className="font-mono text-xs text-[#00e5a0] tracking-wider">PRIMAL EDGE PRODUCT SUITE</span>
           </div>
           <h1 className="text-4xl md:text-6xl font-black text-white mb-6 leading-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-            Every Edge.<br /><span className="text-[#00d4aa]">One Platform.</span>
+            Every Edge.<br /><span className="text-[#00e5a0]">One Platform.</span>
           </h1>
           <p className="text-lg text-white/50 max-w-2xl leading-relaxed">
             Primal Edge is building a suite of AI-powered signal tools for serious traders. Each product is engineered with the same adaptive intelligence engine — purpose-built for a specific market opportunity.
@@ -149,7 +149,7 @@ export default function Products() {
             {PRODUCTS.map((product) => (
               <div
                 key={product.id}
-                className="relative bg-[#0d1520] border border-white/5 rounded-2xl p-8 hover:border-[#00d4aa]/20 transition-all duration-300 group"
+                className="relative bg-[#0d1118] border border-white/5 rounded-2xl p-8 hover:border-[#00e5a0]/20 transition-all duration-300 group"
               >
                 {/* Tag */}
                 <div className="flex items-center justify-between mb-6">
@@ -172,7 +172,7 @@ export default function Products() {
                   {product.features.map((f) => (
                     <li key={f} className="flex items-center gap-2 text-sm text-white/60">
                       <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                        <path d="M2 7l3.5 3.5L12 3" stroke="#00d4aa" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M2 7l3.5 3.5L12 3" stroke="#00e5a0" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                       {f}
                     </li>
@@ -184,7 +184,7 @@ export default function Products() {
                     className="w-full py-3 rounded-xl font-bold text-sm transition-all duration-200"
                     style={
                       product.tag === "LIVE"
-                        ? { backgroundColor: "#00d4aa", color: "#0a0e14" }
+                        ? { backgroundColor: "#00e5a0", color: "#0a0d12" }
                         : product.tag === "BETA"
                         ? { backgroundColor: "#a855f7", color: "#fff" }
                         : product.tag === "IN DEV"
@@ -202,7 +202,7 @@ export default function Products() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#0d1520] border-t border-white/5 py-10">
+      <footer className="bg-[#0d1118] border-t border-white/5 py-10">
         <div className="container flex flex-col sm:flex-row items-center justify-between gap-4">
           <PrimalEdgeLogo size="md" />
           <p className="text-white/20 text-sm">© {new Date().getFullYear()} Primal Edge. All rights reserved.</p>
