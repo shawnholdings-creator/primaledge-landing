@@ -687,58 +687,56 @@ function AlertPreview() {
   );
 }
 
-// ── Pricing ───────────────────────────────────────────────────
-function Pricing() {
+// ── Access ───────────────────────────────────────────────────
+function AccessSection() {
   const { ref, inView } = useInView();
   return (
-    <section id="pricing" className="py-16 sm:py-24 bg-[#0a0d12]">
+    <section id="access" className="py-16 sm:py-24 bg-[#0a0d12]">
       <div className="container">
-        <div className="text-center mb-10 sm:mb-16" ref={ref}>
-          <p className="font-mono text-xs text-[#00e5a0] tracking-widest mb-3">MEMBERSHIP PRICING</p>
-          <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white mb-4">
-            Full Access.<br />One Flat Rate.
-          </h2>
-          <p className="text-white/50 text-base sm:text-lg max-w-lg mx-auto">
-            One tier. Complete analytical engine access. No upsells. This is a private community of serious, quantitatively-minded market enthusiasts — seats are strictly limited.
-          </p>
-        </div>
-
-        <div className={`max-w-md mx-auto ${inView ? "fade-up fade-up-delay-2" : "opacity-0"}`}>
-          <div className="bg-[#10151d] border border-[#00e5a0]/30 rounded-2xl p-6 sm:p-8 teal-glow relative overflow-hidden">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-32 bg-[#00e5a0]/5 blur-3xl rounded-full" />
-            <div className="relative">
-              <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-                <span className="font-['Space_Grotesk'] font-semibold text-base sm:text-lg text-white">Primal Edge — AI Cockpit Access</span>
-                <span className="font-mono text-xs text-[#00e5a0] bg-[#00e5a0]/10 border border-[#00e5a0]/20 px-3 py-1 rounded-full whitespace-nowrap">PRIVATE GROUP</span>
-              </div>
-              <div className="mb-6">
-                <span className="font-['Space_Grotesk'] font-bold text-4xl sm:text-5xl text-white">$49</span>
-                <span className="text-white/40 text-base sm:text-lg">/month</span>
-              </div>
-              <div className="space-y-3 mb-8">
-                {[
-                  "Adaptive intelligence engine — premium multi-index universe",
-                  "9x daily autonomous scan cycles",
-                  "Instant push notifications",
-                  "Conviction-graded setups: A, B, C, D",
-                  "Live analytical dashboard",
-                  "Proprietary multi-dimensional conviction scoring",
-                  "Multi-timeframe confluence analysis",
-                  "Intelligent signal deduplication",
-                ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <svg className="w-4 h-4 text-[#00e5a0] shrink-0" fill="none" viewBox="0 0 16 16">
-                      <path d="M3 8l3.5 3.5L13 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    <span className="text-white/65 text-sm">{item}</span>
-                  </div>
-                ))}
-              </div>
-              <Link href="/subscribe" className="shimmer-btn block w-full bg-[#00e5a0] text-[#0a0d12] font-['Space_Grotesk'] font-bold text-base py-4 rounded-lg hover:bg-[#00bfa0] transition-all pulse-glow text-center">
-                Get Access Now →
-              </Link>
-              <p className="text-center text-white/30 text-xs mt-4">Cancel anytime. Billed monthly.</p>
-            </div>
+        <div className="text-center" ref={ref}>
+          <div className={inView ? "fade-up" : "opacity-0"}>
+            <p
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: "0.75rem",
+                letterSpacing: "0.12em",
+                color: "#00e5a0",
+                textTransform: "uppercase",
+                marginBottom: "24px",
+              }}
+            >
+              ACCESS IS BY INVITATION — REACH OUT TO LEARN MORE
+            </p>
+            <h2 className="font-['Space_Grotesk'] font-bold text-2xl sm:text-3xl lg:text-4xl text-white mb-4">
+              Private Access Only
+            </h2>
+            <p className="text-white/50 text-base sm:text-lg max-w-lg mx-auto mb-8">
+              Primal Edge is a private, invitation-only platform for serious traders. Pricing is discussed privately upon approval.
+            </p>
+            <Link
+              href="/subscribe"
+              className="inline-flex items-center justify-center transition-all"
+              style={{
+                background: "#00e5a0",
+                color: "#0a0d12",
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontWeight: 700,
+                fontSize: "0.9rem",
+                padding: "14px 36px",
+                borderRadius: "6px",
+                minHeight: "48px",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "#00ffb3";
+                e.currentTarget.style.transform = "scale(1.02)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "#00e5a0";
+                e.currentTarget.style.transform = "scale(1)";
+              }}
+            >
+              Request Access
+            </Link>
           </div>
         </div>
       </div>
@@ -828,7 +826,7 @@ function Footer() {
           <div className="flex flex-wrap justify-center gap-4 sm:gap-6 text-sm text-white/30">
             <a href="#how-it-works" className="hover:text-white/60 transition-colors">How It Works</a>
             <a href="#features" className="hover:text-white/60 transition-colors">Features</a>
-            <a href="#pricing" className="hover:text-white/60 transition-colors">Pricing</a>
+            <a href="#access" className="hover:text-white/60 transition-colors">Access</a>
             <Link href="/products" className="hover:text-white/60 transition-colors">Products</Link>
             <Link href="/market-sentiment" className="hover:text-white/60 transition-colors">Market Sentiment</Link>
             <Link href="/sectors" className="hover:text-white/60 transition-colors">Sectors</Link>
@@ -861,7 +859,7 @@ export default function Home() {
       <Features />
       <Technology />
       <AlertPreview />
-      <Pricing />
+      <AccessSection />
       <FAQ />
       <CTABanner />
       <Footer />
