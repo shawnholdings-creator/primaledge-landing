@@ -5,6 +5,8 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { AuthProvider } from "./contexts/AuthContext";
+import { LoginModalProvider } from "./contexts/LoginModalContext";
+import LoginModal from "./components/LoginModal";
 import Home from "./pages/Home";
 import Subscribe from "./pages/Subscribe";
 import Products from "./pages/Products";
@@ -49,12 +51,15 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider defaultTheme="dark">
         <AuthProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Router />
-            <MobileCTA />
-            <GlobalDisclaimer />
-          </TooltipProvider>
+          <LoginModalProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Router />
+              <MobileCTA />
+              <GlobalDisclaimer />
+              <LoginModal />
+            </TooltipProvider>
+          </LoginModalProvider>
         </AuthProvider>
       </ThemeProvider>
     </ErrorBoundary>

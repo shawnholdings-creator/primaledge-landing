@@ -7,6 +7,8 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import PrimalEdgeLogo from "./PrimalEdgeLogo";
+import { useAuth } from "../contexts/AuthContext";
+import { useLoginModal } from "../contexts/LoginModalContext";
 
 const PRODUCTS_LINKS = [
   { label: "Primal Edge AI Cockpit", href: "/ai-dashboard", badge: "LIVE", badgeColor: "#00e5a0" },
@@ -72,6 +74,9 @@ export default function Navbar() {
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
   const [mobileResourcesOpen, setMobileResourcesOpen] = useState(false);
   const [location] = useLocation();
+  const { user, signOut } = useAuth();
+  const { openLoginModal } = useLoginModal();
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   const productsRef = useRef<HTMLDivElement>(null);
   const resourcesRef = useRef<HTMLDivElement>(null);
@@ -94,6 +99,14 @@ export default function Navbar() {
   useEffect(() => {
     setMobileOpen(false);
   }, [location]);
+
+  // Close user menu on outside click
+  useEffect(() => {
+    if (!userMenuOpen) return;
+    const close = () => setUserMenuOpen(false);
+    document.addEventListener("click", close);
+    return () => document.removeEventListener("click", close);
+  }, [userMenuOpen]);
 
   const isProductsActive = PRODUCTS_LINKS.some((l) => l.href === location);
   const isResourcesActive = RESOURCES_LINKS.some((l) => l.href === location);
@@ -149,6 +162,69 @@ export default function Navbar() {
 
           {/* Right side */}
           <div className="flex items-center gap-3">
+            {/* Member Login / User Menu */}
+            <div className="hidden sm:block relative">
+              {user ? (
+                <div className="relative">
+                  <button
+                    onClick={() => setUserMenuOpen(!userMenuOpen)}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-colors"
+                    style={{
+                      border: "1px solid rgba(0,255,150,0.3)",
+                      color: "#00ff96",
+                    }}
+                  >
+                    <span
+                      className="w-2 h-2 rounded-full bg-[#00ff96] animate-pulse"
+                    />
+                    {(user.email || "").length > 20
+                      ? (user.email || "").slice(0, 20) + "..."
+                      : user.email}
+                  </button>
+                  {userMenuOpen && (
+                    <div
+                      className="absolute right-0 top-full mt-2 py-1 rounded-lg shadow-xl"
+                      style={{
+                        background: "#0d0d0d",
+                        border: "1px solid rgba(255,255,255,0.1)",
+                        minWidth: "160px",
+                        zIndex: 100,
+                      }}
+                    >
+                      <button
+                        onClick={() => {
+                          setUserMenuOpen(false);
+                          signOut();
+                        }}
+                        className="w-full text-left px-4 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/5 transition-colors"
+                      >
+                        Sign Out
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <button
+                  onClick={() => openLoginModal()}
+                  className="px-4 py-2 rounded-lg text-sm transition-colors"
+                  style={{
+                    border: "1px solid rgba(255,255,255,0.2)",
+                    color: "#ccc",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = "rgba(0,255,150,0.5)";
+                    e.currentTarget.style.color = "#fff";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
+                    e.currentTarget.style.color = "#ccc";
+                  }}
+                >
+                  Member Login
+                </button>
+              )}
+            </div>
+
             {location !== "/ai-dashboard" && (
               <Link href="/subscribe" className="hidden sm:block">
                 <button className="bg-[#00e5a0] text-[#0a0d12] font-bold text-sm px-5 py-2.5 rounded-lg hover:bg-[#00e5a0]/90 transition-colors">
@@ -230,6 +306,31 @@ export default function Navbar() {
                 Dev Requests
               </div>
             </Link>
+
+            {/* Mobile Member Login */}
+            {user ? (
+              <button
+                onClick={() => {
+                  setMobileOpen(false);
+                  signOut();
+                }}
+                className="w-full text-left py-3 text-sm flex items-center gap-2"
+                style={{ color: "#00ff96" }}
+              >
+                <span className="w-2 h-2 rounded-full bg-[#00ff96]" />
+                Sign Out ({(user.email || "").split("@")[0]})
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  setMobileOpen(false);
+                  openLoginModal();
+                }}
+                className="w-full text-left py-3 text-sm text-white/60 hover:text-white transition-colors"
+              >
+                Member Login
+              </button>
+            )}
 
             {/* CTA */}
             {location !== "/ai-dashboard" && (

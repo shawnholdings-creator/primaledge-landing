@@ -11,6 +11,8 @@ import PrimalEdgeLogo from "@/components/PrimalEdgeLogo";
 import Navbar from "@/components/Navbar";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import MobileCTA from "@/components/MobileCTA";
+import AIDashboardHero from "../components/AIDashboardHero";
+import { useAuth } from "../contexts/AuthContext";
 
 // GitHub Gist raw URL
 const GIST_ID = "a490177229d88de297de0bf4746fdff8";
@@ -1089,9 +1091,16 @@ function DashboardContent() {
 
 /* ─── Main Export — Auth Protected ─────────────────────────── */
 export default function AIDashboard() {
-  return (
-    <ProtectedRoute product="cockpit">
-      <DashboardContent />
-    </ProtectedRoute>
-  );
+  const { user, productAccess } = useAuth();
+  const hasAccess = user && productAccess.cockpit === true;
+
+  if (hasAccess) {
+    return (
+      <ProtectedRoute product="cockpit">
+        <DashboardContent />
+      </ProtectedRoute>
+    );
+  }
+
+  return <AIDashboardHero />;
 }

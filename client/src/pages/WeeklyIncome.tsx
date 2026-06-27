@@ -9,6 +9,8 @@ import { Link } from "wouter";
 import Navbar from "@/components/Navbar";
 import PrimalEdgeLogo from "@/components/PrimalEdgeLogo";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import WeeklyIncomeHero from "../components/WeeklyIncomeHero";
+import { useAuth } from "../contexts/AuthContext";
 
 // GitHub Gist — replace with real ID later
 const GIST_ID = "2bd50c8183b50e72c3d52fd2c3dbf04f";
@@ -82,6 +84,7 @@ interface Candidate {
   score_details?: ScoreDetails;
   setup_type?: string;
   premium_label?: string;
+  thesis?: string;
 }
 
 interface ScanData {
@@ -96,6 +99,19 @@ interface ScanData {
 interface GistHistoryEntry {
   version: string;
   committed_at: string;
+}
+
+interface Position {
+  id: string;
+  ticker: string;
+  side: "PUT" | "CALL";
+  strike: number;
+  expiration: string;
+  entryDelta: number;
+  entryCredit: number;
+  entryDate: string;
+  status: "open" | "closed";
+  exitAlertFired: boolean;
 }
 
 /* ─── Archive Panel ────────────────────────────────────────── */
@@ -374,6 +390,57 @@ function otmLabel(otmPct: number): string {
   return "Tight";
 }
 
+/* ─── Plain-English Score Descriptions ─────────────────────── */
+function getPlainDescription(categoryName: string, status: string): string {
+  const name = categoryName.toLowerCase();
+  if (name.includes("premium")) {
+    return "The premium collected on this trade is meaningful relative to the capital at risk. A strong premium score means the income potential justifies entering the position.";
+  }
+  if (name.includes("liquidity")) {
+    return "This option trades actively with strong participation from other market players. You can enter and exit this position cleanly without giving up significant edge to the spread.";
+  }
+  if (name.includes("cushion") || name.includes("risk cushion")) {
+    return "The strike sits comfortably below the current price with a meaningful buffer zone. Even if the stock pulls back moderately, the trade has room to breathe before reaching the strike.";
+  }
+  if (name.includes("technical")) {
+    return "The stock's recent price behavior looks constructive and supports the direction of this trade. Current conditions appear favorable for a short put position based on price structure alone.";
+  }
+  if (name.includes("event")) {
+    if (status === "Weak" || status === "Review") {
+      return "A scheduled company announcement may occur before this trade expires. This adds an element of uncertainty — consider reducing position size or waiting for the event to pass.";
+    }
+    return "No scheduled company announcements are expected before this trade expires. This removes a major source of uncertainty and supports a cleaner hold to expiry.";
+  }
+  if (name.includes("underlying") || name.includes("quality")) {
+    return "This is a well-established, highly liquid instrument with consistent market participation. Premium collected on names like this tends to be reliable and fills are straightforward.";
+  }
+  // Fallback — generic
+  return "This dimension contributes to the overall conviction score for this setup.";
+}
+
+/* ─── Gate Label Translation ───────────────────────────────── */
+function translateGateLabel(rawLabel: string): { label: string; isEarnings: boolean } {
+  const lower = rawLabel.toLowerCase();
+  if (lower.includes("credit") && (lower.includes("≥") || lower.includes(">=")))
+    return { label: "Premium Worth Collecting", isEarnings: false };
+  if (lower.includes("time") || lower.includes("-14d") || lower.includes("dte"))
+    return { label: "Ideal Expiry Timing", isEarnings: false };
+  if (lower.includes("otm") || lower.includes("cushion"))
+    return { label: "Strike Has Breathing Room", isEarnings: false };
+  if (lower.includes("spread"))
+    return { label: "Clean Entry & Exit", isEarnings: false };
+  if (lower.includes("delta"))
+    return { label: "Low Directional Risk", isEarnings: false };
+  if (lower.includes("strike") && lower.includes("below"))
+    return { label: "Strike Safely Below Price", isEarnings: false };
+  if (lower.includes("liquidity") || lower.includes("oi"))
+    return { label: "Highly Liquid Market", isEarnings: false };
+  if (lower.includes("earning"))
+    return { label: "No Surprise Events Before Expiry", isEarnings: true };
+  // Fallback — clean up and return as-is
+  return { label: rawLabel.replace(/[≥≤<>]/g, "").trim(), isEarnings: false };
+}
+
 /* ─── Score Detail Panel ───────────────────────────────────── */
 function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: string } }) {
   const sd = candidate.score_details;
@@ -411,11 +478,51 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
   return (
     <div className="px-4 sm:px-6 py-5 bg-white/[0.02] border-t border-white/[0.06] space-y-5">
 
+      {/* ── AI Thesis ── */}
+      {candidate.thesis && (
+        <div
+          style={{
+            padding: "14px 16px",
+            marginBottom: "20px",
+            background: "rgba(0,255,150,0.04)",
+            borderLeft: "3px solid rgba(0,255,150,0.4)",
+            borderRadius: "0 8px 8px 0",
+          }}
+        >
+          <span
+            style={{
+              display: "block",
+              fontFamily: "'Space Mono', monospace",
+              fontSize: "9px",
+              letterSpacing: "0.18em",
+              color: "#00ff96",
+              opacity: 0.5,
+              textTransform: "uppercase" as const,
+              marginBottom: "6px",
+            }}
+          >
+            Why This Setup
+          </span>
+          <p
+            style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: "13px",
+              color: "#aaa",
+              lineHeight: 1.55,
+              margin: 0,
+              wordBreak: "break-word" as const,
+            }}
+          >
+            {candidate.thesis}
+          </p>
+        </div>
+      )}
+
       {/* ── Score Breakdown ── */}
       <div>
         <div
-          className="text-[10px] text-white/25 tracking-widest uppercase mb-3"
-          style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+          className="text-[10px] tracking-widest uppercase mb-3"
+          style={{ fontFamily: "'Space Mono', 'Space Grotesk', monospace", letterSpacing: "0.18em", color: "#555" }}
         >
           Score Breakdown
         </div>
@@ -461,10 +568,16 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
                   />
                 </div>
                 <p
-                  className="text-[10px] text-white/25 leading-snug"
-                  style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                  className="leading-snug"
+                  style={{
+                    fontFamily: "'Inter', sans-serif",
+                    fontSize: "13px",
+                    color: "#666",
+                    lineHeight: 1.65,
+                    marginTop: "8px",
+                  }}
                 >
-                  {sanitizeExplanation(cat.explanation)}
+                  {getPlainDescription(cat.name, cat.status)}
                 </p>
               </div>
             );
@@ -472,30 +585,82 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
         </div>
       </div>
 
-      {/* ── Hard Gates ── */}
+      {/* ── Why This Made The Cut ── */}
       {sd.gates.length > 0 && (
         <div>
           <div
-            className="text-[10px] text-white/25 tracking-widest uppercase mb-2"
-            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+            className="text-[10px] tracking-widest uppercase mb-2"
+            style={{ fontFamily: "'Space Mono', 'Space Grotesk', monospace", letterSpacing: "0.18em", color: "#555" }}
           >
-            Hard Gates
+            Why This Made The Cut
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1">
-            {sd.gates.map((g, i) => (
-              <div
-                key={i}
-                className="flex items-center gap-2 text-[11px]"
-                style={{ fontFamily: "'JetBrains Mono', monospace" }}
-              >
-                <span style={{ color: g.passed ? "#22c55e" : "#ef4444" }}>
-                  {g.passed ? "✓" : "✗"}
-                </span>
-                <span className={g.passed ? "text-white/40" : "text-red-400/70"}>
-                  {sanitizeExplanation(g.label)}
-                </span>
-              </div>
-            ))}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "16px" }}>
+            {sd.gates.map((g, i) => {
+              const translated = translateGateLabel(g.label);
+              const isEarnings = translated.isEarnings;
+              // Earnings gate uses WARNING state when failed, never red
+              const state: "pass" | "fail" | "warning" = g.passed
+                ? "pass"
+                : isEarnings
+                  ? "warning"
+                  : "fail";
+              const styles = {
+                pass: {
+                  background: "rgba(0,255,150,0.08)",
+                  border: "1px solid rgba(0,255,150,0.3)",
+                  color: "#00ff96",
+                  icon: "✓",
+                },
+                fail: {
+                  background: "rgba(255,68,68,0.08)",
+                  border: "1px solid rgba(255,68,68,0.3)",
+                  color: "#ff6b6b",
+                  icon: "✗",
+                },
+                warning: {
+                  background: "rgba(255,180,0,0.08)",
+                  border: "1px solid rgba(255,180,0,0.3)",
+                  color: "#ffb400",
+                  icon: "⚠",
+                },
+              }[state];
+              return (
+                <div key={i} style={{ display: "flex", flexDirection: "column" }}>
+                  <span
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "7px",
+                      padding: "8px 16px",
+                      borderRadius: "20px",
+                      fontSize: "11px",
+                      fontWeight: 600,
+                      letterSpacing: "0.06em",
+                      whiteSpace: "nowrap",
+                      background: styles.background,
+                      border: styles.border,
+                      color: styles.color,
+                    }}
+                  >
+                    <span>{styles.icon}</span>
+                    {translated.label}
+                  </span>
+                  {state === "warning" && isEarnings && (
+                    <span
+                      style={{
+                        fontSize: "10px",
+                        color: "#ffb400",
+                        opacity: 0.7,
+                        marginTop: "4px",
+                        paddingLeft: "4px",
+                      }}
+                    >
+                      An announcement may fall before expiry — factor this into your sizing.
+                    </span>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
@@ -557,6 +722,17 @@ function WeeklyIncomeContent() {
   const [history, setHistory] = useState<GistHistoryEntry[]>([]);
   const [activeVersion, setActiveVersion] = useState<string | null>(null);
   const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
+  const [activeTab, setActiveTab] = useState<"scanner" | "positions">("scanner");
+  const [positions, setPositions] = useState<Position[]>([]);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [formData, setFormData] = useState({
+    ticker: "",
+    side: "PUT" as "PUT" | "CALL",
+    strike: "",
+    expiration: "",
+    entryDelta: "",
+    entryCredit: "",
+  });
 
   const toggleRow = useCallback((idx: number) => {
     setExpandedRows((prev) => {
@@ -634,6 +810,50 @@ function WeeklyIncomeContent() {
     }, REFRESH_INTERVAL);
     return () => clearInterval(interval);
   }, [fetchData]);
+
+  // Load positions from localStorage
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("pe_positions");
+      if (saved) setPositions(JSON.parse(saved));
+    } catch {}
+  }, []);
+
+  // Save positions to localStorage
+  useEffect(() => {
+    localStorage.setItem("pe_positions", JSON.stringify(positions));
+  }, [positions]);
+
+  const addPosition = () => {
+    if (!formData.ticker || !formData.strike || !formData.expiration || !formData.entryDelta) return;
+    const newPos: Position = {
+      id: Date.now().toString(),
+      ticker: formData.ticker.toUpperCase(),
+      side: formData.side,
+      strike: parseFloat(formData.strike),
+      expiration: formData.expiration,
+      entryDelta: parseFloat(formData.entryDelta),
+      entryCredit: parseFloat(formData.entryCredit) || 0,
+      entryDate: new Date().toISOString().split("T")[0],
+      status: "open",
+      exitAlertFired: false,
+    };
+    setPositions((prev) => [...prev, newPos]);
+    setFormData({ ticker: "", side: "PUT", strike: "", expiration: "", entryDelta: "", entryCredit: "" });
+    setShowAddForm(false);
+  };
+
+  const markClosed = (id: string) => {
+    setPositions((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, status: "closed" as const, exitAlertFired: false } : p))
+    );
+  };
+
+  const removePosition = (id: string) => {
+    setPositions((prev) => prev.filter((p) => p.id !== id));
+  };
+
+  const openCount = positions.filter((p) => p.status === "open").length;
 
   if (loading) return <LoadingSkeleton />;
 
@@ -774,57 +994,55 @@ function WeeklyIncomeContent() {
             </div>
           </div>
 
-          {/* ── PRODUCT INTRO COPY ── */}
-          <section className="pb-8 sm:pb-12">
-            <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-flex items-center gap-2 font-mono text-[10px] text-[#00e5a0]/70 tracking-widest bg-[#00e5a0]/8 border border-[#00e5a0]/15 rounded-full px-4 py-1.5 mb-6">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#00e5a0] animate-pulse" />
-                PRIVATE ACCESS · INCOME INTELLIGENCE
-              </div>
+          {/* Tab Switcher */}
+          <div style={{ display: "flex", gap: 8, padding: "12px 16px 0" }}>
+            {(["scanner", "positions"] as const).map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                style={{
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: "0.7rem",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  padding: "6px 16px",
+                  borderRadius: 6,
+                  cursor: "pointer",
+                  border: activeTab === tab
+                    ? "1px solid rgba(0,229,160,0.3)"
+                    : "1px solid rgba(255,255,255,0.06)",
+                  background: activeTab === tab
+                    ? "rgba(0,229,160,0.1)"
+                    : "transparent",
+                  color: activeTab === tab
+                    ? "#00e5a0"
+                    : "rgba(255,255,255,0.35)",
+                  fontWeight: activeTab === tab ? 700 : 400,
+                  transition: "all 0.15s ease",
+                }}
+              >
+                {tab === "scanner" ? "Scanner" : "My Positions"}
+                {tab === "positions" && openCount > 0 && (
+                  <span
+                    style={{
+                      marginLeft: 6,
+                      background: "rgba(0,229,160,0.15)",
+                      color: "#00e5a0",
+                      fontSize: "0.6rem",
+                      padding: "1px 6px",
+                      borderRadius: 10,
+                      fontWeight: 700,
+                    }}
+                  >
+                    {openCount}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
 
-              <p className="font-['Space_Grotesk'] text-lg sm:text-xl text-[#00e5a0]/80 mb-6">
-                Find the premium. Measure the risk. Trade with discipline.
-              </p>
-
-              <p className="text-white/45 text-base sm:text-lg leading-relaxed mb-4 max-w-2xl mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                Weekly Income Scanner is a private-access income intelligence layer built to surface high-quality option-selling opportunities from a curated universe of liquid, premium names. It evaluates credit quality, opportunity quality, risk cushion, and timing conditions, trend condition, event risk, and risk-adjusted reward so traders can focus on the contracts that deserve review.
-              </p>
-
-              <p className="text-white/35 text-sm leading-relaxed max-w-2xl mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                For weekly income traders, this creates a more disciplined workflow: identify juicy premium, avoid low-quality traps, understand why a setup qualifies, and review only the candidates with the strongest balance of income and risk control.
-              </p>
-            </div>
-          </section>
-
-
-          {/* ── INCOME INTELLIGENCE DIMENSIONS ── */}
-          <section className="pb-12 sm:pb-16">
-            <div className="text-center mb-10">
-              <p className="font-mono text-xs text-[#00e5a0] tracking-widest mb-3">INTELLIGENCE DIMENSIONS</p>
-              <h2 className="font-['Space_Grotesk'] font-bold text-2xl sm:text-3xl text-white">
-                Six Layers of<br />Income Intelligence
-              </h2>
-            </div>
-
-            <div className="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {[
-                { tag: "PREMIUM", title: "Premium Strength", desc: "Prioritizes contracts that meet or exceed a meaningful income quality threshold before being surfaced as tradable." },
-                { tag: "QUALITY", title: "Opportunity Quality", desc: "Filters for high-probability setups with favorable risk-reward characteristics and appropriate directional cushion." },
-                { tag: "LIQUIDITY", title: "Liquidity Quality", desc: "Evaluates participation depth and execution quality before a contract is surfaced. Illiquid contracts are flagged or excluded." },
-                { tag: "RISK", title: "Risk Cushion", desc: "Measures directional buffer, volatility context, and structural support before any contract qualifies for review." },
-                { tag: "EVENT", title: "Event Awareness", desc: "Identifies scheduled market events within the trade window. Elevated-risk setups are flagged for additional review." },
-                { tag: "SCORE", title: "Score Explanation", desc: "Shows why a candidate qualifies, where it is strong, what still needs review, and the final conviction read." },
-              ].map((item, i) => (
-                <div key={i} className="relative bg-[#10151d] border border-white/5 rounded-xl p-6 hover:border-[#00e5a0]/20 transition-all group">
-                  <span className="font-mono text-[9px] text-[#00e5a0]/50 tracking-widest bg-[#00e5a0]/5 border border-[#00e5a0]/10 rounded px-2 py-0.5 mb-4 inline-block">{item.tag}</span>
-                  <div className="absolute top-5 right-5 font-['Space_Grotesk'] text-4xl font-bold text-white/[0.03]">{String(i + 1).padStart(2, "0")}</div>
-                  <h3 className="font-['Space_Grotesk'] font-semibold text-base text-white mb-3 group-hover:text-[#00e5a0] transition-colors">{item.title}</h3>
-                  <p className="text-white/40 text-sm leading-relaxed">{item.desc}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-
+          {activeTab === "scanner" && (
+          <>
           {/* ═══ MAIN TERMINAL CARD ═══ */}
           <div className="animated-border">
           <div className="bg-[#0d1118] border border-white/10 rounded-2xl overflow-hidden relative">
@@ -1424,6 +1642,56 @@ function WeeklyIncomeContent() {
           </div>
           </div>
 
+          {/* ── PRODUCT INTRO COPY ── */}
+          <section className="pt-12 pb-8 sm:pb-12">
+            <div className="max-w-3xl mx-auto text-center">
+              <div className="inline-flex items-center gap-2 font-mono text-[10px] text-[#00e5a0]/70 tracking-widest bg-[#00e5a0]/8 border border-[#00e5a0]/15 rounded-full px-4 py-1.5 mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00e5a0] animate-pulse" />
+                PRIVATE ACCESS · INCOME INTELLIGENCE
+              </div>
+
+              <p className="font-['Space_Grotesk'] text-lg sm:text-xl text-[#00e5a0]/80 mb-6">
+                Find the premium. Measure the risk. Trade with discipline.
+              </p>
+
+              <p className="text-white/45 text-base sm:text-lg leading-relaxed mb-4 max-w-2xl mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                Weekly Income Scanner is a private-access income intelligence layer built to surface high-quality option-selling opportunities from a curated universe of liquid, premium names. It evaluates credit quality, opportunity quality, risk cushion, and timing conditions, trend condition, event risk, and risk-adjusted reward so traders can focus on the contracts that deserve review.
+              </p>
+
+              <p className="text-white/35 text-sm leading-relaxed max-w-2xl mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                For weekly income traders, this creates a more disciplined workflow: identify juicy premium, avoid low-quality traps, understand why a setup qualifies, and review only the candidates with the strongest balance of income and risk control.
+              </p>
+            </div>
+          </section>
+
+          {/* ── INCOME INTELLIGENCE DIMENSIONS ── */}
+          <section className="pb-12 sm:pb-16">
+            <div className="text-center mb-10">
+              <p className="font-mono text-xs text-[#00e5a0] tracking-widest mb-3">INTELLIGENCE DIMENSIONS</p>
+              <h2 className="font-['Space_Grotesk'] font-bold text-2xl sm:text-3xl text-white">
+                Six Layers of<br />Income Intelligence
+              </h2>
+            </div>
+
+            <div className="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {[
+                { tag: "PREMIUM", title: "Premium Strength", desc: "Prioritizes contracts that meet or exceed a meaningful income quality threshold before being surfaced as tradable." },
+                { tag: "QUALITY", title: "Opportunity Quality", desc: "Filters for high-probability setups with favorable risk-reward characteristics and appropriate directional cushion." },
+                { tag: "LIQUIDITY", title: "Liquidity Quality", desc: "Evaluates participation depth and execution quality before a contract is surfaced. Illiquid contracts are flagged or excluded." },
+                { tag: "RISK", title: "Risk Cushion", desc: "Measures directional buffer, volatility context, and structural support before any contract qualifies for review." },
+                { tag: "EVENT", title: "Event Awareness", desc: "Identifies scheduled market events within the trade window. Elevated-risk setups are flagged for additional review." },
+                { tag: "SCORE", title: "Score Explanation", desc: "Shows why a candidate qualifies, where it is strong, what still needs review, and the final conviction read." },
+              ].map((item, i) => (
+                <div key={i} className="relative bg-[#10151d] border border-white/5 rounded-xl p-6 hover:border-[#00e5a0]/20 transition-all group">
+                  <span className="font-mono text-[9px] text-[#00e5a0]/50 tracking-widest bg-[#00e5a0]/5 border border-[#00e5a0]/10 rounded px-2 py-0.5 mb-4 inline-block">{item.tag}</span>
+                  <div className="absolute top-5 right-5 font-['Space_Grotesk'] text-4xl font-bold text-white/[0.03]">{String(i + 1).padStart(2, "0")}</div>
+                  <h3 className="font-['Space_Grotesk'] font-semibold text-base text-white mb-3 group-hover:text-[#00e5a0] transition-colors">{item.title}</h3>
+                  <p className="text-white/40 text-sm leading-relaxed">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
           {/* ── DISCLAIMER ── */}
           <div className="mt-12 mb-8 max-w-4xl mx-auto bg-[#10151d] border border-white/5 rounded-xl px-5 sm:px-6 py-4 flex items-start gap-3">
             <svg className="w-4 h-4 text-[#f59e0b] shrink-0 mt-0.5" fill="none" viewBox="0 0 16 16">
@@ -1450,6 +1718,319 @@ function WeeklyIncomeContent() {
             onSelect={loadVersion}
             onReset={resetToLive}
           />
+          </>
+          )}
+
+          {activeTab === "positions" && (
+            <div style={{ padding: "16px" }}>
+              {/* Section Header */}
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+                <span
+                  style={{
+                    fontFamily: "'JetBrains Mono', monospace",
+                    fontSize: "0.65rem",
+                    letterSpacing: "0.15em",
+                    color: "rgba(255,255,255,0.25)",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  MY POSITIONS
+                </span>
+                {openCount > 0 && (
+                  <span
+                    style={{
+                      fontFamily: "'JetBrains Mono', monospace",
+                      fontSize: "0.6rem",
+                      background: "rgba(0,229,160,0.1)",
+                      color: "#00e5a0",
+                      padding: "2px 8px",
+                      borderRadius: 10,
+                      fontWeight: 700,
+                    }}
+                  >
+                    {openCount} open
+                  </span>
+                )}
+              </div>
+
+              {/* Add Position Toggle */}
+              <button
+                onClick={() => setShowAddForm(!showAddForm)}
+                style={{
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: "0.75rem",
+                  color: "#00e5a0",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: 0,
+                  marginBottom: showAddForm ? 16 : 0,
+                }}
+              >
+                {showAddForm ? "− Cancel" : "+ Log Position"}
+              </button>
+
+              {/* Add Position Form */}
+              {showAddForm && (
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: window.innerWidth < 640 ? "1fr" : "1fr 1fr",
+                    gap: 12,
+                    marginBottom: 20,
+                    padding: 16,
+                    background: "rgba(13,17,24,0.6)",
+                    border: "1px solid rgba(255,255,255,0.06)",
+                    borderRadius: 10,
+                  }}
+                >
+                  {/* Ticker */}
+                  <div>
+                    <label style={{ display: "block", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 4 }}>Ticker</label>
+                    <input
+                      type="text"
+                      placeholder="NVDA"
+                      value={formData.ticker}
+                      onChange={(e) => setFormData({ ...formData, ticker: e.target.value.toUpperCase() })}
+                      style={{ width: "100%", background: "#0d1118", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8, padding: "8px 12px", color: "white", fontSize: "0.8rem", fontFamily: "'JetBrains Mono', monospace", outline: "none" }}
+                    />
+                  </div>
+                  {/* Side */}
+                  <div>
+                    <label style={{ display: "block", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 4 }}>Side</label>
+                    <select
+                      value={formData.side}
+                      onChange={(e) => setFormData({ ...formData, side: e.target.value as "PUT" | "CALL" })}
+                      style={{ width: "100%", background: "#0d1118", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8, padding: "8px 12px", color: "white", fontSize: "0.8rem", fontFamily: "'JetBrains Mono', monospace", outline: "none" }}
+                    >
+                      <option value="PUT">PUT</option>
+                      <option value="CALL">CALL</option>
+                    </select>
+                  </div>
+                  {/* Strike */}
+                  <div>
+                    <label style={{ display: "block", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 4 }}>Strike</label>
+                    <input
+                      type="number"
+                      placeholder="118.00"
+                      value={formData.strike}
+                      onChange={(e) => setFormData({ ...formData, strike: e.target.value })}
+                      style={{ width: "100%", background: "#0d1118", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8, padding: "8px 12px", color: "white", fontSize: "0.8rem", fontFamily: "'JetBrains Mono', monospace", outline: "none" }}
+                    />
+                  </div>
+                  {/* Expiration */}
+                  <div>
+                    <label style={{ display: "block", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 4 }}>Expiration</label>
+                    <input
+                      type="date"
+                      value={formData.expiration}
+                      onChange={(e) => setFormData({ ...formData, expiration: e.target.value })}
+                      style={{ width: "100%", background: "#0d1118", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8, padding: "8px 12px", color: "white", fontSize: "0.8rem", fontFamily: "'JetBrains Mono', monospace", outline: "none", colorScheme: "dark" }}
+                    />
+                  </div>
+                  {/* Entry Delta */}
+                  <div>
+                    <label style={{ display: "block", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 4 }}>Entry Delta</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      placeholder="0.22"
+                      value={formData.entryDelta}
+                      onChange={(e) => setFormData({ ...formData, entryDelta: e.target.value })}
+                      style={{ width: "100%", background: "#0d1118", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8, padding: "8px 12px", color: "white", fontSize: "0.8rem", fontFamily: "'JetBrains Mono', monospace", outline: "none" }}
+                    />
+                  </div>
+                  {/* Entry Credit */}
+                  <div>
+                    <label style={{ display: "block", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 4 }}>Entry Credit (per share)</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      placeholder="1.45"
+                      value={formData.entryCredit}
+                      onChange={(e) => setFormData({ ...formData, entryCredit: e.target.value })}
+                      style={{ width: "100%", background: "#0d1118", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8, padding: "8px 12px", color: "white", fontSize: "0.8rem", fontFamily: "'JetBrains Mono', monospace", outline: "none" }}
+                    />
+                  </div>
+                  {/* Submit */}
+                  <div style={{ gridColumn: window.innerWidth < 640 ? "1" : "1 / -1", marginTop: 4 }}>
+                    <button
+                      onClick={addPosition}
+                      style={{
+                        fontFamily: "'JetBrains Mono', monospace",
+                        fontSize: "0.75rem",
+                        fontWeight: 700,
+                        color: "#0a0d12",
+                        background: "#00e5a0",
+                        border: "none",
+                        borderRadius: 8,
+                        padding: "10px 24px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Log Position →
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Positions List */}
+              {positions.length === 0 && !showAddForm ? (
+                <div style={{ textAlign: "center", padding: "48px 0" }}>
+                  <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.8rem", color: "rgba(255,255,255,0.2)" }}>
+                    No positions logged yet.
+                  </p>
+                  <button
+                    onClick={() => setShowAddForm(true)}
+                    style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.75rem", color: "#00e5a0", background: "none", border: "none", cursor: "pointer", marginTop: 8 }}
+                  >
+                    + Log Position
+                  </button>
+                </div>
+              ) : positions.length > 0 && (
+                <div style={{ marginTop: 16 }}>
+                  {/* Table Header (desktop) */}
+                  <div
+                    className="hidden sm:grid"
+                    style={{
+                      gridTemplateColumns: "0.8fr 0.5fr 0.7fr 0.8fr 0.7fr 0.7fr 1.2fr 0.8fr",
+                      padding: "8px 12px",
+                      borderBottom: "1px solid rgba(255,255,255,0.06)",
+                    }}
+                  >
+                    {["TICKER", "SIDE", "STRIKE", "EXPIRY", "ENTRY Δ", "CURRENT Δ", "STATUS", "ACTION"].map((h) => (
+                      <span
+                        key={h}
+                        style={{
+                          fontFamily: "'JetBrains Mono', monospace",
+                          fontSize: "0.55rem",
+                          letterSpacing: "0.12em",
+                          color: "rgba(255,255,255,0.2)",
+                        }}
+                      >
+                        {h}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Rows / Cards */}
+                  {positions.map((pos) => (
+                    <div key={pos.id}>
+                      {/* Desktop Row */}
+                      <div
+                        className="hidden sm:grid"
+                        style={{
+                          gridTemplateColumns: "0.8fr 0.5fr 0.7fr 0.8fr 0.7fr 0.7fr 1.2fr 0.8fr",
+                          padding: "10px 12px",
+                          borderBottom: "1px solid rgba(255,255,255,0.04)",
+                          alignItems: "center",
+                          fontFamily: "'JetBrains Mono', monospace",
+                          fontSize: "0.75rem",
+                          color: pos.status === "closed" ? "rgba(255,255,255,0.25)" : "rgba(255,255,255,0.7)",
+                        }}
+                      >
+                        <span style={{ fontWeight: 600 }}>{pos.ticker}</span>
+                        <span>{pos.side}</span>
+                        <span>${pos.strike.toFixed(2)}</span>
+                        <span>{pos.expiration}</span>
+                        <span>{pos.entryDelta.toFixed(2)}</span>
+                        <span>
+                          <span style={{ color: "rgba(255,255,255,0.2)" }}>—</span>
+                          <div style={{ fontSize: "0.6rem", fontStyle: "italic", color: "rgba(255,255,255,0.15)", marginTop: 2 }}>Live delta fetched by monitor</div>
+                        </span>
+                        <span>
+                          {pos.status === "closed" ? (
+                            <span style={{ display: "inline-flex", alignItems: "center", background: "rgba(107,114,128,0.15)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.3)", fontSize: "0.6rem", fontWeight: 600, padding: "2px 8px", borderRadius: 12 }}>Closed</span>
+                          ) : pos.exitAlertFired ? (
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "rgba(245,158,11,0.15)", border: "1px solid rgba(245,158,11,0.4)", color: "#f59e0b", fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.08em", padding: "2px 8px", borderRadius: 12 }}>
+                              <span style={{ width: 5, height: 5, borderRadius: "50%", backgroundColor: "#f59e0b", animation: "pulse 2s ease-in-out infinite", flexShrink: 0 }} />
+                              Exit Signal
+                            </span>
+                          ) : (
+                            <span style={{ display: "inline-flex", alignItems: "center", background: "rgba(0,229,160,0.08)", border: "1px solid rgba(0,229,160,0.15)", color: "rgba(0,229,160,0.5)", fontSize: "0.6rem", fontWeight: 600, padding: "2px 8px", borderRadius: 12 }}>Monitoring</span>
+                          )}
+                        </span>
+                        <span>
+                          {pos.status === "open" ? (
+                            <button
+                              onClick={() => markClosed(pos.id)}
+                              style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem", color: "rgba(255,255,255,0.3)", background: "none", border: "none", cursor: "pointer", textDecoration: "none", padding: 0 }}
+                              onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.6)"; e.currentTarget.style.textDecoration = "underline"; }}
+                              onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.3)"; e.currentTarget.style.textDecoration = "none"; }}
+                            >
+                              Mark Closed
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => removePosition(pos.id)}
+                              style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem", color: "rgba(239,68,68,0.3)", background: "none", border: "none", cursor: "pointer", textDecoration: "none", padding: 0 }}
+                              onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(239,68,68,0.6)"; e.currentTarget.style.textDecoration = "underline"; }}
+                              onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(239,68,68,0.3)"; e.currentTarget.style.textDecoration = "none"; }}
+                            >
+                              Remove
+                            </button>
+                          )}
+                        </span>
+                      </div>
+
+                      {/* Mobile Card */}
+                      <div
+                        className="sm:hidden"
+                        style={{
+                          padding: 14,
+                          marginBottom: 8,
+                          background: "rgba(17,24,32,0.6)",
+                          border: "1px solid rgba(255,255,255,0.06)",
+                          borderRadius: 10,
+                          fontFamily: "'JetBrains Mono', monospace",
+                          fontSize: "0.75rem",
+                        }}
+                      >
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                          <span style={{ fontWeight: 700, color: pos.status === "closed" ? "rgba(255,255,255,0.3)" : "white" }}>{pos.ticker} {pos.side} ${pos.strike.toFixed(2)}</span>
+                          {pos.status === "closed" ? (
+                            <span style={{ background: "rgba(107,114,128,0.15)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.3)", fontSize: "0.6rem", fontWeight: 600, padding: "2px 8px", borderRadius: 12 }}>Closed</span>
+                          ) : pos.exitAlertFired ? (
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "rgba(245,158,11,0.15)", border: "1px solid rgba(245,158,11,0.4)", color: "#f59e0b", fontSize: "0.6rem", fontWeight: 700, padding: "2px 8px", borderRadius: 12 }}>
+                              <span style={{ width: 5, height: 5, borderRadius: "50%", backgroundColor: "#f59e0b", flexShrink: 0 }} />
+                              Exit Signal
+                            </span>
+                          ) : (
+                            <span style={{ background: "rgba(0,229,160,0.08)", border: "1px solid rgba(0,229,160,0.15)", color: "rgba(0,229,160,0.5)", fontSize: "0.6rem", fontWeight: 600, padding: "2px 8px", borderRadius: 12 }}>Monitoring</span>
+                          )}
+                        </div>
+                        <div style={{ display: "flex", gap: 16, color: "rgba(255,255,255,0.35)", fontSize: "0.65rem", marginBottom: 8 }}>
+                          <span>Exp: {pos.expiration}</span>
+                          <span>Entry Δ: {pos.entryDelta.toFixed(2)}</span>
+                          <span>Credit: ${pos.entryCredit.toFixed(2)}</span>
+                        </div>
+                        <div>
+                          {pos.status === "open" ? (
+                            <button onClick={() => markClosed(pos.id)} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem", color: "rgba(255,255,255,0.3)", background: "none", border: "none", cursor: "pointer", padding: 0 }}>Mark Closed</button>
+                          ) : (
+                            <button onClick={() => removePosition(pos.id)} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem", color: "rgba(239,68,68,0.3)", background: "none", border: "none", cursor: "pointer", padding: 0 }}>Remove</button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Footer Note */}
+              <p
+                style={{
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: "0.65rem",
+                  color: "rgba(255,255,255,0.2)",
+                  fontStyle: "italic",
+                  marginTop: 16,
+                }}
+              >
+                Exit alerts are delivered to your personal notification channel. Mark positions closed to silence future alerts.
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
@@ -1470,9 +2051,16 @@ function WeeklyIncomeContent() {
 
 /* ─── Main Export — Auth Protected ───────────────────── */
 export default function WeeklyIncome() {
-  return (
-    <ProtectedRoute product="income">
-      <WeeklyIncomeContent />
-    </ProtectedRoute>
-  );
+  const { user, productAccess } = useAuth();
+  const hasAccess = user && productAccess.income === true;
+
+  if (hasAccess) {
+    return (
+      <ProtectedRoute product="income">
+        <WeeklyIncomeContent />
+      </ProtectedRoute>
+    );
+  }
+
+  return <WeeklyIncomeHero />;
 }

@@ -8,6 +8,8 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import Navbar from "@/components/Navbar";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import MobileCTA from "@/components/MobileCTA";
+import { useAuth } from "@/contexts/AuthContext";
+import MarketSentimentHero from "@/components/MarketSentimentHero";
 
 /* ─── Gist Config ─────────────────────────────────────────── */
 const GIST_ID = "c89dd974e4e74107b5afb88807c12579";
@@ -781,8 +783,8 @@ function DashboardBody({ data }: { data: SentimentData | null }) {
   );
 }
 
-/* ─── Main Export — Page Level Data Fetching ────────────────── */
-export default function MarketSentiment() {
+/* ─── Dashboard Component — Page Level Data Fetching ────────────── */
+function MarketSentimentDashboard() {
   const [data, setData] = useState<SentimentData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -931,3 +933,16 @@ export default function MarketSentiment() {
     </div>
   );
 }
+
+/* ─── Auth-Gated Default Export ───────────────────────────────── */
+export default function MarketSentiment() {
+  const { user, productAccess } = useAuth();
+  const hasAccess = user && productAccess.sentiment === true;
+
+  if (hasAccess) {
+    return <MarketSentimentDashboard />;
+  }
+
+  return <MarketSentimentHero />;
+}
+

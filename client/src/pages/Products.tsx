@@ -7,6 +7,8 @@
 import { Link } from "wouter";
 import PrimalEdgeLogo from "@/components/PrimalEdgeLogo";
 import Navbar from "@/components/Navbar";
+import { useAuth } from "../contexts/AuthContext";
+import { useLoginModal } from "../contexts/LoginModalContext";
 
 const PRODUCTS = [
   {
@@ -122,6 +124,9 @@ const PRODUCTS = [
 ];
 
 export default function Products() {
+  const { user } = useAuth();
+  const { openLoginModal } = useLoginModal();
+
   return (
     <div className="min-h-screen bg-[#0a0d12] text-white">
       <Navbar />
@@ -139,6 +144,29 @@ export default function Products() {
           <p className="text-lg text-white/50 max-w-2xl leading-relaxed">
             Primal Edge is building a suite of AI-powered signal tools for serious traders. Each product is engineered with the same adaptive intelligence engine — purpose-built for a specific market opportunity.
           </p>
+          {!user && (
+            <div className="mt-8 flex items-center gap-4">
+              <button
+                onClick={() => openLoginModal()}
+                className="px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors"
+                style={{
+                  border: "1px solid rgba(255,255,255,0.2)",
+                  color: "#ccc",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(0,255,150,0.5)";
+                  e.currentTarget.style.color = "#fff";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
+                  e.currentTarget.style.color = "#ccc";
+                }}
+              >
+                Member Login
+              </button>
+              <span className="text-white/20 text-xs">Already have access? Sign in here.</span>
+            </div>
+          )}
         </div>
       </section>
 

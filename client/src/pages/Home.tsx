@@ -9,20 +9,33 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
 import PrimalEdgeLogo from "@/components/PrimalEdgeLogo";
 import SharedNavbar from "@/components/Navbar";
+import PushNotificationMockup from "@/components/PushNotificationMockup";
 import { toast } from "sonner";
+import { useLoginModal } from "../contexts/LoginModalContext";
 
-// ── Ticker tape data ──────────────────────────────────────────
-const TICKER_ITEMS = [
-  { sym: "AAPL", verdict: "BULLISH SLINGSHOT", grade: "A", change: "+2.4%" },
-  { sym: "NVDA", verdict: "READY", grade: "B", change: "+1.8%" },
-  { sym: "MSFT", verdict: "COIL", grade: "B", change: "+0.9%" },
-  { sym: "META", verdict: "BULLISH SLINGSHOT", grade: "A", change: "+3.1%" },
-  { sym: "AMZN", verdict: "READY", grade: "B", change: "+1.2%" },
-  { sym: "GOOGL", verdict: "COIL", grade: "C", change: "+0.5%" },
-  { sym: "TSLA", verdict: "BULLISH SLINGSHOT", grade: "A", change: "+4.7%" },
-  { sym: "JPM", verdict: "READY", grade: "B", change: "+1.1%" },
-  { sym: "UNH", verdict: "COIL", grade: "C", change: "+0.3%" },
-  { sym: "V", verdict: "BULLISH SLINGSHOT", grade: "A", change: "+2.0%" },
+// ── Ticker tape types & fallback data ─────────────────────────
+interface TickerPrice {
+  sym: string;
+  price: number;
+  changePct: number;
+}
+
+const TICKER_SYMBOLS = ["AAPL", "NVDA", "MSFT", "META", "AMZN", "GOOGL", "TSLA", "JPM", "UNH", "V", "QQQ", "SPY", "IWM"];
+
+const FALLBACK_PRICES: TickerPrice[] = [
+  { sym: "AAPL", price: 195.89, changePct: 1.24 },
+  { sym: "NVDA", price: 148.50, changePct: 2.31 },
+  { sym: "MSFT", price: 442.57, changePct: 0.87 },
+  { sym: "META", price: 612.30, changePct: 1.65 },
+  { sym: "AMZN", price: 205.74, changePct: 0.93 },
+  { sym: "GOOGL", price: 178.32, changePct: 0.41 },
+  { sym: "TSLA", price: 265.80, changePct: 3.12 },
+  { sym: "JPM", price: 218.45, changePct: 0.56 },
+  { sym: "UNH", price: 312.10, changePct: -0.38 },
+  { sym: "V", price: 292.65, changePct: 0.72 },
+  { sym: "QQQ", price: 510.20, changePct: 1.14 },
+  { sym: "SPY", price: 555.40, changePct: 0.68 },
+  { sym: "IWM", price: 205.33, changePct: -0.21 },
 ];
 
 const SCAN_ROWS = [
@@ -81,18 +94,73 @@ function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
 // ── Navbar ────────────────────────────────────────────────────
 // Using shared Navbar component (see components/Navbar.tsx)
 
-// ── Ticker Tape ───────────────────────────────────────────────
+// ── Ticker Tape (live Yahoo Finance prices) ───────────────────
 function TickerTape() {
-  const items = [...TICKER_ITEMS, ...TICKER_ITEMS];
+  const [prices, setPrices] = useState<TickerPrice[]>(FALLBACK_PRICES);
+
+  useEffect(() => {
+    async function fetchPrice(symbol: string): Promise<TickerPrice | null> {
+      const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1d`;
+      try {
+        let res = await fetch(url);
+        if (!res.ok) {
+          res = await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`);
+        }
+        if (!res.ok) return null;
+        const json = await res.json();
+        const meta = json.chart?.result?.[0]?.meta;
+        if (!meta) return null;
+        const price = meta.regularMarketPrice ?? 0;
+        const prevClose = meta.chartPreviousClose ?? price;
+        const changePct = prevClose ? ((price - prevClose) / prevClose) * 100 : 0;
+        return { sym: symbol, price, changePct };
+      } catch {
+        try {
+          const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`);
+          if (!res.ok) return null;
+          const json = await res.json();
+          const meta = json.chart?.result?.[0]?.meta;
+          if (!meta) return null;
+          const price = meta.regularMarketPrice ?? 0;
+          const prevClose = meta.chartPreviousClose ?? price;
+          const changePct = prevClose ? ((price - prevClose) / prevClose) * 100 : 0;
+          return { sym: symbol, price, changePct };
+        } catch {
+          return null;
+        }
+      }
+    }
+
+    async function fetchAll() {
+      const results = await Promise.allSettled(
+        TICKER_SYMBOLS.map((sym) => fetchPrice(sym))
+      );
+      const live: TickerPrice[] = [];
+      results.forEach((r) => {
+        if (r.status === "fulfilled" && r.value) live.push(r.value);
+      });
+      if (live.length > 0) setPrices(live);
+    }
+
+    fetchAll();
+    const interval = setInterval(fetchAll, 60_000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const items = [...prices, ...prices];
   return (
     <div className="fixed top-20 left-0 right-0 z-40 bg-[#0d1118] border-b border-white/5 overflow-hidden h-8">
       <div className="ticker-tape flex items-center h-full gap-8 px-4">
         {items.map((item, i) => (
           <span key={i} className="flex items-center gap-2 shrink-0">
             <span className="font-mono text-xs font-bold text-white/80">{item.sym}</span>
-            <VerdictLabel verdict={item.verdict} />
-            <GradeBadge grade={item.grade} />
-            <span className="font-mono text-xs text-[#22c55e]">{item.change}</span>
+            <span className="font-mono text-xs text-white/60">${item.price.toFixed(2)}</span>
+            <span
+              className="font-mono text-xs font-semibold"
+              style={{ color: item.changePct >= 0 ? "#22c55e" : "#ef4444" }}
+            >
+              {item.changePct >= 0 ? "+" : ""}{item.changePct.toFixed(2)}%
+            </span>
             <span className="text-white/15 mx-2">|</span>
           </span>
         ))}
@@ -103,6 +171,7 @@ function TickerTape() {
 
 // ── Hero ──────────────────────────────────────────────────────
 function Hero() {
+  const { openLoginModal } = useLoginModal();
   return (
     <section
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
@@ -118,9 +187,9 @@ function Hero() {
       />
 
       {/* Content */}
-      <div className="relative z-10 max-w-[680px] mx-auto px-5 text-center" style={{ paddingTop: "140px", paddingBottom: "80px" }}>
+      <div className="relative z-10 w-full max-w-[780px] mx-auto px-5 text-center" style={{ paddingTop: "140px", paddingBottom: "80px" }}>
 
-        {/* Badge */}
+        {/* Eyebrow Badge */}
         <div
           className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-4"
           style={{
@@ -129,10 +198,25 @@ function Hero() {
           }}
         >
           <span
-            className="text-[#00e5a0]"
-            style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.6rem", letterSpacing: "0.18em", textTransform: "uppercase" }}
+            style={{
+              width: "6px",
+              height: "6px",
+              borderRadius: "50%",
+              backgroundColor: "#00e5a0",
+              display: "inline-block",
+              animation: "heroPulse 2s ease-in-out infinite",
+            }}
+          />
+          <span
+            style={{
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: "0.6rem",
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "#00e5a0",
+            }}
           >
-            ● PRIVATE ACCESS — BY INVITATION
+            ADAPTIVE INTELLIGENCE · PRIVATE ACCESS
           </span>
         </div>
 
@@ -140,7 +224,7 @@ function Hero() {
         <h1
           style={{
             fontFamily: "'Space Grotesk', sans-serif",
-            fontWeight: 700,
+            fontWeight: 800,
             fontSize: "clamp(2.4rem, 6vw, 4.2rem)",
             color: "#ffffff",
             letterSpacing: "-0.03em",
@@ -149,73 +233,197 @@ function Hero() {
             animation: "heroSlideUp 0.6s ease-out 0.2s both",
           }}
         >
-          What if you already knew which setups deserved your attention today?
+          What if you already knew which setups{"\n"}deserved your attention today?
         </h1>
 
-        {/* Subline */}
-        <p
-          style={{
-            fontFamily: "'JetBrains Mono', monospace",
-            fontWeight: 400,
-            fontSize: "0.72rem",
-            color: "#00e5a0",
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            marginTop: "20px",
-            animation: "heroFadeIn 0.5s ease-out 0.35s both",
-          }}
-        >
-          PRIMAL EDGE — INTELLIGENCE FOR SERIOUS TRADERS
-        </p>
-
-        {/* Body */}
+        {/* Subheadline */}
         <p
           style={{
             fontFamily: "'Space Grotesk', sans-serif",
             fontWeight: 400,
             fontSize: "clamp(1rem, 2.2vw, 1.15rem)",
             color: "rgba(255,255,255,0.62)",
-            maxWidth: "520px",
+            maxWidth: "600px",
             margin: "28px auto 0",
             lineHeight: 1.65,
-            animation: "heroFadeIn 0.5s ease-out 0.45s both",
+            animation: "heroFadeIn 0.5s ease-out 0.35s both",
           }}
         >
-          A private intelligence platform that reads the market before you choose the trade — so you spend less time searching and more time deciding.
+          Primal Edge monitors the premium market universe, scores every setup by conviction, and delivers the highest-ranked signals directly to your dashboard and your phone — before you ever open a chart.
         </p>
 
-        {/* AI Confidence Block */}
+        {/* Push notification mockup */}
+        <PushNotificationMockup
+          ticker="META"
+          grade="A"
+          setupType="BULLISH SLINGSHOT"
+          strike="$540"
+          expiry="Jun 27"
+          credit="—"
+          score="88"
+          animDelay={0.35}
+        />
+
+        {/* Blurred AI Cockpit Card */}
         <div
-          className="flex flex-col items-center px-4 sm:px-0"
-          style={{ gap: "14px", maxWidth: "520px", margin: "28px auto 28px" }}
+          style={{
+            background: "#0d1118",
+            border: "1px solid rgba(255,255,255,0.08)",
+            borderRadius: "12px",
+            overflow: "hidden",
+            maxWidth: "700px",
+            margin: "32px auto 0",
+            animation: "heroFadeIn 0.6s ease-out 0.5s both",
+          }}
         >
-          {/* Confidence statement */}
-          <p
+          {/* macOS title bar */}
+          <div
             style={{
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontWeight: 400,
-              fontSize: "0.9rem",
-              color: "rgba(255,255,255,0.42)",
-              textAlign: "center",
-              lineHeight: 1.6,
-              fontStyle: "italic",
-              margin: 0,
-              animation: "heroFadeIn 0.4s ease-out 0.5s both",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              padding: "10px 14px",
+              borderBottom: "1px solid rgba(255,255,255,0.06)",
+              background: "rgba(255,255,255,0.02)",
             }}
           >
-            Every setup is scored by a machine learning algorithm — not a human opinion.
-          </p>
+            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#ff5f57" }} />
+            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#febc2e" }} />
+            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#28c840" }} />
+            <span
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: "0.6rem",
+                color: "rgba(255,255,255,0.3)",
+                marginLeft: "8px",
+                letterSpacing: "0.12em",
+              }}
+            >
+              AI COCKPIT
+            </span>
+          </div>
 
-          {/* Credential tag row */}
+          {/* Table */}
+          <div style={{ padding: "12px 14px", overflowX: "auto" }}>
+            {/* Column headers (unblurred) */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1.6fr 0.7fr 0.6fr 0.9fr 1fr",
+                gap: "8px",
+                padding: "6px 8px",
+                borderBottom: "1px solid rgba(255,255,255,0.06)",
+                marginBottom: "4px",
+              }}
+            >
+              {["TICKER", "VERDICT", "SCORE", "GRADE", "PRICE", "ALERT TIME"].map((h) => (
+                <span
+                  key={h}
+                  style={{
+                    fontFamily: "'JetBrains Mono', monospace",
+                    fontSize: "0.55rem",
+                    color: "rgba(255,255,255,0.3)",
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {h}
+                </span>
+              ))}
+            </div>
+
+            {/* Blurred data rows */}
+            <div style={{ position: "relative" }}>
+              <div style={{ filter: "blur(5px)", userSelect: "none" }}>
+                {[
+                  { ticker: "NVDA", verdict: "BULLISH SLINGSHOT", score: "92", grade: "A", price: "$148.50", time: "09:31:02" },
+                  { ticker: "META", verdict: "READY", score: "85", grade: "A", price: "$612.30", time: "09:32:15" },
+                  { ticker: "TSLA", verdict: "COIL", score: "71", grade: "B", price: "$265.80", time: "09:33:44" },
+                ].map((row, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "1fr 1.6fr 0.7fr 0.6fr 0.9fr 1fr",
+                      gap: "8px",
+                      padding: "8px 8px",
+                      borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.04)" : "none",
+                    }}
+                  >
+                    <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.7rem", color: "#fff", fontWeight: 700 }}>{row.ticker}</span>
+                    <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem", color: "#22c55e" }}>{row.verdict}</span>
+                    <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.7rem", color: "#00e5a0", fontWeight: 700 }}>{row.score}</span>
+                    <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.7rem", color: "#fff" }}>{row.grade}</span>
+                    <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.7rem", color: "rgba(255,255,255,0.7)" }}>{row.price}</span>
+                    <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem", color: "rgba(255,255,255,0.4)" }}>{row.time}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Lock overlay */}
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "6px",
+                }}
+              >
+                <span style={{ fontSize: "1.4rem" }}>🔒</span>
+                <span
+                  style={{
+                    fontFamily: "'JetBrains Mono', monospace",
+                    fontSize: "0.65rem",
+                    color: "rgba(255,255,255,0.45)",
+                    letterSpacing: "0.06em",
+                  }}
+                >
+                  Members only — Sign in to access your dashboard
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Performance Strip */}
+        <div
+          style={{
+            background: "#0d1118",
+            border: "1px solid rgba(255,255,255,0.08)",
+            borderRadius: "8px",
+            padding: "20px",
+            maxWidth: "600px",
+            margin: "28px auto 0",
+            animation: "heroFadeIn 0.5s ease-out 0.55s both",
+          }}
+        >
           <div
-            className="flex flex-wrap justify-center items-center"
-            style={{ gap: "8px 16px", animation: "heroFadeIn 0.35s ease-out 0.6s both" }}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexWrap: "wrap",
+              gap: "16px 24px",
+            }}
           >
-            {["ML SCORING", "ADAPTIVE INTELLIGENCE", "ALWAYS RUNNING"].map((tag, i) => (
-              <div key={tag} className="flex items-center" style={{ gap: "16px", animation: `heroFadeIn 0.35s ease-out ${0.6 + i * 0.06}s both` }}>
-                {i > 0 && (
+            {["73% Directional Accuracy*", "18 Months Backtested", "A-Grade Setups: 81% Hit Rate*"].map((stat, i, arr) => (
+              <span key={stat} style={{ display: "inline-flex", alignItems: "center", gap: "24px" }}>
+                <span
+                  style={{
+                    fontFamily: "'JetBrains Mono', monospace",
+                    fontSize: "0.72rem",
+                    color: "rgba(255,255,255,0.8)",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {stat}
+                </span>
+                {i < arr.length - 1 && (
                   <span
-                    className="hidden lg:inline"
                     style={{
                       fontFamily: "'JetBrains Mono', monospace",
                       fontSize: "0.65rem",
@@ -226,136 +434,162 @@ function Hero() {
                     ·
                   </span>
                 )}
-                <span
-                  className="transition-all"
-                  style={{
-                    fontFamily: "'JetBrains Mono', monospace",
-                    fontWeight: 500,
-                    fontSize: "0.62rem",
-                    letterSpacing: "0.12em",
-                    textTransform: "uppercase",
-                    color: "#00e5a0",
-                    background: "rgba(0,229,160,0.06)",
-                    border: "1px solid rgba(0,229,160,0.2)",
-                    padding: "4px 10px",
-                    borderRadius: "4px",
-                    minHeight: "32px",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    cursor: "default",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "rgba(0,229,160,0.12)";
-                    e.currentTarget.style.borderColor = "rgba(0,229,160,0.4)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "rgba(0,229,160,0.06)";
-                    e.currentTarget.style.borderColor = "rgba(0,229,160,0.2)";
-                  }}
-                >
-                  {tag}
-                </span>
-              </div>
+              </span>
             ))}
           </div>
+          <p
+            style={{
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: "0.58rem",
+              color: "rgba(255,255,255,0.25)",
+              textAlign: "center",
+              marginTop: "12px",
+              marginBottom: 0,
+              lineHeight: 1.5,
+            }}
+          >
+            *Based on historical backtesting. Past performance does not guarantee future results.
+          </p>
         </div>
 
-        {/* Product Navigation Row */}
+        {/* Methodology Pillars */}
         <div
-          className="flex flex-col sm:flex-row items-center justify-center"
-          style={{ marginTop: "32px", gap: "0" }}
+          style={{
+            display: "flex",
+            gap: "12px",
+            flexWrap: "wrap",
+            maxWidth: "640px",
+            margin: "28px auto",
+            justifyContent: "center",
+            animation: "heroFadeIn 0.5s ease-out 0.58s both",
+          }}
         >
           {[
-            { label: "AI COCKPIT", route: "/ai-dashboard" },
-            { label: "MARKET SENTIMENT", route: "/market-sentiment" },
-            { label: "WEEKLY INCOME", route: "/weekly-income" },
-          ].map((item, i) => (
-            <div key={i} className="flex items-center" style={{ animation: `heroFadeIn 0.4s ease-out ${0.6 + i * 0.08}s both` }}>
-              {i > 0 && (
-                <span
-                  className="hidden sm:inline-block mx-4"
-                  style={{ color: "rgba(255,255,255,0.15)", fontSize: "0.7rem", userSelect: "none" }}
-                >
-                  |
-                </span>
-              )}
-              <Link
-                href={item.route}
-                className="group flex items-center gap-1.5 transition-colors"
+            { icon: "⚡", label: "Multi-Timeframe Confluence", desc: "Cross-referencing signals across daily, weekly, and intraday structure" },
+            { icon: "📊", label: "Volatility Structure Analysis", desc: "Reading implied vs realized vol to identify mispriced opportunity" },
+            { icon: "🏆", label: "Conviction Scoring Engine", desc: "Quantifying setup quality on a 0–100 scale with letter grades" },
+          ].map((tile) => (
+            <div
+              key={tile.label}
+              style={{
+                background: "transparent",
+                border: "1px solid rgba(255,255,255,0.08)",
+                borderRadius: "8px",
+                padding: "16px 20px",
+                minWidth: "180px",
+                flex: 1,
+              }}
+            >
+              <p
                 style={{
                   fontFamily: "'JetBrains Mono', monospace",
-                  fontWeight: 500,
-                  fontSize: "0.65rem",
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "rgba(255,255,255,0.5)",
-                  textDecoration: "none",
-                  padding: "10px 0",
-                  minHeight: "44px",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  cursor: "pointer",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = "rgba(255,255,255,0.9)";
-                  const arrow = e.currentTarget.querySelector('[data-arrow]') as HTMLElement;
-                  if (arrow) arrow.style.transform = "translateX(3px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = "rgba(255,255,255,0.5)";
-                  const arrow = e.currentTarget.querySelector('[data-arrow]') as HTMLElement;
-                  if (arrow) arrow.style.transform = "translateX(0)";
+                  fontSize: "0.7rem",
+                  color: "rgba(255,255,255,0.8)",
+                  margin: 0,
+                  whiteSpace: "nowrap",
                 }}
               >
-                {item.label}
-                <span
-                  data-arrow
-                  style={{
-                    color: "#00e5a0",
-                    transition: "transform 180ms ease-out",
-                    display: "inline-block",
-                  }}
-                >
-                  →
-                </span>
-              </Link>
+                {tile.icon} {tile.label}
+              </p>
+              <p
+                style={{
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontSize: "0.72rem",
+                  color: "rgba(255,255,255,0.35)",
+                  margin: "6px 0 0",
+                  lineHeight: 1.5,
+                }}
+              >
+                {tile.desc}
+              </p>
             </div>
           ))}
         </div>
 
-        {/* CTA Row */}
+        {/* Stat pills */}
         <div
-          className="flex flex-col sm:flex-row items-center justify-center gap-3"
-          style={{ marginTop: "40px", animation: "heroFadeIn 0.5s ease-out 0.65s both" }}
+          className="flex flex-wrap justify-center items-center"
+          style={{ gap: "8px 16px", marginTop: "32px", animation: "heroFadeIn 0.35s ease-out 0.6s both" }}
         >
-          <a
-            href="#how-it-works"
-            className="w-full sm:w-auto text-center transition-all"
-            style={{
-              border: "1px solid rgba(0,229,160,0.4)",
-              background: "transparent",
-              color: "#00e5a0",
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontWeight: 500,
-              fontSize: "0.9rem",
-              padding: "14px 28px",
-              borderRadius: "6px",
-              minHeight: "48px",
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = "#00e5a0";
-              e.currentTarget.style.background = "rgba(0,229,160,0.06)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = "rgba(0,229,160,0.4)";
-              e.currentTarget.style.background = "transparent";
-            }}
-          >
-            See What's Inside
-          </a>
+          {["ALWAYS RUNNING", "SUB-3 SECOND DELIVERY", "ANY BROKER · ANY PLATFORM"].map((tag, i) => (
+            <div key={tag} className="flex items-center" style={{ gap: "16px", animation: `heroFadeIn 0.35s ease-out ${0.6 + i * 0.06}s both` }}>
+              {i > 0 && (
+                <span
+                  className="hidden lg:inline"
+                  style={{
+                    fontFamily: "'JetBrains Mono', monospace",
+                    fontSize: "0.65rem",
+                    color: "rgba(255,255,255,0.15)",
+                    userSelect: "none",
+                  }}
+                >
+                  ·
+                </span>
+              )}
+              <span
+                className="transition-all"
+                style={{
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontWeight: 500,
+                  fontSize: "0.62rem",
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "#00e5a0",
+                  background: "rgba(0,229,160,0.06)",
+                  border: "1px solid rgba(0,229,160,0.2)",
+                  padding: "4px 10px",
+                  borderRadius: "4px",
+                  minHeight: "32px",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  cursor: "default",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "rgba(0,229,160,0.12)";
+                  e.currentTarget.style.borderColor = "rgba(0,229,160,0.4)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "rgba(0,229,160,0.06)";
+                  e.currentTarget.style.borderColor = "rgba(0,229,160,0.2)";
+                }}
+              >
+                {tag}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* Social Proof Bar */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "20px",
+            margin: "20px auto",
+            animation: "heroFadeIn 0.4s ease-out 0.62s both",
+          }}
+        >
+          {["120 Active Members", "22 Countries", "By Invitation Only"].map((item) => (
+            <span
+              key={item}
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: "0.6rem",
+                color: "rgba(255,255,255,0.3)",
+                whiteSpace: "nowrap",
+              }}
+            >
+              <span style={{ color: "rgba(0,229,160,0.6)" }}>●</span> {item}
+            </span>
+          ))}
+        </div>
+
+        {/* Primary CTA */}
+        <div
+          style={{ marginTop: "36px", animation: "heroFadeIn 0.5s ease-out 0.65s both" }}
+        >
           <Link
             href="/subscribe"
             className="w-full sm:w-auto text-center transition-all"
@@ -381,62 +615,34 @@ function Hero() {
               e.currentTarget.style.transform = "scale(1)";
             }}
           >
-            Request Access
+            Request Access →
           </Link>
         </div>
 
-        {/* Secondary explore link */}
-        <div
-          className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-1.5"
-          style={{ marginTop: "20px", animation: "heroFadeIn 0.4s ease-out 0.75s both" }}
-        >
+        {/* Secondary CTA */}
+        <p className="text-white/30 text-sm mt-4">
+          Already a member?{" "}
           <span
-            style={{
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontWeight: 400,
-              fontSize: "0.85rem",
-              color: "rgba(255,255,255,0.38)",
-            }}
+            onClick={() => openLoginModal()}
+            style={{ color: "#00ff96", cursor: "pointer", textDecoration: "underline" }}
           >
-            Already curious about what's inside?
+            Sign in →
           </span>
-          <Link
-            href="/products"
-            className="inline-flex items-center gap-1 transition-all"
-            style={{
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontWeight: 500,
-              fontSize: "0.85rem",
-              color: "#00e5a0",
-              opacity: 0.85,
-              textDecoration: "none",
-              minHeight: "44px",
-              display: "inline-flex",
-              alignItems: "center",
-              cursor: "pointer",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = "#00ffb3";
-              e.currentTarget.style.opacity = "1";
-              const arrow = e.currentTarget.querySelector('[data-explore-arrow]') as HTMLElement;
-              if (arrow) arrow.style.transform = "translateX(3px)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = "#00e5a0";
-              e.currentTarget.style.opacity = "0.85";
-              const arrow = e.currentTarget.querySelector('[data-explore-arrow]') as HTMLElement;
-              if (arrow) arrow.style.transform = "translateX(0)";
-            }}
-          >
-            Explore the full product suite
-            <span
-              data-explore-arrow
-              style={{ display: "inline-block", transition: "transform 160ms ease-out" }}
-            >
-              →
-            </span>
-          </Link>
-        </div>
+        </p>
+
+        {/* Scarcity line */}
+        <p
+          style={{
+            fontFamily: "'JetBrains Mono', monospace",
+            fontSize: "0.65rem",
+            color: "rgba(255,255,255,0.28)",
+            letterSpacing: "0.1em",
+            marginTop: "28px",
+            animation: "heroFadeIn 0.4s ease-out 0.85s both",
+          }}
+        >
+          <span style={{ color: "#00e5a0" }}>●</span> Private access · Limited seats · By invitation only
+        </p>
       </div>
 
       {/* Scroll indicator */}
@@ -463,10 +669,15 @@ function Hero() {
           0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.5; }
           50% { transform: translateX(-50%) translateY(6px); opacity: 0.3; }
         }
+        @keyframes heroPulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.4; }
+        }
         @media (prefers-reduced-motion: reduce) {
           [style*="animation"] { animation: none !important; }
         }
-      `}</style>
+      `}
+      </style>
     </section>
   );
 }
@@ -515,6 +726,19 @@ function HowItWorks() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Push notification visual demo */}
+        <div className={`mt-10 ${inView ? "fade-up fade-up-delay-5" : "opacity-0"}`}>
+          <PushNotificationMockup
+            ticker="META"
+            grade="A"
+            setupType="BULLISH SLINGSHOT"
+            strike="$540"
+            expiry="Jun 27"
+            credit="—"
+            score="88"
+          />
         </div>
 
         {/* Value strip */}
@@ -898,7 +1122,7 @@ function FAQ() {
     { q: "What is the Primal Edge AI Cockpit?", a: "It is the flagship adaptive intelligence signal within the Primal Edge product suite — a proprietary system that identifies a specific structural pattern across a curated premium universe. The engine assigns a 0–100 conviction score and grades each setup A through D. The exact model architecture, pattern definition, and universe composition are proprietary. All output is provided for educational and analytical purposes only." },
     { q: "What data does the model use?", a: "The engine ingests live market data across a curated premium universe on every cycle. Raw data is transformed through a proprietary feature engineering pipeline into a multi-dimensional numerical representation. The specific data sources, feature composition, and transformation methods are not disclosed." },
     { q: "How do I receive the analysis?", a: "Analytical insights are delivered via push notification to your mobile device. Download a free notification client, subscribe to the private topic provided after sign-up, and receive instant updates the moment the engine confirms a high-conviction setup." },
-    { q: "What timeframe does the scanner analyze?", a: "The engine uses a multi-timeframe evaluation approach, cross-referencing the primary scan timeframe against higher timeframe trend structure. The model applies a confluence bonus to trend-aligned setups and penalizes counter-trend signals. Setups are designed for analysis of swing-timeframe structures with a typical 2–10 day observation window." },
+    { q: "What timeframe does the engine analyze?", a: "The engine uses a multi-timeframe evaluation approach, cross-referencing the primary scan timeframe against higher timeframe trend structure. The model applies a confluence bonus to trend-aligned setups and penalizes counter-trend signals. Setups are designed for analysis of swing-timeframe structures with a typical 2–10 day observation window." },
     { q: "How was the model validated?", a: "The model was validated across a multi-year historical dataset using walk-forward analysis to confirm out-of-sample performance. Survivorship bias was eliminated by evaluating against the full universe as it existed at each historical point. Detailed methodology is available to active members only." },
     { q: "Is this financial advice?", a: "No. Primal Edge is an educational and analytical tool only. All scan results, scores, and grades are for research and educational purposes only. Past model performance does not guarantee future results. This is not a recommendation to buy, sell, or hold any security. Always conduct your own due diligence and consult a licensed financial advisor." },
     { q: "How many seats are available?", a: "This is a private, close-community service. Seats are strictly limited to maintain analytical quality and ensure every member receives timely, low-noise insights. Once the community is full, a waitlist will open." },
@@ -923,6 +1147,20 @@ function FAQ() {
               {open === i && (
                 <div className="px-5 sm:px-6 pb-4">
                   <p className="text-white/50 text-sm leading-relaxed">{faq.a}</p>
+                  {i === 2 && (
+                    <div className="mt-4">
+                      <PushNotificationMockup
+                        ticker="META"
+                        grade="A"
+                        setupType="BULLISH SLINGSHOT"
+                        strike="$540"
+                        expiry="Jun 27"
+                        credit="—"
+                        score="88"
+                        animDelay={0.1}
+                      />
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -951,7 +1189,7 @@ function CTABanner() {
               Join a private community of systematic market enthusiasts using Primal Edge's adaptive intelligence to study high-conviction setups before the move — scored, graded, and delivered as real-time educational analysis.
             </p>
             <Link href="/subscribe" className="shimmer-btn pulse-glow inline-block bg-[#00e5a0] text-[#0a0d12] font-['Space_Grotesk'] font-bold text-base sm:text-lg px-8 sm:px-10 py-4 rounded-lg hover:bg-[#00bfa0] transition-all">
-              Access the AI Scanner →
+              Access the AI Dashboard →
             </Link>
           </div>
         </div>
