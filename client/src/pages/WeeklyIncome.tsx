@@ -716,6 +716,7 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
 
 /* ─── Dashboard Content (shown after auth + approval) ──────── */
 function WeeklyIncomeContent() {
+  const { signOut } = useAuth();
   const [data, setData] = useState<ScanData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -914,6 +915,26 @@ function WeeklyIncomeContent() {
                   >
                     PRIVATE ACCESS
                   </span>
+                  <button
+                    onClick={() => signOut()}
+                    style={{
+                      fontFamily: "'JetBrains Mono', monospace",
+                      fontSize: "0.6rem",
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      color: "rgba(255,255,255,0.25)",
+                      background: "none",
+                      border: "1px solid rgba(255,255,255,0.08)",
+                      borderRadius: 20,
+                      padding: "4px 12px",
+                      cursor: "pointer",
+                      transition: "all 0.15s ease",
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.6)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.25)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; }}
+                  >
+                    Sign Out
+                  </button>
                 </div>
               </div>
               {/* Market status pill */}

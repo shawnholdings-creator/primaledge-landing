@@ -407,6 +407,318 @@ export default function WeeklyIncomeHero() {
           </div>
         </section>
 
+        {/* ─── 5b. Trade Management ──────────────────────── */}
+        <section style={{ ...sectionGap, animation: "wih-fadeUp 0.7s ease-out 0.35s both" }}>
+          {/* A. Eyebrow + Headline + Subtext */}
+          <div style={{ textAlign: "center", maxWidth: 560, margin: "0 auto" }}>
+            <div
+              style={{
+                fontFamily: T.fontMono,
+                fontSize: 11,
+                color: T.accent,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                marginBottom: 14,
+              }}
+            >
+              TRADE MANAGEMENT
+            </div>
+            <h2
+              style={{
+                fontFamily: T.fontDisplay,
+                fontSize: isMobile ? 28 : 36,
+                fontWeight: 900,
+                color: T.white,
+                lineHeight: 1.15,
+                margin: "0 0 14px",
+              }}
+            >
+              Know exactly when to exit.
+              <br />
+              <span style={{ color: T.accent }}>Before it costs you.</span>
+            </h2>
+            <p
+              style={{
+                fontFamily: T.fontBody,
+                fontSize: 15,
+                color: T.muted,
+                lineHeight: 1.7,
+                margin: 0,
+                maxWidth: 560,
+              }}
+            >
+              Finding the setup is only half the job. The engine watches your open
+              trades around the clock and sends you a single notification the moment
+              it's time to get out — no spreadsheets, no checking prices every hour.
+            </p>
+          </div>
+
+          {/* B. 3-Step Flow */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: isMobile ? "column" : "row",
+              gap: 14,
+              marginTop: 32,
+              maxWidth: 600,
+              margin: "32px auto 0",
+            }}
+          >
+            {[
+              {
+                num: "01",
+                title: "You get the signal",
+                desc: "The engine surfaces a qualifying setup and sends an alert to your phone.",
+              },
+              {
+                num: "02",
+                title: "You log the trade",
+                desc: "Add it to your personal tracker in the dashboard. Takes 10 seconds.",
+              },
+              {
+                num: "03",
+                title: "We watch it for you",
+                desc: "The engine monitors the trade continuously and pushes one notification when it's time to exit.",
+              },
+            ].map((step) => (
+              <div
+                key={step.num}
+                style={{
+                  ...cardStyle,
+                  flex: 1,
+                  padding: "20px 20px 20px 18px",
+                  borderLeft: `3px solid ${T.accent}`,
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily: T.fontMono,
+                    fontSize: 12,
+                    fontWeight: 700,
+                    color: T.accent,
+                    marginBottom: 6,
+                  }}
+                >
+                  {step.num}
+                </div>
+                <div
+                  style={{
+                    fontFamily: T.fontDisplay,
+                    fontSize: 15,
+                    fontWeight: 700,
+                    color: T.white,
+                    marginBottom: 4,
+                  }}
+                >
+                  {step.title}
+                </div>
+                <div
+                  style={{
+                    fontFamily: T.fontBody,
+                    fontSize: 13,
+                    color: T.muted,
+                    lineHeight: 1.6,
+                  }}
+                >
+                  {step.desc}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* C. Stat Callout */}
+          <div
+            style={{
+              marginTop: 32,
+              maxWidth: 400,
+              margin: "32px auto 0",
+              borderLeft: `3px solid ${T.amber}`,
+              background: "rgba(240,180,41,0.04)",
+              padding: "20px 24px",
+              borderRadius: "0 10px 10px 0",
+              textAlign: "center",
+            }}
+          >
+            <div
+              style={{
+                fontFamily: T.fontDisplay,
+                fontSize: 32,
+                fontWeight: 700,
+                color: T.amber,
+                lineHeight: 1.1,
+              }}
+            >
+              168 hours
+            </div>
+            <div
+              style={{
+                fontFamily: T.fontBody,
+                fontSize: 14,
+                color: T.muted,
+                marginTop: 6,
+                lineHeight: 1.5,
+              }}
+            >
+              of manual price-checking a week — replaced by one push notification
+            </div>
+          </div>
+
+          {/* D. Blurred Position Table Tease */}
+          <div
+            style={{
+              ...cardStyle,
+              position: "relative",
+              overflow: "hidden",
+              maxWidth: 560,
+              margin: "32px auto 0",
+            }}
+          >
+            {/* Table header */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1.4fr 1.4fr 1fr",
+                padding: "12px 20px",
+                borderBottom: "1px solid rgba(255,255,255,0.06)",
+              }}
+            >
+              {["TRADE", "STATUS", "ACTION"].map((h) => (
+                <span
+                  key={h}
+                  style={{
+                    fontFamily: T.fontMono,
+                    fontSize: 10,
+                    letterSpacing: "0.14em",
+                    color: T.dimmed,
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {h}
+                </span>
+              ))}
+            </div>
+
+            {/* Data rows (blurred) */}
+            <div style={{ filter: "blur(5px)", userSelect: "none", pointerEvents: "none" }}>
+              {[
+                {
+                  trade: "████ PUT",
+                  status: "Monitoring",
+                  statusColor: T.accent,
+                  statusBg: "rgba(0,255,150,0.08)",
+                  statusBorder: "rgba(0,255,150,0.15)",
+                  action: "—",
+                  highlight: false,
+                },
+                {
+                  trade: "████ PUT",
+                  status: "⚠ Exit Signal Sent",
+                  statusColor: T.amber,
+                  statusBg: "rgba(240,180,41,0.15)",
+                  statusBorder: "rgba(240,180,41,0.4)",
+                  action: "Mark Closed",
+                  highlight: true,
+                },
+                {
+                  trade: "████ CALL",
+                  status: "Monitoring",
+                  statusColor: T.accent,
+                  statusBg: "rgba(0,255,150,0.08)",
+                  statusBorder: "rgba(0,255,150,0.15)",
+                  action: "—",
+                  highlight: false,
+                },
+              ].map((row, i) => (
+                <div
+                  key={i}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1.4fr 1.4fr 1fr",
+                    padding: "11px 20px",
+                    borderBottom:
+                      i < 2 ? "1px solid rgba(255,255,255,0.04)" : "none",
+                    alignItems: "center",
+                    background: row.highlight
+                      ? "rgba(240,180,41,0.06)"
+                      : "transparent",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: T.fontMono,
+                      fontSize: 13,
+                      color: "rgba(255,255,255,0.7)",
+                    }}
+                  >
+                    {row.trade}
+                  </span>
+                  <span>
+                    <span
+                      style={{
+                        fontFamily: T.fontMono,
+                        fontSize: 10,
+                        fontWeight: 600,
+                        color: row.statusColor,
+                        background: row.statusBg,
+                        border: `1px solid ${row.statusBorder}`,
+                        padding: "3px 10px",
+                        borderRadius: 20,
+                      }}
+                    >
+                      {row.status}
+                    </span>
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: T.fontMono,
+                      fontSize: 11,
+                      color: "rgba(255,255,255,0.3)",
+                    }}
+                  >
+                    {row.action}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Lock overlay */}
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                background: "rgba(10,10,10,0.75)",
+                backdropFilter: "blur(4px)",
+                WebkitBackdropFilter: "blur(4px)",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <span style={{ fontSize: 24 }}>🔒</span>
+              <span style={{ fontSize: 13, color: "#ccc", marginTop: 8 }}>
+                Members only
+              </span>
+              <button
+                onClick={() => openLoginModal("/weekly-income")}
+                style={{
+                  marginTop: 16,
+                  background: T.accent,
+                  color: T.bg,
+                  fontWeight: 700,
+                  fontSize: 13,
+                  padding: "12px 24px",
+                  border: "none",
+                  borderRadius: 12,
+                  cursor: "pointer",
+                }}
+              >
+                Sign In to Track Your Trades →
+              </button>
+            </div>
+          </div>
+        </section>
+
         {/* ─── 6. Stat Strip 2 ────────────────────────────── */}
         <section style={{ ...sectionGap, animation: "wih-fadeUp 0.7s ease-out 0.35s both" }}>
           <div
