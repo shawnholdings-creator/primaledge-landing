@@ -983,16 +983,16 @@ function MicroIncomeContent() {
                 </div>
               </div>
               <div className="bg-[#0d1118] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
-                <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Candidates</div>
+                <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">{tradableCount > 0 ? "Candidates" : "Next Scan"}</div>
                 <div
-                  className="text-lg font-bold leading-none"
+                  className={tradableCount > 0 ? "text-lg font-bold leading-none" : "text-xs font-bold leading-none mt-1"}
                   style={{
                     fontFamily: "'JetBrains Mono', monospace",
-                    color: tradableCount > 0 ? "#00e5a0" : "rgba(255,255,255,0.2)",
+                    color: tradableCount > 0 ? "#00e5a0" : "rgba(255,255,255,0.3)",
                     textShadow: tradableCount > 0 ? "0 0 12px rgba(0,229,160,0.3)" : "none",
                   }}
                 >
-                  {tradableCount}
+                  {tradableCount > 0 ? tradableCount : "Check Back Soon"}
                 </div>
               </div>
               <div className="bg-[#0d1118] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
@@ -1089,7 +1089,7 @@ function MicroIncomeContent() {
                   className="text-xs text-[#00e5a0] tracking-[0.2em] uppercase font-bold"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
-                  WEEKLY INCOME SCANNER
+                  MICRO INCOME SCANNER
                 </span>
               </div>
               <div className="flex items-center gap-2">
