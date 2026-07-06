@@ -864,7 +864,7 @@ function WeeklyIncomeContent() {
     .sort((a, b) => b.total_score - a.total_score);
 
   const filteredCandidates = mode === "micro"
-    ? candidates.filter((c) => c.credit >= 0.75 && c.credit <= 3.00)
+    ? candidates.filter((c) => c.credit >= 1.50 && c.credit <= 2.50)
     : candidates;
 
   const tradableCount = filteredCandidates.length;
