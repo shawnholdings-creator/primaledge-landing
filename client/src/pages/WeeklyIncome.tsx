@@ -864,7 +864,7 @@ function WeeklyIncomeContent() {
     .sort((a, b) => b.total_score - a.total_score);
 
   const filteredCandidates = mode === "micro"
-    ? candidates.filter((c) => c.strike * 100 <= 3000)
+    ? candidates.filter((c) => c.credit >= 0.75 && c.credit <= 3.00)
     : candidates;
 
   const tradableCount = filteredCandidates.length;
@@ -1062,7 +1062,7 @@ function WeeklyIncomeContent() {
                 letterSpacing: "0.05em",
               }}
             >
-              {mode === "standard" ? "All qualifying setups" : "Sized for accounts under $10K"}
+              {mode === "standard" ? "All qualifying setups" : "Lower-premium setups. Smaller exposure per contract."}
             </span>
           </div>
 
