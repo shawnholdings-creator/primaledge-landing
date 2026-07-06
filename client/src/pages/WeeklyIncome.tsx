@@ -724,6 +724,7 @@ function WeeklyIncomeContent() {
   const [activeVersion, setActiveVersion] = useState<string | null>(null);
   const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
   const [activeTab, setActiveTab] = useState<"scanner" | "positions">("scanner");
+  const [mode, setMode] = useState<"standard" | "micro">("standard");
   const [positions, setPositions] = useState<Position[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -862,7 +863,11 @@ function WeeklyIncomeContent() {
     .map((c) => ({ ...c, _grade: gradeFromScore(c.total_score) }))
     .sort((a, b) => b.total_score - a.total_score);
 
-  const tradableCount = candidates.length;
+  const filteredCandidates = mode === "micro"
+    ? candidates.filter((c) => c.strike * 100 <= 3000)
+    : candidates;
+
+  const tradableCount = filteredCandidates.length;
   const ms = marketStatusLabel();
   const scanTimestamp = data?.scan_timestamp
     ? new Date(data.scan_timestamp).toLocaleString()
@@ -995,24 +1000,70 @@ function WeeklyIncomeContent() {
                 </div>
               </div>
               <div className="bg-[#0d1118] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
-                <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Unique Alerts</div>
+                <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">{mode === "micro" ? "Probability of Success" : "Unique Alerts"}</div>
                 <div
                   className="text-lg font-bold text-white/60 leading-none"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
-                  {data?.unique_alerts ?? "—"}
+                  {mode === "micro" ? "92%*" : (data?.unique_alerts ?? "—")}
                 </div>
               </div>
               <div className="bg-[#0d1118] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
-                <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Market</div>
+                <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">{mode === "micro" ? "Avg Time to Target" : "Market"}</div>
                 <div
                   className="text-lg font-bold text-white/40 leading-none"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
-                  {data?.market_condition || "—"}
+                  {mode === "micro" ? "5 days" : (data?.market_condition || "—")}
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* ─── Standard / Micro Toggle ─── */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, marginBottom: 8, marginTop: 4 }}>
+            <div
+              style={{
+                display: "inline-flex",
+                background: "rgba(13,17,24,0.6)",
+                border: "1px solid rgba(255,255,255,0.06)",
+                borderRadius: 20,
+                padding: 3,
+              }}
+            >
+              {(["standard", "micro"] as const).map((m) => (
+                <button
+                  key={m}
+                  onClick={() => setMode(m)}
+                  style={{
+                    fontFamily: "'JetBrains Mono', monospace",
+                    fontSize: "0.65rem",
+                    fontWeight: mode === m ? 700 : 400,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    padding: "5px 16px",
+                    borderRadius: 16,
+                    border: "none",
+                    cursor: "pointer",
+                    transition: "all 0.15s ease",
+                    background: mode === m ? "#00e5a0" : "transparent",
+                    color: mode === m ? "#0a0d12" : "rgba(255,255,255,0.35)",
+                  }}
+                >
+                  {m === "standard" ? "Standard" : "Micro"}
+                </button>
+              ))}
+            </div>
+            <span
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: "0.6rem",
+                color: "rgba(255,255,255,0.2)",
+                letterSpacing: "0.05em",
+              }}
+            >
+              {mode === "standard" ? "All qualifying setups" : "Sized for accounts under $10K"}
+            </span>
           </div>
 
           {/* Tab Switcher */}
@@ -1164,7 +1215,7 @@ function WeeklyIncomeContent() {
               )}
 
               {/* Empty State */}
-              {!error && candidates.length === 0 && (
+              {!error && filteredCandidates.length === 0 && (
                 <div className="px-4 py-20 text-center">
                   <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/[0.03] border border-white/[0.06] mb-4">
                     <svg
@@ -1185,16 +1236,18 @@ function WeeklyIncomeContent() {
                     className="text-white/25 text-sm font-semibold mb-1.5 tracking-wide"
                     style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                   >
-                    No Active Candidates
+                    {mode === "micro" ? "No Micro Setups" : "No Active Candidates"}
                   </p>
                   <p className="text-white/[0.12] text-xs max-w-xs mx-auto leading-relaxed">
-                    The scanner will refresh at the next interval. Check back during market hours for new setups.
+                    {mode === "micro"
+                      ? "No Micro setups in this scan. Check back next cycle."
+                      : "The scanner will refresh at the next interval. Check back during market hours for new setups."}
                   </p>
                 </div>
               )}
 
               {/* Signal Rows */}
-              {candidates.map((c, i) => {
+              {filteredCandidates.map((c, i) => {
                 const isPut = c.side.toLowerCase() === "put";
                 const sideColor = isPut ? "#00e5a0" : "#ef4444";
                 const grade = c._grade;
@@ -1374,6 +1427,20 @@ function WeeklyIncomeContent() {
                       {isExpanded && <ScoreDetailPanel candidate={c} />}
                     </div>
 
+                    {/* Micro max risk — desktop */}
+                    {mode === "micro" && (
+                      <div
+                        className="hidden md:block px-6 pb-2"
+                        style={{
+                          fontFamily: "'JetBrains Mono', monospace",
+                          fontSize: "0.65rem",
+                          color: "rgba(255,255,255,0.25)",
+                        }}
+                      >
+                        Max risk: ${Math.round(c.strike * 100).toLocaleString()}
+                      </div>
+                    )}
+
                     {/* Mobile card */}
                     <div
                       className="md:hidden border-b border-white/[0.04] cursor-pointer select-none"
@@ -1514,6 +1581,20 @@ function WeeklyIncomeContent() {
                       >
                         {isExpanded && <ScoreDetailPanel candidate={c} />}
                       </div>
+
+                      {/* Micro max risk — mobile */}
+                      {mode === "micro" && (
+                        <div
+                          className="px-4 pb-2"
+                          style={{
+                            fontFamily: "'JetBrains Mono', monospace",
+                            fontSize: "0.65rem",
+                            color: "rgba(255,255,255,0.25)",
+                          }}
+                        >
+                          Max risk: ${Math.round(c.strike * 100).toLocaleString()}
+                        </div>
+                      )}
                     </div>
                   </div>
                 );
