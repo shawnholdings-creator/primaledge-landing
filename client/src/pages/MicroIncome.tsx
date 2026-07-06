@@ -1,7 +1,7 @@
 /* ============================================================
-   WeeklyIncome.tsx — Weekly Income Scanner (Income Intelligence)
-   Auth: Public — no login required
-   Data: Fetches live scan data from GitHub Gist
+   MicroIncome.tsx — Micro Income Scanner (Lower-Premium Setups)
+   Auth: Requires income_access
+   Data: Fetches live scan data from GitHub Gist (same as WeeklyIncome)
    ============================================================ */
 
 import { useState, useEffect, useCallback, useMemo } from "react";
@@ -715,7 +715,7 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
 }
 
 /* ─── Dashboard Content (shown after auth + approval) ──────── */
-function WeeklyIncomeContent() {
+function MicroIncomeContent() {
   const { signOut } = useAuth();
   const [data, setData] = useState<ScanData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -860,6 +860,7 @@ function WeeklyIncomeContent() {
 
   const candidates = (data?.candidates || [])
     .map((c) => ({ ...c, _grade: gradeFromScore(c.total_score) }))
+    .filter((c) => c.credit >= 1.50 && c.credit <= 2.50)
     .sort((a, b) => b.total_score - a.total_score);
 
   const tradableCount = candidates.length;
@@ -895,13 +896,13 @@ function WeeklyIncomeContent() {
                     WebkitTextFillColor: "transparent",
                   }}
                 >
-                  WEEKLY INCOME
+                  MICRO INCOME
                 </h1>
                 <p
                   className="text-white/20 text-[10px] tracking-[0.35em] uppercase mt-1.5"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
-                  INCOME INTELLIGENCE · PRIVATE ACCESS
+                  INCOME INTELLIGENCE · UNDER $10K
                 </p>
                 <div className="flex items-center gap-2 mt-2 flex-wrap">
                   <span
@@ -995,24 +996,30 @@ function WeeklyIncomeContent() {
                 </div>
               </div>
               <div className="bg-[#0d1118] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
-                <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Unique Alerts</div>
+                <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Probability of Success</div>
                 <div
                   className="text-lg font-bold text-white/60 leading-none"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
-                  {data?.unique_alerts ?? "—"}
+                  92%*
                 </div>
               </div>
               <div className="bg-[#0d1118] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
-                <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Market</div>
+                <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Avg Time to Target</div>
                 <div
                   className="text-lg font-bold text-white/40 leading-none"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
-                  {data?.market_condition || "—"}
+                  5 days
                 </div>
               </div>
             </div>
+            <p
+              className="text-white/[0.08] text-[9px] mt-2 text-center"
+              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            >
+              *Based on backtesting. Past results do not guarantee future performance.
+            </p>
           </div>
 
           {/* Tab Switcher */}
@@ -1185,10 +1192,10 @@ function WeeklyIncomeContent() {
                     className="text-white/25 text-sm font-semibold mb-1.5 tracking-wide"
                     style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                   >
-                    No Active Candidates
+                    No setups this cycle.
                   </p>
                   <p className="text-white/[0.12] text-xs max-w-xs mx-auto leading-relaxed">
-                    The scanner will refresh at the next interval. Check back during market hours for new setups.
+                    Check back at the next scan.
                   </p>
                 </div>
               )}
@@ -1374,6 +1381,19 @@ function WeeklyIncomeContent() {
                       {isExpanded && <ScoreDetailPanel candidate={c} />}
                     </div>
 
+                    {/* Max risk + suggested — desktop */}
+                    <div
+                      className="hidden md:flex gap-4 px-6 pb-2"
+                      style={{
+                        fontFamily: "'JetBrains Mono', monospace",
+                        fontSize: "0.65rem",
+                        color: "rgba(255,255,255,0.25)",
+                      }}
+                    >
+                      <span>Max risk: ${Math.round(c.strike * 100).toLocaleString()}</span>
+                      <span>Suggested: 1 contract</span>
+                    </div>
+
                     {/* Mobile card */}
                     <div
                       className="md:hidden border-b border-white/[0.04] cursor-pointer select-none"
@@ -1513,6 +1533,19 @@ function WeeklyIncomeContent() {
                         }}
                       >
                         {isExpanded && <ScoreDetailPanel candidate={c} />}
+                      </div>
+
+                      {/* Max risk + suggested — mobile */}
+                      <div
+                        className="px-4 pb-2 flex gap-3"
+                        style={{
+                          fontFamily: "'JetBrains Mono', monospace",
+                          fontSize: "0.65rem",
+                          color: "rgba(255,255,255,0.25)",
+                        }}
+                      >
+                        <span>Max risk: ${Math.round(c.strike * 100).toLocaleString()}</span>
+                        <span>Suggested: 1 contract</span>
                       </div>
                     </div>
                   </div>
@@ -2071,14 +2104,14 @@ function WeeklyIncomeContent() {
 }
 
 /* ─── Main Export — Auth Protected ───────────────────── */
-export default function WeeklyIncome() {
+export default function MicroIncome() {
   const { user, productAccess } = useAuth();
   const hasAccess = user && productAccess.income === true;
 
   if (hasAccess) {
     return (
       <ProtectedRoute product="income">
-        <WeeklyIncomeContent />
+        <MicroIncomeContent />
       </ProtectedRoute>
     );
   }

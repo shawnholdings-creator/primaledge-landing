@@ -21,6 +21,7 @@ import AIDashboard from "./pages/AIDashboard";
 import OptionsDashboard from "./pages/OptionsDashboard";
 import ComingSoonPage from "./pages/ComingSoonPage";
 import WeeklyIncome from "./pages/WeeklyIncome";
+import MicroIncome from "./pages/MicroIncome";
 import GlobalDisclaimer from "./components/GlobalDisclaimer";
 import MobileCTA from "./components/MobileCTA";
 
@@ -40,6 +41,7 @@ function Router() {
       <Route path={"/ai-dashboard"} component={AIDashboard} />
       <Route path={"/options-prep"} component={OptionsDashboard} />
       <Route path={"/weekly-income"} component={WeeklyIncome} />
+      <Route path={"/micro"} component={MicroIncome} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>
