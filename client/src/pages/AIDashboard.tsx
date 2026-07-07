@@ -823,7 +823,7 @@ function DashboardContent() {
               >
                 {priceTimestamp && !activeVersion
                   ? `Prices as of ${new Date(priceTimestamp).toLocaleTimeString()} • Scanned ${timestamp}`
-                  : `Premium universe scanned • ${timestamp}`
+                  : `Blue-chip universe scanned • ${timestamp}`
                 }
               </span>
               <span

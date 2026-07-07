@@ -12,6 +12,26 @@ import { useLoginModal } from "../contexts/LoginModalContext";
 
 const PRODUCTS = [
   {
+    id: "weekly-income",
+    name: "Weekly Income Dashboard",
+    tag: "LIVE",
+    tag2: "FLAGSHIP",
+    tagColor: "#00e5a0",
+    description:
+      "The flagship options income tool. Scans blue-chip stocks and ETFs for weekly put and call selling opportunities — scored by conviction, filtered for quality, and delivered to your phone the moment a setup qualifies.",
+    features: ["Income opportunities", "100-point scoring model", "Real-time phone alerts", "Blue-chip universe only"],
+    cta: "View Dashboard",
+    ctaHref: "/weekly-income",
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <path d="M16 4v24" stroke="#00e5a0" strokeWidth="2.5" strokeLinecap="round"/>
+        <path d="M10 12l6-6 6 6" stroke="#00e5a0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M10 20l6 6 6-6" stroke="#00e5a0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <rect x="4" y="13" width="24" height="6" rx="3" stroke="#00e5a0" strokeWidth="1.5" opacity="0.4"/>
+      </svg>
+    ),
+  },
+  {
     id: "ai-dashboard",
     name: "Primal Edge AI Cockpit",
     tag: "BETA",
@@ -50,31 +70,12 @@ const PRODUCTS = [
     ),
   },
   {
-    id: "weekly-income",
-    name: "Weekly Income Dashboard",
-    tag: "LIVE",
-    tagColor: "#00e5a0",
-    description:
-      "Automated bi-directional scanner for weekly income opportunities. Identifies conservative bullish income setups and bearish income setups with institutional-grade quality gates.",
-    features: ["Income opportunities", "100-point scoring model", "Real-time phone alerts", "Blue-chip universe only"],
-    cta: "View Dashboard",
-    ctaHref: "/weekly-income",
-    icon: (
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-        <path d="M16 4v24" stroke="#00e5a0" strokeWidth="2.5" strokeLinecap="round"/>
-        <path d="M10 12l6-6 6 6" stroke="#00e5a0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M10 20l6 6 6-6" stroke="#00e5a0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        <rect x="4" y="13" width="24" height="6" rx="3" stroke="#00e5a0" strokeWidth="1.5" opacity="0.4"/>
-      </svg>
-    ),
-  },
-  {
     id: "bearish-scanner",
     name: "Bearish Reversal Scanner",
     tag: "COMING SOON",
     tagColor: "#f59e0b",
     description:
-      "Identify high-probability bearish reversal and breakdown setups across the full market universe. Powered by the same adaptive intelligence engine as the AI Cockpit — optimized for short-side opportunities.",
+      "Identify high-probability bearish reversal and breakdown setups across blue-chip stocks and ETFs. Powered by the same adaptive intelligence engine as the AI Cockpit — optimized for short-side opportunities.",
     features: ["Short-side signal detection", "Multi-timeframe analysis", "AI-graded setups", "Instant alerts"],
     cta: "Join Waitlist",
     ctaHref: "/subscribe",
@@ -142,7 +143,7 @@ export default function Products() {
             Every Edge.<br /><span className="text-[#00e5a0]">One Platform.</span>
           </h1>
           <p className="text-lg text-white/50 max-w-2xl leading-relaxed">
-            Primal Edge is building a suite of AI-powered signal tools for serious traders. Each product is engineered with the same adaptive intelligence engine — purpose-built for a specific market opportunity.
+            Primal Edge is building a suite of AI-powered signal tools for serious traders. Each product is engineered with the same adaptive intelligence engine — purpose-built for a specific options trading opportunity.
           </p>
           {!user && (
             <div className="mt-8 flex items-center gap-4">
@@ -182,12 +183,22 @@ export default function Products() {
                 {/* Tag */}
                 <div className="flex items-center justify-between mb-6">
                   <div className="p-3 bg-white/5 rounded-xl">{product.icon}</div>
-                  <span
-                    className="text-xs font-bold tracking-widest px-3 py-1 rounded-full border"
-                    style={{ color: product.tagColor, borderColor: `${product.tagColor}40`, backgroundColor: `${product.tagColor}10` }}
-                  >
-                    {product.tag}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="text-xs font-bold tracking-widest px-3 py-1 rounded-full border"
+                      style={{ color: product.tagColor, borderColor: `${product.tagColor}40`, backgroundColor: `${product.tagColor}10` }}
+                    >
+                      {product.tag}
+                    </span>
+                    {(product as any).tag2 && (
+                      <span
+                        className="text-xs font-bold tracking-widest px-3 py-1 rounded-full border"
+                        style={{ color: "#00e5a0", borderColor: "rgba(0,229,160,0.4)", backgroundColor: "rgba(0,229,160,0.1)" }}
+                      >
+                        {(product as any).tag2}
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 <h3 className="text-xl font-bold text-white mb-3" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>

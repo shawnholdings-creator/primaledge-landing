@@ -193,7 +193,7 @@ function Hero() {
               color: "#00e5a0",
             }}
           >
-            ADAPTIVE INTELLIGENCE · PRIVATE ACCESS
+            OPTIONS INCOME · ADAPTIVE INTELLIGENCE · PRIVATE ACCESS
           </span>
         </div>
 
@@ -226,7 +226,7 @@ function Hero() {
             animation: "heroFadeIn 0.5s ease-out 0.35s both",
           }}
         >
-          Primal Edge monitors the premium market universe, scores every setup by conviction, and delivers the highest-ranked signals directly to your dashboard and your phone — before you ever open a chart.
+           Primal Edge scans blue-chip stocks and ETFs for high-probability options income setups, scores every opportunity by conviction, and delivers the highest-ranked signals directly to your dashboard and your phone — before you ever open a chart.
         </p>
 
         {/* Push notification mockup */}
@@ -568,7 +568,7 @@ function Hero() {
           style={{ marginTop: "36px", animation: "heroFadeIn 0.5s ease-out 0.65s both" }}
         >
           <Link
-            href="/subscribe"
+            href="/products"
             className="w-full sm:w-auto text-center transition-all"
             style={{
               background: "#00e5a0",
@@ -592,7 +592,7 @@ function Hero() {
               e.currentTarget.style.transform = "scale(1)";
             }}
           >
-            Request Access →
+            See Our Products →
           </Link>
         </div>
 
@@ -618,7 +618,7 @@ function Hero() {
             animation: "heroFadeIn 0.4s ease-out 0.85s both",
           }}
         >
-          <span style={{ color: "#00e5a0" }}>●</span> Private access · Limited seats · By invitation only
+           <span style={{ color: "#00e5a0" }}>●</span> Weekly Options Income Dashboard — now live · Limited seats
         </p>
       </div>
 
@@ -664,7 +664,7 @@ function Hero() {
 function HowItWorks() {
   const { ref, inView } = useInView();
   const steps = [
-    { num: "01", title: "Autonomous Data Ingestion", desc: "On every cycle, the engine autonomously ingests live market data across a curated universe of premium symbols spanning multiple indices and proprietary watchlists. Data is normalized, adjusted for corporate actions, and staged for feature extraction — zero manual input, zero human bottleneck.", icon: "📡", traderValue: "The engine watches the premium market universe for you, reducing the need to manually cycle through endless charts. Traders get a cleaner starting point: fewer names to chase, more focus on symbols showing meaningful activity." },
+    { num: "01", title: "Autonomous Data Ingestion", desc: "On every cycle, the engine autonomously ingests live market data across a curated universe of blue-chip stocks and options-liquid ETFs spanning multiple indices and proprietary watchlists. Data is normalized, adjusted for corporate actions, and staged for feature extraction — zero manual input, zero human bottleneck.", icon: "📡", traderValue: "The engine watches blue-chip stocks and ETFs for options income setups so you don't have to, reducing the need to manually cycle through endless charts. Traders get a cleaner starting point: fewer names to chase, more focus on symbols showing meaningful activity." },
     { num: "02", title: "Proprietary Feature Extraction", desc: "Raw price and volume data is transformed through a multi-layer feature engineering pipeline into a high-dimensional numerical representation. The system captures latent relationships between momentum regime, volatility structure, and directional pressure that are invisible to standard technical analysis.", icon: "🧠", traderValue: "Instead of reacting to obvious price movement after the crowd sees it, the system studies structure, compression, momentum, volume behavior, and directional pressure. This helps surface setups that may be forming beneath the noise." },
     { num: "03", title: "Adaptive Conviction Scoring", desc: "A proprietary scoring model evaluates each candidate across multiple orthogonal dimensions of market confluence, producing a single 0–100 conviction score. Dynamic penalty layers adjust for regime risk, overextension, and event proximity — tiering every setup as ELITE, FIRE, PREP, or SUPPRESS.", icon: "🏆", traderValue: "Every candidate is ranked before it reaches the trader. The 0–100 score and grade help separate high-priority setups from weak or early formations, so traders can decide what deserves immediate review." },
     { num: "04", title: "Dual-Channel Signal Dispatch", desc: "Qualifying signals are deduplicated against the session registry, packaged with full context — ticker, conviction score, grade, verdict, and price — and dispatched simultaneously to your mobile device and the live Primal Edge AI Cockpit. Typical signal-to-screen latency: under 3 seconds.", icon: "🔔", traderValue: "When a qualified setup fires, the alert arrives with ticker, verdict, score, grade, price, and context. This turns a raw market event into a fast review-ready signal instead of a vague notification." },
@@ -720,7 +720,7 @@ function HowItWorks() {
 
         {/* Value strip */}
         <div className={`mt-10 sm:mt-14 flex flex-wrap justify-center gap-3 sm:gap-4 ${inView ? "fade-up fade-up-delay-5" : "opacity-0"}`}>
-          {["Premium Universe", "Multi-Timeframe Context", "AI Conviction Score", "Noise Filter", "Fast Alert Delivery"].map((item, i) => (
+          {["Blue-Chip Stocks & ETFs", "Multi-Timeframe Context", "AI Conviction Score", "Noise Filter", "Fast Alert Delivery"].map((item, i) => (
             <span key={i} className="font-mono text-[10px] sm:text-xs text-white/35 tracking-wider bg-white/3 border border-white/5 rounded-full px-3 sm:px-4 py-1.5">{item}</span>
           ))}
         </div>
@@ -733,7 +733,7 @@ function HowItWorks() {
 function Features() {
   const { ref, inView } = useInView();
   const features = [
-    { num: "01", title: "Proprietary Adaptive Engine", desc: "The core intelligence layer applies a multi-factor adaptive model to identify high-probability setups across the full premium universe. The model architecture, feature composition, and scoring weights are entirely proprietary — engineered to detect structural patterns that precede significant directional moves.", tag: "ADAPTIVE ENGINE", traderValue: "The engine is built to identify structural behavior across the broader market, not just simple indicator crosses. Traders benefit from a systematic filter designed to reduce emotion, bias, and random chart scanning." },
+    { num: "01", title: "Proprietary Adaptive Engine", desc: "The core intelligence layer applies a multi-factor adaptive model to identify high-probability options income setups across blue-chip stocks and ETFs. The model architecture, feature composition, and scoring weights are entirely proprietary — engineered to detect structural patterns that precede significant directional moves.", tag: "ADAPTIVE ENGINE", traderValue: "The engine is built to identify structural behavior across the broader market, not just simple indicator crosses. Traders benefit from a systematic filter designed to reduce emotion, bias, and random chart scanning." },
     { num: "02", title: "Multi-Timeframe Confluence Layer", desc: "Every setup is cross-validated against multiple timeframes simultaneously. The engine applies directional confluence filters and trend-alignment scoring to ensure signals are structurally sound across the macro and micro landscape — filtering out noise at the source.", tag: "MTF CONFLUENCE", traderValue: "A setup is stronger when short-term movement aligns with the larger structure. This helps traders avoid acting on isolated one-timeframe noise and focus on cleaner alignment." },
     { num: "03", title: "Multi-Dimensional Conviction Scoring", desc: "Multiple orthogonal factors — spanning momentum, structure, volume behavior, sector dynamics, and regime awareness — are synthesized into a single 0–100 conviction score through a proprietary weighted intelligence model. The exact dimensions and weights are undisclosed.", tag: "CONVICTION SCORING", traderValue: "Momentum, structure, volume, sector behavior, and regime awareness are compressed into one readable score. Traders can prioritize attention faster without manually weighing every factor from scratch." },
     { num: "04", title: "Sub-3-Second Signal Delivery", desc: "When a high-conviction signal is confirmed, a structured alert payload is dispatched to your mobile device and the web dashboard simultaneously — ticker, score, grade, verdict, and price context delivered in under 3 seconds. No app store dependencies.", tag: "REAL-TIME DISPATCH", traderValue: "Speed matters when a setup starts moving. The trader receives the signal quickly enough to review the chart while the setup is still fresh." },
@@ -801,7 +801,7 @@ function Technology() {
       ],
     },
     pattern: {
-      headline: "Structural Anomaly Detection Across a Premium Universe",
+      headline: "Structural Anomaly Detection Across Blue-Chip Stocks & ETFs",
       body: [
         "The engine applies deterministic, rule-based evaluation to every symbol on every cycle — identifying structural configurations that have historically preceded explosive directional moves. Unlike discretionary chart reading, which is subject to interpretation and inconsistency, the pattern matching engine applies a fully systematic evaluation.",
         "The system scans for a precise convergence of proprietary conditions across a curated universe of premium symbols. All conditions must be present simultaneously for a setup to qualify — partial matches are filtered out entirely. The specific criteria and thresholds are proprietary and not disclosed.",
@@ -831,7 +831,7 @@ function Technology() {
     signal: {
       headline: "From Raw Data to Actionable Signal in Under 3 Seconds",
       body: [
-        "Signal generation is the final stage of the Primal Edge pipeline — the point at which raw market data is transformed into a structured, actionable alert. When the engine completes a full evaluation cycle across the premium universe, qualifying setups are ranked by composite score, filtered by grade threshold, and checked against the deduplication registry to prevent repeat alerts on the same ticker within the same trading session.",
+        "Signal generation is the final stage of the Primal Edge pipeline — the point at which raw market data is transformed into a structured, actionable alert. When the engine completes a full evaluation cycle across blue-chip stocks and ETFs, qualifying setups are ranked by composite score, filtered by grade threshold, and checked against the deduplication registry to prevent repeat alerts on the same ticker within the same trading session.",
         "Each signal is packaged with a full context payload: the ticker symbol, the current price at the time of detection, the composite score, the assigned grade (A through D), the primary verdict classification (Bullish Slingshot, Ready, or Coil), the volume surge ratio relative to the 20-period average, and a multi-timeframe confluence indicator. This payload is formatted and dispatched to the NTFY push notification service, where it is delivered to all active subscribers within seconds of detection.",
         "The signal architecture is designed around the principle of precision over volume. The system does not generate alerts for every symbol that shows marginal improvement — it fires only when a statistically significant convergence of conditions is confirmed. A typical scan cycle produces between 2 and 8 qualifying signals, ensuring that every alert you receive represents a setup worth evaluating — not noise to be filtered.",
       ],
@@ -1096,8 +1096,8 @@ function FAQ() {
   const { ref, inView } = useInView();
   const [open, setOpen] = useState<number | null>(null);
   const faqs = [
-    { q: "What is the Primal Edge AI Cockpit?", a: "It is the flagship adaptive intelligence signal within the Primal Edge product suite — a proprietary system that identifies a specific structural pattern across a curated premium universe. The engine assigns a 0–100 conviction score and grades each setup A through D. The exact model architecture, pattern definition, and universe composition are proprietary. All output is provided for educational and analytical purposes only." },
-    { q: "What data does the model use?", a: "The engine ingests live market data across a curated premium universe on every cycle. Raw data is transformed through a proprietary feature engineering pipeline into a multi-dimensional numerical representation. The specific data sources, feature composition, and transformation methods are not disclosed." },
+    { q: "What is the Primal Edge AI Cockpit?", a: "It is the flagship adaptive intelligence signal within the Primal Edge product suite — a proprietary system that identifies a specific structural pattern across a curated universe of blue-chip stocks and options-liquid ETFs. The engine assigns a 0–100 conviction score and grades each setup A through D. The exact model architecture, pattern definition, and universe composition are proprietary. All output is provided for educational and analytical purposes only." },
+    { q: "What data does the model use?", a: "The engine ingests live market data across a curated universe of blue-chip stocks and options-liquid ETFs on every cycle. Raw data is transformed through a proprietary feature engineering pipeline into a multi-dimensional numerical representation. The specific data sources, feature composition, and transformation methods are not disclosed." },
     { q: "How do I receive the analysis?", a: "Analytical insights are delivered via push notification to your mobile device. Download a free notification client, subscribe to the private topic provided after sign-up, and receive instant updates the moment the engine confirms a high-conviction setup." },
     { q: "What timeframe does the engine analyze?", a: "The engine uses a multi-timeframe evaluation approach, cross-referencing the primary scan timeframe against higher timeframe trend structure. The model applies a confluence bonus to trend-aligned setups and penalizes counter-trend signals. Setups are designed for analysis of swing-timeframe structures with a typical 2–10 day observation window." },
     { q: "How was the model validated?", a: "The model was validated across a multi-year historical dataset using walk-forward analysis to confirm out-of-sample performance. Survivorship bias was eliminated by evaluating against the full universe as it existed at each historical point. Detailed methodology is available to active members only." },
@@ -1163,10 +1163,10 @@ function CTABanner() {
               Stop Guessing.<br />Let the Engine Find the Edge.
             </h2>
             <p className="text-white/55 text-base sm:text-lg max-w-xl mx-auto mb-8">
-              Join a private community of systematic market enthusiasts using Primal Edge's adaptive intelligence to study high-conviction setups before the move — scored, graded, and delivered as real-time educational analysis.
+              Join a private community of options traders using Primal Edge's adaptive intelligence to find weekly income setups — scored, graded, and delivered as real-time educational analysis.
             </p>
-            <Link href="/subscribe" className="shimmer-btn pulse-glow inline-block bg-[#00e5a0] text-[#0a0d12] font-['Space_Grotesk'] font-bold text-base sm:text-lg px-8 sm:px-10 py-4 rounded-lg hover:bg-[#00bfa0] transition-all">
-              Access the AI Dashboard →
+            <Link href="/products" className="shimmer-btn pulse-glow inline-block bg-[#00e5a0] text-[#0a0d12] font-['Space_Grotesk'] font-bold text-base sm:text-lg px-8 sm:px-10 py-4 rounded-lg hover:bg-[#00bfa0] transition-all">
+              Explore Our Products →
             </Link>
           </div>
         </div>
