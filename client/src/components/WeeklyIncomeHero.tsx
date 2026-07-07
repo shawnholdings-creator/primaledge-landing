@@ -94,10 +94,68 @@ const sectionGap: React.CSSProperties = {
   marginTop: 56,
 };
 
+/* ─── Animated Stat with count-up ──────────────────────────── */
+function AnimatedStat({ target, prefix = '', suffix = '', label, decimals = 0 }: {
+  target: number; prefix?: string; suffix?: string; label: string; decimals?: number;
+}) {
+  const [val, setVal] = useState(0);
+  const prefersReduced = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+  useEffect(() => {
+    if (prefersReduced) { setVal(target); return; }
+    let start: number | null = null;
+    let raf: number;
+    const step = (ts: number) => {
+      if (!start) start = ts;
+      const progress = Math.min((ts - start) / 1400, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setVal(parseFloat((eased * target).toFixed(decimals)));
+      if (progress < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [target, decimals, prefersReduced]);
+
+  return (
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'rgba(255,255,255,0.05)',
+      borderRadius: 12,
+      border: '1px solid rgba(255,255,255,0.1)',
+      padding: '16px 12px',
+      textAlign: 'center',
+    }}>
+      <span style={{
+        fontSize: 28,
+        fontWeight: 900,
+        color: '#4ade80',
+        fontVariantNumeric: 'tabular-nums',
+        fontFamily: T.fontDisplay,
+      }}>
+        {prefix}{decimals > 0 ? val.toFixed(decimals) : Math.round(val)}{suffix}
+      </span>
+      <span style={{
+        fontSize: 10,
+        color: '#9ca3af',
+        marginTop: 4,
+        textTransform: 'uppercase',
+        letterSpacing: '0.08em',
+        fontFamily: T.fontMono,
+      }}>
+        {label}
+      </span>
+    </div>
+  );
+}
+
 /* ─── Component ─────────────────────────────────────────────── */
 export default function WeeklyIncomeHero() {
   const { openLoginModal } = useLoginModal();
   const [isMobile, setIsMobile] = useState(false);
+  const [showTrades, setShowTrades] = useState(false);
 
 
   useEffect(() => {
@@ -170,32 +228,135 @@ export default function WeeklyIncomeHero() {
           </h1>
         </section>
 
-        {/* ─── 3. Stat Strip ────────────────────────────────── */}
-        <section style={{ ...sectionGap, animation: "wih-fadeUp 0.7s ease-out 0.1s both" }}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: isMobile ? "column" : "row",
-              gap: 12,
-            }}
-          >
-            <StatTile value="91%" label="Average Win Rate" color={T.accent} />
-            <StatTile value="71%" label="Weekly Confidence" color={T.accent} />
-            <StatTile value="Top 12%" label="Income Efficiency" color={T.white} />
+        {/* ─── 3. Credibility: Animated Stats + Trade Log ──── */}
+        <section style={{ ...sectionGap, animation: 'wih-fadeUp 0.7s ease-out 0.1s both' }}>
+
+          {/* 4-stat grid */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: isMobile ? '1fr 1fr' : '1fr 1fr 1fr 1fr',
+            gap: 12,
+            width: '100%',
+            maxWidth: 640,
+            margin: '0 auto 20px',
+          }}>
+            {([
+              { target: 92.1, suffix: '%',      label: 'Avg Win Rate',          decimals: 1 },
+              { target: 385,  prefix: '$',       label: 'Avg Credit / Contract', decimals: 0 },
+              { target: 5.5,  suffix: ' days',   label: 'Avg Hold Time',         decimals: 1 },
+              { target: 76,   suffix: ' trades', label: 'Backtest Sample',       decimals: 0 },
+            ] as const).map((s, i) => (
+              <AnimatedStat key={i} target={s.target} prefix={'prefix' in s ? s.prefix : ''} suffix={'suffix' in s ? s.suffix : ''} label={s.label} decimals={s.decimals} />
+            ))}
           </div>
-          <p
-            style={{
-              fontSize: 10,
-              fontStyle: "italic",
-              color: T.faint,
-              textAlign: "center",
-              marginTop: 12,
-              lineHeight: 1.5,
-            }}
-          >
-            *Based on backtesting across 1,200+ setups over 18 months. Past
-            results do not guarantee future performance.
+
+          {/* Footnote */}
+          <p style={{
+            fontSize: 11,
+            color: '#6b7280',
+            textAlign: 'center',
+            marginBottom: 20,
+            lineHeight: 1.5,
+          }}>
+            *Backtested across 13 tickers · 76 trades · 18-month period (Jan 2025–Jun 2026). Past results do not guarantee future performance.
           </p>
+
+          {/* Collapsible trade log */}
+          <button
+            onClick={() => setShowTrades(v => !v)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 4,
+              margin: '0 auto 12px',
+              background: 'none',
+              border: 'none',
+              color: '#4ade80',
+              fontSize: 13,
+              cursor: 'pointer',
+              textDecoration: 'underline',
+              textUnderlineOffset: '2px',
+              fontFamily: T.fontMono,
+              transition: 'color 0.15s',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = '#86efac'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = '#4ade80'; }}
+          >
+            {showTrades ? 'Hide sample trades ▲' : 'See sample trades →'}
+          </button>
+
+          <div style={{
+            overflow: 'hidden',
+            transition: 'max-height 0.3s ease, opacity 0.3s ease',
+            maxHeight: showTrades ? 500 : 0,
+            opacity: showTrades ? 1 : 0,
+          }}>
+            <div style={{
+              width: '100%',
+              maxWidth: 640,
+              margin: '0 auto 16px',
+              borderRadius: 12,
+              border: '1px solid rgba(255,255,255,0.1)',
+              overflow: 'hidden',
+            }}>
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+                  <thead>
+                    <tr style={{ background: 'rgba(255,255,255,0.05)' }}>
+                      {['Ticker', 'Strike', 'Credit', 'Days', 'Result'].map((h, i) => (
+                        <th key={h} style={{
+                          padding: '8px 12px',
+                          textAlign: i < 2 ? 'left' : 'right',
+                          color: '#9ca3af',
+                          fontSize: 10,
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.08em',
+                          fontWeight: 600,
+                        }}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { ticker: 'TSLA', strike: '$240',  credit: '$668', days: 7, result: 'WIN' },
+                      { ticker: 'META', strike: '$465',  credit: '$678', days: 4, result: 'WIN' },
+                      { ticker: 'SNOW', strike: '$218',  credit: '$687', days: 3, result: 'WIN' },
+                      { ticker: 'SPY',  strike: '$495',  credit: '$422', days: 9, result: 'WIN' },
+                      { ticker: 'LLY',  strike: '$752',  credit: '$558', days: 5, result: 'WIN' },
+                      { ticker: 'BLK',  strike: '$1032', credit: '$602', days: 2, result: 'WIN' },
+                    ].map((t, i) => (
+                      <tr key={i} style={{ background: i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent' }}>
+                        <td style={{ padding: '8px 12px', fontWeight: 700, color: T.white }}>{t.ticker}</td>
+                        <td style={{ padding: '8px 12px', color: '#d1d5db' }}>{t.strike} Put</td>
+                        <td style={{ padding: '8px 12px', textAlign: 'right', color: '#4ade80', fontWeight: 600 }}>{t.credit}</td>
+                        <td style={{ padding: '8px 12px', textAlign: 'right', color: '#9ca3af' }}>{t.days}d</td>
+                        <td style={{ padding: '8px 12px', textAlign: 'right' }}>
+                          <span style={{
+                            background: 'rgba(74,222,128,0.15)',
+                            color: '#4ade80',
+                            fontSize: 11,
+                            fontWeight: 700,
+                            padding: '2px 8px',
+                            borderRadius: 9999,
+                          }}>WIN</span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p style={{
+                fontSize: 11,
+                color: '#4b5563',
+                padding: '8px 12px',
+                borderTop: '1px solid rgba(255,255,255,0.05)',
+                margin: 0,
+              }}>
+                Sample trades from backtest. Educational only — not financial advice.
+              </p>
+            </div>
+          </div>
+
         </section>
 
         {/* ─── Who It's For — redesigned CTA cards ──────── */}
