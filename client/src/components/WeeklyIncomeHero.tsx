@@ -79,7 +79,7 @@ export default function WeeklyIncomeHero() {
   const { openLoginModal } = useLoginModal();
   const [isMobile, setIsMobile] = useState(false);
   const [teaserMode, setTeaserMode] = useState<'standard' | 'micro'>('standard');
-  const [teaserFade, setTeaserFade] = useState(1);
+  const [fadeIn, setFadeIn] = useState(true);
 
   useEffect(() => {
     injectKeyframes();
@@ -91,14 +91,14 @@ export default function WeeklyIncomeHero() {
   }, []);
 
   useEffect(() => {
-    const iv = setInterval(() => {
-      setTeaserFade(0);
+    const interval = setInterval(() => {
+      setFadeIn(false);
       setTimeout(() => {
-        setTeaserMode((prev) => (prev === 'standard' ? 'micro' : 'standard'));
-        setTeaserFade(1);
+        setTeaserMode(prev => prev === 'standard' ? 'micro' : 'standard');
+        setFadeIn(true);
       }, 300);
     }, 4000);
-    return () => clearInterval(iv);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -1115,59 +1115,21 @@ export default function WeeklyIncomeHero() {
         </section>
 
         {/* ─── Mode Tease Toggle (animated, display-only) ──── */}
-        <section
-          style={{
-            textAlign: "center",
-            marginTop: 48,
-            marginBottom: 48,
-            animation: "wih-fadeUp 0.7s ease-out 0.45s both",
-          }}
-        >
-          <div
-            style={{
-              display: "inline-flex",
-              background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.06)",
-              borderRadius: 20,
-              padding: 3,
-            }}
-          >
-            {(["standard", "micro"] as const).map((m) => (
-              <div
-                key={m}
-                style={{
-                  fontFamily: T.fontMono,
-                  fontSize: 11,
-                  fontWeight: teaserMode === m ? 700 : 400,
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  padding: "6px 18px",
-                  borderRadius: 16,
-                  transition: "all 0.3s ease",
-                  background: teaserMode === m ? "#4ade80" : "transparent",
-                  color: teaserMode === m ? "#0a0a0a" : "rgba(255,255,255,0.3)",
-                }}
-              >
-                {m === "standard" ? "Standard" : "Micro"}
-              </div>
-            ))}
+        <div className="flex flex-col items-center gap-3 mt-8 mb-8">
+          <div className="flex gap-2">
+            <span className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-300 ${teaserMode === 'standard' ? 'bg-green-400 text-black border-green-400' : 'bg-transparent text-gray-400 border-gray-600'}`}>
+              Standard
+            </span>
+            <span className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-300 ${teaserMode === 'micro' ? 'bg-green-400 text-black border-green-400' : 'bg-transparent text-gray-400 border-gray-600'}`}>
+              Micro
+            </span>
           </div>
-          <p
-            style={{
-              fontFamily: T.fontMono,
-              fontSize: 11,
-              color: "rgba(255,255,255,0.25)",
-              letterSpacing: "0.04em",
-              marginTop: 10,
-              transition: "opacity 0.3s ease",
-              opacity: teaserFade,
-            }}
-          >
-            {teaserMode === "standard"
-              ? "Full watchlist \u00b7 Accounts $10K and above"
-              : "Sized for accounts under $10K \u00b7 1 contract at a time"}
+          <p className={`text-xs text-gray-400 font-mono tracking-wide transition-opacity duration-300 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}>
+            {teaserMode === 'standard'
+              ? 'Full watchlist \u00b7 Accounts $10K and above'
+              : 'Sized for accounts under $10K \u00b7 1 contract at a time'}
           </p>
-        </section>
+        </div>
 
         {/* ─── 9. Final CTA ───────────────────────────────── */}
         <section
