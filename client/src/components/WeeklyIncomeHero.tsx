@@ -562,6 +562,32 @@ export default function WeeklyIncomeHero() {
                             </tr>
                           );
                         })}
+                        {/* Totals footer row */}
+                        <tr style={{ borderTop: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)' }}>
+                          <td colSpan={2} style={{ padding: '8px 12px', color: T.white, fontWeight: 900, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                            Total ({recentTotal} trades · {recentTotal > 0 ? Math.round(recentWins / recentTotal * 100) : 0}% win rate)
+                          </td>
+                          <td style={{ padding: '8px 12px' }} />
+                          <td style={{ padding: '8px 12px', textAlign: 'right', color: '#9ca3af', fontWeight: 600, fontSize: 11 }}>
+                            ${recentTrades.reduce((s, t) => s + Math.round(t.credit * 100), 0).toLocaleString()} collected
+                          </td>
+                          <td style={{ padding: '8px 12px' }} />
+                          <td style={{ padding: '8px 12px', textAlign: 'right', fontWeight: 900, fontSize: 14, color: recentIncome >= 0 ? '#4ade80' : '#f87171' }}>
+                            {recentIncome >= 0 ? '+' : ''}${Math.abs(recentIncome).toLocaleString()}
+                          </td>
+                          <td style={{ padding: '8px 12px', textAlign: 'right' }}>
+                            <span style={{
+                              fontSize: 11,
+                              fontWeight: 700,
+                              padding: '2px 8px',
+                              borderRadius: 9999,
+                              background: recentWins === recentTotal ? 'rgba(74,222,128,0.2)' : 'rgba(250,204,21,0.2)',
+                              color: recentWins === recentTotal ? '#4ade80' : '#facc15',
+                            }}>
+                              {recentWins === recentTotal ? 'ALL WIN' : `${recentWins}W / ${recentTotal - recentWins}L`}
+                            </span>
+                          </td>
+                        </tr>
                       </tbody>
                     </table>
                   </div>
