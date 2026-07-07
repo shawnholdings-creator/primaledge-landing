@@ -300,45 +300,50 @@ export default function WeeklyIncomeHero() {
               overflow: 'hidden',
             }}>
               <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
                   <thead>
                     <tr style={{ background: 'rgba(255,255,255,0.05)' }}>
-                      {['Ticker', 'Strike', 'Credit', 'Days', 'Result'].map((h, i) => (
+                      {['Ticker', 'Date', 'Strike', 'Credit', 'Days', 'P&L', 'Result'].map((h, i) => (
                         <th key={h} style={{
                           padding: '8px 12px',
-                          textAlign: i < 2 ? 'left' : 'right',
+                          textAlign: i < 3 ? 'left' : 'right',
                           color: '#9ca3af',
                           fontSize: 10,
                           textTransform: 'uppercase',
                           letterSpacing: '0.08em',
                           fontWeight: 600,
+                          whiteSpace: 'nowrap',
                         }}>{h}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
                     {[
-                      { ticker: 'TSLA', strike: '$240',  credit: '$668', days: 7, result: 'WIN' },
-                      { ticker: 'META', strike: '$465',  credit: '$678', days: 4, result: 'WIN' },
-                      { ticker: 'SNOW', strike: '$218',  credit: '$687', days: 3, result: 'WIN' },
-                      { ticker: 'SPY',  strike: '$495',  credit: '$422', days: 9, result: 'WIN' },
-                      { ticker: 'LLY',  strike: '$752',  credit: '$558', days: 5, result: 'WIN' },
-                      { ticker: 'BLK',  strike: '$1032', credit: '$602', days: 2, result: 'WIN' },
+                      { ticker: 'QQQ',  date: 'Apr 09, 2025', strike: '$419 Put', credit: '$410', days: 9, pnl: '+$410',   win: true  },
+                      { ticker: 'TSLA', date: 'May 01, 2025', strike: '$240 Put', credit: '$668', days: 7, pnl: '+$493',   win: true  },
+                      { ticker: 'MSTR', date: 'Apr 02, 2025', strike: '$267 Put', credit: '$797', days: 6, pnl: '-$2,631', win: false },
+                      { ticker: 'META', date: 'Apr 24, 2025', strike: '$465 Put', credit: '$678', days: 4, pnl: '+$383',   win: true  },
+                      { ticker: 'LLY',  date: 'Oct 22, 2025', strike: '$752 Put', credit: '$558', days: 5, pnl: '+$384',   win: true  },
+                      { ticker: 'GLD',  date: 'Mar 11, 2026', strike: '$450 Put', credit: '$255', days: 7, pnl: '-$745',   win: false },
+                      { ticker: 'BLK',  date: 'Jan 20, 2026', strike: '$1032 Put',credit: '$602', days: 2, pnl: '+$336',   win: true  },
+                      { ticker: 'SPY',  date: 'Apr 09, 2025', strike: '$495 Put', credit: '$422', days: 9, pnl: '+$422',   win: true  },
                     ].map((t, i) => (
                       <tr key={i} style={{ background: i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent' }}>
-                        <td style={{ padding: '8px 12px', fontWeight: 700, color: T.white }}>{t.ticker}</td>
-                        <td style={{ padding: '8px 12px', color: '#d1d5db' }}>{t.strike} Put</td>
+                        <td style={{ padding: '8px 12px', fontWeight: 700, color: T.white, whiteSpace: 'nowrap' }}>{t.ticker}</td>
+                        <td style={{ padding: '8px 12px', color: '#6b7280', fontSize: 11, whiteSpace: 'nowrap' }}>{t.date}</td>
+                        <td style={{ padding: '8px 12px', color: '#d1d5db', whiteSpace: 'nowrap' }}>{t.strike}</td>
                         <td style={{ padding: '8px 12px', textAlign: 'right', color: '#4ade80', fontWeight: 600 }}>{t.credit}</td>
                         <td style={{ padding: '8px 12px', textAlign: 'right', color: '#9ca3af' }}>{t.days}d</td>
+                        <td style={{ padding: '8px 12px', textAlign: 'right', fontWeight: 600, fontSize: 13, color: t.win ? '#4ade80' : '#f87171' }}>{t.pnl}</td>
                         <td style={{ padding: '8px 12px', textAlign: 'right' }}>
                           <span style={{
-                            background: 'rgba(74,222,128,0.15)',
-                            color: '#4ade80',
+                            background: t.win ? 'rgba(74,222,128,0.15)' : 'rgba(248,113,113,0.15)',
+                            color: t.win ? '#4ade80' : '#f87171',
                             fontSize: 11,
                             fontWeight: 700,
                             padding: '2px 8px',
                             borderRadius: 9999,
-                          }}>WIN</span>
+                          }}>{t.win ? 'WIN' : 'LOSS'}</span>
                         </td>
                       </tr>
                     ))}
@@ -352,7 +357,7 @@ export default function WeeklyIncomeHero() {
                 borderTop: '1px solid rgba(255,255,255,0.05)',
                 margin: 0,
               }}>
-                Sample trades from backtest. Educational only — not financial advice.
+                Real backtest trades · Jan 2025–Jun 2026 · 76 total trades · 92.1% win rate. Educational only — not financial advice.
               </p>
             </div>
           </div>
