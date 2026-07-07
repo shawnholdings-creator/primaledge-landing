@@ -148,89 +148,9 @@ export default function WeeklyIncomeHero() {
             <br />
             <span style={{ color: T.accent }}>You collect the premium.</span>
           </h1>
-
-          {/* Who It's For — two-column card row */}
-          <p
-            style={{
-              color: T.muted,
-              fontSize: 12,
-              letterSpacing: '0.15em',
-              textTransform: 'uppercase',
-              fontFamily: T.fontMono,
-              marginTop: 32,
-              marginBottom: 12,
-            }}
-          >
-            Which describes you?
-          </p>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: isMobile ? 'column' : 'row',
-              gap: 12,
-              width: '100%',
-              maxWidth: 560,
-              margin: '0 auto',
-            }}
-          >
-            {/* Standard card */}
-            <div
-              style={{
-                flex: 1,
-                borderRadius: 12,
-                border: '1px solid #22c55e',
-                background: 'rgba(34,197,94,0.05)',
-                padding: '20px 24px',
-                textAlign: 'center',
-              }}
-            >
-              <p style={{ color: '#4ade80', fontSize: 24, fontWeight: 700, margin: 0, fontFamily: T.fontDisplay }}>
-                $10,000+
-              </p>
-              <p style={{ color: T.white, fontSize: 14, fontWeight: 600, margin: '6px 0 0' }}>
-                Standard Mode
-              </p>
-              <p style={{ color: T.muted, fontSize: 12, margin: '4px 0 0' }}>
-                Full watchlist · All qualifying setups
-              </p>
-            </div>
-            {/* Micro card */}
-            <div
-              style={{
-                flex: 1,
-                borderRadius: 12,
-                border: '1px solid rgba(34,197,94,0.4)',
-                background: 'rgba(34,197,94,0.05)',
-                padding: '20px 24px',
-                textAlign: 'center',
-              }}
-            >
-              <p style={{ color: 'rgba(74,222,128,0.8)', fontSize: 24, fontWeight: 700, margin: 0, fontFamily: T.fontDisplay }}>
-                Under $10K
-              </p>
-              <p style={{ color: T.white, fontSize: 14, fontWeight: 600, margin: '6px 0 0' }}>
-                Micro Mode
-              </p>
-              <p style={{ color: T.muted, fontSize: 12, margin: '4px 0 0' }}>
-                Sized for smaller accounts · 1 contract at a time
-              </p>
-            </div>
-          </div>
-          <p
-            style={{
-              color: '#6b7280',
-              fontSize: 11,
-              textAlign: 'center',
-              fontFamily: T.fontMono,
-              letterSpacing: '0.05em',
-              marginTop: 14,
-            }}
-          >
-            One subscription covers both modes.
-          </p>
         </section>
 
-        {/* ─── 3. Stat Strip 1 ────────────────────────────── */}
+        {/* ─── 3. Stat Strip ────────────────────────────────── */}
         <section style={{ ...sectionGap, animation: "wih-fadeUp 0.7s ease-out 0.1s both" }}>
           <div
             style={{
@@ -257,6 +177,160 @@ export default function WeeklyIncomeHero() {
             results do not guarantee future performance.
           </p>
         </section>
+
+        {/* ─── Who It's For — clickable mode cards ──────────── */}
+        <section style={{ textAlign: "center", animation: "wih-fadeUp 0.7s ease-out 0.15s both" }}>
+          <p
+            style={{
+              color: T.muted,
+              fontSize: 12,
+              letterSpacing: '0.15em',
+              textTransform: 'uppercase',
+              fontFamily: T.fontMono,
+              marginTop: 0,
+              marginBottom: 12,
+            }}
+          >
+            Which describes you?
+          </p>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: isMobile ? 'column' : 'row',
+              gap: 12,
+              width: '100%',
+              maxWidth: 560,
+              margin: '0 auto',
+            }}
+          >
+            {/* Standard card — clickable */}
+            <div
+              role="button"
+              tabIndex={0}
+              aria-label="Get access to Standard Mode for accounts $10,000 and above"
+              onClick={() => openLoginModal("/weekly-income")}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') openLoginModal("/weekly-income"); }}
+              style={{
+                flex: 1,
+                borderRadius: 12,
+                border: '1px solid #22c55e',
+                background: 'rgba(34,197,94,0.05)',
+                padding: '20px 24px',
+                textAlign: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                outline: 'none',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = '#4ade80';
+                e.currentTarget.style.transform = 'scale(1.02)';
+                e.currentTarget.style.background = 'rgba(34,197,94,0.1)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = '#22c55e';
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.background = 'rgba(34,197,94,0.05)';
+              }}
+              onFocus={(e) => { e.currentTarget.style.outline = '2px solid #4ade80'; e.currentTarget.style.outlineOffset = '2px'; }}
+              onBlur={(e) => { e.currentTarget.style.outline = 'none'; }}
+            >
+              <p style={{ color: '#4ade80', fontSize: 24, fontWeight: 700, margin: 0, fontFamily: T.fontDisplay }}>
+                $10,000+
+              </p>
+              <p style={{ color: T.white, fontSize: 14, fontWeight: 600, margin: '6px 0 0' }}>
+                Standard Mode
+              </p>
+              <p style={{ color: T.muted, fontSize: 12, margin: '4px 0 0' }}>
+                Full watchlist · All qualifying setups
+              </p>
+              <p style={{ color: '#4ade80', fontSize: 11, fontFamily: T.fontMono, margin: '12px 0 0' }}>
+                Unlock Dashboard →
+              </p>
+            </div>
+            {/* Micro card — clickable */}
+            <div
+              role="button"
+              tabIndex={0}
+              aria-label="Get access to Micro Mode for accounts under $10,000"
+              onClick={() => openLoginModal("/weekly-income")}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') openLoginModal("/weekly-income"); }}
+              style={{
+                flex: 1,
+                borderRadius: 12,
+                border: '1px solid rgba(34,197,94,0.4)',
+                background: 'rgba(34,197,94,0.05)',
+                padding: '20px 24px',
+                textAlign: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                outline: 'none',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = '#4ade80';
+                e.currentTarget.style.transform = 'scale(1.02)';
+                e.currentTarget.style.background = 'rgba(34,197,94,0.1)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(34,197,94,0.4)';
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.background = 'rgba(34,197,94,0.05)';
+              }}
+              onFocus={(e) => { e.currentTarget.style.outline = '2px solid #4ade80'; e.currentTarget.style.outlineOffset = '2px'; }}
+              onBlur={(e) => { e.currentTarget.style.outline = 'none'; }}
+            >
+              <p style={{ color: 'rgba(74,222,128,0.8)', fontSize: 24, fontWeight: 700, margin: 0, fontFamily: T.fontDisplay }}>
+                Under $10K
+              </p>
+              <p style={{ color: T.white, fontSize: 14, fontWeight: 600, margin: '6px 0 0' }}>
+                Micro Mode
+              </p>
+              <p style={{ color: T.muted, fontSize: 12, margin: '4px 0 0' }}>
+                Sized for smaller accounts · 1 contract at a time
+              </p>
+              <p style={{ color: '#4ade80', fontSize: 11, fontFamily: T.fontMono, margin: '12px 0 0' }}>
+                Unlock Dashboard →
+              </p>
+            </div>
+          </div>
+          <p
+            style={{
+              color: '#6b7280',
+              fontSize: 11,
+              textAlign: 'center',
+              fontFamily: T.fontMono,
+              letterSpacing: '0.05em',
+              marginTop: 14,
+            }}
+          >
+            One subscription covers both modes.
+          </p>
+
+          {/* Standalone Get Access CTA */}
+          <Link href="/subscribe">
+            <button
+              style={{
+                display: 'block',
+                width: '100%',
+                maxWidth: 320,
+                margin: '24px auto 0',
+                background: T.accent,
+                color: T.bg,
+                fontWeight: 700,
+                fontSize: 15,
+                padding: '14px 32px',
+                border: 'none',
+                borderRadius: 12,
+                cursor: 'pointer',
+                transition: 'opacity 0.2s ease',
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
+            >
+              Get Access — It's Free to Try
+            </button>
+          </Link>
+        </section>
+
 
 
         {/* ─── 4. Blurred Recommendation Card ─────────────── */}

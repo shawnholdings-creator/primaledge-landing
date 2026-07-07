@@ -206,18 +206,22 @@ export default function Navbar() {
               ) : (
                 <button
                   onClick={() => openLoginModal()}
-                  className="px-4 py-2 rounded-lg text-sm transition-colors"
+                  className="text-sm transition-colors"
                   style={{
-                    border: "1px solid rgba(255,255,255,0.2)",
-                    color: "#ccc",
+                    background: "none",
+                    border: "none",
+                    color: "#9ca3af",
+                    cursor: "pointer",
+                    textUnderlineOffset: "2px",
+                    padding: "8px 4px",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = "rgba(0,255,150,0.5)";
                     e.currentTarget.style.color = "#fff";
+                    e.currentTarget.style.textDecoration = "underline";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
-                    e.currentTarget.style.color = "#ccc";
+                    e.currentTarget.style.color = "#9ca3af";
+                    e.currentTarget.style.textDecoration = "none";
                   }}
                 >
                   Member Login
