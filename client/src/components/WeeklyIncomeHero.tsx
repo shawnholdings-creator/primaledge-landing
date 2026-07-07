@@ -78,6 +78,8 @@ const sectionGap: React.CSSProperties = {
 export default function WeeklyIncomeHero() {
   const { openLoginModal } = useLoginModal();
   const [isMobile, setIsMobile] = useState(false);
+  const [teaserMode, setTeaserMode] = useState<'standard' | 'micro'>('standard');
+  const [teaserFade, setTeaserFade] = useState(1);
 
   useEffect(() => {
     injectKeyframes();
@@ -86,6 +88,17 @@ export default function WeeklyIncomeHero() {
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     mq.addEventListener("change", handler);
     return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  useEffect(() => {
+    const iv = setInterval(() => {
+      setTeaserFade(0);
+      setTimeout(() => {
+        setTeaserMode((prev) => (prev === 'standard' ? 'micro' : 'standard'));
+        setTeaserFade(1);
+      }, 300);
+    }, 4000);
+    return () => clearInterval(iv);
   }, []);
 
   return (
@@ -1098,6 +1111,61 @@ export default function WeeklyIncomeHero() {
             }}
           >
             Cancel anytime. No contracts, no lock-in.
+          </p>
+        </section>
+
+        {/* ─── Mode Tease Toggle (animated, display-only) ──── */}
+        <section
+          style={{
+            textAlign: "center",
+            marginTop: 48,
+            marginBottom: 48,
+            animation: "wih-fadeUp 0.7s ease-out 0.45s both",
+          }}
+        >
+          <div
+            style={{
+              display: "inline-flex",
+              background: "rgba(255,255,255,0.03)",
+              border: "1px solid rgba(255,255,255,0.06)",
+              borderRadius: 20,
+              padding: 3,
+            }}
+          >
+            {(["standard", "micro"] as const).map((m) => (
+              <div
+                key={m}
+                style={{
+                  fontFamily: T.fontMono,
+                  fontSize: 11,
+                  fontWeight: teaserMode === m ? 700 : 400,
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  padding: "6px 18px",
+                  borderRadius: 16,
+                  transition: "all 0.3s ease",
+                  background: teaserMode === m ? "#4ade80" : "transparent",
+                  color: teaserMode === m ? "#0a0a0a" : "rgba(255,255,255,0.3)",
+                }}
+              >
+                {m === "standard" ? "Standard" : "Micro"}
+              </div>
+            ))}
+          </div>
+          <p
+            style={{
+              fontFamily: T.fontMono,
+              fontSize: 11,
+              color: "rgba(255,255,255,0.25)",
+              letterSpacing: "0.04em",
+              marginTop: 10,
+              transition: "opacity 0.3s ease",
+              opacity: teaserFade,
+            }}
+          >
+            {teaserMode === "standard"
+              ? "Full watchlist \u00b7 Accounts $10K and above"
+              : "Sized for accounts under $10K \u00b7 1 contract at a time"}
           </p>
         </section>
 
