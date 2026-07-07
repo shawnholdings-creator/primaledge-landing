@@ -1,5 +1,5 @@
 /* ============================================================
-   WeeklyIncome.tsx — Weekly Income Scanner (Income Intelligence)
+   WeeklyIncome.tsx — Weekly Options Income Dashboard (Income Intelligence)
    Auth: Public — no login required
    Data: Fetches live scan data from GitHub Gist
    ============================================================ */
@@ -896,7 +896,7 @@ function WeeklyIncomeContent() {
                     WebkitTextFillColor: "transparent",
                   }}
                 >
-                  WEEKLY INCOME
+                  WEEKLY OPTIONS INCOME
                 </h1>
                 <p
                   className="text-white/20 text-[10px] tracking-[0.35em] uppercase mt-1.5"
@@ -1097,7 +1097,7 @@ function WeeklyIncomeContent() {
                   transition: "all 0.15s ease",
                 }}
               >
-                {tab === "scanner" ? "Scanner" : "My Positions"}
+                {tab === "scanner" ? "Dashboard" : "My Positions"}
                 {tab === "positions" && openCount > 0 && (
                   <span
                     style={{
@@ -1137,7 +1137,7 @@ function WeeklyIncomeContent() {
                   className="text-xs text-[#00e5a0] tracking-[0.2em] uppercase font-bold"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
-                  {mode === "micro" ? "MICRO INCOME SCANNER" : "WEEKLY INCOME SCANNER"}
+                  {mode === "micro" ? "MICRO OPTIONS INCOME DASHBOARD" : "WEEKLY OPTIONS INCOME DASHBOARD"}
                 </span>
               </div>
               <div className="flex items-center gap-2">
@@ -1763,7 +1763,7 @@ function WeeklyIncomeContent() {
               </p>
 
               <p className="text-white/45 text-base sm:text-lg leading-relaxed mb-4 max-w-2xl mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                Weekly Income Scanner is a private-access income intelligence layer built to surface high-quality option-selling opportunities from a curated universe of liquid, premium names. It evaluates credit quality, opportunity quality, risk cushion, and timing conditions, trend condition, event risk, and risk-adjusted reward so traders can focus on the contracts that deserve review.
+                Weekly Options Income Dashboard is a private-access income intelligence layer built to surface high-quality option-selling opportunities from a curated universe of liquid, premium names. It evaluates credit quality, opportunity quality, risk cushion, and timing conditions, trend condition, event risk, and risk-adjusted reward so traders can focus on the contracts that deserve review.
               </p>
 
               <p className="text-white/35 text-sm leading-relaxed max-w-2xl mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
@@ -1806,7 +1806,7 @@ function WeeklyIncomeContent() {
               <path d="M8 2l1.5 4.5H14l-3.7 2.7 1.4 4.3L8 11 4.3 13.5l1.4-4.3L2 6.5h4.5z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
             </svg>
             <p className="text-white/35 text-xs leading-relaxed">
-              <span className="text-white/55 font-semibold">Research Disclosure:</span> AI Cockpit and Weekly Income Scanner are educational and analytical intelligence tools. Signals, scores, candidate lists, premiums, directional labels, and all visual readouts are derived from data analysis and may be delayed, incomplete, or inaccurate depending on source availability. They are provided for informational purposes only and do not constitute financial advice or a recommendation to buy, sell, hold, or trade any security or derivative. Every trade idea must be independently reviewed before action.
+              <span className="text-white/55 font-semibold">Research Disclosure:</span> AI Cockpit and Weekly Options Income Dashboard are educational and analytical intelligence tools. Signals, scores, candidate lists, premiums, directional labels, and all visual readouts are derived from data analysis and may be delayed, incomplete, or inaccurate depending on source availability. They are provided for informational purposes only and do not constitute financial advice or a recommendation to buy, sell, hold, or trade any security or derivative. Every trade idea must be independently reviewed before action.
             </p>
           </div>
 
@@ -2161,6 +2161,10 @@ function WeeklyIncomeContent() {
 export default function WeeklyIncome() {
   const { user, productAccess } = useAuth();
   const hasAccess = user && productAccess.income === true;
+
+  useEffect(() => {
+    document.title = "Weekly Options Income Dashboard | Primal Edge";
+  }, []);
 
   if (hasAccess) {
     return (

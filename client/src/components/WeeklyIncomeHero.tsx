@@ -1,5 +1,5 @@
 /* ============================================================
-   WeeklyIncomeHero.tsx — Public tease hero for Weekly Income
+   WeeklyIncomeHero.tsx — Public tease hero for Weekly Options Income
    Design: dark bg #0a0a0a, accent #00ff96, amber #f0b429
    All styles inline — no external CSS files required.
    ============================================================ */
@@ -128,7 +128,7 @@ export default function WeeklyIncomeHero() {
                 color: T.accent,
               }}
             >
-              WEEKLY INCOME DASHBOARD
+              WEEKLY OPTIONS INCOME DASHBOARD
             </span>
           </div>
 
@@ -1094,7 +1094,7 @@ export default function WeeklyIncomeHero() {
               {
                 step: "DAY 1",
                 title: "Dashboard Access Activated",
-                desc: "Your Weekly Income Dashboard goes live immediately. No setup required.",
+                desc: "Your Weekly Options Income Dashboard goes live immediately. No setup required.",
               },
               {
                 step: "DAY 1",
