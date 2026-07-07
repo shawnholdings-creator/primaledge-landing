@@ -534,17 +534,7 @@ export default function WeeklyIncomeHero() {
 
           </div>
 
-          {/* Subscription note */}
-          <p style={{
-            color: '#4ade80',
-            fontWeight: 600,
-            fontSize: 13,
-            textAlign: 'center',
-            marginTop: 10,
-            fontFamily: T.fontMono,
-          }}>
-            One subscription covers both modes.
-          </p>
+
 
           {/* Standalone Get Access CTA */}
           <Link href="/subscribe">
@@ -567,7 +557,7 @@ export default function WeeklyIncomeHero() {
               onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
               onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
             >
-              Get Access — It's Free to Try
+              Get Access →
             </button>
           </Link>
         </section>
@@ -698,25 +688,45 @@ export default function WeeklyIncomeHero() {
                 justifyContent: "center",
               }}
             >
-              <span style={{ fontSize: 24 }}>🔒</span>
-              <span
-                style={{ fontSize: 13, color: "#ccc", marginTop: 8 }}
-              >
-                Members only
-              </span>
+              <span style={{ fontSize: 24 }}>📱🔒</span>
+              <p style={{
+                color: T.white,
+                fontWeight: 600,
+                fontSize: 14,
+                textAlign: 'center',
+                marginTop: 8,
+                margin: '8px 0 0',
+              }}>
+                Real-time mobile alerts — members only
+              </p>
+              <p style={{
+                color: '#9ca3af',
+                fontSize: 12,
+                textAlign: 'center',
+                maxWidth: 280,
+                margin: '6px 0 0',
+                lineHeight: 1.5,
+              }}>
+                Get notified the moment a qualifying setup is detected. Push alerts direct to your phone.
+              </p>
               <button
                 onClick={() => openLoginModal("/weekly-income")}
                 style={{
-                  marginTop: 16,
-                  background: T.accent,
-                  color: T.bg,
-                  fontWeight: 700,
+                  marginTop: 12,
+                  background: '#4ade80',
+                  color: '#000',
+                  fontWeight: 900,
                   fontSize: 14,
-                  padding: "12px 24px",
-                  border: "none",
+                  padding: '12px 24px',
+                  border: 'none',
                   borderRadius: 12,
-                  cursor: "pointer",
+                  cursor: 'pointer',
+                  width: '100%',
+                  maxWidth: 280,
+                  transition: 'filter 0.15s ease',
                 }}
+                onMouseEnter={(e) => { e.currentTarget.style.filter = 'brightness(1.1)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.filter = 'brightness(1)'; }}
               >
                 Unlock This Setup →
               </button>
