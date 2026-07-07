@@ -142,81 +142,92 @@ export default function WeeklyIncomeHero() {
               margin: 0,
             }}
           >
-            <span style={{ color: T.white }}>The engine finds the setups.</span>
+            <span style={{ color: T.white }}>$5K or $500K —</span>
+            <br />
+            <span style={{ color: T.white }}>the engine finds your setup.</span>
             <br />
             <span style={{ color: T.accent }}>You collect the premium.</span>
           </h1>
 
-          {/* Sub */}
+          {/* Who It's For — two-column card row */}
           <p
             style={{
               color: T.muted,
-              fontSize: 15,
-              lineHeight: 1.6,
-              maxWidth: 600,
-              margin: "20px auto 0",
+              fontSize: 12,
+              letterSpacing: '0.15em',
+              textTransform: 'uppercase',
+              fontFamily: T.fontMono,
+              marginTop: 32,
+              marginBottom: 12,
             }}
           >
-            Your account size doesn’t limit your edge.
+            Which describes you?
           </p>
-          <p
-            style={{
-              color: T.muted,
-              fontSize: 13,
-              lineHeight: 1.6,
-              maxWidth: 600,
-              margin: "8px auto 0",
-            }}
-          >
-            Two modes. One conviction engine. Every portfolio covered.
-          </p>
-
-          {/* Static mode badges */}
           <div
             style={{
               display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'center',
-              gap: 10,
-              marginTop: 24,
-              marginBottom: 8,
+              flexDirection: isMobile ? 'column' : 'row',
+              gap: 12,
+              width: '100%',
+              maxWidth: 560,
+              margin: '0 auto',
             }}
           >
-            <span
+            {/* Standard card */}
+            <div
               style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 6,
-                padding: '6px 16px',
-                borderRadius: 9999,
+                flex: 1,
+                borderRadius: 12,
                 border: '1px solid #22c55e',
-                color: '#4ade80',
-                fontSize: 11,
-                fontFamily: T.fontMono,
-                letterSpacing: '0.1em',
+                background: 'rgba(34,197,94,0.05)',
+                padding: '20px 24px',
+                textAlign: 'center',
               }}
             >
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4ade80' }} />
-              STANDARD · $10K+
-            </span>
-            <span
+              <p style={{ color: '#4ade80', fontSize: 24, fontWeight: 700, margin: 0, fontFamily: T.fontDisplay }}>
+                $10,000+
+              </p>
+              <p style={{ color: T.white, fontSize: 14, fontWeight: 600, margin: '6px 0 0' }}>
+                Standard Mode
+              </p>
+              <p style={{ color: T.muted, fontSize: 12, margin: '4px 0 0' }}>
+                Full watchlist · All qualifying setups
+              </p>
+            </div>
+            {/* Micro card */}
+            <div
               style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 6,
-                padding: '6px 16px',
-                borderRadius: 9999,
-                border: '1px solid rgba(34,197,94,0.5)',
-                color: 'rgba(74,222,128,0.7)',
-                fontSize: 11,
-                fontFamily: T.fontMono,
-                letterSpacing: '0.1em',
+                flex: 1,
+                borderRadius: 12,
+                border: '1px solid rgba(34,197,94,0.4)',
+                background: 'rgba(34,197,94,0.05)',
+                padding: '20px 24px',
+                textAlign: 'center',
               }}
             >
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'rgba(74,222,128,0.7)' }} />
-              MICRO · UNDER $10K
-            </span>
+              <p style={{ color: 'rgba(74,222,128,0.8)', fontSize: 24, fontWeight: 700, margin: 0, fontFamily: T.fontDisplay }}>
+                Under $10K
+              </p>
+              <p style={{ color: T.white, fontSize: 14, fontWeight: 600, margin: '6px 0 0' }}>
+                Micro Mode
+              </p>
+              <p style={{ color: T.muted, fontSize: 12, margin: '4px 0 0' }}>
+                Sized for smaller accounts · 1 contract at a time
+              </p>
+            </div>
           </div>
+          <p
+            style={{
+              color: '#6b7280',
+              fontSize: 11,
+              textAlign: 'center',
+              fontFamily: T.fontMono,
+              letterSpacing: '0.05em',
+              marginTop: 14,
+            }}
+          >
+            One subscription covers both modes.
+          </p>
         </section>
 
         {/* ─── 3. Stat Strip 1 ────────────────────────────── */}
