@@ -78,8 +78,7 @@ const sectionGap: React.CSSProperties = {
 export default function WeeklyIncomeHero() {
   const { openLoginModal } = useLoginModal();
   const [isMobile, setIsMobile] = useState(false);
-  const [teaserMode, setTeaserMode] = useState<'standard' | 'micro'>('standard');
-  const [fadeIn, setFadeIn] = useState(true);
+
 
   useEffect(() => {
     injectKeyframes();
@@ -88,17 +87,6 @@ export default function WeeklyIncomeHero() {
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     mq.addEventListener("change", handler);
     return () => mq.removeEventListener("change", handler);
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setFadeIn(false);
-      setTimeout(() => {
-        setTeaserMode(prev => prev === 'standard' ? 'micro' : 'standard');
-        setFadeIn(true);
-      }, 300);
-    }, 4000);
-    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -169,9 +157,66 @@ export default function WeeklyIncomeHero() {
               margin: "20px auto 0",
             }}
           >
-            AI-powered conviction model scans 80+ symbols. Only the top 12%
-            qualify. Delivered in under 3 seconds.
+            Your account size doesn’t limit your edge.
           </p>
+          <p
+            style={{
+              color: T.muted,
+              fontSize: 13,
+              lineHeight: 1.6,
+              maxWidth: 600,
+              margin: "8px auto 0",
+            }}
+          >
+            Two modes. One conviction engine. Every portfolio covered.
+          </p>
+
+          {/* Static mode badges */}
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              gap: 10,
+              marginTop: 24,
+              marginBottom: 8,
+            }}
+          >
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                padding: '6px 16px',
+                borderRadius: 9999,
+                border: '1px solid #22c55e',
+                color: '#4ade80',
+                fontSize: 11,
+                fontFamily: T.fontMono,
+                letterSpacing: '0.1em',
+              }}
+            >
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4ade80' }} />
+              STANDARD · $10K+
+            </span>
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                padding: '6px 16px',
+                borderRadius: 9999,
+                border: '1px solid rgba(34,197,94,0.5)',
+                color: 'rgba(74,222,128,0.7)',
+                fontSize: 11,
+                fontFamily: T.fontMono,
+                letterSpacing: '0.1em',
+              }}
+            >
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'rgba(74,222,128,0.7)' }} />
+              MICRO · UNDER $10K
+            </span>
+          </div>
         </section>
 
         {/* ─── 3. Stat Strip 1 ────────────────────────────── */}
@@ -202,58 +247,6 @@ export default function WeeklyIncomeHero() {
           </p>
         </section>
 
-        {/* ─── Mode Tease Toggle (animated, display-only) ──── */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, marginTop: 32, marginBottom: 32, border: '1px solid red', minHeight: 60, padding: 16 }}>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <span
-              style={{
-                padding: '6px 16px',
-                borderRadius: 9999,
-                fontSize: 13,
-                fontWeight: 600,
-                fontFamily: T.fontMono,
-                border: '1px solid',
-                transition: 'all 0.3s ease',
-                background: teaserMode === 'standard' ? '#4ade80' : 'transparent',
-                color: teaserMode === 'standard' ? '#000' : '#fff',
-                borderColor: teaserMode === 'standard' ? '#4ade80' : '#555',
-              }}
-            >
-              Standard
-            </span>
-            <span
-              style={{
-                padding: '6px 16px',
-                borderRadius: 9999,
-                fontSize: 13,
-                fontWeight: 600,
-                fontFamily: T.fontMono,
-                border: '1px solid',
-                transition: 'all 0.3s ease',
-                background: teaserMode === 'micro' ? '#4ade80' : 'transparent',
-                color: teaserMode === 'micro' ? '#000' : '#fff',
-                borderColor: teaserMode === 'micro' ? '#4ade80' : '#555',
-              }}
-            >
-              Micro
-            </span>
-          </div>
-          <p
-            style={{
-              fontSize: 11,
-              color: '#999',
-              fontFamily: T.fontMono,
-              letterSpacing: '0.04em',
-              transition: 'opacity 0.3s ease',
-              opacity: fadeIn ? 1 : 0,
-              margin: 0,
-            }}
-          >
-            {teaserMode === 'standard'
-              ? 'Full watchlist \u00b7 Accounts $10K and above'
-              : 'Sized for accounts under $10K \u00b7 1 contract at a time'}
-          </p>
-        </div>
 
         {/* ─── 4. Blurred Recommendation Card ─────────────── */}
         <section style={{ ...sectionGap, animation: "wih-fadeUp 0.7s ease-out 0.2s both" }}>
