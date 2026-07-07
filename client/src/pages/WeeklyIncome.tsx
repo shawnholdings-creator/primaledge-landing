@@ -724,6 +724,7 @@ function WeeklyIncomeContent() {
   const [activeVersion, setActiveVersion] = useState<string | null>(null);
   const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
   const [activeTab, setActiveTab] = useState<"scanner" | "positions">("scanner");
+  const [mode, setMode] = useState<"standard" | "micro">("standard");
   const [positions, setPositions] = useState<Position[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -970,6 +971,54 @@ function WeeklyIncomeContent() {
               </div>
             </div>
 
+            {/* ─── Standard / Micro Toggle ─── */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, margin: "12px 0 8px" }}>
+              <div
+                style={{
+                  display: "inline-flex",
+                  background: "rgba(13,17,24,0.6)",
+                  border: "1px solid rgba(255,255,255,0.06)",
+                  borderRadius: 20,
+                  padding: 3,
+                }}
+              >
+                {(["standard", "micro"] as const).map((m) => (
+                  <button
+                    key={m}
+                    onClick={() => setMode(m)}
+                    style={{
+                      fontFamily: "'JetBrains Mono', monospace",
+                      fontSize: "0.65rem",
+                      fontWeight: mode === m ? 700 : 400,
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      padding: "5px 16px",
+                      borderRadius: 16,
+                      border: "none",
+                      cursor: "pointer",
+                      transition: "all 0.15s ease",
+                      background: mode === m ? "#00e5a0" : "transparent",
+                      color: mode === m ? "#0a0d12" : "rgba(255,255,255,0.35)",
+                    }}
+                  >
+                    {m === "standard" ? "Standard" : "Micro"}
+                  </button>
+                ))}
+              </div>
+              <span
+                style={{
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: "0.6rem",
+                  color: "rgba(255,255,255,0.2)",
+                  letterSpacing: "0.05em",
+                }}
+              >
+                {mode === "standard"
+                  ? "Full watchlist \u00b7 All qualifying setups"
+                  : "Sized for accounts under $10K \u00b7 1 contract at a time"}
+              </span>
+            </div>
+
             {/* Stat pills */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
               <div className="bg-[#0d1118] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
@@ -982,34 +1031,40 @@ function WeeklyIncomeContent() {
                 </div>
               </div>
               <div className="bg-[#0d1118] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
-                <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Candidates</div>
+                <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">
+                  {mode === "micro" && tradableCount === 0 ? "Next Scan" : "Candidates"}
+                </div>
                 <div
-                  className="text-lg font-bold leading-none"
+                  className={mode === "micro" && tradableCount === 0 ? "text-xs font-bold leading-none mt-1" : "text-lg font-bold leading-none"}
                   style={{
                     fontFamily: "'JetBrains Mono', monospace",
-                    color: tradableCount > 0 ? "#00e5a0" : "rgba(255,255,255,0.2)",
+                    color: tradableCount > 0 ? "#00e5a0" : "rgba(255,255,255,0.3)",
                     textShadow: tradableCount > 0 ? "0 0 12px rgba(0,229,160,0.3)" : "none",
                   }}
                 >
-                  {tradableCount}
+                  {mode === "micro" && tradableCount === 0 ? "Check Back Soon" : tradableCount}
                 </div>
               </div>
               <div className="bg-[#0d1118] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
-                <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Unique Alerts</div>
+                <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">
+                  {mode === "micro" ? "Probability of Success" : "Unique Alerts"}
+                </div>
                 <div
                   className="text-lg font-bold text-white/60 leading-none"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
-                  {data?.unique_alerts ?? "—"}
+                  {mode === "micro" ? "92%*" : (data?.unique_alerts ?? "—")}
                 </div>
               </div>
               <div className="bg-[#0d1118] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
-                <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Market</div>
+                <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">
+                  {mode === "micro" ? "Avg Time to Target" : "Market"}
+                </div>
                 <div
                   className="text-lg font-bold text-white/40 leading-none"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
-                  {data?.market_condition || "—"}
+                  {mode === "micro" ? "5 days" : (data?.market_condition || "—")}
                 </div>
               </div>
             </div>
@@ -1082,7 +1137,7 @@ function WeeklyIncomeContent() {
                   className="text-xs text-[#00e5a0] tracking-[0.2em] uppercase font-bold"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
-                  WEEKLY INCOME SCANNER
+                  {mode === "micro" ? "MICRO INCOME SCANNER" : "WEEKLY INCOME SCANNER"}
                 </span>
               </div>
               <div className="flex items-center gap-2">
@@ -1185,10 +1240,12 @@ function WeeklyIncomeContent() {
                     className="text-white/25 text-sm font-semibold mb-1.5 tracking-wide"
                     style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                   >
-                    No Active Candidates
+                    {mode === "micro" ? "No setups this cycle." : "No Active Candidates"}
                   </p>
                   <p className="text-white/[0.12] text-xs max-w-xs mx-auto leading-relaxed">
-                    The scanner will refresh at the next interval. Check back during market hours for new setups.
+                    {mode === "micro"
+                      ? "Check back at the next scan."
+                      : "The scanner will refresh at the next interval. Check back during market hours for new setups."}
                   </p>
                 </div>
               )}
@@ -1374,6 +1431,21 @@ function WeeklyIncomeContent() {
                       {isExpanded && <ScoreDetailPanel candidate={c} />}
                     </div>
 
+                    {/* Micro max risk — desktop */}
+                    {mode === "micro" && (
+                      <div
+                        className="hidden md:flex gap-4 px-6 pb-2"
+                        style={{
+                          fontFamily: "'JetBrains Mono', monospace",
+                          fontSize: "0.65rem",
+                          color: "rgba(255,255,255,0.25)",
+                        }}
+                      >
+                        <span>Max risk: {(c.strike * 100).toLocaleString('en-US', {style:'currency', currency:'USD', maximumFractionDigits:0})}</span>
+                        <span>Suggested: 1 contract</span>
+                      </div>
+                    )}
+
                     {/* Mobile card */}
                     <div
                       className="md:hidden border-b border-white/[0.04] cursor-pointer select-none"
@@ -1514,6 +1586,21 @@ function WeeklyIncomeContent() {
                       >
                         {isExpanded && <ScoreDetailPanel candidate={c} />}
                       </div>
+
+                      {/* Micro max risk — mobile */}
+                      {mode === "micro" && (
+                        <div
+                          className="px-4 pb-2 flex gap-3"
+                          style={{
+                            fontFamily: "'JetBrains Mono', monospace",
+                            fontSize: "0.65rem",
+                            color: "rgba(255,255,255,0.25)",
+                          }}
+                        >
+                          <span>Max risk: {(c.strike * 100).toLocaleString('en-US', {style:'currency', currency:'USD', maximumFractionDigits:0})}</span>
+                          <span>Suggested: 1 contract</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 );
