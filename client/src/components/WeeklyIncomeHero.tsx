@@ -202,6 +202,23 @@ export default function WeeklyIncomeHero() {
           </p>
         </section>
 
+        {/* ─── Mode Tease Toggle (animated, display-only) ──── */}
+        <div className="flex flex-col items-center gap-3 mt-8 mb-8">
+          <div className="flex gap-2">
+            <span className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-300 ${teaserMode === 'standard' ? 'bg-green-400 text-black border-green-400' : 'bg-transparent text-gray-400 border-gray-600'}`}>
+              Standard
+            </span>
+            <span className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-300 ${teaserMode === 'micro' ? 'bg-green-400 text-black border-green-400' : 'bg-transparent text-gray-400 border-gray-600'}`}>
+              Micro
+            </span>
+          </div>
+          <p className={`text-xs text-gray-400 font-mono tracking-wide transition-opacity duration-300 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}>
+            {teaserMode === 'standard'
+              ? 'Full watchlist \u00b7 Accounts $10K and above'
+              : 'Sized for accounts under $10K \u00b7 1 contract at a time'}
+          </p>
+        </div>
+
         {/* ─── 4. Blurred Recommendation Card ─────────────── */}
         <section style={{ ...sectionGap, animation: "wih-fadeUp 0.7s ease-out 0.2s both" }}>
           <div
@@ -1114,22 +1131,6 @@ export default function WeeklyIncomeHero() {
           </p>
         </section>
 
-        {/* ─── Mode Tease Toggle (animated, display-only) ──── */}
-        <div className="flex flex-col items-center gap-3 mt-8 mb-8">
-          <div className="flex gap-2">
-            <span className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-300 ${teaserMode === 'standard' ? 'bg-green-400 text-black border-green-400' : 'bg-transparent text-gray-400 border-gray-600'}`}>
-              Standard
-            </span>
-            <span className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-300 ${teaserMode === 'micro' ? 'bg-green-400 text-black border-green-400' : 'bg-transparent text-gray-400 border-gray-600'}`}>
-              Micro
-            </span>
-          </div>
-          <p className={`text-xs text-gray-400 font-mono tracking-wide transition-opacity duration-300 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}>
-            {teaserMode === 'standard'
-              ? 'Full watchlist \u00b7 Accounts $10K and above'
-              : 'Sized for accounts under $10K \u00b7 1 contract at a time'}
-          </p>
-        </div>
 
         {/* ─── 9. Final CTA ───────────────────────────────── */}
         <section
