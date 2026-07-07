@@ -23,19 +23,19 @@ interface TickerPrice {
 const TICKER_SYMBOLS = ["AAPL", "NVDA", "MSFT", "META", "AMZN", "GOOGL", "TSLA", "JPM", "UNH", "V", "QQQ", "SPY", "IWM"];
 
 const FALLBACK_PRICES: TickerPrice[] = [
-  { sym: "AAPL", price: 195.89, changePct: 1.24 },
-  { sym: "NVDA", price: 148.50, changePct: 2.31 },
-  { sym: "MSFT", price: 442.57, changePct: 0.87 },
-  { sym: "META", price: 612.30, changePct: 1.65 },
-  { sym: "AMZN", price: 205.74, changePct: 0.93 },
-  { sym: "GOOGL", price: 178.32, changePct: 0.41 },
-  { sym: "TSLA", price: 265.80, changePct: 3.12 },
-  { sym: "JPM", price: 218.45, changePct: 0.56 },
-  { sym: "UNH", price: 312.10, changePct: -0.38 },
-  { sym: "V", price: 292.65, changePct: 0.72 },
-  { sym: "QQQ", price: 510.20, changePct: 1.14 },
-  { sym: "SPY", price: 555.40, changePct: 0.68 },
-  { sym: "IWM", price: 205.33, changePct: -0.21 },
+  { sym: "AAPL", price: 232.00, changePct: 0.45 },
+  { sym: "NVDA", price: 145.20, changePct: 1.82 },
+  { sym: "MSFT", price: 462.50, changePct: 0.63 },
+  { sym: "META", price: 640.10, changePct: 1.15 },
+  { sym: "AMZN", price: 218.40, changePct: 0.78 },
+  { sym: "GOOGL", price: 192.30, changePct: 0.34 },
+  { sym: "TSLA", price: 290.60, changePct: 2.40 },
+  { sym: "JPM", price: 260.80, changePct: 0.52 },
+  { sym: "UNH", price: 340.25, changePct: -0.28 },
+  { sym: "V", price: 310.90, changePct: 0.61 },
+  { sym: "QQQ", price: 540.70, changePct: 0.92 },
+  { sym: "SPY", price: 575.15, changePct: 0.55 },
+  { sym: "IWM", price: 215.40, changePct: -0.18 },
 ];
 
 const SCAN_ROWS = [
@@ -94,56 +94,33 @@ function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
 // ── Navbar ────────────────────────────────────────────────────
 // Using shared Navbar component (see components/Navbar.tsx)
 
-// ── Ticker Tape (live Yahoo Finance prices) ───────────────────
+// ── Ticker Tape (server-proxied Yahoo Finance prices) ─────────
 function TickerTape() {
   const [prices, setPrices] = useState<TickerPrice[]>(FALLBACK_PRICES);
 
   useEffect(() => {
-    async function fetchPrice(symbol: string): Promise<TickerPrice | null> {
-      const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1d`;
+    async function fetchPrices() {
       try {
-        let res = await fetch(url);
-        if (!res.ok) {
-          res = await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`);
-        }
-        if (!res.ok) return null;
+        const res = await fetch(`/api/prices?tickers=${TICKER_SYMBOLS.join(",")}`);
+        if (!res.ok) return;
         const json = await res.json();
-        const meta = json.chart?.result?.[0]?.meta;
-        if (!meta) return null;
-        const price = meta.regularMarketPrice ?? 0;
-        const prevClose = meta.chartPreviousClose ?? price;
-        const changePct = prevClose ? ((price - prevClose) / prevClose) * 100 : 0;
-        return { sym: symbol, price, changePct };
-      } catch {
-        try {
-          const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`);
-          if (!res.ok) return null;
-          const json = await res.json();
-          const meta = json.chart?.result?.[0]?.meta;
-          if (!meta) return null;
-          const price = meta.regularMarketPrice ?? 0;
-          const prevClose = meta.chartPreviousClose ?? price;
-          const changePct = prevClose ? ((price - prevClose) / prevClose) * 100 : 0;
-          return { sym: symbol, price, changePct };
-        } catch {
-          return null;
+        if (!json.prices) return;
+
+        const live: TickerPrice[] = [];
+        for (const sym of TICKER_SYMBOLS) {
+          const q = json.prices[sym];
+          if (q) {
+            live.push({ sym, price: q.price, changePct: q.change });
+          }
         }
+        if (live.length > 0) setPrices(live);
+      } catch {
+        // keep fallback prices
       }
     }
 
-    async function fetchAll() {
-      const results = await Promise.allSettled(
-        TICKER_SYMBOLS.map((sym) => fetchPrice(sym))
-      );
-      const live: TickerPrice[] = [];
-      results.forEach((r) => {
-        if (r.status === "fulfilled" && r.value) live.push(r.value);
-      });
-      if (live.length > 0) setPrices(live);
-    }
-
-    fetchAll();
-    const interval = setInterval(fetchAll, 60_000);
+    fetchPrices();
+    const interval = setInterval(fetchPrices, 60_000);
     return () => clearInterval(interval);
   }, []);
 
