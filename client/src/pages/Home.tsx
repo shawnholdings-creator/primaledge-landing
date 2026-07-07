@@ -210,7 +210,7 @@ function Hero() {
             animation: "heroSlideUp 0.6s ease-out 0.2s both",
           }}
         >
-          What if you already knew which setups{"\n"}deserved your attention today?
+          What if you already knew which option setups{"\n"}deserved your attention today?
         </h1>
 
         {/* Subheadline */}
