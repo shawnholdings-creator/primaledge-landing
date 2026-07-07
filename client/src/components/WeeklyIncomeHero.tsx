@@ -203,16 +203,52 @@ export default function WeeklyIncomeHero() {
         </section>
 
         {/* ─── Mode Tease Toggle (animated, display-only) ──── */}
-        <div className="flex flex-col items-center gap-3 mt-8 mb-8">
-          <div className="flex gap-2">
-            <span className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-300 ${teaserMode === 'standard' ? 'bg-green-400 text-black border-green-400' : 'bg-transparent text-gray-400 border-gray-600'}`}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, marginTop: 32, marginBottom: 32, border: '1px solid red', minHeight: 60, padding: 16 }}>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <span
+              style={{
+                padding: '6px 16px',
+                borderRadius: 9999,
+                fontSize: 13,
+                fontWeight: 600,
+                fontFamily: T.fontMono,
+                border: '1px solid',
+                transition: 'all 0.3s ease',
+                background: teaserMode === 'standard' ? '#4ade80' : 'transparent',
+                color: teaserMode === 'standard' ? '#000' : '#fff',
+                borderColor: teaserMode === 'standard' ? '#4ade80' : '#555',
+              }}
+            >
               Standard
             </span>
-            <span className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-300 ${teaserMode === 'micro' ? 'bg-green-400 text-black border-green-400' : 'bg-transparent text-gray-400 border-gray-600'}`}>
+            <span
+              style={{
+                padding: '6px 16px',
+                borderRadius: 9999,
+                fontSize: 13,
+                fontWeight: 600,
+                fontFamily: T.fontMono,
+                border: '1px solid',
+                transition: 'all 0.3s ease',
+                background: teaserMode === 'micro' ? '#4ade80' : 'transparent',
+                color: teaserMode === 'micro' ? '#000' : '#fff',
+                borderColor: teaserMode === 'micro' ? '#4ade80' : '#555',
+              }}
+            >
               Micro
             </span>
           </div>
-          <p className={`text-xs text-gray-400 font-mono tracking-wide transition-opacity duration-300 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}>
+          <p
+            style={{
+              fontSize: 11,
+              color: '#999',
+              fontFamily: T.fontMono,
+              letterSpacing: '0.04em',
+              transition: 'opacity 0.3s ease',
+              opacity: fadeIn ? 1 : 0,
+              margin: 0,
+            }}
+          >
             {teaserMode === 'standard'
               ? 'Full watchlist \u00b7 Accounts $10K and above'
               : 'Sized for accounts under $10K \u00b7 1 contract at a time'}
