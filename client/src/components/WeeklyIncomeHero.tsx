@@ -9,6 +9,26 @@ import { Link } from "wouter";
 import Navbar from "./Navbar";
 import { useLoginModal } from "../contexts/LoginModalContext";
 
+/* ─── Trade History Gist URL ────────────────────────────────── */
+const TRADE_HISTORY_URL =
+  (typeof import.meta !== 'undefined'
+    ? (import.meta as any).env?.VITE_TRADE_HISTORY_GIST_URL
+    : undefined) ||
+  '';
+
+/* ─── Types ─────────────────────────────────────────────────── */
+type TradeRecord = {
+  ticker: string;
+  entry_date: string;
+  strike: number;
+  side: string;
+  credit: number;
+  days_held: number;
+  pnl_per_contract: number;
+  outcome: 'WIN' | 'LOSS';
+  exit_reason?: string;
+};
+
 /* ─── Design Tokens ─────────────────────────────────────────── */
 const T = {
   bg: "#0a0a0a",
@@ -94,6 +114,31 @@ const sectionGap: React.CSSProperties = {
   marginTop: 56,
 };
 
+/* ─── Recent Trades hook ───────────────────────────────────── */
+function useRecentTrades() {
+  const [trades, setTrades] = useState<TradeRecord[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if (!TRADE_HISTORY_URL) { setLoading(false); return; }
+    fetch(TRADE_HISTORY_URL)
+      .then(r => r.json())
+      .then((data: TradeRecord[]) => {
+        const cutoff = new Date();
+        cutoff.setDate(cutoff.getDate() - 21);
+        const recent = data
+          .filter(t => new Date(t.entry_date) >= cutoff)
+          .sort((a, b) => new Date(b.entry_date).getTime() - new Date(a.entry_date).getTime());
+        setTrades(recent);
+      })
+      .catch(() => setError(true))
+      .finally(() => setLoading(false));
+  }, []);
+
+  return { trades, loading, error };
+}
+
 /* ─── Animated Stat with count-up ──────────────────────────── */
 function AnimatedStat({ target, prefix = '', suffix = '', label, decimals = 0 }: {
   target: number; prefix?: string; suffix?: string; label: string; decimals?: number;
@@ -156,6 +201,14 @@ export default function WeeklyIncomeHero() {
   const { openLoginModal } = useLoginModal();
   const [isMobile, setIsMobile] = useState(false);
   const [showTrades, setShowTrades] = useState(false);
+
+  // Recent trades from Gist
+  const { trades: recentTrades, loading: tradesLoading, error: tradesError } = useRecentTrades();
+  const recentWins = recentTrades.filter(t => t.outcome === 'WIN').length;
+  const recentTotal = recentTrades.length;
+  const recentIncome = recentTrades
+    .filter(t => t.outcome === 'WIN')
+    .reduce((sum, t) => sum + Math.round(t.pnl_per_contract), 0);
 
 
   useEffect(() => {
@@ -363,6 +416,170 @@ export default function WeeklyIncomeHero() {
           </div>
 
         </section>
+
+        {/* ─── Recent Backtest Results (from Gist) ──────────── */}
+        {!tradesError && TRADE_HISTORY_URL && (
+          <section style={{ ...sectionGap, animation: 'wih-fadeUp 0.7s ease-out 0.15s both' }}>
+            <div style={{ width: '100%', maxWidth: 640, margin: '0 auto' }}>
+
+              {/* Header row */}
+              <div style={{
+                display: 'flex',
+                flexDirection: isMobile ? 'column' : 'row',
+                alignItems: isMobile ? 'flex-start' : 'center',
+                justifyContent: 'space-between',
+                gap: 8,
+                marginBottom: 12,
+              }}>
+                <div>
+                  <h4 style={{
+                    color: T.white,
+                    fontWeight: 700,
+                    fontSize: 13,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.08em',
+                    margin: 0,
+                    fontFamily: T.fontMono,
+                  }}>
+                    Recent Backtest Results
+                  </h4>
+                  <p style={{ color: '#6b7280', fontSize: 11, marginTop: 2, margin: '2px 0 0' }}>
+                    {(() => {
+                      if (!recentTrades.length) return 'Last 3 weeks · Backtest data';
+                      const dates = recentTrades.map(t => new Date(t.entry_date));
+                      const oldest = new Date(Math.min(...dates.map(d => d.getTime())));
+                      const newest = new Date(Math.max(...dates.map(d => d.getTime())));
+                      const fmt = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                      return `${fmt(oldest)} – ${fmt(newest)} · Backtest data`;
+                    })()}
+                  </p>
+                </div>
+                {!tradesLoading && recentTotal > 0 && (
+                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                    <span style={{
+                      background: 'rgba(74,222,128,0.1)',
+                      color: '#4ade80',
+                      fontWeight: 700,
+                      fontSize: 11,
+                      padding: '4px 12px',
+                      borderRadius: 9999,
+                    }}>
+                      {recentWins}/{recentTotal} Wins · {Math.round(recentWins / recentTotal * 100)}%
+                    </span>
+                    <span style={{
+                      background: 'rgba(255,255,255,0.05)',
+                      color: '#d1d5db',
+                      fontWeight: 600,
+                      fontSize: 11,
+                      padding: '4px 12px',
+                      borderRadius: 9999,
+                    }}>
+                      ${recentIncome.toLocaleString()} income
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Loading */}
+              {tradesLoading && (
+                <div style={{
+                  borderRadius: 12,
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  padding: 24,
+                  textAlign: 'center',
+                  color: '#6b7280',
+                  fontSize: 13,
+                }}>
+                  Loading recent results...
+                </div>
+              )}
+
+              {/* Empty */}
+              {!tradesLoading && recentTotal === 0 && (
+                <div style={{
+                  borderRadius: 12,
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  padding: 24,
+                  textAlign: 'center',
+                  color: '#6b7280',
+                  fontSize: 13,
+                }}>
+                  No completed trades in the last 3 weeks.
+                </div>
+              )}
+
+              {/* Table */}
+              {!tradesLoading && recentTotal > 0 && (
+                <div style={{
+                  borderRadius: 12,
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  overflow: 'hidden',
+                }}>
+                  <div style={{ overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 540 }}>
+                      <thead>
+                        <tr style={{ background: 'rgba(255,255,255,0.05)' }}>
+                          {['Ticker', 'Date', 'Strike', 'Credit', 'Days', 'P&L', 'Result'].map((h, i) => (
+                            <th key={h} style={{
+                              padding: '8px 12px',
+                              textAlign: i < 3 ? 'left' : 'right',
+                              color: '#9ca3af',
+                              fontSize: 10,
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.08em',
+                              fontWeight: 600,
+                              whiteSpace: 'nowrap',
+                            }}>{h}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {recentTrades.map((t, i) => {
+                          const creditDisplay = `$${Math.round(t.credit * 100)}`;
+                          const pnlAbs = Math.abs(Math.round(t.pnl_per_contract));
+                          const pnlDisplay = `${t.pnl_per_contract >= 0 ? '+' : '-'}$${pnlAbs.toLocaleString()}`;
+                          const dateDisplay = new Date(t.entry_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                          const strikeDisplay = `$${t.strike} ${t.side === 'put' ? 'Put' : 'Call'}`;
+                          const isWin = t.outcome === 'WIN';
+                          return (
+                            <tr key={i} style={{ background: i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent' }}>
+                              <td style={{ padding: '8px 12px', fontWeight: 700, color: T.white, whiteSpace: 'nowrap' }}>{t.ticker}</td>
+                              <td style={{ padding: '8px 12px', color: '#6b7280', fontSize: 11, whiteSpace: 'nowrap' }}>{dateDisplay}</td>
+                              <td style={{ padding: '8px 12px', color: '#d1d5db', whiteSpace: 'nowrap' }}>{strikeDisplay}</td>
+                              <td style={{ padding: '8px 12px', textAlign: 'right', color: '#4ade80', fontWeight: 600 }}>{creditDisplay}</td>
+                              <td style={{ padding: '8px 12px', textAlign: 'right', color: '#9ca3af' }}>{t.days_held}d</td>
+                              <td style={{ padding: '8px 12px', textAlign: 'right', fontWeight: 600, color: isWin ? '#4ade80' : '#f87171' }}>{pnlDisplay}</td>
+                              <td style={{ padding: '8px 12px', textAlign: 'right' }}>
+                                <span style={{
+                                  background: isWin ? 'rgba(74,222,128,0.15)' : 'rgba(248,113,113,0.15)',
+                                  color: isWin ? '#4ade80' : '#f87171',
+                                  fontSize: 11,
+                                  fontWeight: 700,
+                                  padding: '2px 8px',
+                                  borderRadius: 9999,
+                                }}>{t.outcome}</span>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                  <p style={{
+                    fontSize: 11,
+                    color: '#4b5563',
+                    padding: '8px 12px',
+                    borderTop: '1px solid rgba(255,255,255,0.05)',
+                    margin: 0,
+                  }}>
+                    Backtest simulation data. Updates weekly. Past results do not guarantee future performance. Not financial advice.
+                  </p>
+                </div>
+              )}
+
+            </div>
+          </section>
+        )}
 
         {/* ─── Who It's For — redesigned CTA cards ──────── */}
         <section style={{ textAlign: 'center', animation: 'wih-fadeUp 0.7s ease-out 0.15s both' }}>
