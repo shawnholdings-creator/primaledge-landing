@@ -193,7 +193,7 @@ function Hero() {
               color: "#00e5a0",
             }}
           >
-            OPTIONS INCOME · ADAPTIVE INTELLIGENCE · PRIVATE ACCESS
+            OPTIONS AI ENGINE · PRIVATE ACCESS
           </span>
         </div>
 
@@ -210,7 +210,7 @@ function Hero() {
             animation: "heroSlideUp 0.6s ease-out 0.2s both",
           }}
         >
-          What if you already knew which option setups{"\n"}deserved your attention today?
+          What if you already knew which options setups were worth selling this week?
         </h1>
 
         {/* Subheadline */}
@@ -226,7 +226,7 @@ function Hero() {
             animation: "heroFadeIn 0.5s ease-out 0.35s both",
           }}
         >
-           Primal Edge scans blue-chip stocks and ETFs for high-probability options income setups, scores every opportunity by conviction, and delivers the highest-ranked signals directly to your dashboard and your phone — before you ever open a chart.
+           Primal Edge is an AI engine built exclusively for options traders. It scans blue-chip stocks and ETFs for high-probability put and call selling opportunities, scores every setup by conviction, and delivers the highest-ranked income signals directly to your dashboard and your phone — before you ever open a chart.
         </p>
 
         {/* Push notification mockup */}
@@ -387,7 +387,7 @@ function Hero() {
               gap: "16px 24px",
             }}
           >
-            {["73% Directional Accuracy*", "18 Months Backtested", "A-Grade Setups: 81% Hit Rate*"].map((stat, i, arr) => (
+            {["92.1% Win Rate*", "18 Months Backtested", "Weekly Income Setups · Put & Call Selling"].map((stat, i, arr) => (
               <span key={stat} style={{ display: "inline-flex", alignItems: "center", gap: "24px" }}>
                 <span
                   style={{
@@ -442,9 +442,9 @@ function Hero() {
           }}
         >
           {[
-            { icon: "⚡", label: "Multi-Timeframe Confluence", desc: "Cross-referencing signals across daily, weekly, and intraday structure" },
-            { icon: "📊", label: "Volatility Structure Analysis", desc: "Reading implied vs realized vol to identify mispriced opportunity" },
-            { icon: "🏆", label: "Conviction Scoring Engine", desc: "Quantifying setup quality on a 0–100 scale with letter grades" },
+            { icon: "⚡", label: "Multi-Timeframe Confluence", desc: "Cross-referencing options signals across daily, weekly, and intraday structure to confirm setup quality before entry" },
+            { icon: "📊", label: "Volatility Structure Analysis", desc: "Reading implied vs realized volatility and IV rank to identify mispriced options premium worth selling" },
+            { icon: "🏆", label: "Conviction Scoring Engine", desc: "Quantifying options setup quality on a 0–100 scale — filtering for delta, DTE, IV rank, and underlying quality" },
           ].map((tile) => (
             <div
               key={tile.label}
@@ -664,7 +664,7 @@ function Hero() {
 function HowItWorks() {
   const { ref, inView } = useInView();
   const steps = [
-    { num: "01", title: "Autonomous Data Ingestion", desc: "On every cycle, the engine autonomously ingests live market data across a curated universe of blue-chip stocks and options-liquid ETFs spanning multiple indices and proprietary watchlists. Data is normalized, adjusted for corporate actions, and staged for feature extraction — zero manual input, zero human bottleneck.", icon: "📡", traderValue: "The engine watches blue-chip stocks and ETFs for options income setups so you don't have to, reducing the need to manually cycle through endless charts. Traders get a cleaner starting point: fewer names to chase, more focus on symbols showing meaningful activity." },
+    { num: "01", title: "Autonomous Data Ingestion", desc: "On every cycle, the engine autonomously ingests live market data, options chain pricing, IV rank, and DTE windows across a curated universe of blue-chip stocks and options-liquid ETFs spanning multiple indices and proprietary watchlists. Data is normalized, adjusted for corporate actions, and staged for feature extraction — zero manual input, zero human bottleneck.", icon: "📡", traderValue: "The engine watches blue-chip stocks and ETFs for qualifying options income setups — monitoring delta, IV rank, and weekly expiration windows so you don't have to." },
     { num: "02", title: "Proprietary Feature Extraction", desc: "Raw price and volume data is transformed through a multi-layer feature engineering pipeline into a high-dimensional numerical representation. The system captures latent relationships between momentum regime, volatility structure, and directional pressure that are invisible to standard technical analysis.", icon: "🧠", traderValue: "Instead of reacting to obvious price movement after the crowd sees it, the system studies structure, compression, momentum, volume behavior, and directional pressure. This helps surface setups that may be forming beneath the noise." },
     { num: "03", title: "Adaptive Conviction Scoring", desc: "A proprietary scoring model evaluates each candidate across multiple orthogonal dimensions of market confluence, producing a single 0–100 conviction score. Dynamic penalty layers adjust for regime risk, overextension, and event proximity — tiering every setup as ELITE, FIRE, PREP, or SUPPRESS.", icon: "🏆", traderValue: "Every candidate is ranked before it reaches the trader. The 0–100 score and grade help separate high-priority setups from weak or early formations, so traders can decide what deserves immediate review." },
     { num: "04", title: "Dual-Channel Signal Dispatch", desc: "Qualifying signals are deduplicated against the session registry, packaged with full context — ticker, conviction score, grade, verdict, and price — and dispatched simultaneously to your mobile device and the live Primal Edge AI Cockpit. Typical signal-to-screen latency: under 3 seconds.", icon: "🔔", traderValue: "When a qualified setup fires, the alert arrives with ticker, verdict, score, grade, price, and context. This turns a raw market event into a fast review-ready signal instead of a vague notification." },
@@ -675,11 +675,11 @@ function HowItWorks() {
       <div className="container">
         {/* Bridge headline */}
         <div className="mb-10 sm:mb-16" ref={ref}>
-          <p className="font-mono text-xs text-[#00e5a0] tracking-widest mb-3">HOW THE ENGINE WORKS</p>
+          <p className="font-mono text-xs text-[#00e5a0] tracking-widest mb-3">HOW THE OPTIONS AI ENGINE WORKS</p>
           <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white">
-            From Market Noise<br />to Ranked Setups
+            From Market Noise<br />to Ranked Options Income Setups
           </h2>
-          <p className="text-white/45 text-base sm:text-lg max-w-2xl mt-4 leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>Primal Edge translates live market complexity into scored, graded, review-ready signals — helping traders focus on the setups that appear to deserve attention.</p>
+          <p className="text-white/45 text-base sm:text-lg max-w-2xl mt-4 leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>Primal Edge translates live market complexity into scored, graded, options-specific signals — helping income traders focus on the put and call selling setups that appear to deserve attention.</p>
         </div>
 
         <div className="relative">
@@ -720,7 +720,7 @@ function HowItWorks() {
 
         {/* Value strip */}
         <div className={`mt-10 sm:mt-14 flex flex-wrap justify-center gap-3 sm:gap-4 ${inView ? "fade-up fade-up-delay-5" : "opacity-0"}`}>
-          {["Blue-Chip Stocks & ETFs", "Multi-Timeframe Context", "AI Conviction Score", "Noise Filter", "Fast Alert Delivery"].map((item, i) => (
+          {["Blue-Chip Options Universe", "Multi-Timeframe Context", "AI Conviction Score", "Noise Filter", "Fast Alert Delivery"].map((item, i) => (
             <span key={i} className="font-mono text-[10px] sm:text-xs text-white/35 tracking-wider bg-white/3 border border-white/5 rounded-full px-3 sm:px-4 py-1.5">{item}</span>
           ))}
         </div>
@@ -733,7 +733,7 @@ function HowItWorks() {
 function Features() {
   const { ref, inView } = useInView();
   const features = [
-    { num: "01", title: "Proprietary Adaptive Engine", desc: "The core intelligence layer applies a multi-factor adaptive model to identify high-probability options income setups across blue-chip stocks and ETFs. The model architecture, feature composition, and scoring weights are entirely proprietary — engineered to detect structural patterns that precede significant directional moves.", tag: "ADAPTIVE ENGINE", traderValue: "The engine is built to identify structural behavior across the broader market, not just simple indicator crosses. Traders benefit from a systematic filter designed to reduce emotion, bias, and random chart scanning." },
+    { num: "01", title: "Proprietary Adaptive Engine", desc: "The core intelligence layer applies a multi-factor adaptive model to identify high-probability put and call selling setups across blue-chip stocks and ETFs — filtered by IV rank, delta, and weekly expiration quality. The model architecture, feature composition, and scoring weights are entirely proprietary.", tag: "ADAPTIVE ENGINE", traderValue: "The engine is built to identify structural behavior across the broader market, not just simple indicator crosses. Traders benefit from a systematic filter designed to reduce emotion, bias, and random chart scanning." },
     { num: "02", title: "Multi-Timeframe Confluence Layer", desc: "Every setup is cross-validated against multiple timeframes simultaneously. The engine applies directional confluence filters and trend-alignment scoring to ensure signals are structurally sound across the macro and micro landscape — filtering out noise at the source.", tag: "MTF CONFLUENCE", traderValue: "A setup is stronger when short-term movement aligns with the larger structure. This helps traders avoid acting on isolated one-timeframe noise and focus on cleaner alignment." },
     { num: "03", title: "Multi-Dimensional Conviction Scoring", desc: "Multiple orthogonal factors — spanning momentum, structure, volume behavior, sector dynamics, and regime awareness — are synthesized into a single 0–100 conviction score through a proprietary weighted intelligence model. The exact dimensions and weights are undisclosed.", tag: "CONVICTION SCORING", traderValue: "Momentum, structure, volume, sector behavior, and regime awareness are compressed into one readable score. Traders can prioritize attention faster without manually weighing every factor from scratch." },
     { num: "04", title: "Sub-3-Second Signal Delivery", desc: "When a high-conviction signal is confirmed, a structured alert payload is dispatched to your mobile device and the web dashboard simultaneously — ticker, score, grade, verdict, and price context delivered in under 3 seconds. No app store dependencies.", tag: "REAL-TIME DISPATCH", traderValue: "Speed matters when a setup starts moving. The trader receives the signal quickly enough to review the chart while the setup is still fresh." },
@@ -745,11 +745,11 @@ function Features() {
     <section id="features" className="py-16 sm:py-24 bg-[#0d1118]">
       <div className="container">
         <div className="mb-10 sm:mb-16" ref={ref}>
-          <p className="font-mono text-xs text-[#00e5a0] tracking-widest mb-3">ENGINEERED FEATURES</p>
+          <p className="font-mono text-xs text-[#00e5a0] tracking-widest mb-3">ENGINEERED FOR OPTIONS TRADERS</p>
           <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white max-w-2xl">
-            Institutional-Grade Analysis.<br />Retail Simplicity.
+            Institutional-Grade Options Analysis.<br />Retail Simplicity.
           </h2>
-          <p className="text-white/45 text-base sm:text-lg max-w-2xl mt-4 leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>Every feature is engineered around a single objective: deliver the highest-conviction analytical insights with zero noise and zero delay — built for serious market enthusiasts.</p>
+          <p className="text-white/45 text-base sm:text-lg max-w-2xl mt-4 leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>Every feature is engineered around a single objective: deliver the highest-conviction options income signals with zero noise and zero delay — built for serious options traders.</p>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -804,11 +804,11 @@ function Technology() {
       headline: "Structural Anomaly Detection Across Blue-Chip Stocks & ETFs",
       body: [
         "The engine applies deterministic, rule-based evaluation to every symbol on every cycle — identifying structural configurations that have historically preceded explosive directional moves. Unlike discretionary chart reading, which is subject to interpretation and inconsistency, the pattern matching engine applies a fully systematic evaluation.",
-        "The system scans for a precise convergence of proprietary conditions across a curated universe of premium symbols. All conditions must be present simultaneously for a setup to qualify — partial matches are filtered out entirely. The specific criteria and thresholds are proprietary and not disclosed.",
+        "The system scans for a precise convergence of proprietary conditions across a curated universe of blue-chip stocks and options-liquid ETFs. All conditions must be present simultaneously for a setup to qualify — partial matches are filtered out entirely. The specific criteria and thresholds are proprietary and not disclosed.",
         "Multi-timeframe confluence checks cross-reference the primary detection against higher timeframe structure. Trend-aligned setups receive scoring bonuses while counter-trend signals are penalized — reflecting the statistical reality that alignment with macro momentum significantly improves resolution rates.",
       ],
       stats: [
-        { label: "Universe", val: "Premium Curated" },
+        { label: "Universe", val: "Blue-Chip & Options-Liquid ETFs" },
         { label: "Detection Mode", val: "Systematic" },
         { label: "Timeframes", val: "Multi-TF" },
         { label: "Noise Filter", val: "Active" },
@@ -853,10 +853,10 @@ function Technology() {
         <div className="mb-10 sm:mb-14" ref={ref}>
           <p className="font-mono text-xs text-[#00e5a0] tracking-widest mb-3">UNDER THE HOOD</p>
           <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white max-w-3xl">
-            Institutional-Grade Technology.<br />Retail-Accessible Delivery.
+            Institutional-Grade Options Intelligence.<br />Retail-Accessible Delivery.
           </h2>
           <p className="text-white/50 text-base sm:text-lg max-w-2xl mt-4 leading-relaxed">
-            The Primal Edge engine is not a simple indicator overlay or a hand-drawn trendline. It is a multi-layer quantitative system built on adaptive intelligence, structural pattern recognition, and statistically validated methodology — engineered to identify high-probability setups with the precision of a systematic fund, delivered as educational analysis to your device in real time.
+            The Primal Edge engine is not a simple options screener or a hand-drawn trendline. It is a multi-layer quantitative system built on adaptive intelligence, options-specific feature engineering, and statistically validated methodology — designed from the ground up for put and call selling strategies, delivered as educational analysis to your device in real time.
           </p>
         </div>
 
@@ -962,18 +962,18 @@ function AlertPreview() {
           <div className={`order-2 lg:order-1 ${inView ? "fade-up fade-up-delay-1" : "opacity-0"}`} ref={ref}>
             <p className="font-mono text-xs text-[#00e5a0] tracking-widest mb-3">INSTANT ANALYSIS</p>
             <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white mb-6">
-              Your Phone Buzzes<br />When the Setup Fires
+            Your Phone Buzzes<br />When an Options Income Setup Qualifies
             </h2>
             <p className="text-white/55 text-base sm:text-lg leading-relaxed mb-8">
-              No more staring at charts all day. The engine monitors the market for you and sends a push notification the moment a high-conviction setup is confirmed — delivered as educational analysis for your review.
+              No more scanning options chains all day. The engine monitors blue-chip stocks for qualifying put and call selling setups and sends a push notification the moment a high-conviction income opportunity is confirmed — delivered as educational analysis for your review.
             </p>
             <div className="space-y-4">
               {[
                 { label: "Ticker Symbol", val: "NVDA" },
-                { label: "Verdict", val: "BULLISH SLINGSHOT" },
+                { label: "Verdict", val: "PUT SELL · INCOME SETUP" },
                 { label: "Score / Grade", val: "82 / A" },
                 { label: "Price at Alert", val: "$875.20" },
-                { label: "Key Context", val: "AI Cockpit slingshot confirmed, vol surge 2.1x" },
+                { label: "Key Context", val: "IV rank 68 · Delta 0.18 · 9 DTE · Weekly expiration" },
               ].map((item, i) => (
                 <div key={i} className="teal-border-left">
                   <span className="font-mono text-[10px] text-white/30 tracking-widest block">{item.label}</span>
@@ -1058,7 +1058,7 @@ function AccessSection() {
               Private Access Only
             </h2>
             <p className="text-white/50 text-base sm:text-lg max-w-lg mx-auto mb-8">
-              Primal Edge is a private, invitation-only platform for serious traders. Pricing is discussed privately upon approval.
+              Primal Edge is a private, invitation-only options AI platform for serious income traders. Pricing is discussed privately upon approval.
             </p>
             <Link
               href="/subscribe"
@@ -1096,8 +1096,8 @@ function FAQ() {
   const { ref, inView } = useInView();
   const [open, setOpen] = useState<number | null>(null);
   const faqs = [
-    { q: "What is the Primal Edge AI Cockpit?", a: "It is the flagship adaptive intelligence signal within the Primal Edge product suite — a proprietary system that identifies a specific structural pattern across a curated universe of blue-chip stocks and options-liquid ETFs. The engine assigns a 0–100 conviction score and grades each setup A through D. The exact model architecture, pattern definition, and universe composition are proprietary. All output is provided for educational and analytical purposes only." },
-    { q: "What data does the model use?", a: "The engine ingests live market data across a curated universe of blue-chip stocks and options-liquid ETFs on every cycle. Raw data is transformed through a proprietary feature engineering pipeline into a multi-dimensional numerical representation. The specific data sources, feature composition, and transformation methods are not disclosed." },
+    { q: "What is the Primal Edge Options AI Engine?", a: "The Primal Edge Options AI Engine is a proprietary scanning and scoring system built exclusively for options income traders. It monitors blue-chip stocks and ETFs for high-probability put and call selling setups, scores each opportunity on a 0–100 conviction scale, and delivers the highest-ranked signals to your dashboard and phone in real time." },
+    { q: "What data does the model use?", a: "The engine ingests live price data, options chain pricing, implied volatility rank (IV rank), delta, days-to-expiration (DTE), and volume — all filtered specifically for options income setups. Raw data is transformed through a proprietary feature engineering pipeline into a multi-dimensional numerical representation. The specific data sources, feature composition, and transformation methods are not disclosed." },
     { q: "How do I receive the analysis?", a: "Analytical insights are delivered via push notification to your mobile device. Download a free notification client, subscribe to the private topic provided after sign-up, and receive instant updates the moment the engine confirms a high-conviction setup." },
     { q: "What timeframe does the engine analyze?", a: "The engine uses a multi-timeframe evaluation approach, cross-referencing the primary scan timeframe against higher timeframe trend structure. The model applies a confluence bonus to trend-aligned setups and penalizes counter-trend signals. Setups are designed for analysis of swing-timeframe structures with a typical 2–10 day observation window." },
     { q: "How was the model validated?", a: "The model was validated across a multi-year historical dataset using walk-forward analysis to confirm out-of-sample performance. Survivorship bias was eliminated by evaluating against the full universe as it existed at each historical point. Detailed methodology is available to active members only." },
@@ -1160,13 +1160,13 @@ function CTABanner() {
           <div className="relative">
             <p className="font-mono text-xs text-[#00e5a0] tracking-widest mb-4">PRIVATE MEMBERSHIP — LIMITED SEATS</p>
             <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white mb-6">
-              Stop Guessing.<br />Let the Engine Find the Edge.
+              Stop Scanning Options Chains.<br />Let the AI Find the Setup.
             </h2>
             <p className="text-white/55 text-base sm:text-lg max-w-xl mx-auto mb-8">
-              Join a private community of options traders using Primal Edge's adaptive intelligence to find weekly income setups — scored, graded, and delivered as real-time educational analysis.
+              Join a private community of options income traders using Primal Edge's AI engine to find weekly put and call selling setups — scored, graded, and delivered as real-time educational analysis.
             </p>
             <Link href="/products" className="shimmer-btn pulse-glow inline-block bg-[#00e5a0] text-[#0a0d12] font-['Space_Grotesk'] font-bold text-base sm:text-lg px-8 sm:px-10 py-4 rounded-lg hover:bg-[#00bfa0] transition-all">
-              Explore Our Products →
+              Explore Our Options Tools →
             </Link>
           </div>
         </div>
@@ -1199,7 +1199,7 @@ function Footer() {
             <Link href="/subscribe" className="hover:text-[#00e5a0] transition-colors">Subscribe</Link>
           </div>
           <p className="text-white/20 text-xs text-center">
-            © 2025 Primal Edge — Adaptive Intelligence. Decisive Signals. For educational purposes only. Not financial advice.
+            © 2025 Primal Edge — The Options AI Engine. For educational purposes only. Not financial advice.
           </p>
         </div>
       </div>

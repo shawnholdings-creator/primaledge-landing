@@ -18,7 +18,7 @@ const PRODUCTS = [
     tag2: "FLAGSHIP",
     tagColor: "#00e5a0",
     description:
-      "The flagship options income tool. Scans blue-chip stocks and ETFs for weekly put and call selling opportunities — scored by conviction, filtered for quality, and delivered to your phone the moment a setup qualifies.",
+      "The flagship options income tool. Scans blue-chip stocks and ETFs for weekly put and call selling opportunities — scored by conviction, filtered by IV rank and delta, and delivered to your phone the moment a setup qualifies.",
     features: ["Income opportunities", "100-point scoring model", "Real-time phone alerts", "Blue-chip universe only"],
     cta: "View Dashboard",
     ctaHref: "/weekly-income",
@@ -58,8 +58,8 @@ const PRODUCTS = [
     tag: "LIVE",
     tagColor: "#00e5a0",
     description:
-      "The flagship Primal Edge AI signal engine. Scans thousands of premium symbols across multiple indices in real time, identifying high-probability breakout setups graded A–D by adaptive intelligence.",
-    features: ["Real-time AI scanning", "A–D signal grading", "Instant push alerts", "Premium symbol universe"],
+      "The flagship Primal Edge AI signal engine. Scans blue-chip stocks and ETFs across multiple indices in real time, identifying high-probability options setups graded A–D by the Primal Edge adaptive intelligence engine.",
+    features: ["Real-time AI scanning", "A–D signal grading", "Instant push alerts", "Blue-chip & ETF universe"],
     cta: "Get Access",
     ctaHref: "/subscribe",
     icon: (
@@ -137,13 +137,13 @@ export default function Products() {
         <div className="container max-w-4xl">
           <div className="inline-flex items-center gap-2 bg-[#00e5a0]/10 border border-[#00e5a0]/20 rounded-full px-4 py-1.5 mb-6">
             <span className="w-2 h-2 rounded-full bg-[#00e5a0] animate-pulse" />
-            <span className="font-mono text-xs text-[#00e5a0] tracking-wider">PRIMAL EDGE PRODUCT SUITE</span>
+            <span className="font-mono text-xs text-[#00e5a0] tracking-wider">PRIMAL EDGE OPTIONS AI ENGINE</span>
           </div>
           <h1 className="text-4xl md:text-6xl font-black text-white mb-6 leading-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-            Every Edge.<br /><span className="text-[#00e5a0]">One Platform.</span>
+            Every Options Edge.<br /><span className="text-[#00e5a0]">One Platform.</span>
           </h1>
           <p className="text-lg text-white/50 max-w-2xl leading-relaxed">
-            Primal Edge is building a suite of AI-powered signal tools for serious traders. Each product is engineered with the same adaptive intelligence engine — purpose-built for a specific options trading opportunity.
+            Primal Edge is building a suite of AI-powered options tools for serious income traders. Each product is engineered with the same options AI engine — purpose-built for a specific options trading opportunity.
           </p>
           {!user && (
             <div className="mt-8 flex items-center gap-4">

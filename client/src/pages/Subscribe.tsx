@@ -330,7 +330,7 @@ export default function Subscribe() {
                         "Mobile push alerts",
                         "Anti-noise filtering",
                         "Institutional-style workflow",
-                        "Continuous scanner evolution",
+                        "Continuous options scanner evolution",
                       ].map((item, i) => (
                         <div key={i} className="flex items-center gap-2.5">
                           <span className="w-1 h-1 rounded-full bg-[#00e5a0]/50 shrink-0" />

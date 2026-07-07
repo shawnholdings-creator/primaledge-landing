@@ -41,7 +41,7 @@ export default function PrimalEdgeLogo({ size = "sm", className = "" }: PrimalEd
             color: "#00e5a0",
           }}
         >
-          ADAPTIVE INTELLIGENCE. DECISIVE SIGNALS.
+          THE OPTIONS AI ENGINE.
         </span>
       </div>
     </div>
