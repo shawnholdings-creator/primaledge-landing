@@ -23,19 +23,19 @@ interface TickerPrice {
 const TICKER_SYMBOLS = ["AAPL", "NVDA", "MSFT", "META", "AMZN", "GOOGL", "TSLA", "JPM", "UNH", "V", "QQQ", "SPY", "IWM"];
 
 const FALLBACK_PRICES: TickerPrice[] = [
-  { sym: "AAPL", price: 232.00, changePct: 0.45 },
-  { sym: "NVDA", price: 145.20, changePct: 1.82 },
-  { sym: "MSFT", price: 462.50, changePct: 0.63 },
-  { sym: "META", price: 640.10, changePct: 1.15 },
-  { sym: "AMZN", price: 218.40, changePct: 0.78 },
-  { sym: "GOOGL", price: 192.30, changePct: 0.34 },
-  { sym: "TSLA", price: 290.60, changePct: 2.40 },
-  { sym: "JPM", price: 260.80, changePct: 0.52 },
-  { sym: "UNH", price: 340.25, changePct: -0.28 },
-  { sym: "V", price: 310.90, changePct: 0.61 },
-  { sym: "QQQ", price: 540.70, changePct: 0.92 },
-  { sym: "SPY", price: 575.15, changePct: 0.55 },
-  { sym: "IWM", price: 215.40, changePct: -0.18 },
+  { sym: "AAPL", price: 229.85, changePct: 0.54 },
+  { sym: "NVDA", price: 195.55, changePct: 0.37 },
+  { sym: "MSFT", price: 386.74, changePct: -0.96 },
+  { sym: "META", price: 600.29, changePct: 2.98 },
+  { sym: "AMZN", price: 244.16, changePct: 0.61 },
+  { sym: "GOOGL", price: 366.46, changePct: 1.82 },
+  { sym: "TSLA", price: 352.80, changePct: 1.15 },
+  { sym: "JPM", price: 268.40, changePct: 0.42 },
+  { sym: "UNH", price: 338.90, changePct: -0.31 },
+  { sym: "V", price: 312.55, changePct: 0.58 },
+  { sym: "QQQ", price: 538.20, changePct: 0.87 },
+  { sym: "SPY", price: 572.60, changePct: 0.48 },
+  { sym: "IWM", price: 218.75, changePct: -0.14 },
 ];
 
 const SCAN_ROWS = [
