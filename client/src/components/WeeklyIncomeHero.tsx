@@ -51,6 +51,18 @@ function injectKeyframes() {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(6px); }
     }
+    @keyframes borderPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.0), inset 0 0 0 2px rgba(74,222,128,0.7); }
+      50%       { box-shadow: 0 0 16px 4px rgba(74,222,128,0.25), inset 0 0 0 2px rgba(74,222,128,1); }
+    }
+    @keyframes arrowNudge {
+      0%, 100% { transform: translateX(0); }
+      50%       { transform: translateX(4px); }
+    }
+    @keyframes cardEntrance {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         animation-duration: 0.01ms !important;
@@ -255,6 +267,7 @@ export default function WeeklyIncomeHero() {
                 transition: 'all 0.2s ease',
                 outline: 'none',
                 fontFamily: 'inherit',
+                animation: 'borderPulse 2.5s ease-in-out infinite, cardEntrance 0.5s cubic-bezier(0.23,1,0.32,1) both',
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = 'rgba(34,197,94,0.15)';
@@ -291,7 +304,7 @@ export default function WeeklyIncomeHero() {
                 width: '100%',
                 transition: 'filter 0.15s ease',
               }}>
-                Unlock Dashboard →
+                Unlock Dashboard <span style={{ display: 'inline-block', animation: 'arrowNudge 1.2s ease-in-out infinite' }}>→</span>
               </span>
             </button>
 
@@ -317,6 +330,7 @@ export default function WeeklyIncomeHero() {
                 transition: 'all 0.2s ease',
                 outline: 'none',
                 fontFamily: 'inherit',
+                animation: 'borderPulse 2.5s ease-in-out 0.1s infinite, cardEntrance 0.5s cubic-bezier(0.23,1,0.32,1) 0.1s both',
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = 'rgba(34,197,94,0.15)';
@@ -353,7 +367,7 @@ export default function WeeklyIncomeHero() {
                 width: '100%',
                 transition: 'filter 0.15s ease',
               }}>
-                Unlock Dashboard →
+                Unlock Dashboard <span style={{ display: 'inline-block', animation: 'arrowNudge 1.2s ease-in-out infinite' }}>→</span>
               </span>
             </button>
 
