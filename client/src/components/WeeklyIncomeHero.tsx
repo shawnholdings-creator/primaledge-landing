@@ -43,6 +43,14 @@ function injectKeyframes() {
       from { opacity: 0; transform: translateY(24px); }
       to   { opacity: 1; transform: translateY(0); }
     }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes wih-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(6px); }
+    }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         animation-duration: 0.01ms !important;
@@ -178,130 +186,188 @@ export default function WeeklyIncomeHero() {
           </p>
         </section>
 
-        {/* ─── Who It's For — clickable mode cards ──────────── */}
-        <section style={{ textAlign: "center", animation: "wih-fadeUp 0.7s ease-out 0.15s both" }}>
-          <p
-            style={{
-              color: T.muted,
-              fontSize: 12,
-              letterSpacing: '0.15em',
-              textTransform: 'uppercase',
-              fontFamily: T.fontMono,
-              marginTop: 0,
-              marginBottom: 12,
-            }}
-          >
-            Which describes you?
-          </p>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: isMobile ? 'column' : 'row',
-              gap: 12,
-              width: '100%',
-              maxWidth: 560,
-              margin: '0 auto',
-            }}
-          >
-            {/* Standard card — clickable */}
-            <div
-              role="button"
-              tabIndex={0}
-              aria-label="Get access to Standard Mode for accounts $10,000 and above"
-              onClick={() => openLoginModal("/weekly-income")}
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') openLoginModal("/weekly-income"); }}
-              style={{
-                flex: 1,
-                borderRadius: 12,
-                border: '1px solid #22c55e',
-                background: 'rgba(34,197,94,0.05)',
-                padding: '20px 24px',
-                textAlign: 'center',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                outline: 'none',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = '#4ade80';
-                e.currentTarget.style.transform = 'scale(1.02)';
-                e.currentTarget.style.background = 'rgba(34,197,94,0.1)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = '#22c55e';
-                e.currentTarget.style.transform = 'scale(1)';
-                e.currentTarget.style.background = 'rgba(34,197,94,0.05)';
-              }}
-              onFocus={(e) => { e.currentTarget.style.outline = '2px solid #4ade80'; e.currentTarget.style.outlineOffset = '2px'; }}
-              onBlur={(e) => { e.currentTarget.style.outline = 'none'; }}
-            >
-              <p style={{ color: '#4ade80', fontSize: 24, fontWeight: 700, margin: 0, fontFamily: T.fontDisplay }}>
-                $10,000+
-              </p>
-              <p style={{ color: T.white, fontSize: 14, fontWeight: 600, margin: '6px 0 0' }}>
-                Standard Mode
-              </p>
-              <p style={{ color: T.muted, fontSize: 12, margin: '4px 0 0' }}>
-                Full watchlist · All qualifying setups
-              </p>
-              <p style={{ color: '#4ade80', fontSize: 11, fontFamily: T.fontMono, margin: '12px 0 0' }}>
-                Unlock Dashboard →
-              </p>
-            </div>
-            {/* Micro card — clickable */}
-            <div
-              role="button"
-              tabIndex={0}
-              aria-label="Get access to Micro Mode for accounts under $10,000"
-              onClick={() => openLoginModal("/weekly-income")}
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') openLoginModal("/weekly-income"); }}
-              style={{
-                flex: 1,
-                borderRadius: 12,
-                border: '1px solid rgba(34,197,94,0.4)',
-                background: 'rgba(34,197,94,0.05)',
-                padding: '20px 24px',
-                textAlign: 'center',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                outline: 'none',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = '#4ade80';
-                e.currentTarget.style.transform = 'scale(1.02)';
-                e.currentTarget.style.background = 'rgba(34,197,94,0.1)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(34,197,94,0.4)';
-                e.currentTarget.style.transform = 'scale(1)';
-                e.currentTarget.style.background = 'rgba(34,197,94,0.05)';
-              }}
-              onFocus={(e) => { e.currentTarget.style.outline = '2px solid #4ade80'; e.currentTarget.style.outlineOffset = '2px'; }}
-              onBlur={(e) => { e.currentTarget.style.outline = 'none'; }}
-            >
-              <p style={{ color: 'rgba(74,222,128,0.8)', fontSize: 24, fontWeight: 700, margin: 0, fontFamily: T.fontDisplay }}>
-                Under $10K
-              </p>
-              <p style={{ color: T.white, fontSize: 14, fontWeight: 600, margin: '6px 0 0' }}>
-                Micro Mode
-              </p>
-              <p style={{ color: T.muted, fontSize: 12, margin: '4px 0 0' }}>
-                Sized for smaller accounts · 1 contract at a time
-              </p>
-              <p style={{ color: '#4ade80', fontSize: 11, fontFamily: T.fontMono, margin: '12px 0 0' }}>
-                Unlock Dashboard →
-              </p>
-            </div>
-          </div>
-          <p
-            style={{
-              color: '#6b7280',
+        {/* ─── Who It's For — redesigned CTA cards ──────── */}
+        <section style={{ textAlign: 'center', animation: 'wih-fadeUp 0.7s ease-out 0.15s both' }}>
+
+          {/* Section label */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, marginBottom: 20, marginTop: 8 }}>
+            <p style={{
               fontSize: 11,
-              textAlign: 'center',
+              fontWeight: 600,
+              textTransform: 'uppercase',
+              letterSpacing: '0.15em',
+              color: 'rgba(74,222,128,0.7)',
               fontFamily: T.fontMono,
-              letterSpacing: '0.05em',
-              marginTop: 14,
-            }}
-          >
+              margin: 0,
+            }}>
+              Step 1 of 1
+            </p>
+            <h3 style={{
+              fontSize: isMobile ? 20 : 24,
+              fontWeight: 900,
+              color: T.white,
+              textAlign: 'center',
+              lineHeight: 1.2,
+              margin: 0,
+              fontFamily: T.fontDisplay,
+            }}>
+              Choose your account size to get started
+            </h3>
+            <svg
+              width={20} height={20} viewBox="0 0 24 24" fill="none"
+              stroke="#4ade80" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"
+              style={{ marginTop: 4, animation: 'wih-bounce 1s ease-in-out infinite' }}
+            >
+              <path d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+
+          {/* Cards wrapper — entrance animation */}
+          <div style={{
+            display: 'flex',
+            flexDirection: isMobile ? 'column' : 'row',
+            gap: 16,
+            width: '100%',
+            maxWidth: 580,
+            margin: '0 auto',
+            animation: 'fadeSlideUp 0.5s cubic-bezier(0.23,1,0.32,1) both',
+          }}>
+
+            {/* Standard card */}
+            <button
+              aria-label="Select Standard Mode — accounts $10,000 and above"
+              onClick={() => openLoginModal("/weekly-income")}
+              style={{
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: 12,
+                borderRadius: 12,
+                border: '2px solid #4ade80',
+                background: 'rgba(34,197,94,0.05)',
+                padding: 20,
+                cursor: 'pointer',
+                textAlign: 'center',
+                minHeight: 160,
+                width: '100%',
+                transition: 'all 0.2s ease',
+                outline: 'none',
+                fontFamily: 'inherit',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(34,197,94,0.15)';
+                e.currentTarget.style.transform = 'scale(1.02)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(34,197,94,0.05)';
+                e.currentTarget.style.transform = 'scale(1)';
+              }}
+              onMouseDown={(e) => { e.currentTarget.style.transform = 'scale(0.98)'; }}
+              onMouseUp={(e) => { e.currentTarget.style.transform = 'scale(1.02)'; }}
+              onFocus={(e) => { e.currentTarget.style.outline = '2px solid #4ade80'; e.currentTarget.style.outlineOffset = '2px'; }}
+              onBlur={(e) => { e.currentTarget.style.outline = 'none'; }}
+            >
+              <div>
+                <p style={{ color: '#4ade80', fontSize: 28, fontWeight: 900, margin: 0, fontFamily: T.fontDisplay }}>
+                  $10,000+
+                </p>
+                <p style={{ color: T.white, fontSize: 15, fontWeight: 700, margin: '4px 0 0' }}>
+                  Standard Mode
+                </p>
+                <p style={{ color: '#9ca3af', fontSize: 13, margin: '4px 0 0' }}>
+                  Full watchlist · All qualifying setups
+                </p>
+              </div>
+              <span style={{
+                display: 'block',
+                background: '#4ade80',
+                color: '#000',
+                fontSize: 14,
+                fontWeight: 900,
+                padding: isMobile ? '14px 20px' : '10px 20px',
+                borderRadius: 8,
+                width: '100%',
+                transition: 'filter 0.15s ease',
+              }}>
+                Unlock Dashboard →
+              </span>
+            </button>
+
+            {/* Micro card */}
+            <button
+              aria-label="Select Micro Mode — accounts under $10,000"
+              onClick={() => openLoginModal("/weekly-income")}
+              style={{
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: 12,
+                borderRadius: 12,
+                border: '2px solid rgba(74,222,128,0.6)',
+                background: 'rgba(34,197,94,0.05)',
+                padding: 20,
+                cursor: 'pointer',
+                textAlign: 'center',
+                minHeight: 160,
+                width: '100%',
+                transition: 'all 0.2s ease',
+                outline: 'none',
+                fontFamily: 'inherit',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(34,197,94,0.15)';
+                e.currentTarget.style.transform = 'scale(1.02)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(34,197,94,0.05)';
+                e.currentTarget.style.transform = 'scale(1)';
+              }}
+              onMouseDown={(e) => { e.currentTarget.style.transform = 'scale(0.98)'; }}
+              onMouseUp={(e) => { e.currentTarget.style.transform = 'scale(1.02)'; }}
+              onFocus={(e) => { e.currentTarget.style.outline = '2px solid #4ade80'; e.currentTarget.style.outlineOffset = '2px'; }}
+              onBlur={(e) => { e.currentTarget.style.outline = 'none'; }}
+            >
+              <div>
+                <p style={{ color: 'rgba(74,222,128,0.8)', fontSize: 28, fontWeight: 900, margin: 0, fontFamily: T.fontDisplay }}>
+                  Under $10K
+                </p>
+                <p style={{ color: T.white, fontSize: 15, fontWeight: 700, margin: '4px 0 0' }}>
+                  Micro Mode
+                </p>
+                <p style={{ color: '#9ca3af', fontSize: 13, margin: '4px 0 0' }}>
+                  Sized for smaller accounts · 1 contract at a time
+                </p>
+              </div>
+              <span style={{
+                display: 'block',
+                background: 'rgba(74,222,128,0.8)',
+                color: '#000',
+                fontSize: 14,
+                fontWeight: 900,
+                padding: isMobile ? '14px 20px' : '10px 20px',
+                borderRadius: 8,
+                width: '100%',
+                transition: 'filter 0.15s ease',
+              }}>
+                Unlock Dashboard →
+              </span>
+            </button>
+
+          </div>
+
+          {/* Subscription note */}
+          <p style={{
+            color: '#4ade80',
+            fontWeight: 600,
+            fontSize: 13,
+            textAlign: 'center',
+            marginTop: 10,
+            fontFamily: T.fontMono,
+          }}>
             One subscription covers both modes.
           </p>
 
