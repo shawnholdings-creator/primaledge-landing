@@ -170,9 +170,9 @@ export default function WeeklyIncomeHero() {
               gap: 12,
             }}
           >
-            <StatTile value="81%*" label="A-Grade Probability" color={T.accent} />
-            <StatTile value="71%*" label="B-Grade Probability" color={T.accent} />
-            <StatTile value="Top 12%" label="Qualify Each Week" color={T.white} />
+            <StatTile value="91%" label="Average Win Rate" color={T.accent} />
+            <StatTile value="71%" label="Weekly Confidence" color={T.accent} />
+            <StatTile value="Top 12%" label="Income Efficiency" color={T.white} />
           </div>
           <p
             style={{
