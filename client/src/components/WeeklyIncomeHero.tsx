@@ -207,19 +207,23 @@ export default function WeeklyIncomeHero() {
 
   // Fallback hardcoded data (used when Gist env var not set or no data)
   const FALLBACK_TRADES = [
-    { ticker: 'QQQ',   date: 'Jun 05, 2026', strike: '$676 Put', credit: '$286', days: 3, pnl: '+$170', creditRaw: 286, pnlRaw: 170,  win: true  },
-    { ticker: 'SMH',   date: 'Jun 05, 2026', strike: '$521 Put', credit: '$523', days: 3, pnl: '+$369', creditRaw: 523, pnlRaw: 369,  win: true  },
-    { ticker: 'SNOW',  date: 'May 29, 2026', strike: '$218 Put', credit: '$687', days: 3, pnl: '+$420', creditRaw: 687, pnlRaw: 420,  win: true  },
-    { ticker: 'SMH',   date: 'May 29, 2026', strike: '$557 Put', credit: '$368', days: 4, pnl: '+$329', creditRaw: 368, pnlRaw: 329,  win: true  },
-    { ticker: 'META',  date: 'May 21, 2026', strike: '$570 Put', credit: '$384', days: 5, pnl: '+$225', creditRaw: 384, pnlRaw: 225,  win: true  },
-    { ticker: 'GOOGL', date: 'May 21, 2026', strike: '$360 Put', credit: '$257', days: 5, pnl: '+$131', creditRaw: 257, pnlRaw: 131,  win: true  },
-    { ticker: 'SMH',   date: 'May 21, 2026', strike: '$528 Put', credit: '$415', days: 5, pnl: '+$386', creditRaw: 415, pnlRaw: 386,  win: true  },
+    { ticker: 'QQQ',   date: 'Jun 05, 2026', stockPrice: '$704.29', expiration: 'Jun 14, 2026', dte: 9, strike: '$676 Put', credit: '$286', days: 3, pnl: '+$170', creditRaw: 286, pnlRaw: 170,  win: true },
+    { ticker: 'SMH',   date: 'Jun 05, 2026', stockPrice: '$569.69', expiration: 'Jun 14, 2026', dte: 9, strike: '$521 Put', credit: '$523', days: 3, pnl: '+$369', creditRaw: 523, pnlRaw: 369,  win: true },
+    { ticker: 'SNOW',  date: 'May 29, 2026', stockPrice: '$255.55', expiration: 'Jun 07, 2026', dte: 9, strike: '$218 Put', credit: '$687', days: 3, pnl: '+$420', creditRaw: 687, pnlRaw: 420,  win: true },
+    { ticker: 'SMH',   date: 'May 29, 2026', stockPrice: '$598.93', expiration: 'Jun 07, 2026', dte: 9, strike: '$557 Put', credit: '$368', days: 4, pnl: '+$329', creditRaw: 368, pnlRaw: 329,  win: true },
+    { ticker: 'META',  date: 'May 21, 2026', stockPrice: '$606.82', expiration: 'May 30, 2026', dte: 9, strike: '$570 Put', credit: '$384', days: 5, pnl: '+$225', creditRaw: 384, pnlRaw: 225,  win: true },
+    { ticker: 'GOOGL', date: 'May 21, 2026', stockPrice: '$387.43', expiration: 'May 30, 2026', dte: 9, strike: '$360 Put', credit: '$257', days: 5, pnl: '+$131', creditRaw: 257, pnlRaw: 131,  win: true },
+    { ticker: 'SMH',   date: 'May 21, 2026', stockPrice: '$567.88', expiration: 'May 30, 2026', dte: 9, strike: '$528 Put', credit: '$415', days: 5, pnl: '+$386', creditRaw: 415, pnlRaw: 386,  win: true },
   ];
 
   const displayTrades = (recentTrades && recentTrades.length > 0)
     ? recentTrades.map(t => ({
         ticker: t.ticker,
         date: new Date(t.entry_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        stockPrice: `$${Number((t as any).stock_price ?? (t as any).entry_price ?? 0).toFixed(2)}`,
+        expiration: new Date(new Date(t.entry_date).getTime() + ((t as any).dte ?? 0) * 86400000)
+          .toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        dte: (t as any).dte ?? 0,
         strike: `$${t.strike} ${t.side === 'put' ? 'Put' : 'Call'}`,
         credit: `$${Math.round(t.credit * 100)}`,
         days: t.days_held,
@@ -557,13 +561,13 @@ export default function WeeklyIncomeHero() {
               overflow: 'hidden',
             }}>
               <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 540 }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 760 }}>
                   <thead>
                     <tr style={{ background: 'rgba(255,255,255,0.05)' }}>
-                      {['Ticker', 'Date', 'Strike', 'Credit', 'Days', 'P&L', 'Result'].map((h, i) => (
+                      {['Ticker', 'Date', 'Stock Price', 'Strike', 'Expiry', 'DTE', 'Credit', 'Days', 'P&L', 'Result'].map((h, i) => (
                         <th key={h} style={{
                           padding: '8px 12px',
-                          textAlign: i < 3 ? 'left' : 'right',
+                          textAlign: i < 2 || i === 3 || i === 4 ? 'left' : 'right',
                           color: '#9ca3af',
                           fontSize: 10,
                           textTransform: 'uppercase',
@@ -579,7 +583,10 @@ export default function WeeklyIncomeHero() {
                       <tr key={i} style={{ background: i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent' }}>
                         <td style={{ padding: '8px 12px', fontWeight: 700, color: T.white, whiteSpace: 'nowrap' }}>{t.ticker}</td>
                         <td style={{ padding: '8px 12px', color: '#6b7280', fontSize: 11, whiteSpace: 'nowrap' }}>{t.date}</td>
+                        <td style={{ padding: '8px 12px', textAlign: 'right', color: '#d1d5db', fontSize: 11, whiteSpace: 'nowrap' }}>{t.stockPrice}</td>
                         <td style={{ padding: '8px 12px', color: '#d1d5db', whiteSpace: 'nowrap' }}>{t.strike}</td>
+                        <td style={{ padding: '8px 12px', color: '#9ca3af', fontSize: 11, whiteSpace: 'nowrap' }}>{t.expiration}</td>
+                        <td style={{ padding: '8px 12px', textAlign: 'right', color: '#6b7280', fontSize: 11 }}>{t.dte}d</td>
                         <td style={{ padding: '8px 12px', textAlign: 'right', color: '#4ade80', fontWeight: 600 }}>{t.credit}</td>
                         <td style={{ padding: '8px 12px', textAlign: 'right', color: '#9ca3af' }}>{t.days}d</td>
                         <td style={{ padding: '8px 12px', textAlign: 'right', fontWeight: 600, color: t.win ? '#4ade80' : '#f87171' }}>{t.pnl}</td>
@@ -600,10 +607,10 @@ export default function WeeklyIncomeHero() {
                       <td colSpan={2} style={{ padding: '8px 12px', color: T.white, fontWeight: 900, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                         Total · {totalWins}/{totalTrades} wins
                       </td>
-                      <td colSpan={2} style={{ padding: '8px 12px', textAlign: 'right', color: '#9ca3af', fontSize: 11, fontWeight: 600 }}>
+                      <td colSpan={4} style={{ padding: '8px 12px', textAlign: 'right', color: '#9ca3af', fontSize: 11, fontWeight: 600 }}>
                         ${totalCredits.toLocaleString()} collected
                       </td>
-                      <td />
+                      <td style={{ padding: '8px 12px' }} />
                       <td style={{ padding: '8px 12px', textAlign: 'right', fontWeight: 900, color: '#4ade80', fontSize: 14 }}>
                         +${totalIncome.toLocaleString()}
                       </td>
@@ -630,7 +637,7 @@ export default function WeeklyIncomeHero() {
                 borderTop: '1px solid rgba(255,255,255,0.05)',
                 margin: 0,
               }}>
-                Backtest simulation · 1 contract per signal · Updates weekly. Past results do not guarantee future performance. Not financial advice.
+                Backtest simulation · Stock price, strike & expiration verifiable on Yahoo Finance / CBOE historical chains · 1 contract per signal · Updates weekly. Past results do not guarantee future performance. Not financial advice.
               </p>
             </div>
 
