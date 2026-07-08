@@ -229,22 +229,33 @@ export default function Products() {
                   ))}
                 </ul>
 
-                <Link href={product.ctaHref}>
-                  <button
-                    className="w-full py-3 rounded-xl font-bold text-sm transition-all duration-200"
-                    style={
-                      product.tag === "LIVE"
-                        ? { backgroundColor: "#00e5a0", color: "#0a0d12" }
-                        : product.tag === "BETA"
-                        ? { backgroundColor: "#a855f7", color: "#fff" }
-                        : product.tag === "IN DEV"
-                        ? { backgroundColor: "transparent", color: "#3b82f6", border: "1px solid #3b82f640" }
-                        : { backgroundColor: "transparent", color: "#f59e0b", border: "1px solid #f59e0b40" }
+                {(() => {
+                  const isProtected = ["/weekly-income", "/ai-dashboard"].includes(product.ctaHref);
+                  const handleClick = () => {
+                    if (isProtected && !user) {
+                      openLoginModal(product.ctaHref);
+                    } else {
+                      window.location.href = product.ctaHref;
                     }
-                  >
-                    {product.cta} →
-                  </button>
-                </Link>
+                  };
+                  return (
+                    <button
+                      onClick={handleClick}
+                      className="w-full py-3 rounded-xl font-bold text-sm transition-all duration-200"
+                      style={
+                        product.tag === "LIVE"
+                          ? { backgroundColor: "#00e5a0", color: "#0a0d12" }
+                          : product.tag === "BETA"
+                          ? { backgroundColor: "#a855f7", color: "#fff" }
+                          : product.tag === "IN DEV"
+                          ? { backgroundColor: "transparent", color: "#3b82f6", border: "1px solid #3b82f640" }
+                          : { backgroundColor: "transparent", color: "#f59e0b", border: "1px solid #f59e0b40" }
+                      }
+                    >
+                      {product.cta} →
+                    </button>
+                  );
+                })()}
               </div>
             ))}
           </div>
