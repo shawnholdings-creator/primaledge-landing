@@ -77,6 +77,9 @@ export default function Navbar() {
   const { user, signOut } = useAuth();
   const { openLoginModal } = useLoginModal();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const loginRedirect = ["/weekly-income", "/ai-dashboard", "/market-sentiment"].includes(location)
+    ? location
+    : "/products";
 
   const productsRef = useRef<HTMLDivElement>(null);
   const resourcesRef = useRef<HTMLDivElement>(null);
@@ -205,7 +208,7 @@ export default function Navbar() {
                 </div>
               ) : (
                 <button
-                  onClick={() => openLoginModal()}
+                  onClick={() => openLoginModal(loginRedirect)}
                   className="text-sm transition-colors"
                   style={{
                     background: "none",
@@ -328,7 +331,7 @@ export default function Navbar() {
               <button
                 onClick={() => {
                   setMobileOpen(false);
-                  openLoginModal();
+                  openLoginModal(loginRedirect);
                 }}
                 className="w-full text-left py-3 text-sm text-white/60 hover:text-white transition-colors"
               >

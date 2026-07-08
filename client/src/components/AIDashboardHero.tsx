@@ -301,7 +301,7 @@ export default function AIDashboardHero() {
 
           {/* CTA */}
           <button
-            onClick={() => openLoginModal("/ai-cockpit")}
+            onClick={() => openLoginModal("/ai-dashboard")}
             style={{
               width: "100%",
               marginTop: 20,
@@ -394,7 +394,7 @@ export default function AIDashboardHero() {
                   </span>
                 </p>
                 <button
-                  onClick={() => openLoginModal("/ai-cockpit")}
+                  onClick={() => openLoginModal("/ai-dashboard")}
                   style={{
                     marginTop: 12,
                     background: T.accent,
@@ -553,7 +553,7 @@ export default function AIDashboardHero() {
           <LockOverlay
             label="Rankings visible to members only"
             ctaLabel="Sign in to view rankings →"
-            onClick={() => openLoginModal("/ai-cockpit")}
+            onClick={() => openLoginModal("/ai-dashboard")}
           />
         </div>
       </section>
@@ -753,7 +753,7 @@ export default function AIDashboardHero() {
           <LockOverlay
             label="Morning brief available to members"
             ctaLabel="Sign in to read the brief →"
-            onClick={() => openLoginModal("/ai-cockpit")}
+            onClick={() => openLoginModal("/ai-dashboard")}
           />
         </div>
       </section>
@@ -805,7 +805,7 @@ export default function AIDashboardHero() {
 
         {/* Secondary CTA */}
         <button
-          onClick={() => openLoginModal("/ai-cockpit")}
+          onClick={() => openLoginModal("/ai-dashboard")}
           style={{
             background: "transparent",
             border: "none",

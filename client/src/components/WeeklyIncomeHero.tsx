@@ -610,28 +610,25 @@ export default function WeeklyIncomeHero() {
 
 
           {/* Standalone Get Access CTA */}
-          <Link href="/subscribe">
-            <button
-              style={{
-                display: 'block',
-                width: '100%',
-                maxWidth: 320,
-                margin: '24px auto 0',
-                background: T.accent,
-                color: T.bg,
-                fontWeight: 700,
-                fontSize: 15,
-                padding: '14px 32px',
-                border: 'none',
-                borderRadius: 12,
-                cursor: 'pointer',
-                transition: 'opacity 0.2s ease',
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
-            >
-              Get Access →
-            </button>
+          <Link
+            href="/subscribe"
+            style={{
+              display: 'block',
+              width: '100%',
+              maxWidth: 320,
+              margin: '24px auto 0',
+              background: T.accent,
+              color: T.bg,
+              fontWeight: 700,
+              fontSize: 15,
+              padding: '14px 32px',
+              borderRadius: 12,
+              cursor: 'pointer',
+              textAlign: 'center',
+              textDecoration: 'none',
+            }}
+          >
+            Get Access →
           </Link>
         </section>
 
@@ -1174,11 +1171,13 @@ export default function WeeklyIncomeHero() {
                   background: T.accent,
                   color: T.bg,
                   fontWeight: 700,
-                  fontSize: 13,
-                  padding: "12px 24px",
+                  fontSize: 14,
+                  padding: "13px 28px",
                   border: "none",
                   borderRadius: 12,
                   cursor: "pointer",
+                  width: "100%",
+                  maxWidth: 300,
                 }}
               >
                 Sign In to Track Your Trades →
@@ -1339,10 +1338,12 @@ export default function WeeklyIncomeHero() {
                   color: T.bg,
                   fontWeight: 700,
                   fontSize: 14,
-                  padding: "12px 24px",
+                  padding: "13px 28px",
                   border: "none",
                   borderRadius: 12,
                   cursor: "pointer",
+                  width: "100%",
+                  maxWidth: 300,
                 }}
               >
                 Unlock This Setup →
@@ -1598,21 +1599,21 @@ export default function WeeklyIncomeHero() {
               alignItems: "center",
             }}
           >
-            <Link href="/subscribe">
-              <button
-                style={{
-                  background: T.accent,
-                  color: T.bg,
-                  fontWeight: 700,
-                  fontSize: 15,
-                  padding: "14px 32px",
-                  border: "none",
-                  borderRadius: 12,
-                  cursor: "pointer",
-                }}
-              >
-                Request Access →
-              </button>
+            <Link
+              href="/subscribe"
+              style={{
+                background: T.accent,
+                color: T.bg,
+                fontWeight: 700,
+                fontSize: 15,
+                padding: "14px 32px",
+                borderRadius: 12,
+                cursor: "pointer",
+                textDecoration: "none",
+                display: "inline-block",
+              }}
+            >
+              Request Access →
             </Link>
             <button
               onClick={() => openLoginModal("/weekly-income")}
@@ -1622,7 +1623,7 @@ export default function WeeklyIncomeHero() {
                 color: "#ccc",
                 fontWeight: 600,
                 fontSize: 14,
-                padding: "14px 28px",
+                padding: "13px 28px",
                 borderRadius: 12,
                 cursor: "pointer",
               }}

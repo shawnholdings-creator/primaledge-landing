@@ -5,7 +5,7 @@
    Prices: Real-time via /api/prices (FMP, server-side key)
    ============================================================ */
 
-import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Link } from "wouter";
 import PrimalEdgeLogo from "@/components/PrimalEdgeLogo";
 import Navbar from "@/components/Navbar";
@@ -1093,17 +1093,15 @@ function DashboardContent() {
 /* ─── Main Export — Auth Protected ─────────────────────────── */
 export default function AIDashboard() {
   const { user, loading, productAccess } = useAuth();
-  const { openLoginModal } = useLoginModal();
+  const { openLoginModal, isOpen } = useLoginModal();
   const hasAccess = user && productAccess.cockpit === true;
 
-  // Auto-open login modal once for unauthenticated visitors
-  const hasAutoOpened = useRef(false);
+  // Auto-open login modal for unauthenticated visitors
   useEffect(() => {
-    if (!loading && !user && !hasAutoOpened.current) {
-      hasAutoOpened.current = true;
+    if (!loading && !user && !isOpen) {
       openLoginModal("/ai-dashboard");
     }
-  }, [loading, user, openLoginModal]);
+  }, [loading, user, isOpen, openLoginModal]);
 
   if (loading) {
     return (
