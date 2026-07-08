@@ -207,13 +207,13 @@ export default function WeeklyIncomeHero() {
 
   // Fallback hardcoded data (used when Gist env var not set or no data)
   const FALLBACK_TRADES = [
-    { ticker: 'QQQ',   date: 'Jun 05, 2026', stockPrice: '$704.29', expiration: 'Jun 14, 2026', dte: 9, strike: '$676 Put', credit: '$286', days: 3, pnl: '+$170', creditRaw: 286, pnlRaw: 170,  win: true },
-    { ticker: 'SMH',   date: 'Jun 05, 2026', stockPrice: '$569.69', expiration: 'Jun 14, 2026', dte: 9, strike: '$521 Put', credit: '$523', days: 3, pnl: '+$369', creditRaw: 523, pnlRaw: 369,  win: true },
-    { ticker: 'SNOW',  date: 'May 29, 2026', stockPrice: '$255.55', expiration: 'Jun 07, 2026', dte: 9, strike: '$218 Put', credit: '$687', days: 3, pnl: '+$420', creditRaw: 687, pnlRaw: 420,  win: true },
-    { ticker: 'SMH',   date: 'May 29, 2026', stockPrice: '$598.93', expiration: 'Jun 07, 2026', dte: 9, strike: '$557 Put', credit: '$368', days: 4, pnl: '+$329', creditRaw: 368, pnlRaw: 329,  win: true },
-    { ticker: 'META',  date: 'May 21, 2026', stockPrice: '$606.82', expiration: 'May 30, 2026', dte: 9, strike: '$570 Put', credit: '$384', days: 5, pnl: '+$225', creditRaw: 384, pnlRaw: 225,  win: true },
-    { ticker: 'GOOGL', date: 'May 21, 2026', stockPrice: '$387.43', expiration: 'May 30, 2026', dte: 9, strike: '$360 Put', credit: '$257', days: 5, pnl: '+$131', creditRaw: 257, pnlRaw: 131,  win: true },
-    { ticker: 'SMH',   date: 'May 21, 2026', stockPrice: '$567.88', expiration: 'May 30, 2026', dte: 9, strike: '$528 Put', credit: '$415', days: 5, pnl: '+$386', creditRaw: 415, pnlRaw: 386,  win: true },
+    { ticker: 'QQQ',   date: 'Jun 05, 2026', stockPrice: '$704.29', expiration: 'Jun 14, 2026', dte: 9, strike: '$676 Put', credit: '$286', days: 3, pnl: '+$170', creditRaw: 286, pnlRaw: 170,  win: true, strikeRaw: 676,  rrRatio: (Math.round(((676 - 286) / 286) * 10) / 10).toFixed(1) + ':1' },
+    { ticker: 'SMH',   date: 'Jun 05, 2026', stockPrice: '$569.69', expiration: 'Jun 14, 2026', dte: 9, strike: '$521 Put', credit: '$523', days: 3, pnl: '+$369', creditRaw: 523, pnlRaw: 369,  win: true, strikeRaw: 521,  rrRatio: (Math.round(((521 - 523) / 523) * 10) / 10).toFixed(1) + ':1' },
+    { ticker: 'SNOW',  date: 'May 29, 2026', stockPrice: '$255.55', expiration: 'Jun 07, 2026', dte: 9, strike: '$218 Put', credit: '$687', days: 3, pnl: '+$420', creditRaw: 687, pnlRaw: 420,  win: true, strikeRaw: 218,  rrRatio: (Math.round(((218 - 687) / 687) * 10) / 10).toFixed(1) + ':1' },
+    { ticker: 'SMH',   date: 'May 29, 2026', stockPrice: '$598.93', expiration: 'Jun 07, 2026', dte: 9, strike: '$557 Put', credit: '$368', days: 4, pnl: '+$329', creditRaw: 368, pnlRaw: 329,  win: true, strikeRaw: 557,  rrRatio: (Math.round(((557 - 368) / 368) * 10) / 10).toFixed(1) + ':1' },
+    { ticker: 'META',  date: 'May 21, 2026', stockPrice: '$606.82', expiration: 'May 30, 2026', dte: 9, strike: '$570 Put', credit: '$384', days: 5, pnl: '+$225', creditRaw: 384, pnlRaw: 225,  win: true, strikeRaw: 570,  rrRatio: (Math.round(((570 - 384) / 384) * 10) / 10).toFixed(1) + ':1' },
+    { ticker: 'GOOGL', date: 'May 21, 2026', stockPrice: '$387.43', expiration: 'May 30, 2026', dte: 9, strike: '$360 Put', credit: '$257', days: 5, pnl: '+$131', creditRaw: 257, pnlRaw: 131,  win: true, strikeRaw: 360,  rrRatio: (Math.round(((360 - 257) / 257) * 10) / 10).toFixed(1) + ':1' },
+    { ticker: 'SMH',   date: 'May 21, 2026', stockPrice: '$567.88', expiration: 'May 30, 2026', dte: 9, strike: '$528 Put', credit: '$415', days: 5, pnl: '+$386', creditRaw: 415, pnlRaw: 386,  win: true, strikeRaw: 528,  rrRatio: (Math.round(((528 - 415) / 415) * 10) / 10).toFixed(1) + ':1' },
   ];
 
   const displayTrades = (recentTrades && recentTrades.length > 0)
@@ -231,6 +231,8 @@ export default function WeeklyIncomeHero() {
         creditRaw: Math.round(t.credit * 100),
         pnlRaw: Math.round(t.pnl_per_contract),
         win: t.outcome === 'WIN',
+        strikeRaw: t.strike,
+        rrRatio: (Math.round(((t.strike - t.credit * 100) / (t.credit * 100)) * 10) / 10).toFixed(1) + ':1',
       }))
     : FALLBACK_TRADES;
 
@@ -564,7 +566,7 @@ export default function WeeklyIncomeHero() {
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 760 }}>
                   <thead>
                     <tr style={{ background: 'rgba(255,255,255,0.05)' }}>
-                      {['Ticker', 'Date', 'Stock Price', 'Strike', 'Expiry', 'DTE', 'Credit', 'Days', 'P&L', 'Result'].map((h, i) => (
+                      {['Ticker', 'Date', 'Stock Price', 'Strike', 'Expiry', 'DTE', 'Credit', 'Days', 'Risk/Reward', 'P&L', 'Result'].map((h, i) => (
                         <th key={h} style={{
                           padding: '8px 12px',
                           textAlign: i < 2 || i === 3 || i === 4 ? 'left' : 'right',
@@ -589,6 +591,7 @@ export default function WeeklyIncomeHero() {
                         <td style={{ padding: '8px 12px', textAlign: 'right', color: '#6b7280', fontSize: 11 }}>{t.dte}d</td>
                         <td style={{ padding: '8px 12px', textAlign: 'right', color: '#4ade80', fontWeight: 600 }}>{t.credit}</td>
                         <td style={{ padding: '8px 12px', textAlign: 'right', color: '#9ca3af' }}>{t.days}d</td>
+                        <td style={{ padding: '8px 12px', textAlign: 'right', color: '#d1d5db', fontSize: 12, fontFamily: "'JetBrains Mono', monospace" }}>{t.rrRatio}</td>
                         <td style={{ padding: '8px 12px', textAlign: 'right', fontWeight: 600, color: t.win ? '#4ade80' : '#f87171' }}>{t.pnl}</td>
                         <td style={{ padding: '8px 12px', textAlign: 'right' }}>
                           <span style={{
@@ -607,7 +610,7 @@ export default function WeeklyIncomeHero() {
                       <td colSpan={2} style={{ padding: '8px 12px', color: T.white, fontWeight: 900, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                         Total · {totalWins}/{totalTrades} wins
                       </td>
-                      <td colSpan={4} style={{ padding: '8px 12px', textAlign: 'right', color: '#9ca3af', fontSize: 11, fontWeight: 600 }}>
+                      <td colSpan={5} style={{ padding: '8px 12px', textAlign: 'right', color: '#9ca3af', fontSize: 11, fontWeight: 600 }}>
                         ${totalCredits.toLocaleString()} collected
                       </td>
                       <td style={{ padding: '8px 12px' }} />
