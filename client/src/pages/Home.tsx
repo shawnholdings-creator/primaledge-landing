@@ -193,7 +193,7 @@ function Hero() {
               color: "#00e5a0",
             }}
           >
-            OPTIONS AI ENGINE · PRIVATE ACCESS
+            OPTIONS AI ENGINE · INCOME + DIRECTIONAL STRATEGIES
           </span>
         </div>
 
@@ -210,7 +210,7 @@ function Hero() {
             animation: "heroSlideUp 0.6s ease-out 0.2s both",
           }}
         >
-          What if you already knew which options setups were worth selling this week?
+          What if you already knew exactly which options setup to make today?
         </h1>
 
         {/* Subheadline */}
@@ -226,7 +226,7 @@ function Hero() {
             animation: "heroFadeIn 0.5s ease-out 0.35s both",
           }}
         >
-           Primal Edge is an AI engine built exclusively for options traders. It scans blue-chip stocks and ETFs for high-probability put and call selling opportunities, scores every setup by conviction, and delivers the highest-ranked income signals directly to your dashboard and your phone — before you ever open a chart.
+           Primal Edge is an options AI engine built for two types of traders. It scans blue-chip stocks and ETFs, scores every setup by conviction, and delivers the highest-ranked signals to your dashboard and phone — whether you sell premium for weekly income or trade high-conviction directional breakouts.
         </p>
 
         {/* Push notification mockup */}
@@ -387,7 +387,7 @@ function Hero() {
               gap: "16px 24px",
             }}
           >
-            {["92.1% Win Rate*", "18 Months Backtested", "Weekly Income Setups · Put & Call Selling"].map((stat, i, arr) => (
+            {["92.1% Win Rate · Income Strategy*", "A-Grade Hit Rate 81% · Directional Strategy*", "18 Months Backtested"].map((stat, i, arr) => (
               <span key={stat} style={{ display: "inline-flex", alignItems: "center", gap: "24px" }}>
                 <span
                   style={{
@@ -592,7 +592,7 @@ function Hero() {
               e.currentTarget.style.transform = "scale(1)";
             }}
           >
-            See Our Products →
+            Find Your Strategy →
           </Link>
         </div>
 
@@ -618,7 +618,7 @@ function Hero() {
             animation: "heroFadeIn 0.4s ease-out 0.85s both",
           }}
         >
-           <span style={{ color: "#00e5a0" }}>●</span> Weekly Options Income Dashboard — now live · Limited seats
+           <span style={{ color: "#00e5a0" }}>●</span> Weekly Income Dashboard · AI Cockpit Scanner — both live · Limited seats
         </p>
       </div>
 
@@ -653,8 +653,77 @@ function Hero() {
         @media (prefers-reduced-motion: reduce) {
           [style*="animation"] { animation: none !important; }
         }
+        @keyframes borderPulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.0); }
+          50%       { box-shadow: 0 0 16px 4px rgba(74,222,128,0.2); }
+        }
+        @keyframes arrowNudge {
+          0%, 100% { transform: translateX(0); }
+          50%       { transform: translateX(4px); }
+        }
       `}
       </style>
+    </section>
+  );
+}
+
+
+// ── Two Strategies ────────────────────────────────────────────
+function TwoStrategies() {
+  return (
+    <section className="w-full py-16 px-4">
+      <div className="max-w-4xl mx-auto">
+
+        <div className="flex flex-col items-center gap-1 mb-8 text-center">
+          <p className="text-xs font-semibold uppercase tracking-widest text-green-400/70">Two Strategies. One Engine.</p>
+          <h2 className="text-2xl md:text-3xl font-black text-white" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>Which trader are you?</h2>
+          <p className="text-gray-400 text-sm mt-1 max-w-md">Both products are powered by the same options AI engine — choose the strategy that fits your style.</p>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-5">
+
+          <a href="/weekly-income" className="group flex-1 rounded-2xl border-2 border-green-400/60 bg-white/[0.03] p-6 flex flex-col gap-3 hover:border-green-400 hover:bg-green-400/[0.06] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 cursor-pointer no-underline"
+            style={{ animation: "borderPulse 2.5s ease-in-out infinite" }}>
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-widest text-green-400 bg-green-400/10 px-2 py-0.5 rounded-full">Income Strategy</span>
+              <span className="text-xs text-gray-500">FLAGSHIP</span>
+            </div>
+            <h3 className="text-2xl md:text-3xl font-black text-green-400" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>Sell Premium</h3>
+            <p className="text-white font-bold text-base">Weekly Options Income Dashboard</p>
+            <p className="text-gray-400 text-sm">Scan blue-chip stocks for high-probability put and call selling setups. Collect weekly credit. Let time decay work for you.</p>
+            <ul className="text-xs text-gray-400 space-y-1 mt-1 list-none p-0">
+              <li>✓ 9 DTE weekly expiration focus</li>
+              <li>✓ Conservative OTM strikes on blue-chips</li>
+              <li>✓ 92.1% win rate · 18-month backtest</li>
+            </ul>
+            <span className="mt-auto inline-block bg-green-400 text-black font-black text-sm px-5 py-3 rounded-lg text-center group-hover:brightness-110 transition-all duration-150">
+              Explore Weekly Income <span style={{ display: "inline-block", animation: "arrowNudge 1.2s ease-in-out infinite" }}>→</span>
+            </span>
+          </a>
+
+          <a href="/products" className="group flex-1 rounded-2xl border-2 border-white/20 bg-white/[0.03] p-6 flex flex-col gap-3 hover:border-white/40 hover:bg-white/[0.06] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 cursor-pointer no-underline">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-widest text-gray-300 bg-white/10 px-2 py-0.5 rounded-full">Directional Strategy</span>
+              <span className="text-xs text-gray-500">AI COCKPIT</span>
+            </div>
+            <h3 className="text-2xl md:text-3xl font-black text-white" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>Trade Breakouts</h3>
+            <p className="text-white font-bold text-base">Primal Edge AI Cockpit</p>
+            <p className="text-gray-400 text-sm">Identify high-conviction directional setups on blue-chip stocks. Graded A–D by the AI engine. Act before the move.</p>
+            <ul className="text-xs text-gray-400 space-y-1 mt-1 list-none p-0">
+              <li>✓ A-grade setups · 81% historical hit rate</li>
+              <li>✓ Multi-timeframe confluence scoring</li>
+              <li>✓ Real-time mobile alerts</li>
+            </ul>
+            <span className="mt-auto inline-block bg-white/10 text-white font-black text-sm px-5 py-3 rounded-lg text-center group-hover:bg-white/20 transition-all duration-150">
+              Explore AI Cockpit →
+            </span>
+          </a>
+
+        </div>
+
+        <p className="text-center text-xs text-gray-600 mt-5">One subscription covers both strategies.</p>
+
+      </div>
     </section>
   );
 }
@@ -677,9 +746,9 @@ function HowItWorks() {
         <div className="mb-10 sm:mb-16" ref={ref}>
           <p className="font-mono text-xs text-[#00e5a0] tracking-widest mb-3">HOW THE OPTIONS AI ENGINE WORKS</p>
           <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white">
-            From Market Noise<br />to Ranked Options Income Setups
+            From Market Noise<br />to One Engine. Two Strategies. Zero Guesswork.
           </h2>
-          <p className="text-white/45 text-base sm:text-lg max-w-2xl mt-4 leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>Primal Edge translates live market complexity into scored, graded, options-specific signals — helping income traders focus on the put and call selling setups that appear to deserve attention.</p>
+          <p className="text-white/45 text-base sm:text-lg max-w-2xl mt-4 leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>Whether you're selling premium for weekly income or trading high-conviction directional breakouts — the Primal Edge engine handles the scanning, scoring, and delivery. You focus on execution.</p>
         </div>
 
         <div className="relative">
@@ -747,9 +816,9 @@ function Features() {
         <div className="mb-10 sm:mb-16" ref={ref}>
           <p className="font-mono text-xs text-[#00e5a0] tracking-widest mb-3">ENGINEERED FOR OPTIONS TRADERS</p>
           <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white max-w-2xl">
-            Institutional-Grade Options Analysis.<br />Retail Simplicity.
+            Built for Both Sides of the Options Market.<br />Retail Simplicity.
           </h2>
-          <p className="text-white/45 text-base sm:text-lg max-w-2xl mt-4 leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>Every feature is engineered around a single objective: deliver the highest-conviction options income signals with zero noise and zero delay — built for serious options traders.</p>
+          <p className="text-white/45 text-base sm:text-lg max-w-2xl mt-4 leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>Every feature serves one goal: surface the highest-conviction options setup — whether that's a premium-selling income trade or a directional breakout — with zero noise and zero delay.</p>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -1160,13 +1229,13 @@ function CTABanner() {
           <div className="relative">
             <p className="font-mono text-xs text-[#00e5a0] tracking-widest mb-4">PRIVATE MEMBERSHIP — LIMITED SEATS</p>
             <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white mb-6">
-              Stop Scanning Options Chains.<br />Let the AI Find the Setup.
+              Stop Guessing Which Options Setup to Make.<br />Let the Engine Decide.
             </h2>
             <p className="text-white/55 text-base sm:text-lg max-w-xl mx-auto mb-8">
-              Join a private community of options income traders using Primal Edge's AI engine to find weekly put and call selling setups — scored, graded, and delivered as real-time educational analysis.
+              Join a private community of options traders using the Primal Edge AI engine to find weekly income setups and directional breakouts — scored, graded, and delivered as real-time educational analysis.
             </p>
             <Link href="/products" className="shimmer-btn pulse-glow inline-block bg-[#00e5a0] text-[#0a0d12] font-['Space_Grotesk'] font-bold text-base sm:text-lg px-8 sm:px-10 py-4 rounded-lg hover:bg-[#00bfa0] transition-all">
-              Explore Our Options Tools →
+              Find Your Strategy →
             </Link>
           </div>
         </div>
@@ -1216,6 +1285,7 @@ export default function Home() {
       <SharedNavbar />
       <TickerTape />
       <Hero />
+      <TwoStrategies />
       <HowItWorks />
       <Features />
       <Technology />

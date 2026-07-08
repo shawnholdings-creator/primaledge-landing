@@ -20,6 +20,7 @@ const PRODUCTS = [
     description:
       "The flagship options income tool. Scans blue-chip stocks and ETFs for weekly put and call selling opportunities — scored by conviction, filtered by IV rank and delta, and delivered to your phone the moment a setup qualifies.",
     features: ["Income opportunities", "100-point scoring model", "Real-time phone alerts", "Blue-chip universe only"],
+    strategyBadge: { text: "Income Strategy", color: "text-green-400", bg: "bg-green-400/10" },
     cta: "View Dashboard",
     ctaHref: "/weekly-income",
     icon: (
@@ -39,6 +40,7 @@ const PRODUCTS = [
     description:
       "Live intelligence feed from the AI Cockpit engine. Real-time signal output with multi-timeframe, multi-index analysis powered by the v3.0 scoring engine. PIN-protected early access.",
     features: ["Live signal feed", "Backtest analytics", "Verdict ladder grading", "Multi-index scanning"],
+    strategyBadge: { text: "Directional Strategy", color: "text-blue-400", bg: "bg-blue-400/10" },
     cta: "Access Dashboard",
     ctaHref: "/ai-dashboard",
     icon: (
@@ -60,6 +62,7 @@ const PRODUCTS = [
     description:
       "The flagship Primal Edge AI signal engine. Scans blue-chip stocks and ETFs across multiple indices in real time, identifying high-probability options setups graded A–D by the Primal Edge adaptive intelligence engine.",
     features: ["Real-time AI scanning", "A–D signal grading", "Instant push alerts", "Blue-chip & ETF universe"],
+    strategyBadge: { text: "Directional Strategy", color: "text-blue-400", bg: "bg-blue-400/10" },
     cta: "Get Access",
     ctaHref: "/subscribe",
     icon: (
@@ -77,6 +80,7 @@ const PRODUCTS = [
     description:
       "Identify high-probability bearish reversal and breakdown setups across blue-chip stocks and ETFs. Powered by the same adaptive intelligence engine as the AI Cockpit — optimized for short-side opportunities.",
     features: ["Short-side signal detection", "Multi-timeframe analysis", "AI-graded setups", "Instant alerts"],
+    strategyBadge: { text: "Directional Strategy", color: "text-blue-400", bg: "bg-blue-400/10" },
     cta: "Join Waitlist",
     ctaHref: "/subscribe",
     icon: (
@@ -94,6 +98,7 @@ const PRODUCTS = [
     description:
       "Track unusual options activity and institutional flow in real time. Surface high-conviction directional bets before the crowd catches on — powered by Primal Edge's proprietary signal intelligence.",
     features: ["Unusual options activity", "Institutional flow tracking", "Strike & expiry analysis", "AI conviction scoring"],
+    strategyBadge: { text: "Flow Intelligence", color: "text-purple-400", bg: "bg-purple-400/10" },
     cta: "Join Waitlist",
     ctaHref: "/subscribe",
     icon: (
@@ -111,6 +116,7 @@ const PRODUCTS = [
     description:
       "Quantify expected move, volatility conditions, and historical earnings drift to identify the highest-probability earnings plays. Know exactly which setups offer edge before the catalyst hits.",
     features: ["Expected range analysis", "Volatility regime analysis", "Historical drift scoring", "Pre-earnings setups"],
+    strategyBadge: { text: "Income Strategy", color: "text-green-400", bg: "bg-green-400/10" },
     cta: "Join Waitlist",
     ctaHref: "/subscribe",
     icon: (
@@ -143,7 +149,7 @@ export default function Products() {
             Every Options Edge.<br /><span className="text-[#00e5a0]">One Platform.</span>
           </h1>
           <p className="text-lg text-white/50 max-w-2xl leading-relaxed">
-            Primal Edge is building a suite of AI-powered options tools for serious income traders. Each product is engineered with the same options AI engine — purpose-built for a specific options trading opportunity.
+            Primal Edge is building a suite of AI-powered options tools for serious traders. Each product is powered by the same options AI engine — purpose-built for a specific strategy: income or directional.
           </p>
           {!user && (
             <div className="mt-8 flex items-center gap-4">
@@ -196,6 +202,11 @@ export default function Products() {
                         style={{ color: "#00e5a0", borderColor: "rgba(0,229,160,0.4)", backgroundColor: "rgba(0,229,160,0.1)" }}
                       >
                         {(product as any).tag2}
+                      </span>
+                    )}
+                    {(product as any).strategyBadge && (
+                      <span className={`text-xs font-bold uppercase tracking-widest px-2 py-0.5 rounded-full ${(product as any).strategyBadge.color} ${(product as any).strategyBadge.bg}`}>
+                        {(product as any).strategyBadge.text}
                       </span>
                     )}
                   </div>

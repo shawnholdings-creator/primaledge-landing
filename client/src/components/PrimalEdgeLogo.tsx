@@ -13,8 +13,8 @@ interface PrimalEdgeLogoProps {
 
 export default function PrimalEdgeLogo({ size = "sm", className = "" }: PrimalEdgeLogoProps) {
   const iconSize = size === "lg" ? "h-16 w-16" : size === "md" ? "h-10 w-10" : "h-8 w-8";
-  const titleSize = size === "lg" ? "text-2xl" : size === "md" ? "text-lg" : "text-base";
-  const bylineSize = size === "lg" ? "text-[11px]" : size === "md" ? "text-[9px]" : "text-[8px]";
+  const titleSize = size === "lg" ? "text-2xl" : size === "md" ? "text-lg" : "text-xl sm:text-2xl";
+  const bylineSize = size === "lg" ? "text-[11px]" : size === "md" ? "text-[9px]" : "text-xs sm:text-sm";
 
   return (
     <div className={`flex items-center gap-2.5 select-none ${className}`} style={{ pointerEvents: 'none' }}>
@@ -34,14 +34,14 @@ export default function PrimalEdgeLogo({ size = "sm", className = "" }: PrimalEd
           PRIMAL EDGE
         </span>
         <span
-          className={`${bylineSize} font-medium tracking-widest mt-0.5`}
+          className={`${bylineSize} font-semibold tracking-widest mt-0.5`}
           style={{
             fontFamily: "'Space Grotesk', sans-serif",
             letterSpacing: "0.12em",
             color: "#00e5a0",
           }}
         >
-          THE OPTIONS AI ENGINE.
+          OPTIONS AI ENGINE · INCOME & DIRECTIONAL
         </span>
       </div>
     </div>
