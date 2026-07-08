@@ -41,7 +41,7 @@ const PRODUCTS = [
       "Live intelligence feed from the AI Cockpit engine. Real-time signal output with multi-timeframe, multi-index analysis powered by the v3.0 scoring engine. PIN-protected early access.",
     features: ["Live signal feed", "Backtest analytics", "Verdict ladder grading", "Multi-index scanning"],
     strategyBadge: { text: "Directional Strategy", color: "text-blue-400", bg: "bg-blue-400/10" },
-    cta: "Access Dashboard",
+    cta: "View Dashboard",
     ctaHref: "/ai-dashboard",
     icon: (
       <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
@@ -63,7 +63,7 @@ const PRODUCTS = [
       "The flagship Primal Edge AI signal engine. Scans blue-chip stocks and ETFs across multiple indices in real time, identifying high-probability options setups graded A–D by the Primal Edge adaptive intelligence engine.",
     features: ["Real-time AI scanning", "A–D signal grading", "Instant push alerts", "Blue-chip & ETF universe"],
     strategyBadge: { text: "Directional Strategy", color: "text-blue-400", bg: "bg-blue-400/10" },
-    cta: "Get Access",
+    cta: "View Dashboard",
     ctaHref: "/subscribe",
     icon: (
       <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
