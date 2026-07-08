@@ -517,6 +517,94 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
           </p>
         </div>
       )}
+      {/* ── Recommended Trade ── */}
+      {(() => {
+        const isPut = candidate.side.toLowerCase() === "put";
+        const sideLabel = isPut ? "PUT" : "CALL";
+        const sideColor = isPut ? "#00e5a0" : "#ef4444";
+        const creditPer100 = Math.round(candidate.credit * 100);
+        const probOfProfit = Math.round((1 - Math.abs(candidate.delta)) * 100);
+        const maxRisk = Math.round((candidate.strike - candidate.credit) * 100);
+        const maxReward = Math.round(candidate.credit * 100);
+        const rrRatio = maxReward > 0 ? (maxRisk / maxReward).toFixed(1) : "—";
+        const expirationDisplay = candidate.expiration
+          ? new Date(candidate.expiration + "T00:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+          : "—";
+        return (
+          <div style={{ marginBottom: "20px" }}>
+            <div
+              className="text-[10px] tracking-widest uppercase mb-3"
+              style={{ fontFamily: "'Space Mono', 'Space Grotesk', monospace", letterSpacing: "0.18em", color: "#555" }}
+            >
+              Recommended Trade
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              {/* Stock Price */}
+              <div className="flex flex-col">
+                <span className="text-xs text-gray-500 uppercase tracking-wider">Stock Price</span>
+                <span className="text-white font-black text-base mt-0.5">${candidate.stock_price.toFixed(2)}</span>
+              </div>
+              {/* Strike */}
+              <div className="flex flex-col">
+                <span className="text-xs text-gray-500 uppercase tracking-wider">Strike</span>
+                <span className="text-white font-black text-base mt-0.5">${candidate.strike.toFixed(1)} <span style={{ color: sideColor, fontSize: "11px" }}>{sideLabel}</span></span>
+              </div>
+              {/* Expiration */}
+              <div className="flex flex-col">
+                <span className="text-xs text-gray-500 uppercase tracking-wider">Expiration</span>
+                <span className="text-white font-black text-base mt-0.5">{expirationDisplay}</span>
+              </div>
+              {/* DTE */}
+              <div className="flex flex-col">
+                <span className="text-xs text-gray-500 uppercase tracking-wider">DTE</span>
+                <span className="text-white font-black text-base mt-0.5">{candidate.dte} days</span>
+              </div>
+              {/* Credit */}
+              <div className="flex flex-col">
+                <span className="text-xs text-gray-500 uppercase tracking-wider">Credit</span>
+                <span className="font-black text-base mt-0.5" style={{ color: "#00e5a0" }}>${candidate.credit.toFixed(2)} <span className="text-xs text-white/30">/ ${creditPer100}</span></span>
+              </div>
+              {/* Bid / Ask */}
+              <div className="flex flex-col">
+                <span className="text-xs text-gray-500 uppercase tracking-wider">Bid / Ask</span>
+                <span className="text-white font-black text-base mt-0.5">${candidate.bid.toFixed(2)} / ${candidate.ask.toFixed(2)}</span>
+              </div>
+              {/* OTM Buffer */}
+              <div className="flex flex-col">
+                <span className="text-xs text-gray-500 uppercase tracking-wider">Strike vs Stock</span>
+                <span className="font-black text-base mt-0.5" style={{ color: "#00e5a0" }}>{(candidate.otm_pct * 100).toFixed(1)}% OTM</span>
+              </div>
+              {/* Est. Probability of Profit */}
+              <div className="flex flex-col">
+                <span className="text-xs text-gray-500 uppercase tracking-wider">Est. Probability of Profit</span>
+                <span className={`font-black text-base mt-0.5 ${probOfProfit >= 80 ? "text-green-400" : probOfProfit >= 65 ? "text-yellow-400" : "text-red-400"}`}>
+                  {probOfProfit}%
+                </span>
+                <span className="text-xs text-gray-600 mt-0.5">Chance of expiring worthless</span>
+              </div>
+              {/* Risk / Reward */}
+              <div className="flex flex-col">
+                <span className="text-xs text-gray-500 uppercase tracking-wider">Risk / Reward</span>
+                <span className="text-white font-black text-base mt-0.5">{rrRatio}:1</span>
+                <span className="text-xs text-gray-600 mt-0.5">Max risk ${maxRisk.toLocaleString()} · Max reward ${maxReward}</span>
+              </div>
+              {/* Contract Symbol */}
+              <div className="flex flex-col sm:col-span-3 col-span-2">
+                <span className="text-xs text-gray-500 uppercase tracking-wider">Contract Symbol</span>
+                <span className="text-white/60 text-xs mt-0.5 font-mono">{candidate.contract_symbol}</span>
+              </div>
+            </div>
+            {/* How to place this trade */}
+            <div className="mt-4 p-3 rounded-lg bg-white/[0.03] border border-white/[0.06]">
+              <span className="text-[10px] text-white/30 uppercase tracking-widest block mb-1.5" style={{ fontFamily: "'Space Mono', monospace" }}>How to place this trade</span>
+              <p className="text-xs text-white/45 leading-relaxed" style={{ fontFamily: "'Inter', sans-serif" }}>
+                Sell to open 1× <span className="text-white/70 font-semibold">{candidate.ticker} ${candidate.strike.toFixed(1)} {sideLabel}</span> expiring <span className="text-white/70 font-semibold">{expirationDisplay}</span> for a credit of <span className="text-white/70 font-semibold">${candidate.credit.toFixed(2)}</span> per share (${creditPer100} per contract).{" "}
+                The scanner estimates a <span className={`font-semibold ${probOfProfit >= 80 ? "text-green-400" : "text-yellow-400"}`}>{probOfProfit}% probability</span> of this contract expiring worthless and keeping the full credit.
+              </p>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* ── Score Breakdown ── */}
       <div>
