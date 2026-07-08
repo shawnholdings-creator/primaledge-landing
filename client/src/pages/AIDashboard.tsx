@@ -13,6 +13,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import MobileCTA from "@/components/MobileCTA";
 import AIDashboardHero from "../components/AIDashboardHero";
 import { useAuth } from "../contexts/AuthContext";
+import { useLoginModal } from "../contexts/LoginModalContext";
 
 // GitHub Gist raw URL
 const GIST_ID = "a490177229d88de297de0bf4746fdff8";
@@ -1092,7 +1093,15 @@ function DashboardContent() {
 /* ─── Main Export — Auth Protected ─────────────────────────── */
 export default function AIDashboard() {
   const { user, loading, productAccess } = useAuth();
+  const { openLoginModal } = useLoginModal();
   const hasAccess = user && productAccess.cockpit === true;
+
+  // Auto-open login modal for unauthenticated visitors
+  useEffect(() => {
+    if (!loading && !user) {
+      openLoginModal("/ai-dashboard");
+    }
+  }, [loading, user, openLoginModal]);
 
   if (loading) {
     return (
