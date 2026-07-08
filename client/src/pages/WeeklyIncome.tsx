@@ -10,6 +10,7 @@ import Navbar from "@/components/Navbar";
 import PrimalEdgeLogo from "@/components/PrimalEdgeLogo";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import WeeklyIncomeHero from "../components/WeeklyIncomeHero";
+import BacktestSignalLog from "../components/BacktestSignalLog";
 import { useAuth } from "../contexts/AuthContext";
 
 // GitHub Gist — replace with real ID later
@@ -1693,6 +1694,14 @@ function WeeklyIncomeContent() {
                   </div>
                 );
               })}
+            </div>
+
+            {/* ── Recent Backtest Performance ── */}
+            <div className="mt-10 mb-2 px-4 sm:px-0">
+              <p className="text-xs font-mono text-green-400/70 uppercase tracking-widest">Reference</p>
+              <h3 className="text-white font-bold text-base mt-0.5">Recent Backtest Performance</h3>
+              <p className="text-gray-500 text-xs mt-0.5 mb-4">How the scanner performed over the last 3 weeks of backtesting — for reference only.</p>
+              <BacktestSignalLog />
             </div>
 
             {/* ── Info Footer ── */}

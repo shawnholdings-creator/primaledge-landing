@@ -7,6 +7,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "wouter";
 import Navbar from "./Navbar";
+import BacktestSignalLog from "./BacktestSignalLog";
 import { useLoginModal } from "../contexts/LoginModalContext";
 
 /* ─── Trade History Gist URL ────────────────────────────────── */
@@ -205,60 +206,17 @@ export default function WeeklyIncomeHero() {
   // Recent trades from Gist
   const { trades: recentTrades, loading: tradesLoading, error: tradesError } = useRecentTrades();
 
-  // Fallback hardcoded data (used when Gist env var not set or no data)
-  const FALLBACK_TRADES = [
-    { ticker: 'QQQ',   date: 'Jun 05, 2026', stockPrice: '$704.29', expiration: 'Jun 14, 2026', dte: 9, strike: '$676 Put', credit: '$286', days: 3, pnl: '+$170', creditRaw: 286, pnlRaw: 170,  win: true, strikeRaw: 676,  rrRatio: (Math.round(((676 - 286) / 286) * 10) / 10).toFixed(1) + ':1' },
-    { ticker: 'SMH',   date: 'Jun 05, 2026', stockPrice: '$569.69', expiration: 'Jun 14, 2026', dte: 9, strike: '$521 Put', credit: '$523', days: 3, pnl: '+$369', creditRaw: 523, pnlRaw: 369,  win: true, strikeRaw: 521,  rrRatio: (Math.round(((521 - 523) / 523) * 10) / 10).toFixed(1) + ':1' },
-    { ticker: 'SNOW',  date: 'May 29, 2026', stockPrice: '$255.55', expiration: 'Jun 07, 2026', dte: 9, strike: '$218 Put', credit: '$687', days: 3, pnl: '+$420', creditRaw: 687, pnlRaw: 420,  win: true, strikeRaw: 218,  rrRatio: (Math.round(((218 - 687) / 687) * 10) / 10).toFixed(1) + ':1' },
-    { ticker: 'SMH',   date: 'May 29, 2026', stockPrice: '$598.93', expiration: 'Jun 07, 2026', dte: 9, strike: '$557 Put', credit: '$368', days: 4, pnl: '+$329', creditRaw: 368, pnlRaw: 329,  win: true, strikeRaw: 557,  rrRatio: (Math.round(((557 - 368) / 368) * 10) / 10).toFixed(1) + ':1' },
-    { ticker: 'META',  date: 'May 21, 2026', stockPrice: '$606.82', expiration: 'May 30, 2026', dte: 9, strike: '$570 Put', credit: '$384', days: 5, pnl: '+$225', creditRaw: 384, pnlRaw: 225,  win: true, strikeRaw: 570,  rrRatio: (Math.round(((570 - 384) / 384) * 10) / 10).toFixed(1) + ':1' },
-    { ticker: 'GOOGL', date: 'May 21, 2026', stockPrice: '$387.43', expiration: 'May 30, 2026', dte: 9, strike: '$360 Put', credit: '$257', days: 5, pnl: '+$131', creditRaw: 257, pnlRaw: 131,  win: true, strikeRaw: 360,  rrRatio: (Math.round(((360 - 257) / 257) * 10) / 10).toFixed(1) + ':1' },
-    { ticker: 'SMH',   date: 'May 21, 2026', stockPrice: '$567.88', expiration: 'May 30, 2026', dte: 9, strike: '$528 Put', credit: '$415', days: 5, pnl: '+$386', creditRaw: 415, pnlRaw: 386,  win: true, strikeRaw: 528,  rrRatio: (Math.round(((528 - 415) / 415) * 10) / 10).toFixed(1) + ':1' },
-  ];
-
-  const displayTrades = (recentTrades && recentTrades.length > 0)
-    ? recentTrades.map(t => ({
-        ticker: t.ticker,
-        date: new Date(t.entry_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-        stockPrice: `$${Number((t as any).stock_price ?? (t as any).entry_price ?? 0).toFixed(2)}`,
-        expiration: new Date(new Date(t.entry_date).getTime() + ((t as any).dte ?? 0) * 86400000)
-          .toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-        dte: (t as any).dte ?? 0,
-        strike: `$${t.strike} ${t.side === 'put' ? 'Put' : 'Call'}`,
-        credit: `$${Math.round(t.credit * 100)}`,
-        days: t.days_held,
-        pnl: `${t.pnl_per_contract >= 0 ? '+' : ''}$${Math.abs(Math.round(t.pnl_per_contract)).toLocaleString()}`,
-        creditRaw: Math.round(t.credit * 100),
-        pnlRaw: Math.round(t.pnl_per_contract),
-        win: t.outcome === 'WIN',
-        strikeRaw: t.strike,
-        rrRatio: (Math.round(((t.strike - t.credit * 100) / (t.credit * 100)) * 10) / 10).toFixed(1) + ':1',
-      }))
-    : FALLBACK_TRADES;
-
-  const totalTrades = displayTrades.length;
-  const totalWins = displayTrades.filter(t => t.win).length;
-  const totalIncome = displayTrades.filter(t => t.win).reduce((s, t) => s + t.pnlRaw, 0);
-  const totalCredits = displayTrades.reduce((s, t) => s + t.creditRaw, 0);
-
-  const weeklyStats = (() => {
-    const weeks: Record<string, { label: string; wins: number; losses: number; net: number }> = {};
-    displayTrades.forEach(t => {
-      const d = new Date(t.date);
-      const monday = new Date(d);
-      monday.setDate(d.getDate() - ((d.getDay() + 6) % 7));
-      const key = monday.toISOString().slice(0, 10);
-      const label = monday.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-      if (!weeks[key]) weeks[key] = { label: `Wk of ${label}`, wins: 0, losses: 0, net: 0 };
-      if (t.win) { weeks[key].wins++; weeks[key].net += t.pnlRaw; }
-      else { weeks[key].losses++; weeks[key].net -= Math.abs(t.pnlRaw); }
-    });
-    return Object.values(weeks).slice(-3).reverse();
-  })();
-
-  const periodLabel = displayTrades.length > 0
-    ? `${displayTrades[displayTrades.length - 1].date} \u2013 ${displayTrades[0].date}`
-    : 'Last 3 weeks';
+  // Fallback stats for animated counters (still computed from display trades via the component)
+  // These counters in the hero use the same source, so we keep a simple version here
+  const HERO_FALLBACK_STATS = { totalIncome: 2030, winRate: 100, totalTrades: 7, avgHold: 4.0 };
+  const heroStats = (recentTrades && recentTrades.length > 0)
+    ? {
+        totalIncome: recentTrades.filter(t => t.outcome === 'WIN').reduce((s, t) => s + Math.round(t.pnl_per_contract), 0),
+        winRate: Math.round(recentTrades.filter(t => t.outcome === 'WIN').length / recentTrades.length * 100),
+        totalTrades: recentTrades.length,
+        avgHold: recentTrades.reduce((s, t) => s + t.days_held, 0) / recentTrades.length,
+      }
+    : HERO_FALLBACK_STATS;
 
 
   useEffect(() => {
@@ -467,183 +425,10 @@ export default function WeeklyIncomeHero() {
 
         </section>
 
-        {/* ─── Backtest Signal Log — 3-part layout ──────────── */}
+        {/* ─── Backtest Signal Log — shared component ──────────── */}
         {!tradesLoading && (
           <section style={{ ...sectionGap, animation: 'wih-fadeUp 0.7s ease-out 0.15s both' }}>
-
-            {/* PART 1 — Terminal Banner */}
-            <div style={{ width: '100%', maxWidth: 640, margin: '0 auto 0' }}>
-              <div style={{
-                borderTopLeftRadius: 12,
-                borderTopRightRadius: 12,
-                border: '1px solid rgba(255,255,255,0.1)',
-                background: 'rgba(255,255,255,0.03)',
-                padding: '12px 16px',
-                display: 'flex',
-                flexDirection: isMobile ? 'column' : 'row',
-                alignItems: isMobile ? 'flex-start' : 'center',
-                justifyContent: 'space-between',
-                gap: 8,
-              }}>
-                <div>
-                  <p style={{
-                    fontSize: 10,
-                    fontFamily: T.fontMono,
-                    color: 'rgba(74,222,128,0.7)',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.12em',
-                    margin: 0,
-                  }}>
-                    Backtest Signal Log · If You Had Taken These Trades
-                  </p>
-                  <p style={{
-                    color: T.white,
-                    fontWeight: 900,
-                    fontSize: 17,
-                    marginTop: 2,
-                    margin: '2px 0 0',
-                    fontFamily: T.fontDisplay,
-                  }}>
-                    +${totalIncome.toLocaleString()} net income · {totalWins}/{totalTrades} signals won
-                  </p>
-                </div>
-                <div style={{ fontSize: 11, color: '#6b7280', fontFamily: T.fontMono }}>
-                  {periodLabel} · 1 contract/signal
-                </div>
-              </div>
-            </div>
-
-            {/* PART 2 — Weekly Scorecard Strip */}
-            <div style={{
-              width: '100%',
-              maxWidth: 640,
-              margin: '0 auto',
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr 1fr',
-              borderLeft: '1px solid rgba(255,255,255,0.1)',
-              borderRight: '1px solid rgba(255,255,255,0.1)',
-            }}>
-              {weeklyStats.map((week, i) => (
-                <div key={i} style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: isMobile ? '10px 8px' : '12px 16px',
-                  borderBottom: '1px solid rgba(255,255,255,0.1)',
-                  borderRight: i < weeklyStats.length - 1 ? '1px solid rgba(255,255,255,0.1)' : 'none',
-                  textAlign: 'center',
-                }}>
-                  <p style={{ fontSize: 10, color: '#6b7280', fontFamily: T.fontMono, margin: 0 }}>{week.label}</p>
-                  <p style={{
-                    fontSize: isMobile ? 14 : 16,
-                    fontWeight: 900,
-                    margin: '4px 0 0',
-                    color: week.net > 0 ? '#4ade80' : '#f87171',
-                    fontFamily: T.fontDisplay,
-                  }}>
-                    {week.net > 0 ? '+' : ''}${Math.abs(week.net).toLocaleString()}
-                  </p>
-                  <p style={{ fontSize: 10, color: '#9ca3af', margin: '2px 0 0' }}>
-                    {week.wins}W · {week.losses}L
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            {/* PART 3 — Full Trade Log Table */}
-            <div style={{
-              width: '100%',
-              maxWidth: 640,
-              margin: '0 auto 16px',
-              border: '1px solid rgba(255,255,255,0.1)',
-              borderTop: 'none',
-              borderBottomLeftRadius: 12,
-              borderBottomRightRadius: 12,
-              overflow: 'hidden',
-            }}>
-              <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 760 }}>
-                  <thead>
-                    <tr style={{ background: 'rgba(255,255,255,0.05)' }}>
-                      {['Ticker', 'Date', 'Stock Price', 'Strike', 'Expiry', 'DTE', 'Credit', 'Days', 'Risk/Reward', 'P&L', 'Result'].map((h, i) => (
-                        <th key={h} style={{
-                          padding: '8px 12px',
-                          textAlign: i < 2 || i === 3 || i === 4 ? 'left' : 'right',
-                          color: '#9ca3af',
-                          fontSize: 10,
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.08em',
-                          fontWeight: 600,
-                          whiteSpace: 'nowrap',
-                        }}>{h}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {displayTrades.map((t, i) => (
-                      <tr key={i} style={{ background: i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent' }}>
-                        <td style={{ padding: '8px 12px', fontWeight: 700, color: T.white, whiteSpace: 'nowrap' }}>{t.ticker}</td>
-                        <td style={{ padding: '8px 12px', color: '#6b7280', fontSize: 11, whiteSpace: 'nowrap' }}>{t.date}</td>
-                        <td style={{ padding: '8px 12px', textAlign: 'right', color: '#d1d5db', fontSize: 11, whiteSpace: 'nowrap' }}>{t.stockPrice}</td>
-                        <td style={{ padding: '8px 12px', color: '#d1d5db', whiteSpace: 'nowrap' }}>{t.strike}</td>
-                        <td style={{ padding: '8px 12px', color: '#9ca3af', fontSize: 11, whiteSpace: 'nowrap' }}>{t.expiration}</td>
-                        <td style={{ padding: '8px 12px', textAlign: 'right', color: '#6b7280', fontSize: 11 }}>{t.dte}d</td>
-                        <td style={{ padding: '8px 12px', textAlign: 'right', color: '#4ade80', fontWeight: 600 }}>{t.credit}</td>
-                        <td style={{ padding: '8px 12px', textAlign: 'right', color: '#9ca3af' }}>{t.days}d</td>
-                        <td style={{ padding: '8px 12px', textAlign: 'right', color: '#d1d5db', fontSize: 12, fontFamily: "'JetBrains Mono', monospace" }}>{t.rrRatio}</td>
-                        <td style={{ padding: '8px 12px', textAlign: 'right', fontWeight: 600, color: t.win ? '#4ade80' : '#f87171' }}>{t.pnl}</td>
-                        <td style={{ padding: '8px 12px', textAlign: 'right' }}>
-                          <span style={{
-                            background: t.win ? 'rgba(74,222,128,0.15)' : 'rgba(248,113,113,0.15)',
-                            color: t.win ? '#4ade80' : '#f87171',
-                            fontSize: 11,
-                            fontWeight: 700,
-                            padding: '2px 8px',
-                            borderRadius: 9999,
-                          }}>{t.win ? 'WIN' : 'LOSS'}</span>
-                        </td>
-                      </tr>
-                    ))}
-                    {/* Totals row */}
-                    <tr style={{ borderTop: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)' }}>
-                      <td colSpan={2} style={{ padding: '8px 12px', color: T.white, fontWeight: 900, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                        Total · {totalWins}/{totalTrades} wins
-                      </td>
-                      <td colSpan={5} style={{ padding: '8px 12px', textAlign: 'right', color: '#9ca3af', fontSize: 11, fontWeight: 600 }}>
-                        ${totalCredits.toLocaleString()} collected
-                      </td>
-                      <td style={{ padding: '8px 12px' }} />
-                      <td style={{ padding: '8px 12px', textAlign: 'right', fontWeight: 900, color: '#4ade80', fontSize: 14 }}>
-                        +${totalIncome.toLocaleString()}
-                      </td>
-                      <td style={{ padding: '8px 12px', textAlign: 'right' }}>
-                        <span style={{
-                          background: 'rgba(74,222,128,0.2)',
-                          color: '#4ade80',
-                          fontSize: 11,
-                          fontWeight: 700,
-                          padding: '2px 8px',
-                          borderRadius: 9999,
-                        }}>
-                          {totalTrades > 0 ? Math.round(totalWins / totalTrades * 100) : 0}% WIN
-                        </span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <p style={{
-                fontSize: 11,
-                color: '#4b5563',
-                padding: '8px 12px',
-                borderTop: '1px solid rgba(255,255,255,0.05)',
-                margin: 0,
-              }}>
-                Backtest simulation · Stock price, strike & expiration verifiable on Yahoo Finance / CBOE historical chains · 1 contract per signal · Updates weekly. Past results do not guarantee future performance. Not financial advice.
-              </p>
-            </div>
-
+            <BacktestSignalLog />
           </section>
         )}
 
