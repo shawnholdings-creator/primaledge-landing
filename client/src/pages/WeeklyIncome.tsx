@@ -4,7 +4,7 @@
    Data: Fetches live scan data from GitHub Gist
    ============================================================ */
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { Link } from "wouter";
 import Navbar from "@/components/Navbar";
 import PrimalEdgeLogo from "@/components/PrimalEdgeLogo";
@@ -2265,9 +2265,11 @@ export default function WeeklyIncome() {
     document.title = "Weekly Options Income Dashboard | Primal Edge";
   }, []);
 
-  // Auto-open login modal for unauthenticated visitors
+  // Auto-open login modal once for unauthenticated visitors
+  const hasAutoOpened = useRef(false);
   useEffect(() => {
-    if (!loading && !user) {
+    if (!loading && !user && !hasAutoOpened.current) {
+      hasAutoOpened.current = true;
       openLoginModal("/weekly-income");
     }
   }, [loading, user, openLoginModal]);
