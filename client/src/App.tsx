@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
-import { Route, Switch } from "wouter";
+import { Route, Switch, useLocation } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -23,6 +23,16 @@ import ComingSoonPage from "./pages/ComingSoonPage";
 import WeeklyIncome from "./pages/WeeklyIncome";
 import GlobalDisclaimer from "./components/GlobalDisclaimer";
 import MobileCTA from "./components/MobileCTA";
+import { useEffect } from "react";
+
+/* Scroll to top on every route change */
+function ScrollToTop() {
+  const [location] = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [location]);
+  return null;
+}
 
 function Router() {
   return (
@@ -54,6 +64,7 @@ function App() {
           <LoginModalProvider>
             <TooltipProvider>
               <Toaster />
+              <ScrollToTop />
               <Router />
               <MobileCTA />
               <GlobalDisclaimer />
