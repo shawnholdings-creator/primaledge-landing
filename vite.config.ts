@@ -166,6 +166,18 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // React core — cached across all pages
+          "vendor-react": ["react", "react-dom"],
+          // Supabase client — only loaded once, cached
+          "vendor-supabase": ["@supabase/supabase-js"],
+          // Routing
+          "vendor-router": ["wouter"],
+        },
+      },
+    },
   },
   server: {
     port: 3000,
