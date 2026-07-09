@@ -230,17 +230,8 @@ export default function Products() {
                 </ul>
 
                 {(() => {
-                  const isProtected = ["/weekly-income", "/ai-dashboard"].includes(product.ctaHref);
-                  const DISMISS_MAP: Record<string, string> = {
-                    "/weekly-income": "/weekly-income",
-                    "/ai-dashboard": "/ai-dashboard",
-                  };
                   const handleClick = () => {
-                    if (isProtected && !user) {
-                      openLoginModal(product.ctaHref, DISMISS_MAP[product.ctaHref] ?? "/products");
-                    } else {
-                      window.location.href = product.ctaHref;
-                    }
+                    window.location.href = product.ctaHref;
                   };
                   return (
                     <button
