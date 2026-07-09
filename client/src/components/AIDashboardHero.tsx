@@ -220,7 +220,7 @@ export default function AIDashboardHero() {
             margin: "0 auto",
           }}
         >
-          Live intelligence layer across 80+ symbols. Surfaces highest conviction
+          Live intelligence layer across the most actively traded names in the market. Surfaces highest conviction
           setups. Answers your questions in plain English.
         </p>
       </section>
@@ -581,7 +581,7 @@ export default function AIDashboardHero() {
               Without the Cockpit
             </p>
             {[
-              "Scroll 80+ charts manually",
+              "Scroll hundreds of charts manually",
               "Guess which setups matter",
               "Miss alerts while at work",
               "Hours of pre-market research",
@@ -616,7 +616,7 @@ export default function AIDashboardHero() {
               With the Cockpit
             </p>
             {[
-              "80+ symbols ranked in seconds",
+              "Every major name ranked in seconds",
               "Highest conviction surfaced automatically",
               "Push alert in under 3 seconds",
               "Plain-English morning brief",

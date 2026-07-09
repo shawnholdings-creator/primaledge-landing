@@ -18,7 +18,7 @@ const PRODUCTS = [
     tag2: "FLAGSHIP",
     tagColor: "#00e5a0",
     description:
-      "The flagship options income tool. Scans blue-chip stocks and ETFs for weekly put and call selling opportunities — scored by conviction, filtered by IV rank and delta, and delivered to your phone the moment a setup qualifies.",
+      "The flagship options income tool. Monitors the most actively traded stocks and ETFs for weekly income opportunities — scored by conviction, filtered by IV rank and delta, and delivered to your phone the moment a setup qualifies.",
     features: ["Income opportunities", "100-point scoring model", "Real-time phone alerts", "Blue-chip universe only"],
     strategyBadge: { text: "Income Strategy", color: "text-green-400", bg: "bg-green-400/10" },
     cta: "View Dashboard",
@@ -60,7 +60,7 @@ const PRODUCTS = [
     tag: "LIVE",
     tagColor: "#00e5a0",
     description:
-      "The flagship Primal Edge AI signal engine. Scans blue-chip stocks and ETFs across multiple indices in real time, identifying high-probability options setups graded A–D by the Primal Edge adaptive intelligence engine.",
+      "The flagship Primal Edge AI signal engine. Monitors the most liquid stocks and ETFs across multiple indices in real time, identifying high-probability options setups graded A–D by the Primal Edge adaptive intelligence engine.",
     features: ["Real-time AI scanning", "A–D signal grading", "Instant push alerts", "Blue-chip & ETF universe"],
     strategyBadge: { text: "Directional Strategy", color: "text-blue-400", bg: "bg-blue-400/10" },
     cta: "View Dashboard",
@@ -78,7 +78,7 @@ const PRODUCTS = [
     tag: "COMING SOON",
     tagColor: "#f59e0b",
     description:
-      "Identify high-probability bearish reversal and breakdown setups across blue-chip stocks and ETFs. Powered by the same adaptive intelligence engine as the AI Cockpit — optimized for short-side opportunities.",
+      "Identify high-probability bearish reversal and breakdown setups across the most liquid stocks and ETFs. Powered by the same adaptive intelligence engine as the AI Cockpit — optimized for short-side opportunities.",
     features: ["Short-side signal detection", "Multi-timeframe analysis", "AI-graded setups", "Instant alerts"],
     strategyBadge: { text: "Directional Strategy", color: "text-blue-400", bg: "bg-blue-400/10" },
     cta: "Join Waitlist",

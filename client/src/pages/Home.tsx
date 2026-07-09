@@ -307,7 +307,7 @@ function TwoStrategies() {
             </div>
             <h3 className="text-2xl md:text-3xl font-black text-green-400" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>Sell Premium</h3>
             <p className="text-white font-bold text-base">Weekly Options Income Dashboard</p>
-            <p className="text-gray-400 text-sm">Scan blue-chip stocks for high-probability put and call selling setups. Collect weekly credit. Let time decay work for you.</p>
+            <p className="text-gray-400 text-sm">Monitors the most actively traded stocks for high-probability income setups. Collect weekly credit. Let time decay work for you.</p>
             <ul className="text-xs text-gray-400 space-y-1 mt-1 list-none p-0">
               <li>✓ 9 DTE weekly expiration focus</li>
               <li>✓ Conservative OTM strikes on blue-chips</li>
@@ -338,7 +338,7 @@ function TwoStrategies() {
             </div>
             <h3 className="text-2xl md:text-3xl font-black text-white" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>Trade Breakouts</h3>
             <p className="text-white font-bold text-base">Primal Edge AI Cockpit</p>
-            <p className="text-gray-400 text-sm">Identify high-conviction directional setups on blue-chip stocks. Graded A–D by the AI engine. Act before the move.</p>
+            <p className="text-gray-400 text-sm">Identify high-conviction directional setups on the most liquid names in the market. Graded A–D by the AI engine. Act before the move.</p>
             <ul className="text-xs text-gray-400 space-y-1 mt-1 list-none p-0">
               <li>✓ A-grade setups · 81% historical hit rate</li>
               <li>✓ Multi-timeframe confluence scoring</li>
@@ -393,7 +393,7 @@ function TwoStrategies() {
 function HowItWorks() {
   const { ref, inView } = useInView();
   const steps = [
-    { num: "01", title: "Scan", desc: "The engine monitors blue-chip stocks and ETFs continuously across multiple timeframes.", icon: "📡" },
+    { num: "01", title: "Scan", desc: "The engine continuously monitors the most actively traded stocks and ETFs — the names where options liquidity and premium quality are highest.", icon: "📡" },
     { num: "02", title: "Score", desc: "Every setup is scored 0–100 by conviction — only the top qualify.", icon: "🏆" },
     { num: "03", title: "Deliver", desc: "The highest-ranked signal reaches your phone and dashboard in under 3 seconds.", icon: "🔔" },
   ];

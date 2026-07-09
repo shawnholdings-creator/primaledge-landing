@@ -372,7 +372,7 @@ function LoginForm({ product }: { product: keyof ProductAccess }) {
               }}
             >
               <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "16px" }}>
-                {["81% A-Grade Probability of Success*", "Top 12% of Scanned Setups Qualify*", "80+ Premium Symbols Scanned"].map((stat) => (
+                {["81% A-Grade Probability of Success*", "Top 12% of Scanned Setups Qualify*", "Elite Liquidity Universe"].map((stat) => (
                   <span
                     key={stat}
                     style={{
@@ -489,7 +489,7 @@ function LoginForm({ product }: { product: keyof ProductAccess }) {
                 animation: "preFadeIn 0.4s ease-out 0.5s both",
               }}
             >
-              {["80+ PREMIUM SYMBOLS", "WEEKLY DELIVERY", "ANY BROKER · ANY PLATFORM"].map((pill) => (
+              {["PREMIUM NAMES ONLY", "WEEKLY DELIVERY", "ANY BROKER · ANY PLATFORM"].map((pill) => (
                 <span
                   key={pill}
                   style={{
