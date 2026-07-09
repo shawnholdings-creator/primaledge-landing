@@ -109,7 +109,6 @@ interface Position {
   side: "PUT" | "CALL";
   strike: number;
   expiration: string;
-  entryDelta: number;
   entryCredit: number;
   entryDate: string;
   status: "open" | "closed";
@@ -823,7 +822,6 @@ function WeeklyIncomeContent() {
     side: "PUT" as "PUT" | "CALL",
     strike: "",
     expiration: "",
-    entryDelta: "",
     entryCredit: "",
   });
 
@@ -918,21 +916,20 @@ function WeeklyIncomeContent() {
   }, [positions]);
 
   const addPosition = () => {
-    if (!formData.ticker || !formData.strike || !formData.expiration || !formData.entryDelta) return;
+    if (!formData.ticker) return;
     const newPos: Position = {
       id: Date.now().toString(),
       ticker: formData.ticker.toUpperCase(),
       side: formData.side,
-      strike: parseFloat(formData.strike),
+      strike: parseFloat(formData.strike) || 0,
       expiration: formData.expiration,
-      entryDelta: parseFloat(formData.entryDelta),
       entryCredit: parseFloat(formData.entryCredit) || 0,
       entryDate: new Date().toISOString().split("T")[0],
       status: "open",
       exitAlertFired: false,
     };
     setPositions((prev) => [...prev, newPos]);
-    setFormData({ ticker: "", side: "PUT", strike: "", expiration: "", entryDelta: "", entryCredit: "" });
+    setFormData({ ticker: "", side: "PUT", strike: "", expiration: "", entryCredit: "" });
     setShowAddForm(false);
   };
 
@@ -1553,6 +1550,37 @@ function WeeklyIncomeContent() {
                       }}
                     >
                       {isExpanded && <ScoreDetailPanel candidate={c} />}
+                      {isExpanded && (
+                        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 16, paddingBottom: 8, paddingRight: 16 }}>
+                          <button
+                            onClick={() => {
+                              setFormData({
+                                ticker: c.ticker,
+                                side: (c.side?.toUpperCase() === "CALL" ? "CALL" : "PUT") as "PUT" | "CALL",
+                                strike: String(c.strike),
+                                expiration: c.expiration,
+                                entryCredit: String(c.credit ?? ""),
+                              });
+                              setActiveTab("positions");
+                              setShowAddForm(true);
+                              window.scrollTo({ top: 0, behavior: "smooth" });
+                            }}
+                            style={{
+                              fontFamily: "'JetBrains Mono', monospace",
+                              fontSize: "0.75rem",
+                              fontWeight: 700,
+                              color: "#0a0d12",
+                              background: "#00e5a0",
+                              border: "none",
+                              borderRadius: 8,
+                              padding: "10px 20px",
+                              cursor: "pointer",
+                            }}
+                          >
+                            Log This Trade →
+                          </button>
+                        </div>
+                      )}
                     </div>
 
                     {/* Micro max risk — desktop */}
@@ -1709,6 +1737,37 @@ function WeeklyIncomeContent() {
                         }}
                       >
                         {isExpanded && <ScoreDetailPanel candidate={c} />}
+                        {isExpanded && (
+                          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 16, paddingBottom: 8, paddingRight: 16 }}>
+                            <button
+                              onClick={() => {
+                                setFormData({
+                                  ticker: c.ticker,
+                                  side: (c.side?.toUpperCase() === "CALL" ? "CALL" : "PUT") as "PUT" | "CALL",
+                                  strike: String(c.strike),
+                                  expiration: c.expiration,
+                                  entryCredit: String(c.credit ?? ""),
+                                });
+                                setActiveTab("positions");
+                                setShowAddForm(true);
+                                window.scrollTo({ top: 0, behavior: "smooth" });
+                              }}
+                              style={{
+                                fontFamily: "'JetBrains Mono', monospace",
+                                fontSize: "0.75rem",
+                                fontWeight: 700,
+                                color: "#0a0d12",
+                                background: "#00e5a0",
+                                border: "none",
+                                borderRadius: 8,
+                                padding: "10px 20px",
+                                cursor: "pointer",
+                              }}
+                            >
+                              Log This Trade →
+                            </button>
+                          </div>
+                        )}
                       </div>
 
                       {/* Micro max risk — mobile */}
@@ -2069,18 +2128,6 @@ function WeeklyIncomeContent() {
                       style={{ width: "100%", background: "#0d1118", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8, padding: "8px 12px", color: "white", fontSize: "0.8rem", fontFamily: "'JetBrains Mono', monospace", outline: "none", colorScheme: "dark" }}
                     />
                   </div>
-                  {/* Entry Delta */}
-                  <div>
-                    <label style={{ display: "block", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 4 }}>Entry Delta</label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      placeholder="0.22"
-                      value={formData.entryDelta}
-                      onChange={(e) => setFormData({ ...formData, entryDelta: e.target.value })}
-                      style={{ width: "100%", background: "#0d1118", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8, padding: "8px 12px", color: "white", fontSize: "0.8rem", fontFamily: "'JetBrains Mono', monospace", outline: "none" }}
-                    />
-                  </div>
                   {/* Entry Credit */}
                   <div>
                     <label style={{ display: "block", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 4 }}>Entry Credit (per share)</label>
@@ -2134,12 +2181,12 @@ function WeeklyIncomeContent() {
                   <div
                     className="hidden sm:grid"
                     style={{
-                      gridTemplateColumns: "0.8fr 0.5fr 0.7fr 0.8fr 0.7fr 0.7fr 1.2fr 0.8fr",
+                      gridTemplateColumns: "0.8fr 0.5fr 0.7fr 0.8fr 0.7fr 1.2fr 0.8fr",
                       padding: "8px 12px",
                       borderBottom: "1px solid rgba(255,255,255,0.06)",
                     }}
                   >
-                    {["TICKER", "SIDE", "STRIKE", "EXPIRY", "ENTRY Δ", "CURRENT Δ", "STATUS", "ACTION"].map((h) => (
+                    {["TICKER", "SIDE", "STRIKE", "EXPIRY", "CREDIT", "STATUS", "ACTION"].map((h) => (
                       <span
                         key={h}
                         style={{
@@ -2161,7 +2208,7 @@ function WeeklyIncomeContent() {
                       <div
                         className="hidden sm:grid"
                         style={{
-                          gridTemplateColumns: "0.8fr 0.5fr 0.7fr 0.8fr 0.7fr 0.7fr 1.2fr 0.8fr",
+                          gridTemplateColumns: "0.8fr 0.5fr 0.7fr 0.8fr 0.7fr 1.2fr 0.8fr",
                           padding: "10px 12px",
                           borderBottom: "1px solid rgba(255,255,255,0.04)",
                           alignItems: "center",
@@ -2174,11 +2221,7 @@ function WeeklyIncomeContent() {
                         <span>{pos.side}</span>
                         <span>${pos.strike.toFixed(2)}</span>
                         <span>{pos.expiration}</span>
-                        <span>{pos.entryDelta.toFixed(2)}</span>
-                        <span>
-                          <span style={{ color: "rgba(255,255,255,0.2)" }}>—</span>
-                          <div style={{ fontSize: "0.6rem", fontStyle: "italic", color: "rgba(255,255,255,0.15)", marginTop: 2 }}>Live delta fetched by monitor</div>
-                        </span>
+                        <span>${pos.entryCredit.toFixed(2)}</span>
                         <span>
                           {pos.status === "closed" ? (
                             <span style={{ display: "inline-flex", alignItems: "center", background: "rgba(107,114,128,0.15)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.3)", fontSize: "0.6rem", fontWeight: 600, padding: "2px 8px", borderRadius: 12 }}>Closed</span>
@@ -2242,7 +2285,6 @@ function WeeklyIncomeContent() {
                         </div>
                         <div style={{ display: "flex", gap: 16, color: "rgba(255,255,255,0.35)", fontSize: "0.65rem", marginBottom: 8 }}>
                           <span>Exp: {pos.expiration}</span>
-                          <span>Entry Δ: {pos.entryDelta.toFixed(2)}</span>
                           <span>Credit: ${pos.entryCredit.toFixed(2)}</span>
                         </div>
                         <div>
