@@ -43,18 +43,7 @@ interface DisplayTrade {
 }
 
 /* ─── Fallback Data ─────────────────────────────────────────── */
-const FALLBACK_TRADES: DisplayTrade[] = [
-  { ticker: "QQQ",   date: "Jun 05, 2026", stockPrice: "$704.29", expiration: "Jun 14, 2026", dte: 9, strike: "$676 Put", strikeRaw: 676,  credit: "$286", creditRaw: 286, days: 3, pnl: "+$170", pnlRaw: 170,  win: true  },
-  { ticker: "SMH",   date: "Jun 05, 2026", stockPrice: "$569.69", expiration: "Jun 14, 2026", dte: 9, strike: "$521 Put", strikeRaw: 521,  credit: "$523", creditRaw: 523, days: 3, pnl: "+$369", pnlRaw: 369,  win: true  },
-  { ticker: "SNOW",  date: "May 29, 2026", stockPrice: "$255.55", expiration: "Jun 07, 2026", dte: 9, strike: "$218 Put", strikeRaw: 218,  credit: "$687", creditRaw: 687, days: 3, pnl: "+$420", pnlRaw: 420,  win: true  },
-  { ticker: "SMH",   date: "May 29, 2026", stockPrice: "$598.93", expiration: "Jun 07, 2026", dte: 9, strike: "$557 Put", strikeRaw: 557,  credit: "$368", creditRaw: 368, days: 4, pnl: "+$329", pnlRaw: 329,  win: true  },
-  { ticker: "META",  date: "May 21, 2026", stockPrice: "$606.82", expiration: "May 30, 2026", dte: 9, strike: "$570 Put", strikeRaw: 570,  credit: "$384", creditRaw: 384, days: 5, pnl: "+$225", pnlRaw: 225,  win: true  },
-  { ticker: "GOOGL", date: "May 21, 2026", stockPrice: "$387.43", expiration: "May 30, 2026", dte: 9, strike: "$360 Put", strikeRaw: 360,  credit: "$257", creditRaw: 257, days: 5, pnl: "+$131", pnlRaw: 131,  win: true  },
-  { ticker: "SMH",   date: "May 21, 2026", stockPrice: "$567.88", expiration: "May 30, 2026", dte: 9, strike: "$528 Put", strikeRaw: 528,  credit: "$415", creditRaw: 415, days: 5, pnl: "+$386", pnlRaw: 386,  win: true  },
-].map(t => ({
-  ...t,
-  rrRatio: (Math.round(((t.strikeRaw - t.creditRaw) / t.creditRaw) * 10) / 10).toFixed(1) + ":1",
-}));
+  const FALLBACK_TRADES: DisplayTrade[] = [];
 
 /* ─── Data Fetching Hook ────────────────────────────────────── */
 function useRecentTrades() {
@@ -68,9 +57,9 @@ function useRecentTrades() {
       .then(r => r.json())
       .then((data: TradeRecord[]) => {
         const cutoff = new Date();
-        cutoff.setDate(cutoff.getDate() - 21);
+        cutoff.setDate(cutoff.getDate() - 14); // 14-day window as requested
         const recent = data
-          .filter(t => new Date(t.entry_date) >= cutoff)
+          .filter(t => new Date(t.entry_date) >= cutoff && t.outcome !== "OPEN") // Only show closed/resolved trades
           .sort((a, b) => new Date(b.entry_date).getTime() - new Date(a.entry_date).getTime());
         setTrades(recent);
       })
@@ -127,7 +116,7 @@ export default function BacktestSignalLog() {
 
   const periodLabel = displayTrades.length > 0
     ? `${displayTrades[displayTrades.length - 1].date} \u2013 ${displayTrades[0].date}`
-    : "Last 3 weeks";
+    : "Last 14 days";
 
   if (loading) return null;
 
@@ -204,7 +193,13 @@ export default function BacktestSignalLog() {
             </tr>
           </thead>
           <tbody>
-            {displayTrades.map((t, i) => (
+            {displayTrades.length === 0 ? (
+              <tr>
+                <td colSpan={11} className="px-3 py-12 text-center text-gray-500 text-xs font-mono">
+                  Awaiting resolved trades from the last 14 days...
+                </td>
+              </tr>
+            ) : displayTrades.map((t, i) => (
               <tr key={i} className={i % 2 === 0 ? "bg-white/[0.02]" : ""}>
                 <td className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-bold text-white whitespace-nowrap">{t.ticker}</td>
                 <td className="hidden sm:table-cell px-2 sm:px-3 py-2 text-xs text-gray-500 whitespace-nowrap">{t.date}</td>
