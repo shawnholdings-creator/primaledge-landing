@@ -4,7 +4,7 @@
    Data: Fetches live scan data from GitHub Gist
    ============================================================ */
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Link } from "wouter";
 import Navbar from "@/components/Navbar";
 import PrimalEdgeLogo from "@/components/PrimalEdgeLogo";
@@ -393,7 +393,7 @@ function otmLabel(otmPct: number): string {
 }
 
 /* ─── Plain-English Score Descriptions ─────────────────────── */
-function getPlainDescription(categoryName: string, status: string): string {
+function getPlainDescription(categoryName: string, status: string, side?: string): string {
   const name = categoryName.toLowerCase();
   if (name.includes("premium")) {
     return "The premium collected on this trade is meaningful relative to the capital at risk. A strong premium score means the income potential justifies entering the position.";
@@ -405,7 +405,8 @@ function getPlainDescription(categoryName: string, status: string): string {
     return "The strike sits comfortably below the current price with a meaningful buffer zone. Even if the stock pulls back moderately, the trade has room to breathe before reaching the strike.";
   }
   if (name.includes("technical")) {
-    return "The stock's recent price behavior looks constructive and supports the direction of this trade. Current conditions appear favorable for a short put position based on price structure alone.";
+    const sideText = side?.toLowerCase() === "call" ? "short call" : "short put";
+    return `The stock's recent price behavior looks constructive and supports the direction of this trade. Current conditions appear favorable for a ${sideText} position based on price structure alone.`;
   }
   if (name.includes("event")) {
     if (status === "Weak" || status === "Review") {
@@ -667,7 +668,7 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
                     marginTop: "8px",
                   }}
                 >
-                  {getPlainDescription(cat.name, cat.status)}
+                  {getPlainDescription(cat.name, cat.status, candidate.side)}
                 </p>
               </div>
             );
@@ -1110,7 +1111,7 @@ function WeeklyIncomeContent() {
             </div>
 
             {/* Stat pills */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-2.5">
               <div className="bg-[#0d1118] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
                 <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Scanned</div>
                 <div
@@ -1157,6 +1158,21 @@ function WeeklyIncomeContent() {
                   {mode === "micro" ? "5 days" : (data?.market_condition || "—")}
                 </div>
               </div>
+              {candidates.filter(c => c.side?.toLowerCase() === "call").length > 0 && (
+                <div className="bg-[#0d1118] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
+                  <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Call Setups</div>
+                  <div
+                    className="text-lg font-bold leading-none"
+                    style={{
+                      fontFamily: "'JetBrains Mono', monospace",
+                      color: "#ef4444",
+                      textShadow: "0 0 12px rgba(239,68,68,0.3)",
+                    }}
+                  >
+                    {candidates.filter(c => c.side?.toLowerCase() === "call").length}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -1341,7 +1357,12 @@ function WeeklyIncomeContent() {
               )}
 
               {/* Signal Rows */}
-              {candidates.map((c, i) => {
+              {(() => {
+                const sortedCandidates = [
+                  ...candidates.filter(c => c.side?.toLowerCase() === "put"),
+                  ...candidates.filter(c => c.side?.toLowerCase() === "call"),
+                ];
+                return sortedCandidates.map((c, i) => {
                 const isPut = c.side.toLowerCase() === "put";
                 const sideColor = isPut ? "#00e5a0" : "#ef4444";
                 const grade = c._grade;
@@ -1353,7 +1374,20 @@ function WeeklyIncomeContent() {
                 const isExpanded = expandedRows.has(i);
 
                 return (
-                  <div key={`${c.contract_symbol}-${i}`}>
+                  <React.Fragment key={`${c.contract_symbol}-${i}`}>
+                  {i > 0 && sortedCandidates[i].side?.toLowerCase() === "call" && sortedCandidates[i-1].side?.toLowerCase() === "put" && (
+                    <div
+                      className="mx-4 my-2 flex items-center gap-3"
+                      style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                    >
+                      <div className="flex-1 h-px" style={{ background: "rgba(239,68,68,0.12)" }} />
+                      <span className="text-[9px] tracking-widest uppercase" style={{ color: "rgba(239,68,68,0.4)" }}>
+                        A-Grade Call Setups
+                      </span>
+                      <div className="flex-1 h-px" style={{ background: "rgba(239,68,68,0.12)" }} />
+                    </div>
+                  )}
+                  <div>
                     {/* Desktop row */}
                     <div
                       className="hidden md:grid gap-3 px-4 py-4 border-b border-white/[0.04] items-center hover:bg-white/[0.02] transition-colors cursor-pointer select-none"
@@ -1693,8 +1727,9 @@ function WeeklyIncomeContent() {
                       )}
                     </div>
                   </div>
+                  </React.Fragment>
                 );
-              })}
+              }); })()}
             </div>
 
             {/* ── Recent Backtest Performance ── */}
@@ -2009,8 +2044,8 @@ function WeeklyIncomeContent() {
                       onChange={(e) => setFormData({ ...formData, side: e.target.value as "PUT" | "CALL" })}
                       style={{ width: "100%", background: "#0d1118", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8, padding: "8px 12px", color: "white", fontSize: "0.8rem", fontFamily: "'JetBrains Mono', monospace", outline: "none" }}
                     >
-                      <option value="PUT">PUT</option>
-                      <option value="CALL">CALL</option>
+                      <option value="PUT">Short Put</option>
+                      <option value="CALL">Short Call</option>
                     </select>
                   </div>
                   {/* Strike */}
