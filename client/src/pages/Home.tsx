@@ -12,6 +12,7 @@ import SharedNavbar from "@/components/Navbar";
 import PushNotificationMockup from "@/components/PushNotificationMockup";
 import { toast } from "sonner";
 import { useLoginModal } from "../contexts/LoginModalContext";
+import GlobalDisclaimer from "@/components/GlobalDisclaimer";
 
 // ── Ticker tape types & fallback data ─────────────────────────
 interface TickerPrice {
@@ -148,7 +149,6 @@ function TickerTape() {
 
 // ── Hero ──────────────────────────────────────────────────────
 function Hero() {
-  const { openLoginModal } = useLoginModal();
   return (
     <section
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
@@ -226,400 +226,17 @@ function Hero() {
             animation: "heroFadeIn 0.5s ease-out 0.35s both",
           }}
         >
-           Primal Edge is an options AI engine built for two types of traders. It scans blue-chip stocks and ETFs, scores every setup by conviction, and delivers the highest-ranked signals to your dashboard and phone — whether you sell premium for weekly income or trade high-conviction directional breakouts.
+          Two strategies. One AI engine. Signals delivered to your phone before the market opens.
         </p>
 
-        {/* Push notification mockup */}
-        <PushNotificationMockup
-          ticker="META"
-          grade="A"
-          setupType="BULLISH SLINGSHOT"
-          strike="$540"
-          expiry="Jun 27"
-          credit="—"
-          score="88"
-          animDelay={0.35}
-        />
-
-        {/* Blurred AI Cockpit Card */}
-        <div
-          style={{
-            background: "#0d1118",
-            border: "1px solid rgba(255,255,255,0.08)",
-            borderRadius: "12px",
-            overflow: "hidden",
-            maxWidth: "700px",
-            margin: "32px auto 0",
-            animation: "heroFadeIn 0.6s ease-out 0.5s both",
-          }}
+        {/* Single CTA */}
+        <button
+          onClick={() => document.getElementById('strategies')?.scrollIntoView({ behavior: 'smooth' })}
+          className="mt-8 bg-[#00e5a0] text-[#0a0d12] font-bold text-sm px-8 py-4 rounded-lg hover:bg-[#00ffb3] transition-colors"
+          style={{ animation: "heroFadeIn 0.5s ease-out 0.5s both" }}
         >
-          {/* macOS title bar */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-              padding: "10px 14px",
-              borderBottom: "1px solid rgba(255,255,255,0.06)",
-              background: "rgba(255,255,255,0.02)",
-            }}
-          >
-            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#ff5f57" }} />
-            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#febc2e" }} />
-            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#28c840" }} />
-            <span
-              style={{
-                fontFamily: "'JetBrains Mono', monospace",
-                fontSize: "0.6rem",
-                color: "rgba(255,255,255,0.3)",
-                marginLeft: "8px",
-                letterSpacing: "0.12em",
-              }}
-            >
-              AI COCKPIT
-            </span>
-          </div>
-
-          {/* Table */}
-          <div style={{ padding: "12px 14px", overflowX: "auto" }}>
-            {/* Column headers (unblurred) */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1.6fr 0.7fr 0.6fr 0.9fr 1fr",
-                gap: "8px",
-                padding: "6px 8px",
-                borderBottom: "1px solid rgba(255,255,255,0.06)",
-                marginBottom: "4px",
-              }}
-            >
-              {["TICKER", "VERDICT", "SCORE", "GRADE", "PRICE", "ALERT TIME"].map((h) => (
-                <span
-                  key={h}
-                  style={{
-                    fontFamily: "'JetBrains Mono', monospace",
-                    fontSize: "0.55rem",
-                    color: "rgba(255,255,255,0.3)",
-                    letterSpacing: "0.1em",
-                    textTransform: "uppercase",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {h}
-                </span>
-              ))}
-            </div>
-
-            {/* Blurred data rows */}
-            <div style={{ position: "relative" }}>
-              <div style={{ filter: "blur(5px)", userSelect: "none" }}>
-                {[
-                  { ticker: "NVDA", verdict: "BULLISH SLINGSHOT", score: "92", grade: "A", price: "$148.50", time: "09:31:02" },
-                  { ticker: "META", verdict: "READY", score: "85", grade: "A", price: "$612.30", time: "09:32:15" },
-                  { ticker: "TSLA", verdict: "COIL", score: "71", grade: "B", price: "$265.80", time: "09:33:44" },
-                ].map((row, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "1fr 1.6fr 0.7fr 0.6fr 0.9fr 1fr",
-                      gap: "8px",
-                      padding: "8px 8px",
-                      borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.04)" : "none",
-                    }}
-                  >
-                    <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.7rem", color: "#fff", fontWeight: 700 }}>{row.ticker}</span>
-                    <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem", color: "#22c55e" }}>{row.verdict}</span>
-                    <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.7rem", color: "#00e5a0", fontWeight: 700 }}>{row.score}</span>
-                    <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.7rem", color: "#fff" }}>{row.grade}</span>
-                    <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.7rem", color: "rgba(255,255,255,0.7)" }}>{row.price}</span>
-                    <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem", color: "rgba(255,255,255,0.4)" }}>{row.time}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Lock overlay */}
-              <div
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "6px",
-                }}
-              >
-                <span style={{ fontSize: "1.4rem" }}>🔒</span>
-                <span
-                  style={{
-                    fontFamily: "'JetBrains Mono', monospace",
-                    fontSize: "0.65rem",
-                    color: "rgba(255,255,255,0.45)",
-                    letterSpacing: "0.06em",
-                  }}
-                >
-                  Members only — Sign in to access your dashboard
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Performance Strip */}
-        <div
-          style={{
-            background: "#0d1118",
-            border: "1px solid rgba(255,255,255,0.08)",
-            borderRadius: "8px",
-            padding: "20px",
-            maxWidth: "600px",
-            margin: "28px auto 0",
-            animation: "heroFadeIn 0.5s ease-out 0.55s both",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexWrap: "wrap",
-              gap: "16px 24px",
-            }}
-          >
-            {["92.1% Win Rate · Income Strategy*", "A-Grade Hit Rate 81% · Directional Strategy*", "18 Months Backtested"].map((stat, i, arr) => (
-              <span key={stat} style={{ display: "inline-flex", alignItems: "center", gap: "24px" }}>
-                <span
-                  style={{
-                    fontFamily: "'JetBrains Mono', monospace",
-                    fontSize: "0.72rem",
-                    color: "rgba(255,255,255,0.8)",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {stat}
-                </span>
-                {i < arr.length - 1 && (
-                  <span
-                    style={{
-                      fontFamily: "'JetBrains Mono', monospace",
-                      fontSize: "0.65rem",
-                      color: "rgba(255,255,255,0.15)",
-                      userSelect: "none",
-                    }}
-                  >
-                    ·
-                  </span>
-                )}
-              </span>
-            ))}
-          </div>
-          <p
-            style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              fontSize: "0.58rem",
-              color: "rgba(255,255,255,0.25)",
-              textAlign: "center",
-              marginTop: "12px",
-              marginBottom: 0,
-              lineHeight: 1.5,
-            }}
-          >
-            *Based on historical backtesting. Past performance does not guarantee future results.
-          </p>
-        </div>
-
-        {/* Methodology Pillars */}
-        <div
-          style={{
-            display: "flex",
-            gap: "12px",
-            flexWrap: "wrap",
-            maxWidth: "640px",
-            margin: "28px auto",
-            justifyContent: "center",
-            animation: "heroFadeIn 0.5s ease-out 0.58s both",
-          }}
-        >
-          {[
-            { icon: "⚡", label: "Multi-Timeframe Confluence", desc: "Cross-referencing options signals across daily, weekly, and intraday structure to confirm setup quality before entry" },
-            { icon: "📊", label: "Volatility Structure Analysis", desc: "Reading implied vs realized volatility and IV rank to identify mispriced options premium worth selling" },
-            { icon: "🏆", label: "Conviction Scoring Engine", desc: "Quantifying options setup quality on a 0–100 scale — filtering for delta, DTE, IV rank, and underlying quality" },
-          ].map((tile) => (
-            <div
-              key={tile.label}
-              style={{
-                background: "transparent",
-                border: "1px solid rgba(255,255,255,0.08)",
-                borderRadius: "8px",
-                padding: "16px 20px",
-                minWidth: "180px",
-                flex: 1,
-              }}
-            >
-              <p
-                style={{
-                  fontFamily: "'JetBrains Mono', monospace",
-                  fontSize: "0.7rem",
-                  color: "rgba(255,255,255,0.8)",
-                  margin: 0,
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {tile.icon} {tile.label}
-              </p>
-              <p
-                style={{
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  fontSize: "0.72rem",
-                  color: "rgba(255,255,255,0.35)",
-                  margin: "6px 0 0",
-                  lineHeight: 1.5,
-                }}
-              >
-                {tile.desc}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        {/* Stat pills */}
-        <div
-          className="flex flex-wrap justify-center items-center"
-          style={{ gap: "8px 16px", marginTop: "32px", animation: "heroFadeIn 0.35s ease-out 0.6s both" }}
-        >
-          {["ALWAYS RUNNING", "SUB-3 SECOND DELIVERY", "ANY BROKER · ANY PLATFORM"].map((tag, i) => (
-            <div key={tag} className="flex items-center" style={{ gap: "16px", animation: `heroFadeIn 0.35s ease-out ${0.6 + i * 0.06}s both` }}>
-              {i > 0 && (
-                <span
-                  className="hidden lg:inline"
-                  style={{
-                    fontFamily: "'JetBrains Mono', monospace",
-                    fontSize: "0.65rem",
-                    color: "rgba(255,255,255,0.15)",
-                    userSelect: "none",
-                  }}
-                >
-                  ·
-                </span>
-              )}
-              <span
-                className="transition-all"
-                style={{
-                  fontFamily: "'JetBrains Mono', monospace",
-                  fontWeight: 500,
-                  fontSize: "0.62rem",
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "#00e5a0",
-                  background: "rgba(0,229,160,0.06)",
-                  border: "1px solid rgba(0,229,160,0.2)",
-                  padding: "4px 10px",
-                  borderRadius: "4px",
-                  minHeight: "32px",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  cursor: "default",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "rgba(0,229,160,0.12)";
-                  e.currentTarget.style.borderColor = "rgba(0,229,160,0.4)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "rgba(0,229,160,0.06)";
-                  e.currentTarget.style.borderColor = "rgba(0,229,160,0.2)";
-                }}
-              >
-                {tag}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {/* Social Proof Bar */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            flexWrap: "wrap",
-            gap: "20px",
-            margin: "20px auto",
-            animation: "heroFadeIn 0.4s ease-out 0.62s both",
-          }}
-        >
-          {["120 Active Members", "22 Countries", "By Invitation Only"].map((item) => (
-            <span
-              key={item}
-              style={{
-                fontFamily: "'JetBrains Mono', monospace",
-                fontSize: "0.6rem",
-                color: "rgba(255,255,255,0.3)",
-                whiteSpace: "nowrap",
-              }}
-            >
-              <span style={{ color: "rgba(0,229,160,0.6)" }}>●</span> {item}
-            </span>
-          ))}
-        </div>
-
-        {/* Primary CTA */}
-        <div
-          style={{ marginTop: "36px", animation: "heroFadeIn 0.5s ease-out 0.65s both" }}
-        >
-          <Link
-            href="/products"
-            className="w-full sm:w-auto text-center transition-all"
-            style={{
-              background: "#00e5a0",
-              color: "#0a0d12",
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontWeight: 700,
-              fontSize: "0.9rem",
-              padding: "14px 28px",
-              borderRadius: "6px",
-              minHeight: "48px",
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "#00ffb3";
-              e.currentTarget.style.transform = "scale(1.02)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "#00e5a0";
-              e.currentTarget.style.transform = "scale(1)";
-            }}
-          >
-            Find Your Strategy →
-          </Link>
-        </div>
-
-        {/* Secondary CTA */}
-        <p className="text-white/30 text-sm mt-4">
-          Already a member?{" "}
-          <span
-            onClick={() => openLoginModal()}
-            style={{ color: "#00ff96", cursor: "pointer", textDecoration: "underline" }}
-          >
-            Sign in →
-          </span>
-        </p>
-
-        {/* Scarcity line */}
-        <p
-          style={{
-            fontFamily: "'JetBrains Mono', monospace",
-            fontSize: "0.65rem",
-            color: "rgba(255,255,255,0.28)",
-            letterSpacing: "0.1em",
-            marginTop: "28px",
-            animation: "heroFadeIn 0.4s ease-out 0.85s both",
-          }}
-        >
-           <span style={{ color: "#00e5a0" }}>●</span> Weekly Income Dashboard · AI Cockpit Scanner — both live · Limited seats
-        </p>
+          ↓ Choose your strategy
+        </button>
       </div>
 
       {/* Scroll indicator */}
@@ -671,7 +288,7 @@ function Hero() {
 // ── Two Strategies ────────────────────────────────────────────
 function TwoStrategies() {
   return (
-    <section className="w-full py-16 px-4">
+    <section id="strategies" className="w-full py-16 px-4">
       <div className="max-w-4xl mx-auto">
 
         <div className="flex flex-col items-center gap-1 mb-8 text-center">
@@ -696,6 +313,19 @@ function TwoStrategies() {
               <li>✓ Conservative OTM strikes on blue-chips</li>
               <li>✓ 92.1% win rate · 18-month backtest</li>
             </ul>
+            {/* Push notification preview */}
+            <div className="my-3">
+              <PushNotificationMockup
+                ticker="META"
+                grade="A"
+                setupType="BULLISH SLINGSHOT"
+                strike="$540"
+                expiry="Jun 27"
+                credit="—"
+                score="88"
+                animDelay={0.1}
+              />
+            </div>
             <span className="mt-auto inline-block bg-green-400 text-black font-black text-sm px-5 py-3 rounded-lg text-center group-hover:brightness-110 transition-all duration-150">
               Explore Weekly Income <span style={{ display: "inline-block", animation: "arrowNudge 1.2s ease-in-out infinite" }}>→</span>
             </span>
@@ -714,6 +344,36 @@ function TwoStrategies() {
               <li>✓ Multi-timeframe confluence scoring</li>
               <li>✓ Real-time mobile alerts</li>
             </ul>
+            {/* Blurred AI Cockpit table preview */}
+            <div className="my-3 rounded-xl overflow-hidden" style={{ background: "#0d1118", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "6px", padding: "8px 12px", borderBottom: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)" }}>
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#ff5f57" }} />
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#febc2e" }} />
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#28c840" }} />
+                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.5rem", color: "rgba(255,255,255,0.3)", marginLeft: "6px", letterSpacing: "0.12em" }}>AI COCKPIT</span>
+              </div>
+              <div style={{ padding: "8px 10px", position: "relative" }}>
+                <div style={{ filter: "blur(5px)", userSelect: "none" }}>
+                  {[
+                    { ticker: "NVDA", verdict: "BULLISH SLINGSHOT", score: "92", grade: "A", price: "$148.50" },
+                    { ticker: "META", verdict: "READY", score: "85", grade: "A", price: "$612.30" },
+                    { ticker: "TSLA", verdict: "COIL", score: "71", grade: "B", price: "$265.80" },
+                  ].map((row, i) => (
+                    <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "6px 4px", borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
+                      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem", color: "#fff", fontWeight: 700 }}>{row.ticker}</span>
+                      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.6rem", color: "#22c55e" }}>{row.verdict}</span>
+                      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem", color: "#00e5a0", fontWeight: 700 }}>{row.score}</span>
+                      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem", color: "rgba(255,255,255,0.7)" }}>{row.price}</span>
+                    </div>
+                  ))}
+                </div>
+                {/* Lock overlay */}
+                <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "4px" }}>
+                  <span style={{ fontSize: "1.2rem" }}>🔒</span>
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.55rem", color: "rgba(255,255,255,0.45)", letterSpacing: "0.06em" }}>Members only</span>
+                </div>
+              </div>
+            </div>
             <span className="mt-auto inline-block bg-white/10 text-white font-black text-sm px-5 py-3 rounded-lg text-center group-hover:bg-white/20 transition-all duration-150">
               Explore AI Cockpit →
             </span>
@@ -733,10 +393,9 @@ function TwoStrategies() {
 function HowItWorks() {
   const { ref, inView } = useInView();
   const steps = [
-    { num: "01", title: "Autonomous Data Ingestion", desc: "On every cycle, the engine autonomously ingests live market data, options chain pricing, IV rank, and DTE windows across a curated universe of blue-chip stocks and options-liquid ETFs spanning multiple indices and proprietary watchlists. Data is normalized, adjusted for corporate actions, and staged for feature extraction — zero manual input, zero human bottleneck.", icon: "📡", traderValue: "The engine watches blue-chip stocks and ETFs for qualifying options income setups — monitoring delta, IV rank, and weekly expiration windows so you don't have to." },
-    { num: "02", title: "Proprietary Feature Extraction", desc: "Raw price and volume data is transformed through a multi-layer feature engineering pipeline into a high-dimensional numerical representation. The system captures latent relationships between momentum regime, volatility structure, and directional pressure that are invisible to standard technical analysis.", icon: "🧠", traderValue: "Instead of reacting to obvious price movement after the crowd sees it, the system studies structure, compression, momentum, volume behavior, and directional pressure. This helps surface setups that may be forming beneath the noise." },
-    { num: "03", title: "Adaptive Conviction Scoring", desc: "A proprietary scoring model evaluates each candidate across multiple orthogonal dimensions of market confluence, producing a single 0–100 conviction score. Dynamic penalty layers adjust for regime risk, overextension, and event proximity — tiering every setup as ELITE, FIRE, PREP, or SUPPRESS.", icon: "🏆", traderValue: "Every candidate is ranked before it reaches the trader. The 0–100 score and grade help separate high-priority setups from weak or early formations, so traders can decide what deserves immediate review." },
-    { num: "04", title: "Dual-Channel Signal Dispatch", desc: "Qualifying signals are deduplicated against the session registry, packaged with full context — ticker, conviction score, grade, verdict, and price — and dispatched simultaneously to your mobile device and the live Primal Edge AI Cockpit. Typical signal-to-screen latency: under 3 seconds.", icon: "🔔", traderValue: "When a qualified setup fires, the alert arrives with ticker, verdict, score, grade, price, and context. This turns a raw market event into a fast review-ready signal instead of a vague notification." },
+    { num: "01", title: "Scan", desc: "The engine monitors blue-chip stocks and ETFs continuously across multiple timeframes.", icon: "📡" },
+    { num: "02", title: "Score", desc: "Every setup is scored 0–100 by conviction — only the top qualify.", icon: "🏆" },
+    { num: "03", title: "Deliver", desc: "The highest-ranked signal reaches your phone and dashboard in under 3 seconds.", icon: "🔔" },
   ];
 
   return (
@@ -752,8 +411,8 @@ function HowItWorks() {
         </div>
 
         <div className="relative">
-          <div className="hidden lg:block absolute top-12 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00e5a0]/20 to-transparent" />
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          <div className="hidden sm:block absolute top-12 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00e5a0]/20 to-transparent" />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
             {steps.map((step, i) => (
               <div key={i} className={`relative ${inView ? `fade-up fade-up-delay-${i + 1}` : "opacity-0"}`}>
                 <div className="flex items-center gap-3 mb-4">
@@ -763,35 +422,10 @@ function HowItWorks() {
                 </div>
                 <div className="text-2xl mb-3">{step.icon}</div>
                 <h3 className="font-['Space_Grotesk'] font-semibold text-base sm:text-lg text-white mb-2">{step.title}</h3>
-                <p className="text-white/50 text-sm leading-relaxed mb-3">{step.desc}</p>
-                {/* Trader Value translation */}
-                <div className="bg-[#00e5a0]/5 border border-[#00e5a0]/10 rounded-lg px-3 py-2.5 mt-auto">
-                  <p className="font-mono text-[10px] text-[#00e5a0]/70 tracking-widest mb-1">WHY TRADERS CARE</p>
-                  <p className="text-white/55 text-xs leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>{step.traderValue}</p>
-                </div>
+                <p className="text-white/50 text-sm leading-relaxed">{step.desc}</p>
               </div>
             ))}
           </div>
-        </div>
-
-        {/* Push notification visual demo */}
-        <div className={`mt-10 ${inView ? "fade-up fade-up-delay-5" : "opacity-0"}`}>
-          <PushNotificationMockup
-            ticker="META"
-            grade="A"
-            setupType="BULLISH SLINGSHOT"
-            strike="$540"
-            expiry="Jun 27"
-            credit="—"
-            score="88"
-          />
-        </div>
-
-        {/* Value strip */}
-        <div className={`mt-10 sm:mt-14 flex flex-wrap justify-center gap-3 sm:gap-4 ${inView ? "fade-up fade-up-delay-5" : "opacity-0"}`}>
-          {["Blue-Chip Options Universe", "Multi-Timeframe Context", "AI Conviction Score", "Noise Filter", "Fast Alert Delivery"].map((item, i) => (
-            <span key={i} className="font-mono text-[10px] sm:text-xs text-white/35 tracking-wider bg-white/3 border border-white/5 rounded-full px-3 sm:px-4 py-1.5">{item}</span>
-          ))}
         </div>
       </div>
     </section>
@@ -1227,6 +861,22 @@ function CTABanner() {
           <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url(https://d2xsxph8kpxj0f.cloudfront.net/310519663512345692/KvRThKXVvSJuMZkgYyw4Zk/hero-bg-WRuxyzjuQc2Zg7wTqtkdku.webp)`, backgroundSize: "cover", backgroundPosition: "center" }} />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0a0d12]/80" />
           <div className="relative">
+            {/* Social proof */}
+            <div className="flex justify-center items-center flex-wrap gap-4 mb-6">
+              {["120 Active Members", "22 Countries", "By Invitation Only"].map((item) => (
+                <span
+                  key={item}
+                  style={{
+                    fontFamily: "'JetBrains Mono', monospace",
+                    fontSize: "0.6rem",
+                    color: "rgba(255,255,255,0.4)",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  <span style={{ color: "rgba(0,229,160,0.6)" }}>●</span> {item}
+                </span>
+              ))}
+            </div>
             <p className="font-mono text-xs text-[#00e5a0] tracking-widest mb-4">PRIVATE MEMBERSHIP — LIMITED SEATS</p>
             <h2 className="font-['Space_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-5xl text-white mb-6">
               Stop Guessing Which Options Setup to Make.<br />Let the Engine Decide.
@@ -1234,8 +884,8 @@ function CTABanner() {
             <p className="text-white/55 text-base sm:text-lg max-w-xl mx-auto mb-8">
               Join a private community of options traders using the Primal Edge AI engine to find weekly income setups and directional breakouts — scored, graded, and delivered as real-time educational analysis.
             </p>
-            <Link href="/products" className="shimmer-btn pulse-glow inline-block bg-[#00e5a0] text-[#0a0d12] font-['Space_Grotesk'] font-bold text-base sm:text-lg px-8 sm:px-10 py-4 rounded-lg hover:bg-[#00bfa0] transition-all">
-              Find Your Strategy →
+            <Link href="/subscribe" className="shimmer-btn pulse-glow inline-block bg-[#00e5a0] text-[#0a0d12] font-['Space_Grotesk'] font-bold text-base sm:text-lg px-8 sm:px-10 py-4 rounded-lg hover:bg-[#00bfa0] transition-all">
+              Request Access →
             </Link>
           </div>
         </div>
@@ -1255,8 +905,8 @@ function Footer() {
           </div>
           <div className="flex flex-wrap justify-center gap-4 sm:gap-6 text-sm text-white/30">
             <a href="#how-it-works" className="hover:text-white/60 transition-colors">How It Works</a>
-            <a href="#features" className="hover:text-white/60 transition-colors">Features</a>
-            <a href="#access" className="hover:text-white/60 transition-colors">Access</a>
+            <Link href="/products" className="hover:text-white/60 transition-colors">Features</Link>
+            <Link href="/subscribe" className="hover:text-white/60 transition-colors">Access</Link>
             <Link href="/products" className="hover:text-white/60 transition-colors">Products</Link>
             <Link href="/market-sentiment" className="hover:text-white/60 transition-colors">Market Sentiment</Link>
             <Link href="/sectors" className="hover:text-white/60 transition-colors">Sectors</Link>
@@ -1287,12 +937,9 @@ export default function Home() {
       <Hero />
       <TwoStrategies />
       <HowItWorks />
-      <Features />
-      <Technology />
       <AlertPreview />
-      <AccessSection />
-      <FAQ />
       <CTABanner />
+      <GlobalDisclaimer />
       <Footer />
     </div>
   );
