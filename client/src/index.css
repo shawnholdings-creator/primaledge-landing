@@ -277,6 +277,8 @@
   .ticker-tape {
     animation: ticker-scroll 30s linear infinite;
     white-space: nowrap;
+    width: max-content;
+    will-change: transform;
   }
 
   @keyframes scan-row-in {

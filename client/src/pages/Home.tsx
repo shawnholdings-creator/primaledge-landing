@@ -127,7 +127,7 @@ function TickerTape() {
   const items = [...prices, ...prices];
   return (
     <div className="fixed top-20 left-0 right-0 z-40 bg-[#0d1118] border-b border-white/5 overflow-hidden h-8">
-      <div className="ticker-tape flex items-center h-full gap-8 px-4">
+      <div className="ticker-tape inline-flex items-center h-full gap-8 px-4">
         {items.map((item, i) => (
           <span key={i} className="flex items-center gap-2 shrink-0">
             <span className="font-mono text-xs font-bold text-white/80">{item.sym}</span>
