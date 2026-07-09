@@ -9,16 +9,24 @@ import { useAuth } from "../contexts/AuthContext";
 import LoginForm from "./LoginForm";
 
 export default function LoginModal() {
-  const { isOpen, closeLoginModal, redirectTo } = useLoginModal();
+  const { isOpen, closeLoginModal, redirectTo, dismissTo } = useLoginModal();
   const { user, productAccess } = useAuth();
   const [, navigate] = useLocation();
+
+  // After user dismisses modal (X, backdrop, Escape): close and navigate to hero page
+  const handleDismiss = useCallback(() => {
+    closeLoginModal();
+    if (dismissTo) {
+      navigate(dismissTo);
+    }
+  }, [closeLoginModal, dismissTo, navigate]);
 
   // Close on Escape
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === "Escape") closeLoginModal();
+      if (e.key === "Escape") handleDismiss();
     },
-    [closeLoginModal],
+    [handleDismiss],
   );
 
   useEffect(() => {
@@ -56,7 +64,7 @@ export default function LoginModal() {
         backdropFilter: "blur(4px)",
       }}
       onClick={(e) => {
-        if (e.target === e.currentTarget) closeLoginModal();
+        if (e.target === e.currentTarget) handleDismiss();
       }}
     >
       <div
@@ -74,7 +82,7 @@ export default function LoginModal() {
       >
         {/* Close button */}
         <button
-          onClick={closeLoginModal}
+          onClick={handleDismiss}
           className="absolute top-4 right-4 text-white/30 hover:text-white transition-colors text-xl leading-none"
           aria-label="Close"
         >

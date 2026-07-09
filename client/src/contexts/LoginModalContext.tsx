@@ -6,9 +6,10 @@ import { createContext, useContext, useState, type ReactNode } from "react";
 
 interface LoginModalContextType {
   isOpen: boolean;
-  openLoginModal: (redirectTo?: string) => void;
+  openLoginModal: (redirectTo?: string, dismissTo?: string) => void;
   closeLoginModal: () => void;
   redirectTo: string | undefined;
+  dismissTo: string | undefined;
 }
 
 const LoginModalContext = createContext<LoginModalContextType | null>(null);
@@ -16,20 +17,23 @@ const LoginModalContext = createContext<LoginModalContextType | null>(null);
 export function LoginModalProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const [redirectTo, setRedirectTo] = useState<string | undefined>(undefined);
+  const [dismissTo, setDismissTo] = useState<string | undefined>(undefined);
 
-  const openLoginModal = (path?: string) => {
+  const openLoginModal = (path?: string, dismiss?: string) => {
     setRedirectTo(path);
+    setDismissTo(dismiss);
     setIsOpen(true);
   };
 
   const closeLoginModal = () => {
     setIsOpen(false);
     setRedirectTo(undefined);
+    setDismissTo(undefined);
   };
 
   return (
     <LoginModalContext.Provider
-      value={{ isOpen, openLoginModal, closeLoginModal, redirectTo }}
+      value={{ isOpen, openLoginModal, closeLoginModal, redirectTo, dismissTo }}
     >
       {children}
     </LoginModalContext.Provider>
