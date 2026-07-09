@@ -134,7 +134,7 @@ export default function BacktestSignalLog() {
   return (
     <div>
       {/* PART 1 — Terminal Banner */}
-      <div className="w-full max-w-2xl mx-auto">
+      <div className="w-full mx-auto">
         <div className="rounded-t-xl border border-white/10 bg-white/[0.03] px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <div>
             <p className="text-[10px] font-mono text-green-400/70 uppercase tracking-widest m-0">
@@ -151,7 +151,7 @@ export default function BacktestSignalLog() {
       </div>
 
       {/* PART 2 — Weekly Scorecard Strip */}
-      <div className="w-full max-w-2xl mx-auto grid grid-cols-3 border-l border-r border-white/10">
+      <div className="w-full mx-auto grid grid-cols-3 border-l border-r border-white/10">
         {weeklyStats.map((week, i) => (
           <div
             key={i}
@@ -174,8 +174,9 @@ export default function BacktestSignalLog() {
       </div>
 
       {/* PART 3 — Full Trade Log Table */}
-      <div className="w-full max-w-2xl mx-auto border border-white/10 border-t-0 rounded-b-xl overflow-hidden mb-4">
-        <table className="w-full border-collapse">
+      <div className="w-full mx-auto border border-white/10 border-t-0 rounded-b-xl overflow-hidden mb-4">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[600px] border-collapse">
           <thead>
             <tr className="bg-white/5">
               {/* Ticker — always visible */}
@@ -242,6 +243,7 @@ export default function BacktestSignalLog() {
             </tr>
           </tbody>
         </table>
+        </div>
         {/* Footnote */}
         <p className="text-[11px] text-gray-600 px-3 py-2 border-t border-white/5 m-0">
           Backtest simulation · Stock price, strike &amp; expiration verifiable on Yahoo Finance / CBOE historical chains · 1 contract per signal · Updates weekly. Past results do not guarantee future performance. Not financial advice.
