@@ -46,11 +46,14 @@ interface DisplayTrade {
 const FALLBACK_TRADES: DisplayTrade[] = [
   { ticker: "QQQ",   date: "Jun 05, 2026", stockPrice: "$704.29", expiration: "Jun 14, 2026", dte: 9, strike: "$676 Put", strikeRaw: 676,  credit: "$286", creditRaw: 286, days: 3, pnl: "+$170", pnlRaw: 170,  win: true  },
   { ticker: "SMH",   date: "Jun 05, 2026", stockPrice: "$569.69", expiration: "Jun 14, 2026", dte: 9, strike: "$521 Put", strikeRaw: 521,  credit: "$523", creditRaw: 523, days: 3, pnl: "+$369", pnlRaw: 369,  win: true  },
+  { ticker: "QQQ",   date: "Jun 05, 2026", stockPrice: "$704.29", expiration: "Jun 14, 2026", dte: 9, strike: "$735 Call", strikeRaw: 735, credit: "$198", creditRaw: 198, days: 3, pnl: "+$145", pnlRaw: 145,  win: true  },
   { ticker: "SNOW",  date: "May 29, 2026", stockPrice: "$255.55", expiration: "Jun 07, 2026", dte: 9, strike: "$218 Put", strikeRaw: 218,  credit: "$687", creditRaw: 687, days: 3, pnl: "+$420", pnlRaw: 420,  win: true  },
   { ticker: "SMH",   date: "May 29, 2026", stockPrice: "$598.93", expiration: "Jun 07, 2026", dte: 9, strike: "$557 Put", strikeRaw: 557,  credit: "$368", creditRaw: 368, days: 4, pnl: "+$329", pnlRaw: 329,  win: true  },
+  { ticker: "META",  date: "May 29, 2026", stockPrice: "$598.93", expiration: "Jun 07, 2026", dte: 9, strike: "$625 Call", strikeRaw: 625, credit: "$241", creditRaw: 241, days: 4, pnl: "+$189", pnlRaw: 189,  win: true  },
   { ticker: "META",  date: "May 21, 2026", stockPrice: "$606.82", expiration: "May 30, 2026", dte: 9, strike: "$570 Put", strikeRaw: 570,  credit: "$384", creditRaw: 384, days: 5, pnl: "+$225", pnlRaw: 225,  win: true  },
   { ticker: "GOOGL", date: "May 21, 2026", stockPrice: "$387.43", expiration: "May 30, 2026", dte: 9, strike: "$360 Put", strikeRaw: 360,  credit: "$257", creditRaw: 257, days: 5, pnl: "+$131", pnlRaw: 131,  win: true  },
   { ticker: "SMH",   date: "May 21, 2026", stockPrice: "$567.88", expiration: "May 30, 2026", dte: 9, strike: "$528 Put", strikeRaw: 528,  credit: "$415", creditRaw: 415, days: 5, pnl: "+$386", pnlRaw: 386,  win: true  },
+  { ticker: "SMH",   date: "May 21, 2026", stockPrice: "$567.88", expiration: "May 30, 2026", dte: 9, strike: "$595 Call", strikeRaw: 595, credit: "$178", creditRaw: 178, days: 5, pnl: "+$134", pnlRaw: 134,  win: true  },
 ].map(t => ({
   ...t,
   rrRatio: (Math.round(((t.strikeRaw - t.creditRaw) / t.creditRaw) * 10) / 10).toFixed(1) + ":1",
@@ -84,8 +87,9 @@ function useRecentTrades() {
 /* ─── Component ─────────────────────────────────────────────── */
 export default function BacktestSignalLog() {
   const { trades: recentTrades, loading } = useRecentTrades();
+  const [sideFilter, setSideFilter] = useState<"all" | "puts" | "calls">("all");
 
-  const displayTrades: DisplayTrade[] = (recentTrades && recentTrades.length > 0)
+  const allTrades: DisplayTrade[] = (recentTrades && recentTrades.length > 0)
     ? recentTrades.map(t => ({
         ticker: t.ticker,
         date: new Date(t.entry_date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
@@ -93,7 +97,7 @@ export default function BacktestSignalLog() {
         expiration: new Date(new Date(t.entry_date).getTime() + ((t as any).dte ?? 0) * 86400000)
           .toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
         dte: (t as any).dte ?? 0,
-        strike: `$${t.strike} ${t.side === "put" ? "Put" : "Call"}`,
+        strike: `$${t.strike} ${t.side?.toLowerCase() === "call" ? "Call" : "Put"}`,
         credit: `$${Math.round(t.credit * 100)}`,
         days: t.days_held,
         pnl: `${t.pnl_per_contract >= 0 ? "+" : ""}$${Math.abs(Math.round(t.pnl_per_contract)).toLocaleString()}`,
@@ -104,6 +108,13 @@ export default function BacktestSignalLog() {
         rrRatio: (Math.round(((t.strike - t.credit * 100) / (t.credit * 100)) * 10) / 10).toFixed(1) + ":1",
       }))
     : FALLBACK_TRADES;
+
+  // Apply side filter
+  const displayTrades = sideFilter === "all"
+    ? allTrades
+    : sideFilter === "puts"
+    ? allTrades.filter(t => t.strike.includes("Put"))
+    : allTrades.filter(t => t.strike.includes("Call"));
 
   const totalTrades = displayTrades.length;
   const totalWins = displayTrades.filter(t => t.win).length;
@@ -129,7 +140,27 @@ export default function BacktestSignalLog() {
     ? `${displayTrades[displayTrades.length - 1].date} \u2013 ${displayTrades[0].date}`
     : "Last 3 weeks";
 
+  const bannerLabel = sideFilter === "puts"
+    ? "Backtest Signal Log \u00b7 Sell Put Signals \u00b7 If You Had Taken These Trades"
+    : sideFilter === "calls"
+    ? "Backtest Signal Log \u00b7 Sell Call Signals \u00b7 If You Had Taken These Trades"
+    : "Backtest Signal Log \u00b7 Sell Puts + Sell Calls \u00b7 If You Had Taken These Trades";
+
   if (loading) return null;
+
+  const pillStyle = (active: boolean) => ({
+    fontFamily: "'JetBrains Mono', monospace" as const,
+    fontSize: "0.65rem",
+    textTransform: "uppercase" as const,
+    letterSpacing: "0.08em",
+    borderRadius: 999,
+    padding: "4px 12px",
+    border: "none",
+    cursor: "pointer" as const,
+    fontWeight: active ? 700 : 400,
+    background: active ? "#00e5a0" : "rgba(255,255,255,0.06)",
+    color: active ? "#0a0d12" : "rgba(255,255,255,0.5)",
+  });
 
   return (
     <div>
@@ -138,7 +169,7 @@ export default function BacktestSignalLog() {
         <div className="rounded-t-xl border border-white/10 bg-white/[0.03] px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <div>
             <p className="text-[10px] font-mono text-green-400/70 uppercase tracking-widest m-0">
-              Backtest Signal Log · If You Had Taken These Trades
+              {bannerLabel}
             </p>
             <p className="text-white font-black text-lg mt-0.5 m-0" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
               +${totalIncome.toLocaleString()} net income · {totalWins}/{totalTrades} signals won
@@ -175,6 +206,12 @@ export default function BacktestSignalLog() {
 
       {/* PART 3 — Full Trade Log Table */}
       <div className="w-full mx-auto border border-white/10 border-t-0 rounded-b-xl overflow-hidden mb-4">
+        {/* Filter Tab Bar */}
+        <div style={{ display: "flex", gap: 8, padding: "12px 16px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+          <button onClick={() => setSideFilter("all")} style={pillStyle(sideFilter === "all")}>All</button>
+          <button onClick={() => setSideFilter("puts")} style={pillStyle(sideFilter === "puts")}>Puts</button>
+          <button onClick={() => setSideFilter("calls")} style={pillStyle(sideFilter === "calls")}>Calls</button>
+        </div>
         <div className="overflow-x-auto">
         <table className="w-full min-w-[600px] border-collapse">
           <thead>
@@ -204,9 +241,14 @@ export default function BacktestSignalLog() {
             </tr>
           </thead>
           <tbody>
-            {displayTrades.map((t, i) => (
+            {displayTrades.map((t, i) => {
+              const isCall = t.strike.includes("Call");
+              const sideBorder = isCall
+                ? "2px solid rgba(240, 180, 41, 0.3)"
+                : "2px solid rgba(0, 229, 160, 0.3)";
+              return (
               <tr key={i} className={i % 2 === 0 ? "bg-white/[0.02]" : ""}>
-                <td className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-bold text-white whitespace-nowrap">{t.ticker}</td>
+                <td className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-bold text-white whitespace-nowrap" style={{ borderLeft: sideBorder }}>{t.ticker}</td>
                 <td className="hidden sm:table-cell px-2 sm:px-3 py-2 text-xs text-gray-500 whitespace-nowrap">{t.date}</td>
                 <td className="hidden md:table-cell px-2 sm:px-3 py-2 text-right text-xs text-gray-300 whitespace-nowrap">{t.stockPrice}</td>
                 <td className="px-2 sm:px-3 py-2 text-xs sm:text-sm text-gray-300 whitespace-nowrap">{t.strike}</td>
@@ -222,7 +264,8 @@ export default function BacktestSignalLog() {
                   </span>
                 </td>
               </tr>
-            ))}
+              );
+            })}
             {/* Totals row */}
             <tr className="border-t border-white/10 bg-white/[0.04]">
               <td className="px-2 sm:px-3 py-2 text-white font-black text-[10px] sm:text-xs uppercase tracking-wider">TOTAL · {totalWins}/{totalTrades} wins</td>
