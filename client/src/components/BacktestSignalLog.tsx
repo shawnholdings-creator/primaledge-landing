@@ -43,7 +43,8 @@ interface DisplayTrade {
 }
 
 /* ─── Fallback Data ─────────────────────────────────────────── */
-  const FALLBACK_TRADES: DisplayTrade[] = [];
+/* No hardcoded fallback — table only shows real trades from the live Gist */
+const FALLBACK_TRADES: DisplayTrade[] = [];
 
 /* ─── Data Fetching Hook ────────────────────────────────────── */
 function useRecentTrades() {
@@ -57,9 +58,9 @@ function useRecentTrades() {
       .then(r => r.json())
       .then((data: TradeRecord[]) => {
         const cutoff = new Date();
-        cutoff.setDate(cutoff.getDate() - 14); // 14-day window as requested
+        cutoff.setDate(cutoff.getDate() - 14); // 14-day rolling window
         const recent = data
-          .filter(t => new Date(t.entry_date) >= cutoff && t.outcome !== "OPEN") // Only show closed/resolved trades
+          .filter(t => new Date(t.entry_date) >= cutoff && t.outcome !== "OPEN") // Only resolved trades
           .sort((a, b) => new Date(b.entry_date).getTime() - new Date(a.entry_date).getTime());
         setTrades(recent);
       })
@@ -73,8 +74,9 @@ function useRecentTrades() {
 /* ─── Component ─────────────────────────────────────────────── */
 export default function BacktestSignalLog() {
   const { trades: recentTrades, loading } = useRecentTrades();
+  const [sideFilter, setSideFilter] = useState<"all" | "puts" | "calls">("all");
 
-  const displayTrades: DisplayTrade[] = (recentTrades && recentTrades.length > 0)
+  const allTrades: DisplayTrade[] = (recentTrades && recentTrades.length > 0)
     ? recentTrades.map(t => ({
         ticker: t.ticker,
         date: new Date(t.entry_date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
@@ -82,7 +84,7 @@ export default function BacktestSignalLog() {
         expiration: new Date(new Date(t.entry_date).getTime() + ((t as any).dte ?? 0) * 86400000)
           .toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
         dte: (t as any).dte ?? 0,
-        strike: `$${t.strike} ${t.side === "put" ? "Put" : "Call"}`,
+        strike: `$${t.strike} ${t.side?.toLowerCase() === "call" ? "Call" : "Put"}`,
         credit: `$${Math.round(t.credit * 100)}`,
         days: t.days_held,
         pnl: `${t.pnl_per_contract >= 0 ? "+" : ""}$${Math.abs(Math.round(t.pnl_per_contract)).toLocaleString()}`,
@@ -93,6 +95,13 @@ export default function BacktestSignalLog() {
         rrRatio: (Math.round(((t.strike - t.credit * 100) / (t.credit * 100)) * 10) / 10).toFixed(1) + ":1",
       }))
     : FALLBACK_TRADES;
+
+  // Apply side filter
+  const displayTrades = sideFilter === "all"
+    ? allTrades
+    : sideFilter === "puts"
+    ? allTrades.filter(t => t.strike.includes("Put"))
+    : allTrades.filter(t => t.strike.includes("Call"));
 
   const totalTrades = displayTrades.length;
   const totalWins = displayTrades.filter(t => t.win).length;
@@ -118,7 +127,27 @@ export default function BacktestSignalLog() {
     ? `${displayTrades[displayTrades.length - 1].date} \u2013 ${displayTrades[0].date}`
     : "Last 14 days";
 
+  const bannerLabel = sideFilter === "puts"
+    ? "Backtest Signal Log \u00b7 Sell Put Signals \u00b7 If You Had Taken These Trades"
+    : sideFilter === "calls"
+    ? "Backtest Signal Log \u00b7 Sell Call Signals \u00b7 If You Had Taken These Trades"
+    : "Backtest Signal Log \u00b7 Sell Puts + Sell Calls \u00b7 If You Had Taken These Trades";
+
   if (loading) return null;
+
+  const pillStyle = (active: boolean) => ({
+    fontFamily: "'JetBrains Mono', monospace" as const,
+    fontSize: "0.65rem",
+    textTransform: "uppercase" as const,
+    letterSpacing: "0.08em",
+    borderRadius: 999,
+    padding: "4px 12px",
+    border: "none",
+    cursor: "pointer" as const,
+    fontWeight: active ? 700 : 400,
+    background: active ? "#00e5a0" : "rgba(255,255,255,0.06)",
+    color: active ? "#0a0d12" : "rgba(255,255,255,0.5)",
+  });
 
   return (
     <div>
@@ -127,7 +156,7 @@ export default function BacktestSignalLog() {
         <div className="rounded-t-xl border border-white/10 bg-white/[0.03] px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <div>
             <p className="text-[10px] font-mono text-green-400/70 uppercase tracking-widest m-0">
-              Backtest Signal Log · If You Had Taken These Trades
+              {bannerLabel}
             </p>
             <p className="text-white font-black text-lg mt-0.5 m-0" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
               +${totalIncome.toLocaleString()} net income · {totalWins}/{totalTrades} signals won
@@ -164,6 +193,12 @@ export default function BacktestSignalLog() {
 
       {/* PART 3 — Full Trade Log Table */}
       <div className="w-full mx-auto border border-white/10 border-t-0 rounded-b-xl overflow-hidden mb-4">
+        {/* Filter Tab Bar */}
+        <div style={{ display: "flex", gap: 8, padding: "12px 16px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+          <button onClick={() => setSideFilter("all")} style={pillStyle(sideFilter === "all")}>All</button>
+          <button onClick={() => setSideFilter("puts")} style={pillStyle(sideFilter === "puts")}>Puts</button>
+          <button onClick={() => setSideFilter("calls")} style={pillStyle(sideFilter === "calls")}>Calls</button>
+        </div>
         <div className="overflow-x-auto">
         <table className="w-full min-w-[600px] border-collapse">
           <thead>
@@ -195,13 +230,18 @@ export default function BacktestSignalLog() {
           <tbody>
             {displayTrades.length === 0 ? (
               <tr>
-                <td colSpan={11} className="px-3 py-12 text-center text-gray-500 text-xs font-mono">
-                  Awaiting resolved trades from the last 14 days...
+                <td colSpan={11} style={{ padding: "48px 16px", textAlign: "center", color: "rgba(255,255,255,0.2)", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.75rem" }}>
+                  Live trade data will appear here as signals are generated and resolved.
                 </td>
               </tr>
-            ) : displayTrades.map((t, i) => (
+            ) : displayTrades.map((t, i) => {
+              const isCall = t.strike.includes("Call");
+              const sideBorder = isCall
+                ? "2px solid rgba(240, 180, 41, 0.3)"
+                : "2px solid rgba(0, 229, 160, 0.3)";
+              return (
               <tr key={i} className={i % 2 === 0 ? "bg-white/[0.02]" : ""}>
-                <td className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-bold text-white whitespace-nowrap">{t.ticker}</td>
+                <td className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-bold text-white whitespace-nowrap" style={{ borderLeft: sideBorder }}>{t.ticker}</td>
                 <td className="hidden sm:table-cell px-2 sm:px-3 py-2 text-xs text-gray-500 whitespace-nowrap">{t.date}</td>
                 <td className="hidden md:table-cell px-2 sm:px-3 py-2 text-right text-xs text-gray-300 whitespace-nowrap">{t.stockPrice}</td>
                 <td className="px-2 sm:px-3 py-2 text-xs sm:text-sm text-gray-300 whitespace-nowrap">{t.strike}</td>
@@ -217,7 +257,8 @@ export default function BacktestSignalLog() {
                   </span>
                 </td>
               </tr>
-            ))}
+              );
+            })}
             {/* Totals row */}
             <tr className="border-t border-white/10 bg-white/[0.04]">
               <td className="px-2 sm:px-3 py-2 text-white font-black text-[10px] sm:text-xs uppercase tracking-wider">TOTAL · {totalWins}/{totalTrades} wins</td>
