@@ -12,7 +12,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import WeeklyIncomeHero from "../components/WeeklyIncomeHero";
 import BacktestSignalLog from "../components/BacktestSignalLog";
 import { useAuth } from "../contexts/AuthContext";
-import { useLoginModal } from "../contexts/LoginModalContext";
+
 
 // GitHub Gist — replace with real ID later
 const GIST_ID = "2bd50c8183b50e72c3d52fd2c3dbf04f";
@@ -2258,19 +2258,11 @@ function WeeklyIncomeContent() {
 /* ─── Main Export — Auth Protected ───────────────────── */
 export default function WeeklyIncome() {
   const { user, loading, productAccess } = useAuth();
-  const { openLoginModal, isOpen } = useLoginModal();
   const hasAccess = user && productAccess.income === true;
 
   useEffect(() => {
     document.title = "Weekly Options Income Dashboard | Primal Edge";
   }, []);
-
-  // Auto-open login modal for unauthenticated visitors
-  useEffect(() => {
-    if (!loading && !user && !isOpen) {
-      openLoginModal("/weekly-income");
-    }
-  }, [loading, user, isOpen, openLoginModal]);
 
   if (loading) {
     return (
