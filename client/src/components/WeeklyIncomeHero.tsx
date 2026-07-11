@@ -208,6 +208,7 @@ export default function WeeklyIncomeHero() {
 
   // Fallback stats for animated counters (still computed from display trades via the component)
   // These counters in the hero use the same source, so we keep a simple version here
+  // SAMPLE data for marketing display only
   const HERO_FALLBACK_STATS = { totalIncome: 2030, winRate: 100, totalTrades: 7, avgHold: 4.0 };
   const heroStats = (recentTrades && recentTrades.length > 0)
     ? {
@@ -302,10 +303,10 @@ export default function WeeklyIncomeHero() {
             margin: '0 auto 20px',
           }}>
             {([
-              { target: 92.1, suffix: '%',      label: 'Avg Win Rate',          decimals: 1 },
-              { target: 385,  prefix: '$',       label: 'Avg Credit / Contract', decimals: 0 },
+              { target: 92.1, suffix: '%',      label: 'Avg Win Rate (Sample)',  decimals: 1 },
+              { target: 385,  prefix: '$',       label: 'Avg Credit (Sample)',   decimals: 0 },
               { target: 5.5,  suffix: ' days',   label: 'Avg Hold Time',         decimals: 1 },
-              { target: 76,   suffix: ' trades', label: 'Backtest Sample',       decimals: 0 },
+              { target: 76,   suffix: ' trades', label: 'Sample Trades',         decimals: 0 },
             ] as const).map((s, i) => (
               <AnimatedStat key={i} target={s.target} prefix={'prefix' in s ? s.prefix : ''} suffix={'suffix' in s ? s.suffix : ''} label={s.label} decimals={s.decimals} />
             ))}

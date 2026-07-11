@@ -1,295 +1,471 @@
 /* ============================================================
-   BacktestSignalLog.tsx — Shared component: recent backtest results
-   Self-contained: owns data fetching, fallback, stats, and all JSX.
+   BacktestSignalLog.tsx — Modeled Trade Results
+   Self-contained: owns data fetching, stats, and all JSX.
    Used in WeeklyIncomeHero (public) and WeeklyIncome (authenticated).
    ============================================================ */
 
 import { useEffect, useState } from "react";
 
-/* ─── Trade History Gist URL ────────────────────────────────── */
-const TRADE_HISTORY_URL =
-  (typeof import.meta !== "undefined"
-    ? (import.meta as any).env?.VITE_TRADE_HISTORY_GIST_URL
-    : undefined) || "";
-
 /* ─── Types ─────────────────────────────────────────────────── */
-type TradeRecord = {
+interface ModeledTrade {
+  id: string;
   ticker: string;
-  entry_date: string;
+  side: "PUT" | "CALL";
   strike: number;
-  side: string;
-  credit: number;
-  days_held: number;
-  pnl_per_contract: number;
-  outcome: "WIN" | "LOSS";
-  exit_reason?: string;
-};
-
-interface DisplayTrade {
-  ticker: string;
-  date: string;
-  stockPrice: string;
   expiration: string;
-  dte: number;
-  strike: string;
-  strikeRaw: number;
-  credit: string;
-  creditRaw: number;
-  days: number;
-  pnl: string;
-  pnlRaw: number;
-  win: boolean;
-  rrRatio: string;
+  entry_credit: number;
+  entry_stock_price: number;
+  entry_dte: number;
+  alerted_at: string;
+  status: string;
+  closed_at: string | null;
+  exit_debit: number | null;
+  exit_reason: string | null;
+  days_held: number | null;
+  gross_pnl: number | null;
+  fees: number | null;
+  net_pnl: number | null;
+  outcome: "WIN" | "LOSS" | "FLAT" | null;
+  tier: string;
+  is_spread: boolean;
 }
 
-/* ─── Fallback Data ─────────────────────────────────────────── */
-const FALLBACK_TRADES: DisplayTrade[] = [
-  { ticker: "QQQ",   date: "Jun 05, 2026", stockPrice: "$704.29", expiration: "Jun 14, 2026", dte: 9, strike: "$676 Put", strikeRaw: 676,  credit: "$286", creditRaw: 286, days: 3, pnl: "+$170", pnlRaw: 170,  win: true  },
-  { ticker: "SMH",   date: "Jun 05, 2026", stockPrice: "$569.69", expiration: "Jun 14, 2026", dte: 9, strike: "$521 Put", strikeRaw: 521,  credit: "$523", creditRaw: 523, days: 3, pnl: "+$369", pnlRaw: 369,  win: true  },
-  { ticker: "QQQ",   date: "Jun 05, 2026", stockPrice: "$704.29", expiration: "Jun 14, 2026", dte: 9, strike: "$735 Call", strikeRaw: 735, credit: "$198", creditRaw: 198, days: 3, pnl: "+$145", pnlRaw: 145,  win: true  },
-  { ticker: "SNOW",  date: "May 29, 2026", stockPrice: "$255.55", expiration: "Jun 07, 2026", dte: 9, strike: "$218 Put", strikeRaw: 218,  credit: "$687", creditRaw: 687, days: 3, pnl: "+$420", pnlRaw: 420,  win: true  },
-  { ticker: "SMH",   date: "May 29, 2026", stockPrice: "$598.93", expiration: "Jun 07, 2026", dte: 9, strike: "$557 Put", strikeRaw: 557,  credit: "$368", creditRaw: 368, days: 4, pnl: "+$329", pnlRaw: 329,  win: true  },
-  { ticker: "META",  date: "May 29, 2026", stockPrice: "$598.93", expiration: "Jun 07, 2026", dte: 9, strike: "$625 Call", strikeRaw: 625, credit: "$241", creditRaw: 241, days: 4, pnl: "+$189", pnlRaw: 189,  win: true  },
-  { ticker: "META",  date: "May 21, 2026", stockPrice: "$606.82", expiration: "May 30, 2026", dte: 9, strike: "$570 Put", strikeRaw: 570,  credit: "$384", creditRaw: 384, days: 5, pnl: "+$225", pnlRaw: 225,  win: true  },
-  { ticker: "GOOGL", date: "May 21, 2026", stockPrice: "$387.43", expiration: "May 30, 2026", dte: 9, strike: "$360 Put", strikeRaw: 360,  credit: "$257", creditRaw: 257, days: 5, pnl: "+$131", pnlRaw: 131,  win: true  },
-  { ticker: "SMH",   date: "May 21, 2026", stockPrice: "$567.88", expiration: "May 30, 2026", dte: 9, strike: "$528 Put", strikeRaw: 528,  credit: "$415", creditRaw: 415, days: 5, pnl: "+$386", pnlRaw: 386,  win: true  },
-  { ticker: "SMH",   date: "May 21, 2026", stockPrice: "$567.88", expiration: "May 30, 2026", dte: 9, strike: "$595 Call", strikeRaw: 595, credit: "$178", creditRaw: 178, days: 5, pnl: "+$134", pnlRaw: 134,  win: true  },
-].map(t => ({
-  ...t,
-  rrRatio: (Math.round(((t.strikeRaw - t.creditRaw) / t.creditRaw) * 10) / 10).toFixed(1) + ":1",
-}));
+interface MTDSummary {
+  net_pnl: number;
+  wins: number;
+  losses: number;
+  flats: number;
+  count: number;
+  win_rate: number;
+}
+
+interface TradesResponse {
+  open: ModeledTrade[];
+  closed_14d: ModeledTrade[];
+  mtd: MTDSummary;
+  data_health: { last_evaluated: string | null; issues: string[] };
+}
 
 /* ─── Data Fetching Hook ────────────────────────────────────── */
-function useRecentTrades() {
-  const [trades, setTrades] = useState<TradeRecord[]>([]);
+function useTradesAPI() {
+  const [data, setData] = useState<TradesResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    if (!TRADE_HISTORY_URL) { setLoading(false); return; }
-    fetch(TRADE_HISTORY_URL)
-      .then(r => r.json())
-      .then((data: TradeRecord[]) => {
-        const cutoff = new Date();
-        cutoff.setDate(cutoff.getDate() - 21);
-        const recent = data
-          .filter(t => new Date(t.entry_date) >= cutoff)
-          .sort((a, b) => new Date(b.entry_date).getTime() - new Date(a.entry_date).getTime());
-        setTrades(recent);
+    fetch("/api/trades")
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
       })
+      .then((d: TradesResponse) => setData(d))
       .catch(() => setError(true))
       .finally(() => setLoading(false));
   }, []);
 
-  return { trades, loading, error };
+  return { data, loading, error };
 }
+
+/* ─── Helpers ───────────────────────────────────────────────── */
+function fmtDate(iso: string | null) {
+  if (!iso) return "—";
+  return new Date(iso).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+function fmtCurrency(v: number | null | undefined) {
+  if (v == null) return "—";
+  const abs = Math.abs(v);
+  const sign = v >= 0 ? "+" : "-";
+  return `${sign}$${abs.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+}
+
+function dteRemaining(expiration: string) {
+  const diff = Math.ceil(
+    (new Date(expiration).getTime() - Date.now()) / 86_400_000
+  );
+  return Math.max(diff, 0);
+}
+
+/* ─── Pill styles ───────────────────────────────────────────── */
+const sidePillClass = (side: "PUT" | "CALL") =>
+  side === "PUT"
+    ? "bg-[#00e5a0]/15 text-[#00e5a0]"
+    : "bg-[#f0b429]/15 text-[#f0b429]";
+
+const outcomePillClass = (outcome: "WIN" | "LOSS" | "FLAT" | null) => {
+  if (outcome === "WIN") return "bg-green-400/15 text-green-400";
+  if (outcome === "LOSS") return "bg-red-400/15 text-red-400";
+  return "bg-white/10 text-white/50";
+};
 
 /* ─── Component ─────────────────────────────────────────────── */
 export default function BacktestSignalLog() {
-  const { trades: recentTrades, loading } = useRecentTrades();
-  const [sideFilter, setSideFilter] = useState<"all" | "puts" | "calls">("all");
+  const { data, loading, error } = useTradesAPI();
+  const [sideFilter, setSideFilter] = useState<"all" | "puts" | "calls">(
+    "all"
+  );
 
-  const allTrades: DisplayTrade[] = (recentTrades && recentTrades.length > 0)
-    ? recentTrades.map(t => ({
-        ticker: t.ticker,
-        date: new Date(t.entry_date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
-        stockPrice: `$${Number((t as any).stock_price ?? (t as any).entry_price ?? 0).toFixed(2)}`,
-        expiration: new Date(new Date(t.entry_date).getTime() + ((t as any).dte ?? 0) * 86400000)
-          .toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
-        dte: (t as any).dte ?? 0,
-        strike: `$${t.strike} ${t.side?.toLowerCase() === "call" ? "Call" : "Put"}`,
-        credit: `$${Math.round(t.credit * 100)}`,
-        days: t.days_held,
-        pnl: `${t.pnl_per_contract >= 0 ? "+" : ""}$${Math.abs(Math.round(t.pnl_per_contract)).toLocaleString()}`,
-        creditRaw: Math.round(t.credit * 100),
-        pnlRaw: Math.round(t.pnl_per_contract),
-        win: t.outcome === "WIN",
-        strikeRaw: t.strike,
-        rrRatio: (Math.round(((t.strike - t.credit * 100) / (t.credit * 100)) * 10) / 10).toFixed(1) + ":1",
-      }))
-    : FALLBACK_TRADES;
+  if (loading) {
+    return (
+      <div className="rounded-xl border border-white/10 bg-[#0d1117] p-6 text-center">
+        <div className="animate-pulse flex flex-col items-center gap-2">
+          <div className="w-32 h-3 bg-white/10 rounded" />
+          <div className="w-48 h-3 bg-white/10 rounded" />
+        </div>
+      </div>
+    );
+  }
 
-  // Apply side filter
-  const displayTrades = sideFilter === "all"
-    ? allTrades
-    : sideFilter === "puts"
-    ? allTrades.filter(t => t.strike.includes("Put"))
-    : allTrades.filter(t => t.strike.includes("Call"));
+  if (error || !data) {
+    return (
+      <div className="rounded-xl border border-white/10 bg-[#0d1117] p-6 text-center text-white/40 text-sm">
+        Unable to load modeled trade results. Please try again later.
+      </div>
+    );
+  }
 
-  const totalTrades = displayTrades.length;
-  const totalWins = displayTrades.filter(t => t.win).length;
-  const totalIncome = displayTrades.filter(t => t.win).reduce((s, t) => s + t.pnlRaw, 0);
-  const totalCredits = displayTrades.reduce((s, t) => s + t.creditRaw, 0);
+  const { open, closed_14d, mtd, data_health } = data;
 
-  const weeklyStats = (() => {
-    const weeks: Record<string, { label: string; wins: number; losses: number; net: number }> = {};
-    displayTrades.forEach(t => {
-      const d = new Date(t.date);
-      const monday = new Date(d);
-      monday.setDate(d.getDate() - ((d.getDay() + 6) % 7));
-      const key = monday.toISOString().slice(0, 10);
-      const label = monday.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-      if (!weeks[key]) weeks[key] = { label: `Wk of ${label}`, wins: 0, losses: 0, net: 0 };
-      if (t.win) { weeks[key].wins++; weeks[key].net += t.pnlRaw; }
-      else { weeks[key].losses++; weeks[key].net -= Math.abs(t.pnlRaw); }
-    });
-    return Object.values(weeks).slice(-3).reverse();
-  })();
+  const filterTrade = (t: ModeledTrade) => {
+    if (sideFilter === "puts") return t.side === "PUT";
+    if (sideFilter === "calls") return t.side === "CALL";
+    return true;
+  };
 
-  const periodLabel = displayTrades.length > 0
-    ? `${displayTrades[displayTrades.length - 1].date} \u2013 ${displayTrades[0].date}`
-    : "Last 3 weeks";
+  const filteredOpen = open.filter(filterTrade);
+  const filteredClosed = closed_14d.filter(filterTrade);
 
-  const bannerLabel = sideFilter === "puts"
-    ? "Backtest Signal Log \u00b7 Sell Put Signals \u00b7 If You Had Taken These Trades"
-    : sideFilter === "calls"
-    ? "Backtest Signal Log \u00b7 Sell Call Signals \u00b7 If You Had Taken These Trades"
-    : "Backtest Signal Log \u00b7 Sell Puts + Sell Calls \u00b7 If You Had Taken These Trades";
-
-  if (loading) return null;
-
-  const pillStyle = (active: boolean) => ({
-    fontFamily: "'JetBrains Mono', monospace" as const,
-    fontSize: "0.65rem",
-    textTransform: "uppercase" as const,
-    letterSpacing: "0.08em",
-    borderRadius: 999,
-    padding: "4px 12px",
-    border: "none",
-    cursor: "pointer" as const,
-    fontWeight: active ? 700 : 400,
-    background: active ? "#00e5a0" : "rgba(255,255,255,0.06)",
-    color: active ? "#0a0d12" : "rgba(255,255,255,0.5)",
-  });
+  const pillBtn = (
+    label: string,
+    value: "all" | "puts" | "calls"
+  ) => (
+    <button
+      onClick={() => setSideFilter(value)}
+      className={`font-mono text-[0.65rem] uppercase tracking-wider rounded-full px-3 py-1 border-none cursor-pointer transition-colors ${
+        sideFilter === value
+          ? "bg-[#00e5a0] text-[#0a0d12] font-bold"
+          : "bg-white/[0.06] text-white/50 font-normal hover:bg-white/10"
+      }`}
+    >
+      {label}
+    </button>
+  );
 
   return (
     <div>
-      {/* PART 1 — Terminal Banner */}
-      <div className="w-full mx-auto">
-        <div className="rounded-t-xl border border-white/10 bg-white/[0.03] px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-          <div>
-            <p className="text-[10px] font-mono text-green-400/70 uppercase tracking-widest m-0">
-              {bannerLabel}
-            </p>
-            <p className="text-white font-black text-lg mt-0.5 m-0" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-              +${totalIncome.toLocaleString()} net income · {totalWins}/{totalTrades} signals won
-            </p>
-          </div>
-          <div className="text-[11px] text-gray-500 font-mono">
-            {periodLabel} · 1 contract/signal
-          </div>
+      {/* ─── Header ──────────────────────────────────────────── */}
+      <div className="rounded-t-xl border border-white/10 bg-white/[0.03] px-4 py-3">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="inline-block w-2 h-2 rounded-full bg-[#00e5a0] animate-pulse" />
+          <p className="text-[10px] font-mono text-green-400/70 uppercase tracking-widest m-0">
+            Modeled Trade Results
+          </p>
         </div>
+        <p className="text-[11px] text-white/40 m-0">
+          Rule-based simulated entries and exits using public market data. Not
+          broker executions.
+        </p>
       </div>
 
-      {/* PART 2 — Weekly Scorecard Strip */}
-      <div className="w-full mx-auto grid grid-cols-3 border-l border-r border-white/10">
-        {weeklyStats.map((week, i) => (
+      {/* ─── Filter Tabs ─────────────────────────────────────── */}
+      <div className="border-x border-white/10 flex gap-2 px-4 py-3 border-b border-white/[0.06]">
+        {pillBtn("All", "all")}
+        {pillBtn("Puts", "puts")}
+        {pillBtn("Calls", "calls")}
+      </div>
+
+      {/* ─── Stats Banner ────────────────────────────────────── */}
+      <div className="border-x border-white/10 grid grid-cols-3">
+        {[
+          {
+            label: "Net P&L (MTD)",
+            value: fmtCurrency(mtd.net_pnl),
+            color: mtd.net_pnl >= 0 ? "text-green-400" : "text-red-400",
+          },
+          {
+            label: "Win Rate",
+            value: `${mtd.win_rate.toFixed(0)}%`,
+            color: "text-white",
+          },
+          {
+            label: "Total Trades",
+            value: String(mtd.count),
+            color: "text-white",
+          },
+        ].map((s, i) => (
           <div
             key={i}
-            className={`flex flex-col items-center justify-center py-3 px-2 sm:px-4 border-b border-white/10 text-center ${
-              i < weeklyStats.length - 1 ? "border-r border-white/10" : ""
+            className={`flex flex-col items-center justify-center py-3 px-2 border-b border-white/10 text-center ${
+              i < 2 ? "border-r border-white/10" : ""
             }`}
           >
-            <p className="text-[10px] text-gray-500 font-mono m-0">{week.label}</p>
+            <p className="text-[10px] text-gray-500 font-mono m-0 uppercase tracking-wider">
+              {s.label}
+            </p>
             <p
-              className={`text-sm sm:text-base font-black mt-1 m-0 ${week.net > 0 ? "text-green-400" : "text-red-400"}`}
+              className={`text-base sm:text-lg font-black mt-1 m-0 ${s.color}`}
               style={{ fontFamily: "'Space Grotesk', sans-serif" }}
             >
-              {week.net > 0 ? "+" : ""}${Math.abs(week.net).toLocaleString()}
-            </p>
-            <p className="text-[10px] text-gray-400 mt-0.5 m-0">
-              {week.wins}W · {week.losses}L
+              {s.value}
             </p>
           </div>
         ))}
       </div>
 
-      {/* PART 3 — Full Trade Log Table */}
-      <div className="w-full mx-auto border border-white/10 border-t-0 rounded-b-xl overflow-hidden mb-4">
-        {/* Filter Tab Bar */}
-        <div style={{ display: "flex", gap: 8, padding: "12px 16px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-          <button onClick={() => setSideFilter("all")} style={pillStyle(sideFilter === "all")}>All</button>
-          <button onClick={() => setSideFilter("puts")} style={pillStyle(sideFilter === "puts")}>Puts</button>
-          <button onClick={() => setSideFilter("calls")} style={pillStyle(sideFilter === "calls")}>Calls</button>
-        </div>
-        <div className="overflow-x-auto">
-        <table className="w-full min-w-[600px] border-collapse">
-          <thead>
-            <tr className="bg-white/5">
-              {/* Ticker — always visible */}
-              <th className="px-2 sm:px-3 py-2 text-left text-[10px] sm:text-xs text-gray-400 uppercase tracking-wider font-semibold whitespace-nowrap">Ticker</th>
-              {/* Date — sm+ */}
-              <th className="hidden sm:table-cell px-2 sm:px-3 py-2 text-left text-[10px] sm:text-xs text-gray-400 uppercase tracking-wider font-semibold whitespace-nowrap">Date</th>
-              {/* Stock Price — md+ */}
-              <th className="hidden md:table-cell px-2 sm:px-3 py-2 text-right text-[10px] sm:text-xs text-gray-400 uppercase tracking-wider font-semibold whitespace-nowrap">Stock Price</th>
-              {/* Strike — always */}
-              <th className="px-2 sm:px-3 py-2 text-left text-[10px] sm:text-xs text-gray-400 uppercase tracking-wider font-semibold whitespace-nowrap">Strike</th>
-              {/* Expiry — md+ */}
-              <th className="hidden md:table-cell px-2 sm:px-3 py-2 text-left text-[10px] sm:text-xs text-gray-400 uppercase tracking-wider font-semibold whitespace-nowrap">Expiry</th>
-              {/* DTE — lg+ */}
-              <th className="hidden lg:table-cell px-2 sm:px-3 py-2 text-right text-[10px] sm:text-xs text-gray-400 uppercase tracking-wider font-semibold whitespace-nowrap">DTE</th>
-              {/* Credit — always */}
-              <th className="px-2 sm:px-3 py-2 text-right text-[10px] sm:text-xs text-gray-400 uppercase tracking-wider font-semibold whitespace-nowrap">Credit</th>
-              {/* Days — md+ */}
-              <th className="hidden md:table-cell px-2 sm:px-3 py-2 text-right text-[10px] sm:text-xs text-gray-400 uppercase tracking-wider font-semibold whitespace-nowrap">Days</th>
-              {/* P&L — sm+ */}
-              <th className="hidden sm:table-cell px-2 sm:px-3 py-2 text-right text-[10px] sm:text-xs text-gray-400 uppercase tracking-wider font-semibold whitespace-nowrap">P&L</th>
-              {/* Risk/Reward — lg+ */}
-              <th className="hidden lg:table-cell px-2 sm:px-3 py-2 text-right text-[10px] sm:text-xs text-gray-400 uppercase tracking-wider font-semibold whitespace-nowrap">Risk/Reward</th>
-              {/* Result — always */}
-              <th className="px-2 sm:px-3 py-2 text-right text-[10px] sm:text-xs text-gray-400 uppercase tracking-wider font-semibold whitespace-nowrap">Result</th>
-            </tr>
-          </thead>
-          <tbody>
-            {displayTrades.map((t, i) => {
-              const isCall = t.strike.includes("Call");
-              const sideBorder = isCall
-                ? "2px solid rgba(240, 180, 41, 0.3)"
-                : "2px solid rgba(0, 229, 160, 0.3)";
-              return (
-              <tr key={i} className={i % 2 === 0 ? "bg-white/[0.02]" : ""}>
-                <td className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-bold text-white whitespace-nowrap" style={{ borderLeft: sideBorder }}>{t.ticker}</td>
-                <td className="hidden sm:table-cell px-2 sm:px-3 py-2 text-xs text-gray-500 whitespace-nowrap">{t.date}</td>
-                <td className="hidden md:table-cell px-2 sm:px-3 py-2 text-right text-xs text-gray-300 whitespace-nowrap">{t.stockPrice}</td>
-                <td className="px-2 sm:px-3 py-2 text-xs sm:text-sm text-gray-300 whitespace-nowrap">{t.strike}</td>
-                <td className="hidden md:table-cell px-2 sm:px-3 py-2 text-xs text-gray-400 whitespace-nowrap">{t.expiration}</td>
-                <td className="hidden lg:table-cell px-2 sm:px-3 py-2 text-right text-xs text-gray-500">{t.dte}d</td>
-                <td className="px-2 sm:px-3 py-2 text-right text-xs sm:text-sm text-green-400 font-semibold">{t.credit}</td>
-                <td className="hidden md:table-cell px-2 sm:px-3 py-2 text-right text-xs text-gray-400">{t.days}d</td>
-                <td className={`hidden sm:table-cell px-2 sm:px-3 py-2 text-right text-xs sm:text-sm font-semibold ${t.win ? "text-green-400" : "text-red-400"}`}>{t.pnl}</td>
-                <td className="hidden lg:table-cell px-2 sm:px-3 py-2 text-right text-xs text-gray-300 font-mono">{t.rrRatio}</td>
-                <td className="px-2 sm:px-3 py-2 text-right">
-                  <span className={`${t.win ? "bg-green-400/15 text-green-400" : "bg-red-400/15 text-red-400"} text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full`}>
-                    {t.win ? "WIN" : "LOSS"}
-                  </span>
-                </td>
-              </tr>
-              );
-            })}
-            {/* Totals row */}
-            <tr className="border-t border-white/10 bg-white/[0.04]">
-              <td className="px-2 sm:px-3 py-2 text-white font-black text-[10px] sm:text-xs uppercase tracking-wider">TOTAL · {totalWins}/{totalTrades} wins</td>
-              <td className="hidden sm:table-cell px-2 sm:px-3 py-2" />
-              <td className="hidden md:table-cell px-2 sm:px-3 py-2" />
-              <td className="px-2 sm:px-3 py-2" />
-              <td className="hidden md:table-cell px-2 sm:px-3 py-2" />
-              <td className="hidden lg:table-cell px-2 sm:px-3 py-2" />
-              <td className="px-2 sm:px-3 py-2 text-right text-gray-400 text-xs font-semibold">${totalCredits.toLocaleString()} collected</td>
-              <td className="hidden md:table-cell px-2 sm:px-3 py-2" />
-              <td className="hidden sm:table-cell px-2 sm:px-3 py-2 text-right font-black text-green-400">+${totalIncome.toLocaleString()}</td>
-              <td className="hidden lg:table-cell px-2 sm:px-3 py-2" />
-              <td className="px-2 sm:px-3 py-2 text-right">
-                <span className="bg-green-400/20 text-green-400 text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full">
-                  {totalTrades > 0 ? Math.round(totalWins / totalTrades * 100) : 0}% WIN
+      {/* ─── Currently Tracking (Open) ───────────────────────── */}
+      <div className="border-x border-white/10 border-b border-white/10 px-4 py-3">
+        <p className="text-[10px] font-mono text-green-400/70 uppercase tracking-widest mb-2 m-0">
+          Currently Tracking
+        </p>
+        {filteredOpen.length === 0 ? (
+          <p className="text-sm text-white/40 m-0">
+            No trades currently being tracked
+          </p>
+        ) : (
+          <div className="space-y-2">
+            {filteredOpen.map((t) => (
+              <div
+                key={t.id}
+                className="flex flex-wrap items-center gap-2 bg-white/[0.03] rounded-lg px-3 py-2 border border-white/[0.06]"
+              >
+                <span className="relative flex h-2 w-2 mr-1">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
                 </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                <span className="text-white font-bold text-sm">
+                  {t.ticker}
+                </span>
+                <span
+                  className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${sidePillClass(t.side)}`}
+                >
+                  {t.side}
+                </span>
+                <span className="text-white/60 text-xs">
+                  ${t.strike}
+                </span>
+                <span className="text-white/40 text-xs">
+                  exp {fmtDate(t.expiration)}
+                </span>
+                <span className="text-[#00e5a0] text-xs font-semibold">
+                  ${t.entry_credit}
+                </span>
+                <span className="text-white/40 text-xs">
+                  {dteRemaining(t.expiration)}d left
+                </span>
+                <span className="text-white/30 text-[10px] ml-auto">
+                  entered {fmtDate(t.alerted_at)}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* ─── Closed — Last 14 Days ───────────────────────────── */}
+      <div className="border border-white/10 border-t-0 rounded-b-xl overflow-hidden mb-4">
+        <p className="text-[10px] font-mono text-green-400/70 uppercase tracking-widest px-4 pt-3 pb-1 m-0">
+          Closed — Last 14 Days
+        </p>
+
+        {filteredClosed.length === 0 ? (
+          <p className="text-sm text-white/40 px-4 py-4 m-0">
+            No trades closed in the last 14 days
+          </p>
+        ) : (
+          <>
+            {/* Desktop Table */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="bg-white/5">
+                    {[
+                      { label: "Side", align: "left" },
+                      { label: "Ticker", align: "left" },
+                      { label: "Strike", align: "right" },
+                      { label: "Entry Credit", align: "right" },
+                      { label: "Exit Debit", align: "right" },
+                      { label: "Days", align: "right" },
+                      { label: "Net P&L", align: "right" },
+                      { label: "Outcome", align: "center" },
+                      { label: "Exit Reason", align: "left" },
+                    ].map((h) => (
+                      <th
+                        key={h.label}
+                        className={`px-3 py-2 text-[10px] text-gray-400 uppercase tracking-wider font-semibold whitespace-nowrap text-${h.align}`}
+                      >
+                        {h.label}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredClosed.map((t, i) => (
+                    <tr
+                      key={t.id}
+                      className={i % 2 === 0 ? "bg-white/[0.02]" : ""}
+                    >
+                      <td className="px-3 py-2">
+                        <span
+                          className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${sidePillClass(t.side)}`}
+                        >
+                          {t.side}
+                        </span>
+                      </td>
+                      <td className="px-3 py-2 text-sm font-bold text-white">
+                        {t.ticker}
+                      </td>
+                      <td className="px-3 py-2 text-right text-xs text-gray-300">
+                        ${t.strike}
+                      </td>
+                      <td className="px-3 py-2 text-right text-xs text-[#00e5a0] font-semibold">
+                        ${t.entry_credit}
+                      </td>
+                      <td className="px-3 py-2 text-right text-xs text-white/60">
+                        {t.exit_debit != null ? `$${t.exit_debit}` : "—"}
+                      </td>
+                      <td className="px-3 py-2 text-right text-xs text-gray-400">
+                        {t.days_held ?? "—"}d
+                      </td>
+                      <td
+                        className={`px-3 py-2 text-right text-sm font-semibold ${
+                          (t.net_pnl ?? 0) >= 0
+                            ? "text-green-400"
+                            : "text-red-400"
+                        }`}
+                      >
+                        {fmtCurrency(t.net_pnl)}
+                      </td>
+                      <td className="px-3 py-2 text-center">
+                        <span
+                          className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${outcomePillClass(t.outcome)}`}
+                        >
+                          {t.outcome ?? "—"}
+                        </span>
+                      </td>
+                      <td className="px-3 py-2 text-xs text-white/40 whitespace-nowrap">
+                        {t.exit_reason ?? "—"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Cards */}
+            <div className="md:hidden space-y-2 px-3 pb-3">
+              {filteredClosed.map((t) => (
+                <div
+                  key={t.id}
+                  className="bg-[#0d1117] border border-white/10 rounded-xl p-3"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-white font-bold text-sm">
+                        {t.ticker}
+                      </span>
+                      <span
+                        className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${sidePillClass(t.side)}`}
+                      >
+                        {t.side}
+                      </span>
+                    </div>
+                    <span
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${outcomePillClass(t.outcome)}`}
+                    >
+                      {t.outcome ?? "—"}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
+                    <div>
+                      <span className="text-white/40">Strike</span>{" "}
+                      <span className="text-white/80">${t.strike}</span>
+                    </div>
+                    <div>
+                      <span className="text-white/40">Entry</span>{" "}
+                      <span className="text-[#00e5a0] font-semibold">
+                        ${t.entry_credit}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-white/40">Exit</span>{" "}
+                      <span className="text-white/60">
+                        {t.exit_debit != null ? `$${t.exit_debit}` : "—"}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-white/40">Days</span>{" "}
+                      <span className="text-white/60">
+                        {t.days_held ?? "—"}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-white/40">Net P&L</span>{" "}
+                      <span
+                        className={`font-semibold ${
+                          (t.net_pnl ?? 0) >= 0
+                            ? "text-green-400"
+                            : "text-red-400"
+                        }`}
+                      >
+                        {fmtCurrency(t.net_pnl)}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-white/40">Reason</span>{" "}
+                      <span className="text-white/50">
+                        {t.exit_reason ?? "—"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* ─── Monthly Footer ──────────────────────────────────── */}
+        <div className="border-t border-white/10 bg-white/[0.03] px-4 py-3">
+          <p
+            className="text-sm font-black text-white m-0"
+            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+          >
+            Month-to-Date:{" "}
+            <span
+              className={mtd.net_pnl >= 0 ? "text-green-400" : "text-red-400"}
+            >
+              Net {fmtCurrency(mtd.net_pnl)}
+            </span>{" "}
+            <span className="text-white/40 font-normal text-xs">
+              | {mtd.wins} wins / {mtd.losses} losses | {mtd.count} trades
+            </span>
+          </p>
         </div>
-        {/* Footnote */}
-        <p className="text-[11px] text-gray-600 px-3 py-2 border-t border-white/5 m-0">
-          Backtest simulation · Stock price, strike &amp; expiration verifiable on Yahoo Finance / CBOE historical chains · 1 contract per signal · Updates weekly. Past results do not guarantee future performance. Not financial advice.
+
+        {/* ─── Data Health ─────────────────────────────────────── */}
+        <div className="border-t border-white/5 px-4 py-2 flex flex-wrap items-center gap-2">
+          <p className="text-[10px] text-gray-600 m-0">
+            Last evaluated:{" "}
+            {data_health.last_evaluated
+              ? new Date(data_health.last_evaluated).toLocaleString()
+              : "N/A"}
+          </p>
+          {data_health.issues.length > 0 && (
+            <span className="text-[10px] text-[#f0b429] flex items-center gap-1">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#f0b429]" />
+              {data_health.issues[0]}
+            </span>
+          )}
+        </div>
+
+        {/* ─── Disclosure ──────────────────────────────────────── */}
+        <p className="text-[11px] text-gray-600 px-4 py-2 border-t border-white/5 m-0">
+          Modeled results use public market data and rule-based simulated
+          entries and exits. They are not broker executions. Quotes may be
+          delayed or unavailable.
         </p>
       </div>
     </div>
