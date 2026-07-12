@@ -111,7 +111,7 @@ export default function BacktestSignalLog() {
 
   if (loading) {
     return (
-      <div className="rounded-xl border border-white/10 bg-[#0d1117] p-6 text-center">
+      <div data-testid="modeled-trades-dashboard" data-state="loading" className="rounded-xl border border-white/10 bg-[#0d1117] p-6 text-center">
         <div className="animate-pulse flex flex-col items-center gap-2">
           <div className="w-32 h-3 bg-white/10 rounded" />
           <div className="w-48 h-3 bg-white/10 rounded" />
@@ -122,7 +122,7 @@ export default function BacktestSignalLog() {
 
   if (error || !data) {
     return (
-      <div className="rounded-xl border border-white/10 bg-[#0d1117] p-6 text-center text-white/40 text-sm">
+      <div data-testid="modeled-trades-dashboard" data-state="error" className="rounded-xl border border-white/10 bg-[#0d1117] p-6 text-center text-white/40 text-sm">
         Unable to load modeled trade results. Please try again later.
       </div>
     );
@@ -156,7 +156,7 @@ export default function BacktestSignalLog() {
   );
 
   return (
-    <div>
+    <div data-testid="modeled-trades-dashboard" data-state={filteredOpen.some(t => t.status === 'DATA_REVIEW') ? 'data_review' : filteredOpen.length > 0 && filteredClosed.length > 0 ? 'mixed' : filteredOpen.length > 0 ? 'open' : filteredClosed.length > 0 ? 'closed' : 'empty'}>
       {/* ─── Header ──────────────────────────────────────────── */}
       <div className="rounded-t-xl border border-white/10 bg-white/[0.03] px-4 py-3">
         <div className="flex items-center gap-2 mb-1">
