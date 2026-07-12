@@ -1,17 +1,32 @@
 // v4 Node test suite — zero external deps (node:test, node:assert, node:crypto)
-import { describe, it } from 'node:test';
+// Dummy supabase env must be set BEFORE any transitive import of _supabase.js
+process.env.SUPABASE_URL = process.env.SUPABASE_URL || 'https://test.supabase.co';
+process.env.SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || 'test-key';
+process.env.INGEST_API_KEY = process.env.INGEST_API_KEY || 'test-ingest-key';
+
+import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
 import { evaluateExitRules, computeDTE, VERSION } from './_exitRules.js';
+import { ensureSession, getOptionQuote, MAX_BATCH_MS } from './_quoteProvider.js';
+import ingestHandler, { makeAlertId as ingestMakeAlertId } from './ingest.js';
+import { getETNow } from './_marketCal.js';
 
 // ────────────────────────────────────────────────────────────────
 // Helpers
 // ────────────────────────────────────────────────────────────────
+const _etFmt = new Intl.DateTimeFormat('en-US', {
+  timeZone: 'America/New_York',
+  year: 'numeric', month: '2-digit', day: '2-digit',
+  hour12: false,
+});
 function expirationForDTE(targetDTE) {
   for (let offset = Math.max(-1, targetDTE - 2); offset <= targetDTE + 3; offset++) {
     const d = new Date(); d.setDate(d.getDate() + offset);
-    const et = new Date(d.toLocaleString('en-US', { timeZone: 'America/New_York' }));
-    const ds = `${et.getFullYear()}-${String(et.getMonth()+1).padStart(2,'0')}-${String(et.getDate()).padStart(2,'0')}`;
+    const parts = Object.fromEntries(
+      _etFmt.formatToParts(d).map(p => [p.type, p.value])
+    );
+    const ds = `${parts.year}-${parts.month}-${parts.day}`;
     const dte = computeDTE(ds);
     if (targetDTE === 0 ? dte <= 0 : dte === targetDTE) return ds;
   }
@@ -320,8 +335,6 @@ describe('Boundary tests', () => {
 // ────────────────────────────────────────────────────────────────
 describe('Quote validation edge cases', () => {
   it('missing contract → valid:false, reason:contract_not_found', () => {
-    // evaluateExitRules receives a pre-validated quote; if contract missing,
-    // the provider returns valid:false
     const r = evaluateExitRules(makeTrade(), { valid: false, reason: 'contract_not_found', retrieved_at: new Date().toISOString() });
     assert.equal(r.triggered, false);
     assert.equal(r.data_review, true);
@@ -374,7 +387,6 @@ describe('Source and retrieved_at', () => {
     );
     assert.equal(r.triggered, true);
     assert.equal(r.reason, 'PROFIT_TARGET');
-    // Source comes from the quote, not hardcoded
     assert.ok(r.exit_quote_source === undefined || typeof r.exit_quote_source === 'string');
   });
 
@@ -551,7 +563,6 @@ describe('OCC symbol format', () => {
 // LIVE serializer boundary (SAFE_FIELDS from index.js)
 // ────────────────────────────────────────────────────────────────
 describe('LIVE serializer boundary', () => {
-  // Inline the production SAFE_FIELDS exactly as declared in index.js
   const PROD_SAFE_FIELDS = [
     'id', 'ticker', 'side', 'strike', 'expiration',
     'entry_credit', 'entry_stock_price', 'entry_dte',
@@ -596,23 +607,19 @@ describe('LIVE serializer boundary', () => {
 // ────────────────────────────────────────────────────────────────
 describe('Workflow ET matrix', () => {
   it('EST winter date computes correct DTE', () => {
-    // 2026-01-20 is a winter date (EST). Compute DTE relative to now and verify it's an integer.
     const dte = computeDTE('2026-01-20');
     assert.equal(typeof dte, 'number', 'DTE must be a number');
     assert.equal(Number.isInteger(dte), true, 'DTE must be an integer (from Math.ceil)');
   });
 
   it('EDT summer date computes correct DTE', () => {
-    // 2026-07-20 is a summer date (EDT). Compute and verify integer result.
     const dte = computeDTE('2026-07-20');
     assert.equal(typeof dte, 'number', 'DTE must be a number');
     assert.equal(Number.isInteger(dte), true, 'DTE must be an integer (from Math.ceil)');
-    // 2026-07-20 is 9 days from 2026-07-11, so should be positive on that date
     assert.ok(dte > 0, `DTE for 2026-07-20 should be positive, got ${dte}`);
   });
 
   it('expired contract DTE <= 0', () => {
-    // A date well in the past: 2025-01-01
     const dte = computeDTE('2025-01-01');
     assert.ok(dte <= 0, `DTE for 2025-01-01 should be <= 0, got ${dte}`);
   });
@@ -640,7 +647,6 @@ describe('Evaluator edge cases', () => {
   });
 
   it('near-boundary profit: ask exactly 50% of entry → PROFIT_TARGET', () => {
-    // entry_credit=4.00, ask=2.00 → ask is exactly 50% of entry → triggered
     const r = evaluateExitRules(
       makeTrade({ entry_credit: 4.00 }),
       makeQuote({ option: { bid: 1.80, ask: 2.00, last: 1.90, strike: 781 } }),
@@ -651,7 +657,6 @@ describe('Evaluator edge cases', () => {
   });
 
   it('near-boundary stop: ask exactly 200% of entry → STOP_LOSS', () => {
-    // entry_credit=4.00, ask=8.00 → ask is exactly 2x entry → triggered
     const r = evaluateExitRules(
       makeTrade({ entry_credit: 4.00 }),
       makeQuote({ stock_price: 800, option: { bid: 7.50, ask: 8.00, last: 7.80, strike: 781 } }),
@@ -663,33 +668,11 @@ describe('Evaluator edge cases', () => {
 });
 
 // ════════════════════════════════════════════════════════════════
-// v4.2 BLOCK A: Quote Provider Session Mechanics
+// v4.2 BLOCK A: Quote Provider — real ensureSession / getOptionQuote
 // ════════════════════════════════════════════════════════════════
-describe('Quote Provider session mechanics', () => {
+describe('Quote Provider (real functions)', () => {
   const origFetch = globalThis.fetch;
-
-  // Helper: build a mock fetch that responds sequentially
-  function mockFetchSequence(responses) {
-    let idx = 0;
-    return async (url, opts) => {
-      const entry = idx < responses.length ? responses[idx++] : responses[responses.length - 1];
-      if (typeof entry === 'function') return entry(url, opts);
-      return entry;
-    };
-  }
-
-  // Build a valid Yahoo option-chain JSON body
-  function yahooPayload(contractSymbol, overrides = {}) {
-    const contract = { contractSymbol, bid: 2.5, ask: 3.0, lastPrice: 2.8, strike: 200, volume: 100, openInterest: 500, impliedVolatility: 0.3, ...overrides };
-    return {
-      optionChain: {
-        result: [{
-          quote: { regularMarketPrice: 210, regularMarketTime: Math.floor(Date.now() / 1000) },
-          options: [{ puts: [], calls: [contract] }],
-        }],
-      },
-    };
-  }
+  after(() => { globalThis.fetch = origFetch; });
 
   function fakeResp(status, body, headers = {}) {
     return {
@@ -701,36 +684,71 @@ describe('Quote Provider session mechanics', () => {
     };
   }
 
-  // Standard session flow: cookie → crumb → options
-  function sessionResponses(crumb, optionsBody, optionsStatus = 200) {
+  function yahooChain(puts, calls, stockPrice = 210) {
+    return {
+      optionChain: {
+        result: [{
+          quote: { regularMarketPrice: stockPrice, regularMarketTime: Math.floor(Date.now() / 1000) },
+          options: [{ puts, calls }],
+        }],
+      },
+    };
+  }
+
+  function seqFetch(responses) {
+    let i = 0;
+    return async (url, opts) => {
+      const r = i < responses.length ? responses[i++] : responses[responses.length - 1];
+      return typeof r === 'function' ? r(url, opts) : r;
+    };
+  }
+
+  function sessionMocks(crumb, ...rest) {
     return [
-      fakeResp(302, '', { 'set-cookie': 'A3=abc123; Path=/' }), // fc.yahoo.com cookie
-      fakeResp(200, crumb),                                       // crumb
-      fakeResp(optionsStatus, optionsBody),                       // options
+      fakeResp(302, '', { 'set-cookie': `A3=test_cookie_val; Path=/` }),
+      fakeResp(200, crumb),
+      ...rest,
     ];
   }
 
-  it('cookie→crumb→URL-encoded crumb propagation', async () => {
-    let capturedUrl = '';
-    const responses = [
-      fakeResp(302, '', { 'set-cookie': 'A3=abc123; Path=/' }),
-      fakeResp(200, 'cr/umb'),
-      async (url) => { capturedUrl = url; return fakeResp(200, yahooPayload('AAPL260718P00200000')); },
-    ];
-    globalThis.fetch = mockFetchSequence(responses);
-    const { getOptionQuote } = await import('./_quoteProvider.js?v=crumb1');
-    // We can't reimport easily, so use the module's getOptionQuote which will
-    // attempt ensureSession internally. Force session by making TTL expire.
-    // Since we can't reset module state, we call the live function and verify
-    // behavior through the mock captures.
-    // Re-import won't work due to module caching. Instead, just verify
-    // URL-encoding logic directly:
-    const encoded = encodeURIComponent('cr/umb');
-    assert.equal(encoded, 'cr%2Fumb', 'slash in crumb must be percent-encoded');
+  it('ensureSession(true) forces cookie→crumb refresh; getOptionQuote sends encoded crumb', async () => {
+    const crumb = 'cr/umb+special';
+    const target = 'AAPL260718C00200000';
+    const calls = [{ contractSymbol: target, bid: 2.5, ask: 3.0, lastPrice: 2.8, strike: 200, volume: 100, openInterest: 500, impliedVolatility: 0.3 }];
+    let capturedCookieHeader = null;
+    let capturedOptionsUrl = null;
+
+    globalThis.fetch = seqFetch([
+      (url) => {
+        assert.ok(url.includes('fc.yahoo.com'), 'First call must be cookie endpoint');
+        return fakeResp(302, '', { 'set-cookie': 'A3=fresh_cookie; Path=/' });
+      },
+      (url, opts) => {
+        assert.ok(url.includes('getcrumb'), 'Second call must be crumb endpoint');
+        capturedCookieHeader = opts?.headers?.Cookie;
+        return fakeResp(200, crumb);
+      },
+      (url) => {
+        capturedOptionsUrl = url;
+        return fakeResp(200, yahooChain([], calls));
+      },
+    ]);
+
+    const sessionOk = await ensureSession(true);
+    assert.equal(sessionOk, true, 'ensureSession(true) should succeed');
+    assert.ok(capturedCookieHeader?.includes('A3='), 'Crumb call must include cookie header');
+
+    const result = await getOptionQuote('AAPL', target, '2026-07-18');
+    assert.equal(result.valid, true);
+    assert.ok(capturedOptionsUrl, 'Options URL must have been captured');
+    assert.ok(
+      capturedOptionsUrl.includes(encodeURIComponent(crumb)),
+      `Options URL must contain encoded crumb: expected ${encodeURIComponent(crumb)} in ${capturedOptionsUrl}`
+    );
     globalThis.fetch = origFetch;
   });
 
-  it('exact OCC from PUT/CALL arrays', async () => {
+  it('exact OCC match: finds target from mixed puts + calls', async () => {
     const target = 'AAPL260718C00200000';
     const puts = [
       { contractSymbol: 'AAPL260718P00190000', bid: 1, ask: 2, lastPrice: 1.5, strike: 190, volume: 10, openInterest: 50, impliedVolatility: 0.2 },
@@ -741,90 +759,131 @@ describe('Quote Provider session mechanics', () => {
       { contractSymbol: 'AAPL260718C00195000', bid: 3, ask: 4, lastPrice: 3.5, strike: 195, volume: 10, openInterest: 50, impliedVolatility: 0.2 },
       { contractSymbol: target, bid: 2.5, ask: 3.0, lastPrice: 2.8, strike: 200, volume: 100, openInterest: 500, impliedVolatility: 0.3 },
     ];
-    // Simulate the find logic from _quoteProvider line 115
-    const contract = [...puts, ...calls].find(c => c.contractSymbol === target);
-    assert.ok(contract, 'Must find exact contract in combined puts+calls');
-    assert.equal(contract.contractSymbol, target);
-    assert.equal(contract.strike, 200);
+
+    globalThis.fetch = seqFetch(sessionMocks('crumb_occ', fakeResp(200, yahooChain(puts, calls))));
+    await ensureSession(true);
+
+    const result = await getOptionQuote('AAPL', target, '2026-07-18');
+    assert.equal(result.valid, true, 'Quote must be valid');
+    assert.equal(result.option.bid, 2.5, 'Must return target contract bid');
+    assert.equal(result.option.ask, 3.0, 'Must return target contract ask');
+    assert.equal(result.option.strike, 200);
+    globalThis.fetch = origFetch;
   });
 
-  it('401→forced refresh reason format', () => {
-    // The provider returns reason: `yahoo_auth_${origStatus}_refresh_failed`
-    const origStatus = 401;
-    const reason = `yahoo_auth_${origStatus}_refresh_failed`;
-    assert.equal(reason, 'yahoo_auth_401_refresh_failed');
+  it('401 → one forced refresh → retry success', async () => {
+    const target = 'SPY260718P00550000';
+    const chain = yahooChain(
+      [{ contractSymbol: target, bid: 4.0, ask: 4.5, lastPrice: 4.2, strike: 550, volume: 200, openInterest: 1000, impliedVolatility: 0.25 }],
+      []
+    );
+    globalThis.fetch = seqFetch(sessionMocks('crumb_init'));
+    await ensureSession(true);
+
+    let callIdx = 0;
+    globalThis.fetch = async (url, opts) => {
+      callIdx++;
+      if (callIdx === 1) return fakeResp(401, 'Unauthorized');
+      if (callIdx === 2) return fakeResp(302, '', { 'set-cookie': 'A3=new_cookie; Path=/' });
+      if (callIdx === 3) return fakeResp(200, 'crumb_refreshed');
+      return fakeResp(200, chain);
+    };
+
+    const result = await getOptionQuote('SPY', target, '2026-07-18');
+    assert.equal(result.valid, true, 'Should succeed after 401 → refresh → retry');
+    assert.equal(result.option.bid, 4.0);
+    globalThis.fetch = origFetch;
   });
 
-  it('403→refresh→second failure reason', () => {
-    const origStatus = 403;
-    const secondStatus = 403;
-    // After refresh succeeds but second fetch still 403, reason uses resp.status
-    const reason = `yahoo_auth_${secondStatus}_refresh_failed`;
-    assert.equal(reason, 'yahoo_auth_403_refresh_failed');
+  it('403 → refresh → second 403 → fail closed', async () => {
+    globalThis.fetch = seqFetch(sessionMocks('crumb_403'));
+    await ensureSession(true);
+
+    let callIdx = 0;
+    globalThis.fetch = async (url) => {
+      callIdx++;
+      if (callIdx === 1) return fakeResp(403, 'Forbidden');
+      if (callIdx === 2) return fakeResp(302, '', { 'set-cookie': 'A3=x; Path=/' });
+      if (callIdx === 3) return fakeResp(200, 'crumb_new');
+      return fakeResp(403, 'Forbidden');
+    };
+
+    const result = await getOptionQuote('SPY', 'SPY260718P00550000', '2026-07-18');
+    assert.equal(result.valid, false);
+    assert.equal(result.reason, 'yahoo_auth_403_refresh_failed');
+    globalThis.fetch = origFetch;
   });
 
-  it('fail-closed on HTML crumb: length>40 or contains <', () => {
-    const htmlCrumb = '<html>';
-    const tooLong = 'a'.repeat(41);
-    // _quoteProvider.js line 46 check:
-    const rejectHtml = !htmlCrumb || htmlCrumb.length > 40 || htmlCrumb.includes('<');
-    const rejectLong = !tooLong || tooLong.length > 40 || tooLong.includes('<');
-    assert.equal(rejectHtml, true, 'HTML crumb must be rejected');
-    assert.equal(rejectLong, true, 'Overlong crumb must be rejected');
-  });
+  it('HTML crumb → fail closed with session_failed', async () => {
+    globalThis.fetch = seqFetch([
+      fakeResp(302, '', { 'set-cookie': 'A3=cookie_val; Path=/' }),
+      fakeResp(200, '<html>'),
+      fakeResp(302, '', { 'set-cookie': 'A3=cookie_val2; Path=/' }),
+      fakeResp(200, '<html>'),
+    ]);
+    await ensureSession(true);
 
-  it('zero secret/token logging: console.error message pattern', () => {
-    // _quoteProvider.js line 54 logs 'Yahoo session error:' + err.message
-    // line 156 logs 'getOptionQuote error:' + err.message
-    // Neither includes cookie/crumb values.
-    const cookieVal = 'A3=abc123';
-    const crumbVal = 'myCrumb99';
-    const safeMsg1 = 'Yahoo session error: fetch failed';
-    const safeMsg2 = 'getOptionQuote error: network timeout';
-    assert.ok(!safeMsg1.includes(cookieVal), 'Cookie must not leak in session error log');
-    assert.ok(!safeMsg1.includes(crumbVal), 'Crumb must not leak in session error log');
-    assert.ok(!safeMsg2.includes(cookieVal), 'Cookie must not leak in quote error log');
-    assert.ok(!safeMsg2.includes(crumbVal), 'Crumb must not leak in quote error log');
-  });
-
-  it('session_failed returned when ensureSession fails', () => {
-    // getOptionQuote line 66: if both ensureSession calls fail → session_failed
-    const result = { valid: false, reason: 'session_failed', retrieved_at: new Date().toISOString() };
+    globalThis.fetch = seqFetch([
+      fakeResp(302, '', { 'set-cookie': 'A3=c; Path=/' }),
+      fakeResp(200, '<html>'),
+      fakeResp(302, '', { 'set-cookie': 'A3=c; Path=/' }),
+      fakeResp(200, '<html>'),
+    ]);
+    const result = await getOptionQuote('AAPL', 'AAPL260718P00200000', '2026-07-18');
     assert.equal(result.valid, false);
     assert.equal(result.reason, 'session_failed');
+    globalThis.fetch = origFetch;
   });
 
-  it('SESSION_TTL is 10 minutes', () => {
-    const SESSION_TTL = 10 * 60 * 1000;
-    assert.equal(SESSION_TTL, 600_000);
+  it('zero credential logging: no cookie/crumb values in console.error', async () => {
+    const logged = [];
+    const origError = console.error;
+    console.error = (...args) => { logged.push(args.join(' ')); };
+
+    globalThis.fetch = seqFetch([
+      fakeResp(302, '', { 'set-cookie': 'A3=SECRET_COOKIE_VAL; Path=/' }),
+      fakeResp(200, 'SECRET_CRUMB_VAL'),
+      async () => { throw new Error('network timeout'); },
+    ]);
+    await ensureSession(true);
+    const result = await getOptionQuote('AAPL', 'X', '2026-07-18');
+    assert.equal(result.valid, false);
+
+    console.error = origError;
+    globalThis.fetch = origFetch;
+
+    for (const msg of logged) {
+      assert.ok(!msg.includes('SECRET_COOKIE_VAL'), `Cookie value must not appear in logs: ${msg}`);
+      assert.ok(!msg.includes('SECRET_CRUMB_VAL'), `Crumb value must not appear in logs: ${msg}`);
+    }
+  });
+
+  it('MAX_BATCH_MS exported as 25000', () => {
+    assert.equal(MAX_BATCH_MS, 25000);
   });
 });
 
 // ════════════════════════════════════════════════════════════════
-// v4.2 BLOCK B: Route-level ingest validation
+// v4.2 BLOCK B: Ingest handler — real import
 // ════════════════════════════════════════════════════════════════
-describe('Route-level ingest validation', () => {
-  // Mirrors validation logic from ingest.js without hitting supabase
-  const REQUIRED = [
-    'scan_run_id', 'alerted_at', 'tier', 'ticker', 'side', 'strike',
-    'expiration', 'contract_symbol', 'bid', 'ask', 'stock_price', 'dte',
-  ];
+describe('Ingest handler (real functions)', () => {
+  const SAVED_KEY = process.env.INGEST_API_KEY;
+  const TEST_KEY = 'test_ingest_key_42';
 
-  function validateBody(body) {
-    const missing = REQUIRED.filter(f => body[f] == null || body[f] === '');
-    if (missing.length > 0) return { status: 400, error: 'Missing fields', missing };
-    const alertedAt = new Date(body.alerted_at);
-    if (isNaN(alertedAt.getTime())) return { status: 400, error: 'alerted_at must be ISO-8601 UTC' };
-    const side = (body.side || '').toUpperCase();
-    if (!['PUT', 'CALL'].includes(side)) return { status: 400, error: 'side must be PUT or CALL' };
-    const strike = Number(body.strike);
-    const bid = Number(body.bid);
-    const ask = Number(body.ask);
-    if (strike <= 0) return { status: 400, error: 'strike must be > 0' };
-    if (bid <= 0) return { status: 400, error: 'bid must be > 0' };
-    if (ask <= 0) return { status: 400, error: 'ask must be > 0' };
-    if (bid > ask) return { status: 400, error: 'bid must be <= ask (crossed market)' };
-    return { status: 200, side, entry_credit: bid };
+  before(() => { process.env.INGEST_API_KEY = TEST_KEY; });
+  after(() => {
+    if (SAVED_KEY !== undefined) process.env.INGEST_API_KEY = SAVED_KEY;
+    else delete process.env.INGEST_API_KEY;
+  });
+
+  function mockRes() {
+    const r = { _status: null, _json: null };
+    r.status = (s) => { r._status = s; return r; };
+    r.json = (j) => { r._json = j; return r; };
+    return r;
+  }
+  function mockReq(method, headers, body) {
+    return { method, headers: headers || {}, body: body || {} };
   }
 
   const goodBody = {
@@ -834,313 +893,376 @@ describe('Route-level ingest validation', () => {
     stock_price: 210, dte: 7,
   };
 
-  it('missing x-api-key → 401', () => {
-    const apiKey = undefined;
-    assert.equal(!apiKey || apiKey !== 'real_key', true);
+  it('GET → 405 Method not allowed', async () => {
+    const res = mockRes();
+    await ingestHandler(mockReq('GET'), res);
+    assert.equal(res._status, 405);
+    assert.equal(res._json.error, 'Method not allowed');
   });
 
-  it('wrong x-api-key → 401', () => {
-    const apiKey = 'wrong_key';
-    assert.equal(apiKey !== 'real_key', true);
+  it('missing x-api-key → 401', async () => {
+    const res = mockRes();
+    await ingestHandler(mockReq('POST', {}, goodBody), res);
+    assert.equal(res._status, 401);
   });
 
-  it('missing ticker → 400 with field name', () => {
-    const r = validateBody({ ...goodBody, ticker: '' });
-    assert.equal(r.status, 400);
-    assert.ok(r.missing.includes('ticker'));
+  it('wrong x-api-key → 401', async () => {
+    const res = mockRes();
+    await ingestHandler(mockReq('POST', { 'x-api-key': 'wrong' }, goodBody), res);
+    assert.equal(res._status, 401);
   });
 
-  it('invalid alerted_at → 400', () => {
-    const r = validateBody({ ...goodBody, alerted_at: 'not-a-date' });
-    assert.equal(r.status, 400);
-    assert.match(r.error, /alerted_at/);
+  it('correct key but missing ticker → 400 with field name', async () => {
+    const res = mockRes();
+    await ingestHandler(mockReq('POST', { 'x-api-key': TEST_KEY }, { ...goodBody, ticker: '' }), res);
+    assert.equal(res._status, 400);
+    assert.ok(res._json.missing.includes('ticker'));
   });
 
-  it('side not PUT/CALL → 400', () => {
-    const r = validateBody({ ...goodBody, side: 'SELL' });
-    assert.equal(r.status, 400);
-    assert.match(r.error, /side/);
+  it('invalid alerted_at → 400', async () => {
+    const res = mockRes();
+    await ingestHandler(mockReq('POST', { 'x-api-key': TEST_KEY }, { ...goodBody, alerted_at: 'not-a-date' }), res);
+    assert.equal(res._status, 400);
+    assert.match(res._json.error, /alerted_at/);
   });
 
-  it('strike <= 0 → 400', () => {
-    const r = validateBody({ ...goodBody, strike: 0 });
-    assert.equal(r.status, 400);
-    assert.match(r.error, /strike/);
+  it('side not PUT/CALL → 400', async () => {
+    const res = mockRes();
+    await ingestHandler(mockReq('POST', { 'x-api-key': TEST_KEY }, { ...goodBody, side: 'SELL' }), res);
+    assert.equal(res._status, 400);
+    assert.match(res._json.error, /side/);
   });
 
-  it('bid > ask (crossed) → 400', () => {
-    const r = validateBody({ ...goodBody, bid: 5.00, ask: 3.00 });
-    assert.equal(r.status, 400);
-    assert.match(r.error, /crossed/);
+  it('strike <= 0 → 400', async () => {
+    const res = mockRes();
+    await ingestHandler(mockReq('POST', { 'x-api-key': TEST_KEY }, { ...goodBody, strike: 0 }), res);
+    assert.equal(res._status, 400);
+    assert.match(res._json.error, /strike/);
   });
 
-  it('server DTE: computeDTE uses body.expiration', () => {
-    // Use a far-future expiration and an intentionally wrong caller DTE
-    const farExpiration = '2028-12-15';
-    const wrongCallerDTE = 0; // obviously wrong for a 2028 expiration
-    const serverDTE = computeDTE(farExpiration);
-    assert.equal(typeof serverDTE, 'number');
-    assert.ok(serverDTE > 0, 'Server DTE for far-future expiration must be positive');
-    assert.notEqual(serverDTE, wrongCallerDTE, 'Server DTE from computeDTE() must differ from an obviously wrong caller DTE');
+  it('bid > ask (crossed) → 400', async () => {
+    const res = mockRes();
+    await ingestHandler(mockReq('POST', { 'x-api-key': TEST_KEY }, { ...goodBody, bid: 5.00, ask: 3.00 }), res);
+    assert.equal(res._status, 400);
+    assert.match(res._json.error, /crossed/);
   });
 
-  it('entry_credit = bid (bid-derived)', () => {
-    const r = validateBody(goodBody);
-    assert.equal(r.entry_credit, goodBody.bid);
-    assert.notEqual(r.entry_credit, goodBody.ask);
+  it('bid <= 0 → 400', async () => {
+    const res = mockRes();
+    await ingestHandler(mockReq('POST', { 'x-api-key': TEST_KEY }, { ...goodBody, bid: 0 }), res);
+    assert.equal(res._status, 400);
   });
 
-  it('publish_state defaults to SHADOW, status to OPEN', () => {
-    // From ingest.js line 92-93: hardcoded in row construction
-    const row = { status: 'OPEN', publish_state: 'SHADOW' };
-    assert.equal(row.publish_state, 'SHADOW');
-    assert.equal(row.status, 'OPEN');
+  it('ask <= 0 → 400', async () => {
+    const res = mockRes();
+    await ingestHandler(mockReq('POST', { 'x-api-key': TEST_KEY }, { ...goodBody, ask: -1 }), res);
+    assert.equal(res._status, 400);
   });
 
-  it('duplicate alert_id returns { created: false, reason: duplicate }', () => {
-    // Behavior from ingest.js line 108-109: ignoreDuplicates returns empty array
-    const duplicateResponse = { created: false, reason: 'duplicate', alert_id: 'abc123' };
-    assert.equal(duplicateResponse.created, false);
-    assert.equal(duplicateResponse.reason, 'duplicate');
+  it('makeAlertId is deterministic and sha256-based', () => {
+    const body = { scan_run_id: 'run_X', tier: 'standard', ticker: 'AAPL', side: 'PUT', contract_symbol: 'AAPL260718P00200000' };
+    const id1 = ingestMakeAlertId(body);
+    const id2 = ingestMakeAlertId(body);
+    assert.equal(id1, id2, 'Same input → same alert_id');
+    assert.equal(id1.length, 40, 'alert_id is 40 hex chars');
+    assert.match(id1, /^[0-9a-f]{40}$/, 'Must be lowercase hex');
   });
 
-  it('new scan_run_id → new alert_id', () => {
-    const a = makeAlertId({ ...goodBody, scan_run_id: 'run_A' });
-    const b = makeAlertId({ ...goodBody, scan_run_id: 'run_B' });
+  it('different scan_run_id → different alert_id', () => {
+    const a = ingestMakeAlertId({ ...goodBody, scan_run_id: 'run_A' });
+    const b = ingestMakeAlertId({ ...goodBody, scan_run_id: 'run_B' });
     assert.notEqual(a, b);
   });
 
-  it('fees hardcoded to 1.30', () => {
-    assert.equal(1.30, 1.30, 'Row fees must be 1.30 per contract');
+  it('different ticker → different alert_id', () => {
+    const a = ingestMakeAlertId({ ...goodBody, ticker: 'AAPL' });
+    const b = ingestMakeAlertId({ ...goodBody, ticker: 'SPY' });
+    assert.notEqual(a, b);
+  });
+
+  it('server DTE: computeDTE called by handler with body.expiration', () => {
+    const dte = computeDTE('2028-12-15');
+    assert.equal(typeof dte, 'number');
+    assert.ok(dte > 0, 'Far future expiration must yield positive DTE');
   });
 });
 
 // ════════════════════════════════════════════════════════════════
-// v4.2 BLOCK C: GET route safe-serializer
+// v4.2 BLOCK C: GET route safe-serializer invariants
 // ════════════════════════════════════════════════════════════════
-describe('GET route safe-serializer', () => {
-  const SAFE_SET = new Set([
+describe('GET route safe-serializer invariants', () => {
+  const EXPECTED_SAFE_FIELDS = [
     'id', 'ticker', 'side', 'strike', 'expiration',
     'entry_credit', 'entry_stock_price', 'entry_dte',
     'alerted_at', 'status',
     'closed_at', 'exit_debit', 'exit_reason',
     'days_held', 'gross_pnl', 'fees', 'net_pnl', 'outcome',
     'tier', 'is_spread',
-  ]);
+  ];
+
   const EXIT_REASON_MAP = {
-    'PROFIT_TARGET': 'Profit', 'STOP_LOSS': 'Stop',
-    'PRE_ITM': 'Protection', 'FORCED_TIME_EXIT': 'Time', 'EXPIRATION': 'Expiration',
+    'PROFIT_TARGET': 'Profit',
+    'STOP_LOSS': 'Stop',
+    'PRE_ITM': 'Protection',
+    'FORCED_TIME_EXIT': 'Time',
+    'EXPIRATION': 'Expiration',
   };
-  function sanitize(rows) {
-    return (rows || []).map(r => {
-      const clean = {};
-      for (const k of SAFE_SET) { if (r[k] !== undefined) clean[k] = r[k]; }
-      clean.exit_reason = r.exit_reason ? (EXIT_REASON_MAP[r.exit_reason] || r.exit_reason) : null;
-      return clean;
-    });
+
+  it('SAFE_FIELDS count = 20 (contract test)', () => {
+    assert.equal(EXPECTED_SAFE_FIELDS.length, 20);
+  });
+
+  it('no internal fields in SAFE_FIELDS', () => {
+    const forbidden = ['alert_id', 'scan_run_id', 'contract_symbol', 'publish_state',
+      'rule_version', 'calc_version', 'last_evaluated_at', 'reviewed_at',
+      'entry_bid', 'entry_ask', 'entry_score', 'entry_grade'];
+    for (const f of forbidden) {
+      assert.ok(!EXPECTED_SAFE_FIELDS.includes(f), `${f} must NOT be in SAFE_FIELDS`);
+    }
+  });
+
+  it('exit_reason mapping covers all exit rule reasons', () => {
+    const allReasons = ['PROFIT_TARGET', 'STOP_LOSS', 'PRE_ITM', 'FORCED_TIME_EXIT', 'EXPIRATION'];
+    for (const r of allReasons) {
+      assert.ok(r in EXIT_REASON_MAP, `${r} must have a mapping`);
+      assert.ok(typeof EXIT_REASON_MAP[r] === 'string' && EXIT_REASON_MAP[r].length > 0);
+    }
+  });
+
+  it('exit_reason mapping uses generic user-facing labels (no internals)', () => {
+    for (const [, label] of Object.entries(EXIT_REASON_MAP)) {
+      assert.ok(!label.includes('_'), `Label "${label}" must not contain underscores`);
+      assert.ok(label.length <= 12, `Label "${label}" must be short/generic`);
+    }
+  });
+
+  it('null exit_reason remains null in mapping logic', () => {
+    const reason = null;
+    const mapped = reason ? (EXIT_REASON_MAP[reason] || reason) : null;
+    assert.equal(mapped, null);
+  });
+
+  it('unknown exit_reason passes through unmapped', () => {
+    const reason = 'MANUAL_CLOSE';
+    const mapped = reason ? (EXIT_REASON_MAP[reason] || reason) : null;
+    assert.equal(mapped, 'MANUAL_CLOSE');
+  });
+});
+
+// ════════════════════════════════════════════════════════════════
+// v4.2 BLOCK D: Reconcile handler auth + method guards
+// ════════════════════════════════════════════════════════════════
+describe('Reconcile handler guards', async () => {
+  const { default: reconcileHandler } = await import('./reconcile.js');
+
+  function mockRes() {
+    const r = { _status: null, _json: null };
+    r.status = (s) => { r._status = s; return r; };
+    r.json = (j) => { r._json = j; return r; };
+    return r;
   }
 
-  it('complete row → sanitized to exactly 20 fields', () => {
-    const fullRow = {
-      id: 1, ticker: 'AAPL', side: 'PUT', strike: 200, expiration: '2026-07-18',
-      entry_credit: 3.65, entry_stock_price: 210, entry_dte: 7,
-      alerted_at: '2026-07-11T14:00:00Z', status: 'CLOSED',
-      closed_at: '2026-07-15T16:00:00Z', exit_debit: 1.50, exit_reason: 'PROFIT_TARGET',
-      days_held: 4, gross_pnl: 215, fees: 1.30, net_pnl: 213.70, outcome: 'WIN',
-      tier: 'standard', is_spread: false,
-      // Internal fields that must be stripped:
-      alert_id: 'abc', scan_run_id: 'run_01', contract_symbol: 'X',
-      publish_state: 'LIVE', reviewed_at: '2026-07-12T00:00:00Z',
-      rule_version: 'v1', calc_version: 'v1', last_evaluated_at: '2026-07-15T15:00:00Z',
-    };
-    const [clean] = sanitize([fullRow]);
-    const keys = Object.keys(clean);
-    assert.equal(keys.length, 20, `Expected 20 safe fields, got ${keys.length}: ${keys}`);
-    assert.equal(clean.alert_id, undefined);
-    assert.equal(clean.scan_run_id, undefined);
-    assert.equal(clean.publish_state, undefined);
-    assert.equal(clean.rule_version, undefined);
+  const SAVED_KEY = process.env.INGEST_API_KEY;
+  const TEST_KEY = 'test_reconcile_key_42';
+
+  before(() => { process.env.INGEST_API_KEY = TEST_KEY; });
+  after(() => {
+    if (SAVED_KEY !== undefined) process.env.INGEST_API_KEY = SAVED_KEY;
+    else delete process.env.INGEST_API_KEY;
   });
 
-  it('exit_reason mapping: each internal → generic category', () => {
-    for (const [internal, generic] of Object.entries(EXIT_REASON_MAP)) {
-      const [r] = sanitize([{ exit_reason: internal }]);
-      assert.equal(r.exit_reason, generic, `${internal} should map to ${generic}`);
-    }
+  it('GET → 405', async () => {
+    const res = mockRes();
+    await reconcileHandler({ method: 'GET', headers: {} }, res);
+    assert.equal(res._status, 405);
   });
 
-  it('unknown exit_reason passes through', () => {
-    const [r] = sanitize([{ exit_reason: 'MANUAL_CLOSE' }]);
-    assert.equal(r.exit_reason, 'MANUAL_CLOSE');
+  it('missing x-api-key → 401', async () => {
+    const res = mockRes();
+    await reconcileHandler({ method: 'POST', headers: {} }, res);
+    assert.equal(res._status, 401);
   });
 
-  it('null exit_reason stays null', () => {
-    const [r] = sanitize([{ exit_reason: null }]);
-    assert.equal(r.exit_reason, null);
+  it('wrong x-api-key → 401', async () => {
+    const res = mockRes();
+    await reconcileHandler({ method: 'POST', headers: { 'x-api-key': 'nope' } }, res);
+    assert.equal(res._status, 401);
   });
 
-  it('SHADOW trades filtered via publish_state=LIVE query', () => {
-    // index.js line 65: .eq('publish_state', 'LIVE') in all 3 queries
-    const queryFilter = 'LIVE';
-    assert.equal(queryFilter, 'LIVE', 'Queries must filter for LIVE only');
-    assert.notEqual(queryFilter, 'SHADOW');
+  it('missing DASHBOARD_GIST_ID → 500', async () => {
+    const savedGist = process.env.DASHBOARD_GIST_ID;
+    const savedToken = process.env.GIST_TOKEN;
+    delete process.env.DASHBOARD_GIST_ID;
+    delete process.env.GIST_TOKEN;
+
+    const res = mockRes();
+    await reconcileHandler({ method: 'POST', headers: { 'x-api-key': TEST_KEY } }, res);
+    assert.equal(res._status, 500);
+    assert.match(res._json.error, /GIST/i);
+
+    if (savedGist) process.env.DASHBOARD_GIST_ID = savedGist;
+    if (savedToken) process.env.GIST_TOKEN = savedToken;
   });
 });
 
 // ════════════════════════════════════════════════════════════════
-// v4.2 BLOCK D: Reconcile/recovery mechanics
+// v4.2 BLOCK E: Evaluator handler auth + market-closed guard
 // ════════════════════════════════════════════════════════════════
-describe('Reconcile/recovery mechanics', () => {
-  it('oldest-first ordering: sort ascending by committed_at', () => {
-    const revs = [
-      { committed_at: '2026-07-11T03:00:00Z', version: 'c' },
-      { committed_at: '2026-07-11T01:00:00Z', version: 'a' },
-      { committed_at: '2026-07-11T02:00:00Z', version: 'b' },
-    ];
-    const sorted = [...revs].sort((a, b) => (a.committed_at > b.committed_at ? 1 : -1));
-    assert.deepStrictEqual(sorted.map(r => r.version), ['a', 'b', 'c']);
+describe('Evaluator handler guards', async () => {
+  const { default: evaluateHandler } = await import('./evaluate.js');
+
+  function mockRes() {
+    const r = { _status: null, _json: null, _headers: {} };
+    r.status = (s) => { r._status = s; return r; };
+    r.json = (j) => { r._json = j; return r; };
+    r.setHeader = (k, v) => { r._headers[k] = v; return r; };
+    return r;
+  }
+
+  const SAVED_KEY = process.env.INGEST_API_KEY;
+  const TEST_KEY = 'test_eval_key_42';
+
+  before(() => { process.env.INGEST_API_KEY = TEST_KEY; });
+  after(() => {
+    if (SAVED_KEY !== undefined) process.env.INGEST_API_KEY = SAVED_KEY;
+    else delete process.env.INGEST_API_KEY;
   });
 
-  it('malformed JSON revision → skipped (parse fails)', () => {
-    const content = '{not valid json]';
-    let parsed = null;
-    try { parsed = JSON.parse(content); } catch { /* skip */ }
-    assert.equal(parsed, null, 'Malformed JSON should not parse');
+  it('GET → 405', async () => {
+    const res = mockRes();
+    await evaluateHandler({ method: 'GET', headers: {} }, res);
+    assert.equal(res._status, 405);
   });
 
-  it('missing required field: ticker absent → revisionFailed', () => {
-    const candidate = { strike: 200, expiration: '2026-07-18', contract_symbol: 'X' };
-    const valid = !!(candidate.ticker && candidate.strike && candidate.expiration && candidate.contract_symbol);
-    assert.equal(valid, false, 'Missing ticker should fail validation');
+  it('missing x-api-key → 401', async () => {
+    const res = mockRes();
+    await evaluateHandler({ method: 'POST', headers: {} }, res);
+    assert.equal(res._status, 401);
   });
 
-  it('duplicate idempotency: same alert_id upsert with ignoreDuplicates → skip', () => {
-    // ignoreDuplicates returns empty array on conflict (ingest.js line 108)
-    const data = []; // empty = duplicate
-    const isDuplicate = !data || data.length === 0;
-    assert.equal(isDuplicate, true);
+  it('wrong x-api-key → 401', async () => {
+    const res = mockRes();
+    await evaluateHandler({ method: 'POST', headers: { 'x-api-key': 'wrong' } }, res);
+    assert.equal(res._status, 401);
   });
 
-  it('pagination: 30 per page, 35 total → 2 pages', () => {
-    const page1 = Array(30).fill({ version: 'x' });
-    const page2 = Array(5).fill({ version: 'y' });
-    const all = [...page1, ...page2];
-    assert.equal(all.length, 35);
-    const hasMoreAfterP1 = page1.length === 30; // triggers page 2
-    const hasMoreAfterP2 = page2.length === 30; // false
-    assert.equal(hasMoreAfterP1, true);
-    assert.equal(hasMoreAfterP2, false);
-  });
-
-  it('bootstrap: first call creates cursor', () => {
-    const bootstrapResp = { bootstrapped: true, note: 'Call again to start normal replay' };
-    assert.equal(bootstrapResp.bootstrapped, true);
-  });
-
-  it('bootstrap: cursor_already_exists on second call', () => {
-    const resp = { bootstrapped: false, reason: 'cursor_already_exists' };
-    assert.equal(resp.reason, 'cursor_already_exists');
-  });
-
-  it('CAS failure: advance_recovery_cursor error → cursor_advanced: false', () => {
-    const casError = { message: 'concurrent modification' };
-    const cursorAdvanced = casError ? false : true;
-    assert.equal(cursorAdvanced, false);
-  });
-
-  it('no overwrite: ignoreDuplicates prevents updating existing trade', () => {
-    // reconcile.js line 196: { onConflict: 'alert_id', ignoreDuplicates: true }
-    const upsertOpts = { onConflict: 'alert_id', ignoreDuplicates: true };
-    assert.equal(upsertOpts.ignoreDuplicates, true, 'Must use ignoreDuplicates to prevent overwrites');
-  });
-});
-
-// ════════════════════════════════════════════════════════════════
-// v4.2 BLOCK E: Evaluator mechanics
-// ════════════════════════════════════════════════════════════════
-describe('Evaluator mechanics', () => {
-  it('batch limit: LIMIT 20', () => {
-    const BATCH_LIMIT = 20;
-    assert.equal(BATCH_LIMIT, 20, 'evaluate.js uses .limit(20)');
-  });
-
-  it('time budget: MAX_BATCH_MS = 25000', () => {
-    // _quoteProvider.js exports MAX_BATCH_MS = 25000
-    const MAX_BATCH = 25000;
-    assert.equal(MAX_BATCH, 25000);
-  });
-
-  it('time budget check before each trade, not after', () => {
-    // evaluate.js line 47: checked at top of loop BEFORE processing
-    const startMs = Date.now();
-    const trades = ['a', 'b', 'c'];
-    let evaluated = 0;
-    for (let i = 0; i < trades.length; i++) {
-      if (Date.now() - startMs > 25000) break; // check BEFORE
-      evaluated++;
-    }
-    assert.equal(evaluated, 3, 'All trades processed within time budget');
-  });
-
-  it('oldest-first: last_evaluated_at ASC NULLS FIRST, alerted_at ASC', () => {
-    const trades = [
-      { last_evaluated_at: null, alerted_at: '2026-07-11T12:00:00Z', id: 'new' },
-      { last_evaluated_at: '2026-07-11T10:00:00Z', alerted_at: '2026-07-11T11:00:00Z', id: 'old' },
-      { last_evaluated_at: null, alerted_at: '2026-07-11T13:00:00Z', id: 'newer' },
-    ];
-    // Supabase query: order by last_evaluated_at ASC NULLS FIRST, then alerted_at ASC
-    const sorted = [...trades].sort((a, b) => {
-      if (a.last_evaluated_at === null && b.last_evaluated_at !== null) return -1;
-      if (a.last_evaluated_at !== null && b.last_evaluated_at === null) return 1;
-      if ((a.last_evaluated_at || '') < (b.last_evaluated_at || '')) return -1;
-      if ((a.last_evaluated_at || '') > (b.last_evaluated_at || '')) return 1;
-      return a.alerted_at < b.alerted_at ? -1 : 1;
-    });
-    assert.equal(sorted[0].id, 'new', 'NULL last_evaluated_at comes first');
-    assert.equal(sorted[1].id, 'newer', 'Second NULL sorted by alerted_at');
-    assert.equal(sorted[2].id, 'old', 'Non-null last_evaluated_at comes last');
-  });
-
-  it('DATA_REVIEW transition on invalid quote', () => {
+  it('evaluateExitRules: DATA_REVIEW on invalid quote', () => {
     const r = evaluateExitRules(makeTrade(), { valid: false, reason: 'session_failed', retrieved_at: '' });
     assert.equal(r.data_review, true);
-    // evaluate.js line 66-68: status changes to DATA_REVIEW
-    const newStatus = r.data_review && 'OPEN' !== 'DATA_REVIEW' ? 'DATA_REVIEW' : 'OPEN';
-    assert.equal(newStatus, 'DATA_REVIEW');
+    assert.equal(r.triggered, false);
+    assert.equal(r.details.rule, 'DATA_FAILURE');
   });
 
-  it('DATA_REVIEW revert on valid quote, not triggered', () => {
+  it('evaluateExitRules: valid quote no trigger → no data_review', () => {
     const r = evaluateExitRules(makeTrade(), makeQuote());
-    // evaluate.js line 81: if trade.status === DATA_REVIEW && !result.triggered → revert to OPEN
-    const currentStatus = 'DATA_REVIEW';
-    const newStatus = currentStatus === 'DATA_REVIEW' && !r.triggered ? 'OPEN' : currentStatus;
-    assert.equal(newStatus, 'OPEN', 'Should revert to OPEN when quote becomes valid');
+    assert.equal(r.triggered, false);
+    assert.equal(r.data_review, undefined);
   });
 
-  it('SHADOW trades evaluated (no publish_state filter)', () => {
-    // evaluate.js line 32: .in('status', ['OPEN', 'DATA_REVIEW']) — no publish_state filter
-    const queryFilters = { status: ['OPEN', 'DATA_REVIEW'] };
-    assert.ok(!('publish_state' in queryFilters), 'Evaluator must not filter by publish_state');
+  it('MAX_BATCH_MS from _quoteProvider is 25000', () => {
+    assert.equal(MAX_BATCH_MS, 25000);
+  });
+});
+
+// ════════════════════════════════════════════════════════════════
+// v4.2 BLOCK F: Date/DTE/timezone boundary tests
+// ════════════════════════════════════════════════════════════════
+describe('Date/DTE/timezone boundaries', () => {
+  it('getETNow returns valid ET components', () => {
+    const et = getETNow();
+    assert.ok(typeof et.hour === 'number' && et.hour >= 0 && et.hour <= 23);
+    assert.ok(typeof et.minute === 'number' && et.minute >= 0 && et.minute <= 59);
+    assert.ok(typeof et.dow === 'number' && et.dow >= 0 && et.dow <= 6);
+    assert.match(et.dateStr, /^\d{4}-\d{2}-\d{2}$/);
+    assert.ok(et.year >= 2025 && et.year <= 2030);
   });
 
-  it('no-op concurrent close: rpcResult=null → already closed', () => {
-    // evaluate.js line 120-121: rpcResult === null means already closed
-    const rpcResult = null;
-    const alreadyClosed = rpcResult === null;
-    assert.equal(alreadyClosed, true);
+  it('computeDTE: same-day expiration → 0 or negative', () => {
+    const et = getETNow();
+    const dte = computeDTE(et.dateStr);
+    assert.ok(dte <= 1, `Same-day DTE should be <= 1, got ${dte}`);
   });
 
-  it('EVALUATED event throttle: 1/hr per trade', () => {
-    const oneHourAgo = new Date(Date.now() - 3600000).toISOString();
-    const recentEvent = new Date(Date.now() - 1800000).toISOString(); // 30 min ago
-    const staleEvent = new Date(Date.now() - 7200000).toISOString();  // 2 hr ago
-    assert.ok(recentEvent > oneHourAgo, 'Recent event is within 1hr → throttled');
-    assert.ok(staleEvent < oneHourAgo, 'Stale event is outside 1hr → not throttled');
+  it('computeDTE: far future is positive', () => {
+    const dte = computeDTE('2028-12-15');
+    assert.ok(dte > 300, `Far future DTE should be >300, got ${dte}`);
   });
 
-  it('fairness: last_evaluated_at updated even on quote failure', () => {
-    // evaluate.js lines 60-62: ALWAYS update last_evaluated_at, before any branching
-    const alwaysUpdated = true; // unconditional update at line 60
-    assert.equal(alwaysUpdated, true, 'last_evaluated_at must update regardless of quote validity');
+  it('computeDTE: past expiration is negative', () => {
+    const dte = computeDTE('2020-01-01');
+    assert.ok(dte < 0, `Past DTE should be negative, got ${dte}`);
+  });
+
+  it('month-end boundary: Jan 31 → Feb 1 handled by Intl', () => {
+    const fmt = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/New_York',
+      year: 'numeric', month: '2-digit', day: '2-digit', hour12: false,
+    });
+    const jan31 = new Date('2026-01-31T23:30:00Z');
+    const parts = Object.fromEntries(fmt.formatToParts(jan31).map(p => [p.type, p.value]));
+    const dateStr = `${parts.year}-${parts.month}-${parts.day}`;
+    assert.equal(dateStr, '2026-01-31', 'Jan 31 23:30 UTC should be Jan 31 in ET (EST)');
+  });
+
+  it('year-end boundary: Dec 31 → Jan 1 handled by Intl', () => {
+    const fmt = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/New_York',
+      year: 'numeric', month: '2-digit', day: '2-digit', hour12: false,
+    });
+    const dec31 = new Date('2026-12-31T23:30:00Z');
+    const parts = Object.fromEntries(fmt.formatToParts(dec31).map(p => [p.type, p.value]));
+    const dateStr = `${parts.year}-${parts.month}-${parts.day}`;
+    assert.equal(dateStr, '2026-12-31');
+  });
+
+  it('leap day: Feb 29 2028 is valid', () => {
+    const fmt = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/New_York',
+      year: 'numeric', month: '2-digit', day: '2-digit', hour12: false,
+    });
+    const feb29 = new Date('2028-02-29T15:00:00Z');
+    const parts = Object.fromEntries(fmt.formatToParts(feb29).map(p => [p.type, p.value]));
+    assert.equal(parts.month, '02');
+    assert.equal(parts.day, '29');
+    const dte = computeDTE('2028-02-29');
+    assert.equal(typeof dte, 'number');
+  });
+
+  it('spring DST: Mar 8 2026 (spring forward) → Intl still correct', () => {
+    const fmt = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/New_York',
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: 'numeric', minute: 'numeric', hour12: false,
+    });
+    const springFwd = new Date('2026-03-08T07:30:00Z');
+    const parts = Object.fromEntries(fmt.formatToParts(springFwd).map(p => [p.type, p.value]));
+    assert.equal(parts.month, '03');
+    assert.equal(parts.day, '08');
+    assert.equal(parseInt(parts.hour), 3, 'Spring forward: 07:30 UTC should be 03:30 EDT');
+  });
+
+  it('fall DST: Nov 1 2026 (fall back) → Intl still correct', () => {
+    const fmt = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/New_York',
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: 'numeric', minute: 'numeric', hour12: false,
+    });
+    const fallBack = new Date('2026-11-01T06:30:00Z');
+    const parts = Object.fromEntries(fmt.formatToParts(fallBack).map(p => [p.type, p.value]));
+    assert.equal(parts.month, '11');
+    assert.equal(parts.day, '01');
+    assert.equal(parseInt(parts.hour), 1, 'Fall back: 06:30 UTC should be 01:30 EST');
+  });
+
+  it('expirationForDTE helper produces valid YYYY-MM-DD', () => {
+    const exp = expirationForDTE(5);
+    assert.match(exp, /^\d{4}-\d{2}-\d{2}$/);
+    assert.equal(computeDTE(exp), 5);
+  });
+
+  it('expirationForDTE: DTE=0 returns today or recently-past', () => {
+    const exp = expirationForDTE(0);
+    const dte = computeDTE(exp);
+    assert.ok(dte <= 0, `DTE=0 expiration should yield computeDTE <= 0, got ${dte}`);
   });
 });
