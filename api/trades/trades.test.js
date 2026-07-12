@@ -516,12 +516,13 @@ describe('Market calendar coverage', () => {
     assert.equal(SUPPORTED.includes(2028), false, '2028 not in SUPPORTED_YEARS');
   });
 
-  it('computeDTE returns 0 for today (ET)', () => {
+  it('computeDTE returns 0 or 1 for today (ET)', () => {
     const today = new Date();
     const et = new Date(today.toLocaleString('en-US', { timeZone: 'America/New_York' }));
     const ds = `${et.getFullYear()}-${String(et.getMonth()+1).padStart(2,'0')}-${String(et.getDate()).padStart(2,'0')}`;
     const dte = computeDTE(ds);
-    assert.ok(dte <= 0, `DTE for today should be <=0, got ${dte}`);
+    // Before 4PM ET: dte=1 (hours remain before market close); after 4PM: dte=0
+    assert.ok(dte >= 0 && dte <= 1, `DTE for today should be 0 or 1, got ${dte}`);
   });
 
   it('computeDTE returns positive for future dates', () => {

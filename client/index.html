@@ -16,9 +16,18 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script
-      defer
-      src="%VITE_ANALYTICS_ENDPOINT%/umami"
-      data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"></script>
+    <script type="module">
+      // Umami analytics — loaded only when build-time env vars are defined
+      // Uses import.meta.env (Vite JS API) to avoid HTML %% env scanning
+      const ep = import.meta.env.VITE_ANALYTICS_ENDPOINT;
+      const wid = import.meta.env.VITE_ANALYTICS_WEBSITE_ID;
+      if (ep && wid) {
+        const s = document.createElement("script");
+        s.defer = true;
+        s.src = ep + "/umami";
+        s.setAttribute("data-website-id", wid);
+        document.head.appendChild(s);
+      }
+    </script>
   </body>
 </html>
