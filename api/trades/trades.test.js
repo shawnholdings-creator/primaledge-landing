@@ -7,7 +7,7 @@ process.env.INGEST_API_KEY = process.env.INGEST_API_KEY || 'test-ingest-key';
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
-import { evaluateExitRules, computeDTE, VERSION } from './_exitRules.js';
+import { evaluateExitRules, computeDTE, nowPartsET, VERSION } from './_exitRules.js';
 import { ensureSession, getOptionQuote, MAX_BATCH_MS } from './_quoteProvider.js';
 import ingestHandler, { makeAlertId as ingestMakeAlertId } from './ingest.js';
 import { getETNow } from './_marketCal.js';
@@ -516,21 +516,53 @@ describe('Market calendar coverage', () => {
     assert.equal(SUPPORTED.includes(2028), false, '2028 not in SUPPORTED_YEARS');
   });
 
-  it('computeDTE returns 0 or 1 for today (ET)', () => {
-    const today = new Date();
-    const et = new Date(today.toLocaleString('en-US', { timeZone: 'America/New_York' }));
-    const ds = `${et.getFullYear()}-${String(et.getMonth()+1).padStart(2,'0')}-${String(et.getDate()).padStart(2,'0')}`;
+  it('computeDTE returns 0 or 1 for today (ET) via nowPartsET', () => {
+    const p = nowPartsET();
+    const ds = `${p.year}-${String(p.month).padStart(2,'0')}-${String(p.day).padStart(2,'0')}`;
     const dte = computeDTE(ds);
     // Before 4PM ET: dte=1 (hours remain before market close); after 4PM: dte=0
     assert.ok(dte >= 0 && dte <= 1, `DTE for today should be 0 or 1, got ${dte}`);
   });
 
   it('computeDTE returns positive for future dates', () => {
-    const future = new Date();
-    future.setDate(future.getDate() + 7);
-    const ds = `${future.getFullYear()}-${String(future.getMonth()+1).padStart(2,'0')}-${String(future.getDate()).padStart(2,'0')}`;
+    const p = nowPartsET();
+    // 7 days from now using ET parts
+    const future = new Date(Date.UTC(p.year, p.month - 1, p.day + 7));
+    const fp = nowPartsET(future);
+    const ds = `${fp.year}-${String(fp.month).padStart(2,'0')}-${String(fp.day).padStart(2,'0')}`;
     const dte = computeDTE(ds);
     assert.ok(dte > 0, `DTE should be positive for 7 days from now, got ${dte}`);
+  });
+});
+
+// ────────────────────────────────────────────────────────────────
+// v4.2r3: nowPartsET helper — pure formatToParts, no round trip
+// ────────────────────────────────────────────────────────────────
+describe('nowPartsET (formatToParts helper)', () => {
+  it('returns numeric year, month, day, hour, minute, second', () => {
+    const p = nowPartsET();
+    for (const k of ['year','month','day','hour','minute','second']) {
+      assert.equal(typeof p[k], 'number', `${k} should be a number`);
+    }
+    assert.ok(p.year >= 2025 && p.year <= 2030, `year ${p.year} in range`);
+    assert.ok(p.month >= 1 && p.month <= 12, `month ${p.month} in range`);
+    assert.ok(p.day >= 1 && p.day <= 31, `day ${p.day} in range`);
+    assert.ok(p.hour >= 0 && p.hour <= 23, `hour ${p.hour} in range`);
+  });
+
+  it('accepts an explicit date parameter', () => {
+    const d = new Date('2026-01-15T12:00:00Z');
+    const p = nowPartsET(d);
+    assert.equal(p.year, 2026);
+    assert.equal(p.month, 1);
+    assert.equal(p.day, 15);
+  });
+
+  it('never round-trips through new Date(string)', () => {
+    // Verify the return is plain numbers, not a Date instance
+    const p = nowPartsET();
+    assert.ok(!(p instanceof Date), 'should not return a Date');
+    assert.equal(Object.keys(p).length, 6, 'should have exactly 6 keys');
   });
 });
 

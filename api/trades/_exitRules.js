@@ -9,22 +9,43 @@
 const VERSION = 'v1';
 
 /**
- * Server-side DTE: ET now via Intl, expiration at 4PM ET.
+ * Pure Intl.DateTimeFormat.formatToParts helper — no locale-string-to-Date
+ * round trips.  Returns {year, month, day, hour, minute, second} as numbers.
+ */
+const _etFmt = new Intl.DateTimeFormat('en-US', {
+  timeZone: 'America/New_York',
+  year: 'numeric', month: '2-digit', day: '2-digit',
+  hour: '2-digit', minute: '2-digit', second: '2-digit',
+  hour12: false,
+});
+
+export function nowPartsET(date = new Date()) {
+  const m = Object.fromEntries(
+    _etFmt.formatToParts(date).map(p => [p.type, p.value])
+  );
+  return {
+    year:   Number(m.year),
+    month:  Number(m.month),
+    day:    Number(m.day),
+    hour:   Number(m.hour),
+    minute: Number(m.minute),
+    second: Number(m.second),
+  };
+}
+
+/**
+ * Server-side DTE: ET now via formatToParts, expiration at 4 PM ET.
+ * Uses epoch arithmetic — never parses a locale string back through
+ * the Date constructor.
  */
 export function computeDTE(expirationDate) {
-  const fmt = new Intl.DateTimeFormat('en-US', {
-    timeZone: 'America/New_York',
-    year: 'numeric', month: '2-digit', day: '2-digit',
-    hour: 'numeric', minute: 'numeric', second: 'numeric',
-    hour12: false,
-  });
-  const parts = Object.fromEntries(
-    fmt.formatToParts(new Date()).map(p => [p.type, p.value])
-  );
-  // Build current ET time as a Date (approximate but consistent)
-  const nowET = new Date(`${parts.year}-${parts.month}-${parts.day}T${parts.hour.padStart(2, '0')}:${parts.minute.padStart(2, '0')}:${parts.second.padStart(2, '0')}`);
-  const expET = new Date(`${expirationDate}T16:00:00`);
-  return Math.ceil((expET.getTime() - nowET.getTime()) / 86400000);
+  const p = nowPartsET();
+  // Epoch-ms for "now" in ET-wall-clock (same trick but numeric-only)
+  const nowMs = Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute, p.second);
+  // Epoch-ms for expiration at 4 PM ET (same offset basis)
+  const [ey, em, ed] = expirationDate.split('-').map(Number);
+  const expMs = Date.UTC(ey, em - 1, ed, 16, 0, 0);
+  return Math.ceil((expMs - nowMs) / 86_400_000);
 }
 
 export function evaluateExitRules(trade, quote) {
