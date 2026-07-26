@@ -519,7 +519,7 @@ function LoginForm({ product }: { product: keyof ProductAccess }) {
                 animation: "preFadeIn 0.4s ease-out 0.52s both",
               }}
             >
-              {["120 Active Members", "22 Countries", "By Invitation Only"].map((item) => (
+              {["Now Accepting Applications", "By Invitation Only"].map((item) => (
                 <span
                   key={item}
                   style={{
@@ -1180,7 +1180,7 @@ function LoginForm({ product }: { product: keyof ProductAccess }) {
                 animation: "preFadeIn 0.4s ease-out 0.52s both",
               }}
             >
-              {["120 Active Members", "22 Countries", "By Invitation Only"].map((item) => (
+              {["Now Accepting Applications", "By Invitation Only"].map((item) => (
                 <span
                   key={item}
                   style={{
@@ -1465,7 +1465,7 @@ function LoginForm({ product }: { product: keyof ProductAccess }) {
               animation: "preFadeIn 0.4s ease-out 0.39s both",
             }}
           >
-            {["120 Active Members", "22 Countries", "By Invitation Only"].map((item) => (
+            {["Now Accepting Applications", "By Invitation Only"].map((item) => (
               <span
                 key={item}
                 style={{

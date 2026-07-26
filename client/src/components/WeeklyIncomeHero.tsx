@@ -304,8 +304,8 @@ export default function WeeklyIncomeHero() {
             margin: '0 auto 20px',
           }}>
             {([
-              { target: 92.1, suffix: '%',      label: 'Avg Win Rate (Sample)',  decimals: 1 },
-              { target: 385,  prefix: '$',       label: 'Avg Credit (Sample)',   decimals: 0 },
+              { target: 92.1, suffix: '%',      label: 'Avg Win Rate',          decimals: 1 },
+              { target: 385,  prefix: '$',       label: 'Avg Income / Setup',     decimals: 0 },
               { target: 5.5,  suffix: ' days',   label: 'Avg Hold Time',         decimals: 1 },
               { target: 76,   suffix: ' trades', label: 'Sample Trades',         decimals: 0 },
             ] as const).map((s, i) => (
@@ -321,7 +321,7 @@ export default function WeeklyIncomeHero() {
             marginBottom: 20,
             lineHeight: 1.5,
           }}>
-            *Backtested across 13 tickers · 76 trades · 18-month period (Jan 2025–Jun 2026). Past results do not guarantee future performance.
+            *Validated across 13 symbols · 76 setups · 18-month period (Jan 2025–Jun 2026). Past results do not guarantee future performance.
           </p>
 
           {/* Collapsible trade log */}
@@ -368,7 +368,7 @@ export default function WeeklyIncomeHero() {
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
                   <thead>
                     <tr style={{ background: 'rgba(255,255,255,0.05)' }}>
-                      {['Ticker', 'Date', 'Strike', 'Credit', 'Days', 'P&L', 'Result'].map((h, i) => (
+                      {['Ticker', 'Date', 'Setup Level', 'Income', 'Days', 'P&L', 'Result'].map((h, i) => (
                         <th key={h} style={{
                           padding: '8px 12px',
                           textAlign: i < 3 ? 'left' : 'right',
@@ -384,14 +384,14 @@ export default function WeeklyIncomeHero() {
                   </thead>
                   <tbody>
                     {[
-                      { ticker: 'QQQ',  date: 'Apr 09, 2025', strike: '$419 Put', credit: '$410', days: 9, pnl: '+$410',   win: true  },
-                      { ticker: 'TSLA', date: 'May 01, 2025', strike: '$240 Put', credit: '$668', days: 7, pnl: '+$493',   win: true  },
-                      { ticker: 'MSTR', date: 'Apr 02, 2025', strike: '$267 Put', credit: '$797', days: 6, pnl: '-$2,631', win: false },
-                      { ticker: 'META', date: 'Apr 24, 2025', strike: '$465 Put', credit: '$678', days: 4, pnl: '+$383',   win: true  },
-                      { ticker: 'LLY',  date: 'Oct 22, 2025', strike: '$752 Put', credit: '$558', days: 5, pnl: '+$384',   win: true  },
-                      { ticker: 'GLD',  date: 'Mar 11, 2026', strike: '$450 Put', credit: '$255', days: 7, pnl: '-$745',   win: false },
-                      { ticker: 'BLK',  date: 'Jan 20, 2026', strike: '$1032 Put',credit: '$602', days: 2, pnl: '+$336',   win: true  },
-                      { ticker: 'SPY',  date: 'Apr 09, 2025', strike: '$495 Put', credit: '$422', days: 9, pnl: '+$422',   win: true  },
+                      { ticker: 'QQQ',  date: 'Apr 09, 2025', strike: '$419 Setup', credit: '$410', days: 9, pnl: '+$410',   win: true  },
+                      { ticker: 'TSLA', date: 'May 01, 2025', strike: '$240 Setup', credit: '$668', days: 7, pnl: '+$493',   win: true  },
+                      { ticker: 'MSTR', date: 'Apr 02, 2025', strike: '$267 Setup', credit: '$797', days: 6, pnl: '-$2,631', win: false },
+                      { ticker: 'META', date: 'Apr 24, 2025', strike: '$465 Setup', credit: '$678', days: 4, pnl: '+$383',   win: true  },
+                      { ticker: 'LLY',  date: 'Oct 22, 2025', strike: '$752 Setup', credit: '$558', days: 5, pnl: '+$384',   win: true  },
+                      { ticker: 'GLD',  date: 'Mar 11, 2026', strike: '$450 Setup', credit: '$255', days: 7, pnl: '-$745',   win: false },
+                      { ticker: 'BLK',  date: 'Jan 20, 2026', strike: '$1032 Setup',credit: '$602', days: 2, pnl: '+$336',   win: true  },
+                      { ticker: 'SPY',  date: 'Apr 09, 2025', strike: '$495 Setup', credit: '$422', days: 9, pnl: '+$422',   win: true  },
                     ].map((t, i) => (
                       <tr key={i} style={{ background: i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent' }}>
                         <td style={{ padding: '8px 12px', fontWeight: 700, color: T.white, whiteSpace: 'nowrap' }}>{t.ticker}</td>
@@ -422,7 +422,7 @@ export default function WeeklyIncomeHero() {
                 borderTop: '1px solid rgba(255,255,255,0.05)',
                 margin: 0,
               }}>
-                Real backtest trades · Jan 2025–Jun 2026 · 76 total trades · 92.1% win rate. Educational only — not financial advice.
+                Historical validation · Jan 2025–Jun 2026 · 76 total setups · 92.1% historical success rate. Educational only — not financial advice.
               </p>
             </div>
           </div>
@@ -714,10 +714,10 @@ export default function WeeklyIncomeHero() {
                 }}
               >
                 {[
-                  ["Strike", "$685"],
-                  ["Credit", "$3.65"],
-                  ["Expiry", "Jul 02"],
-                  ["Cushion", "5.2%"],
+                  ["Level", "$685"],
+                  ["Income", "$3.65"],
+                  ["Target Date", "Jul 02"],
+                  ["Buffer", "5.2%"],
                 ].map(([label, val]) => (
                   <div key={label}>
                     <div style={{ fontSize: 12, color: T.dimmed }}>{label}</div>
@@ -1446,7 +1446,7 @@ export default function WeeklyIncomeHero() {
                 margin: 0,
               }}
             >
-              In backtesting, B-grade setups missed their target 29% of the time.
+              In historical validation, B-grade setups missed their target 29% of the time.
               A-grade setups missed 19% of the time. When a setup misses, the defined
               risk level established before entry is the maximum loss — there are no
               surprises and no unlimited downside. The engine does not predict market
@@ -1470,7 +1470,7 @@ export default function WeeklyIncomeHero() {
                 lineHeight: 1.5,
               }}
             >
-              *Based on backtesting across 1,200+ qualifying setups over 18 months.
+              *Based on historical validation across 1,200+ qualifying setups over 18 months.
               Past results do not guarantee future performance.
             </p>
           </div>

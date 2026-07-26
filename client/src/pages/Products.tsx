@@ -18,8 +18,8 @@ const PRODUCTS = [
     tag2: "FLAGSHIP",
     tagColor: "#00e5a0",
     description:
-      "The flagship options income tool. Monitors the most actively traded stocks and ETFs for weekly income opportunities — scored by conviction, filtered by IV rank and delta, and delivered to your phone the moment a setup qualifies.",
-    features: ["Income opportunities", "100-point scoring model", "Real-time phone alerts", "Blue-chip universe only"],
+      "The flagship options income tool. Monitors the most actively traded stocks and ETFs for weekly income opportunities — scored by the AI conviction engine, filtered through proprietary intelligence layers, and delivered to your phone the moment a setup qualifies.",
+    features: ["Income opportunities", "100-point scoring model", "Real-time phone alerts", "Premium stocks & ETFs universe"],
     strategyBadge: { text: "Income Strategy", color: "text-green-400", bg: "bg-green-400/10" },
     cta: "View Dashboard",
     ctaHref: "/weekly-income",
@@ -61,7 +61,7 @@ const PRODUCTS = [
     tagColor: "#00e5a0",
     description:
       "The flagship Primal Edge AI signal engine. Monitors the most liquid stocks and ETFs across multiple indices in real time, identifying high-probability options setups graded A–D by the Primal Edge adaptive intelligence engine.",
-    features: ["Real-time AI scanning", "A–D signal grading", "Instant push alerts", "Blue-chip & ETF universe"],
+    features: ["Real-time AI scanning", "A–D signal grading", "Instant push alerts", "Premium stocks & ETF universe"],
     strategyBadge: { text: "Directional Strategy", color: "text-blue-400", bg: "bg-blue-400/10" },
     cta: "View Dashboard",
     ctaHref: "/subscribe",
@@ -97,7 +97,7 @@ const PRODUCTS = [
     tagColor: "#3b82f6",
     description:
       "Track unusual options activity and institutional flow in real time. Surface high-conviction directional bets before the crowd catches on — powered by Primal Edge's proprietary signal intelligence.",
-    features: ["Unusual options activity", "Institutional flow tracking", "Strike & expiry analysis", "AI conviction scoring"],
+    features: ["Unusual options activity", "Institutional flow tracking", "Timing & structure analysis", "AI conviction scoring"],
     strategyBadge: { text: "Flow Intelligence", color: "text-purple-400", bg: "bg-purple-400/10" },
     cta: "Join Waitlist",
     ctaHref: "/subscribe",
