@@ -12,6 +12,8 @@ import Navbar from "@/components/Navbar";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import MobileCTA from "@/components/MobileCTA";
 import AIDashboardHero from "../components/AIDashboardHero";
+import BacktestResultsTable from "../components/BacktestResultsTable";
+import BacktestSignalLog from "../components/BacktestSignalLog";
 import { useAuth } from "../contexts/AuthContext";
 
 
@@ -454,8 +456,8 @@ function DashboardContent() {
           <div className="mb-8">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mb-6">
               <div className="text-center sm:text-left">
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight gradient-text leading-none" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>AI COCKPIT</h1>
-                <p className="text-white/20 text-[0.6rem] sm:text-[0.65rem] lg:text-[0.7rem] font-mono tracking-[0.1em] sm:tracking-[0.15em] lg:tracking-[0.35em] uppercase mt-1.5">ADAPTIVE INTELLIGENCE · DECISIVE SIGNALS</p>
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight gradient-text leading-none" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>PRIMAL EDGE AI COCKPIT</h1>
+                <p className="text-white/20 text-[0.6rem] sm:text-[0.65rem] lg:text-[0.7rem] font-mono tracking-[0.1em] sm:tracking-[0.15em] lg:tracking-[0.35em] uppercase mt-1.5">OPTIONS SPECIALTY AI ENGINE</p>
               </div>
               {/* Market status pill */}
               {(() => {
@@ -494,55 +496,6 @@ function DashboardContent() {
             </div>
           </div>
 
-          {/* ── PRODUCT INTRO COPY ── */}
-          <section className="pb-8 sm:pb-12">
-            <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-flex items-center gap-2 font-mono text-[10px] text-[#00e5a0]/70 tracking-widest bg-[#00e5a0]/8 border border-[#00e5a0]/15 rounded-full px-4 py-1.5 mb-6">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#00e5a0] animate-pulse" />
-                PRIVATE ACCESS · TRADING COMMAND LAYER
-              </div>
-
-              <p className="font-['Space_Grotesk'] text-lg sm:text-xl text-[#00e5a0]/80 mb-6">
-                From market noise to trade-ready intelligence.
-              </p>
-
-              <p className="text-white/45 text-base sm:text-lg leading-relaxed mb-4 max-w-2xl mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                AI Cockpit is a private-access trading command layer built to help traders evaluate opportunities with speed, structure, and discipline. It brings together market context, technical condition, opportunity quality, risk awareness, and timing conditions, and setup quality into a single decision cockpit designed for fast interpretation.
-              </p>
-
-              <p className="text-white/35 text-sm leading-relaxed max-w-2xl mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                Instead of jumping between charts, chains, scanners, and notes, traders get a unified view of what matters: the opportunity, the risk, the reason, and the next decision.
-              </p>
-            </div>
-          </section>
-
-
-          {/* ── COMMAND LAYERS ── */}
-          <section className="pb-12 sm:pb-16">
-            <div className="text-center mb-10">
-              <p className="font-mono text-xs text-[#00e5a0] tracking-widest mb-3">INTELLIGENCE DIMENSIONS</p>
-              <h2 className="font-['Space_Grotesk'] font-bold text-2xl sm:text-3xl text-white">
-                Five Command Layers
-              </h2>
-            </div>
-
-            <div className="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {[
-                { tag: "CONTEXT", title: "Market Context", desc: "Reads the broader environment before a trade idea is evaluated. Bias, volatility regime, and market conditions in one glance." },
-                { tag: "TECHNICAL", title: "Technical Condition", desc: "Frames trend, structure, momentum, support, and risk zones. Filters out obvious breakdowns." },
-                { tag: "OPTIONS", title: "Options Opportunity", desc: "Identifies contracts with meaningful income quality and tradable liquidity. Minimum quality gates are applied automatically." },
-                { tag: "RISK", title: "Risk Cushion", desc: "Measures directional cushion, support structure, and event exposure before any action is considered." },
-                { tag: "DECISION", title: "Decision Readiness", desc: "Turns scattered signals into a clean read: act, wait, avoid, or review. One cockpit, one decision." },
-              ].map((item, i) => (
-                <div key={i} className={`relative bg-[#10151d] border border-white/5 rounded-xl p-6 hover:border-[#00e5a0]/20 transition-all group ${i === 4 ? "sm:col-span-2 lg:col-span-1 sm:max-w-md sm:mx-auto lg:max-w-none" : ""}`}>
-                  <span className="font-mono text-[9px] text-[#00e5a0]/50 tracking-widest bg-[#00e5a0]/5 border border-[#00e5a0]/10 rounded px-2 py-0.5 mb-4 inline-block">{item.tag}</span>
-                  <div className="absolute top-5 right-5 font-['Space_Grotesk'] text-4xl font-bold text-white/[0.03]">{String(i + 1).padStart(2, "0")}</div>
-                  <h3 className="font-['Space_Grotesk'] font-semibold text-base text-white mb-3 group-hover:text-[#00e5a0] transition-colors">{item.title}</h3>
-                  <p className="text-white/40 text-sm leading-relaxed">{item.desc}</p>
-                </div>
-              ))}
-            </div>
-          </section>
 
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-4 items-start overflow-hidden">
 
@@ -1064,13 +1017,29 @@ function DashboardContent() {
             />
           </div>
 
+          {/* ── BIWEEKLY MODELED RESULTS ── */}
+          <section className="mt-10 mb-8">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="font-mono text-xs text-[#00e5a0] tracking-widest">TWO-WEEK MODELED RESULTS</span>
+            </div>
+            <BacktestResultsTable isMember={true} />
+          </section>
+
+          {/* ── RECENT MODELED ACTIVITY ── */}
+          <section className="mb-8">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="font-mono text-xs text-[#00e5a0] tracking-widest">RECENT MODELED ACTIVITY — LAST 3 WEEKS</span>
+            </div>
+            <BacktestSignalLog />
+          </section>
+
           {/* ── DISCLAIMER ── */}
-          <div className="mt-12 mb-8 max-w-4xl mx-auto bg-[#10151d] border border-white/5 rounded-xl px-5 sm:px-6 py-4 flex items-start gap-3">
+          <div className="mt-6 mb-8 max-w-4xl mx-auto bg-[#10151d] border border-white/5 rounded-xl px-5 sm:px-6 py-4 flex items-start gap-3">
             <svg className="w-4 h-4 text-[#f59e0b] shrink-0 mt-0.5" fill="none" viewBox="0 0 16 16">
               <path d="M8 2l1.5 4.5H14l-3.7 2.7 1.4 4.3L8 11 4.3 13.5l1.4-4.3L2 6.5h4.5z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
             </svg>
             <p className="text-white/35 text-xs leading-relaxed">
-              <span className="text-white/55 font-semibold">Research Disclosure:</span> AI Cockpit and Weekly Income Scanner are educational and analytical intelligence tools. Signals, scores, candidate lists, premiums, directional labels, and all visual readouts are derived from data analysis and may be delayed, incomplete, or inaccurate depending on source availability. They are provided for informational purposes only and do not constitute financial advice or a recommendation to buy, sell, hold, or trade any security or derivative. Every trade idea must be independently reviewed before action.
+              <span className="text-white/55 font-semibold">Research Disclosure:</span> Primal Edge AI Cockpit is an educational and analytical intelligence tool. Signals, scores, candidate lists, and all visual readouts are derived from data analysis and may be delayed, incomplete, or inaccurate depending on source availability. Historical modeled/backtest results are illustrative only, do not guarantee future outcomes, and are not broker executions or personalized investment advice. Every trade idea must be independently reviewed before action.
             </p>
           </div>
         </div>
