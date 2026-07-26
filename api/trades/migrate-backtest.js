@@ -143,8 +143,21 @@ export default async function handler(req, res) {
         END IF;
       END $$`,
 
+      // GRANT permissions to Supabase roles
+      `GRANT ALL ON backtest_config TO service_role`,
+      `GRANT ALL ON backtest_periods TO service_role`,
+      `GRANT ALL ON backtest_period_trades TO service_role`,
+      `GRANT ALL ON modeled_trades TO service_role`,
+      `GRANT SELECT ON backtest_periods TO anon`,
+      `GRANT SELECT ON backtest_period_trades TO anon`,
+      `GRANT SELECT ON modeled_trades TO anon`,
+      `GRANT ALL ON backtest_config TO authenticated`,
+      `GRANT SELECT ON backtest_periods TO authenticated`,
+      `GRANT SELECT ON backtest_period_trades TO authenticated`,
+      `GRANT SELECT ON modeled_trades TO authenticated`,
+
       // Record migration version
-      `INSERT INTO backtest_config (key, value) VALUES ('migration_version', 'backtest_periods_v1')
+      `INSERT INTO backtest_config (key, value) VALUES ('migration_version', 'backtest_periods_v2_grants')
        ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = now()`,
     ];
 
