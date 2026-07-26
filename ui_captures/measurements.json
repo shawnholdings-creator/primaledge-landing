@@ -1,0 +1,38 @@
+[
+  {
+    "viewport": "360",
+    "filename": "backtest_360.png",
+    "found": true,
+    "state": "populated",
+    "width": 328,
+    "height": 608,
+    "top": 1532,
+    "minFont": 12,
+    "fontViolations": 0,
+    "hasOverflow": false
+  },
+  {
+    "viewport": "390",
+    "filename": "backtest_390.png",
+    "found": true,
+    "state": "populated",
+    "width": 358,
+    "height": 588.5,
+    "top": 1500,
+    "minFont": 12,
+    "fontViolations": 0,
+    "hasOverflow": false
+  },
+  {
+    "viewport": "desktop",
+    "filename": "backtest_desktop.png",
+    "found": true,
+    "state": "populated",
+    "width": 672,
+    "height": 350,
+    "top": 1374.375,
+    "minFont": 12,
+    "fontViolations": 0,
+    "hasOverflow": false
+  }
+]
