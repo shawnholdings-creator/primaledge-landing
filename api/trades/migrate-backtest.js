@@ -24,7 +24,12 @@ export default async function handler(req, res) {
     });
   }
 
-  const client = new pg.Client({ connectionString: connStr, ssl: { rejectUnauthorized: false } });
+  // Supabase uses a self-signed intermediate cert; disable strict verification
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+  const client = new pg.Client({
+    connectionString: connStr,
+    ssl: true,
+  });
 
   try {
     await client.connect();
