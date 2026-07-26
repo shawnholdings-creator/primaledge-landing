@@ -309,9 +309,9 @@ function TwoStrategies() {
             <p className="text-white font-bold text-base">Weekly Options Income Dashboard</p>
             <p className="text-gray-400 text-sm">Monitors the most actively traded stocks for high-probability income setups. Collect weekly credit. Let time decay work for you.</p>
             <ul className="text-xs text-gray-400 space-y-1 mt-1 list-none p-0">
-              <li>✓ 9 DTE weekly expiration focus</li>
-              <li>✓ Conservative OTM strikes on blue-chips</li>
-              <li>✓ 92.1% win rate · 18-month backtest</li>
+              <li>✓ Short-duration, time-efficient setups</li>
+              <li>✓ High-probability, AI-filtered opportunities</li>
+              <li>✓ 92.1% historical success rate · validated methodology</li>
             </ul>
             {/* Push notification preview */}
             <div className="my-3">
@@ -436,7 +436,7 @@ function HowItWorks() {
 function Features() {
   const { ref, inView } = useInView();
   const features = [
-    { num: "01", title: "Proprietary Adaptive Engine", desc: "The core intelligence layer applies a multi-factor adaptive model to identify high-probability put and call selling setups across blue-chip stocks and ETFs — filtered by IV rank, delta, and weekly expiration quality. The model architecture, feature composition, and scoring weights are entirely proprietary.", tag: "ADAPTIVE ENGINE", traderValue: "The engine is built to identify structural behavior across the broader market, not just simple indicator crosses. Traders benefit from a systematic filter designed to reduce emotion, bias, and random chart scanning." },
+    { num: "01", title: "Proprietary Adaptive Engine", desc: "The core intelligence layer applies a multi-factor adaptive model to identify high-probability options income setups across the most liquid stocks and ETFs — filtered through a proprietary multi-factor intelligence layer. The model architecture, feature composition, and scoring weights are entirely proprietary.", tag: "ADAPTIVE ENGINE", traderValue: "The engine is built to identify structural behavior across the broader market, not just simple indicator crosses. Traders benefit from a systematic filter designed to reduce emotion, bias, and random chart scanning." },
     { num: "02", title: "Multi-Timeframe Confluence Layer", desc: "Every setup is cross-validated against multiple timeframes simultaneously. The engine applies directional confluence filters and trend-alignment scoring to ensure signals are structurally sound across the macro and micro landscape — filtering out noise at the source.", tag: "MTF CONFLUENCE", traderValue: "A setup is stronger when short-term movement aligns with the larger structure. This helps traders avoid acting on isolated one-timeframe noise and focus on cleaner alignment." },
     { num: "03", title: "Multi-Dimensional Conviction Scoring", desc: "Multiple orthogonal factors — spanning momentum, structure, volume behavior, sector dynamics, and regime awareness — are synthesized into a single 0–100 conviction score through a proprietary weighted intelligence model. The exact dimensions and weights are undisclosed.", tag: "CONVICTION SCORING", traderValue: "Momentum, structure, volume, sector behavior, and regime awareness are compressed into one readable score. Traders can prioritize attention faster without manually weighing every factor from scratch." },
     { num: "04", title: "Sub-3-Second Signal Delivery", desc: "When a high-conviction signal is confirmed, a structured alert payload is dispatched to your mobile device and the web dashboard simultaneously — ticker, score, grade, verdict, and price context delivered in under 3 seconds. No app store dependencies.", tag: "REAL-TIME DISPATCH", traderValue: "Speed matters when a setup starts moving. The trader receives the signal quickly enough to review the chart while the setup is still fresh." },
@@ -504,14 +504,14 @@ function Technology() {
       ],
     },
     pattern: {
-      headline: "Structural Anomaly Detection Across Blue-Chip Stocks & ETFs",
+      headline: "Structural Anomaly Detection Across Premium Stocks & ETFs",
       body: [
         "The engine applies deterministic, rule-based evaluation to every symbol on every cycle — identifying structural configurations that have historically preceded explosive directional moves. Unlike discretionary chart reading, which is subject to interpretation and inconsistency, the pattern matching engine applies a fully systematic evaluation.",
         "The system scans for a precise convergence of proprietary conditions across a curated universe of blue-chip stocks and options-liquid ETFs. All conditions must be present simultaneously for a setup to qualify — partial matches are filtered out entirely. The specific criteria and thresholds are proprietary and not disclosed.",
         "Multi-timeframe confluence checks cross-reference the primary detection against higher timeframe structure. Trend-aligned setups receive scoring bonuses while counter-trend signals are penalized — reflecting the statistical reality that alignment with macro momentum significantly improves resolution rates.",
       ],
       stats: [
-        { label: "Universe", val: "Blue-Chip & Options-Liquid ETFs" },
+        { label: "Universe", val: "Premium Stocks & Options-Liquid ETFs" },
         { label: "Detection Mode", val: "Systematic" },
         { label: "Timeframes", val: "Multi-TF" },
         { label: "Noise Filter", val: "Active" },
@@ -559,7 +559,7 @@ function Technology() {
             Institutional-Grade Options Intelligence.<br />Retail-Accessible Delivery.
           </h2>
           <p className="text-white/50 text-base sm:text-lg max-w-2xl mt-4 leading-relaxed">
-            The Primal Edge engine is not a simple options screener or a hand-drawn trendline. It is a multi-layer quantitative system built on adaptive intelligence, options-specific feature engineering, and statistically validated methodology — designed from the ground up for put and call selling strategies, delivered as educational analysis to your device in real time.
+            The Primal Edge engine is not a simple options screener or a hand-drawn trendline. It is a multi-layer quantitative system built on adaptive intelligence, options-specific feature engineering, and statistically validated methodology — designed from the ground up for options income and directional strategies, delivered as educational analysis to your device in real time.
           </p>
         </div>
 
@@ -668,15 +668,15 @@ function AlertPreview() {
             Your Phone Buzzes<br />When an Options Income Setup Qualifies
             </h2>
             <p className="text-white/55 text-base sm:text-lg leading-relaxed mb-8">
-              No more scanning options chains all day. The engine monitors blue-chip stocks for qualifying put and call selling setups and sends a push notification the moment a high-conviction income opportunity is confirmed — delivered as educational analysis for your review.
+              No more scanning all day. The engine monitors premium stocks for qualifying options income setups and sends a push notification the moment a high-conviction opportunity is confirmed — delivered as educational analysis for your review.
             </p>
             <div className="space-y-4">
               {[
                 { label: "Ticker Symbol", val: "NVDA" },
-                { label: "Verdict", val: "PUT SELL · INCOME SETUP" },
+                { label: "Verdict", val: "INCOME SIGNAL · HIGH CONVICTION" },
                 { label: "Score / Grade", val: "82 / A" },
                 { label: "Price at Alert", val: "$875.20" },
-                { label: "Key Context", val: "IV rank 68 · Delta 0.18 · 9 DTE · Weekly expiration" },
+                { label: "Key Context", val: "AI Score 82 · Grade A · Confirmed Setup" },
               ].map((item, i) => (
                 <div key={i} className="teal-border-left">
                   <span className="font-mono text-[10px] text-white/30 tracking-widest block">{item.label}</span>
@@ -800,12 +800,12 @@ function FAQ() {
   const [open, setOpen] = useState<number | null>(null);
   const faqs = [
     { q: "What is the Primal Edge Options AI Engine?", a: "The Primal Edge Options AI Engine is a proprietary scanning and scoring system built exclusively for options income traders. It monitors blue-chip stocks and ETFs for high-probability put and call selling setups, scores each opportunity on a 0–100 conviction scale, and delivers the highest-ranked signals to your dashboard and phone in real time." },
-    { q: "What data does the model use?", a: "The engine ingests live price data, options chain pricing, implied volatility rank (IV rank), delta, days-to-expiration (DTE), and volume — all filtered specifically for options income setups. Raw data is transformed through a proprietary feature engineering pipeline into a multi-dimensional numerical representation. The specific data sources, feature composition, and transformation methods are not disclosed." },
+    { q: "What data does the model use?", a: "The engine ingests live market data and proprietary multi-dimensional signals — all processed through the AI intelligence layer. The specific data inputs, feature composition, and transformation methods are not disclosed." },
     { q: "How do I receive the analysis?", a: "Analytical insights are delivered via push notification to your mobile device. Download a free notification client, subscribe to the private topic provided after sign-up, and receive instant updates the moment the engine confirms a high-conviction setup." },
     { q: "What timeframe does the engine analyze?", a: "The engine uses a multi-timeframe evaluation approach, cross-referencing the primary scan timeframe against higher timeframe trend structure. The model applies a confluence bonus to trend-aligned setups and penalizes counter-trend signals. Setups are designed for analysis of swing-timeframe structures with a typical 2–10 day observation window." },
     { q: "How was the model validated?", a: "The model was validated across a multi-year historical dataset using walk-forward analysis to confirm out-of-sample performance. Survivorship bias was eliminated by evaluating against the full universe as it existed at each historical point. Detailed methodology is available to active members only." },
     { q: "Is this financial advice?", a: "No. Primal Edge is an educational and analytical tool only. All scan results, scores, and grades are for research and educational purposes only. Past model performance does not guarantee future results. This is not a recommendation to buy, sell, or hold any security. Always conduct your own due diligence and consult a licensed financial advisor." },
-    { q: "How many seats are available?", a: "This is a private, close-community service. Seats are strictly limited to maintain analytical quality and ensure every member receives timely, low-noise insights. Once the community is full, a waitlist will open." },
+    { q: "How many seats are available?", a: "Primal Edge is a private, invitation-only platform. Access is reviewed individually to maintain signal quality and ensure every member receives a focused, low-noise experience. Applications are reviewed within 24 hours." },
   ];
 
   return (
@@ -863,7 +863,7 @@ function CTABanner() {
           <div className="relative">
             {/* Social proof */}
             <div className="flex justify-center items-center flex-wrap gap-4 mb-6">
-              {["120 Active Members", "22 Countries", "By Invitation Only"].map((item) => (
+              {["Now Accepting Applications", "By Invitation Only"].map((item) => (
                 <span
                   key={item}
                   style={{
@@ -882,7 +882,7 @@ function CTABanner() {
               Stop Guessing Which Options Setup to Make.<br />Let the Engine Decide.
             </h2>
             <p className="text-white/55 text-base sm:text-lg max-w-xl mx-auto mb-8">
-              Join a private community of options traders using the Primal Edge AI engine to find weekly income setups and directional breakouts — scored, graded, and delivered as real-time educational analysis.
+              Join a curated group of options traders using the Primal Edge AI engine to find high-conviction setups — scored, graded, and delivered as real-time educational analysis.
             </p>
             <Link href="/subscribe" className="shimmer-btn pulse-glow inline-block bg-[#00e5a0] text-[#0a0d12] font-['Space_Grotesk'] font-bold text-base sm:text-lg px-8 sm:px-10 py-4 rounded-lg hover:bg-[#00bfa0] transition-all">
               Request Access →
