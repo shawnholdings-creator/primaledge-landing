@@ -129,7 +129,7 @@ export default function Navbar() {
             <div ref={productsRef} className="relative">
               <button
                 onClick={() => { setProductsOpen(!productsOpen); setResourcesOpen(false); }}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors ${
+                className={`flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg transition-colors ${
                   isProductsActive ? "text-[#00e5a0]" : "text-white/60 hover:text-white hover:bg-white/5"
                 }`}
               >
@@ -143,7 +143,7 @@ export default function Navbar() {
             <div ref={resourcesRef} className="relative">
               <button
                 onClick={() => { setResourcesOpen(!resourcesOpen); setProductsOpen(false); }}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors ${
+                className={`flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg transition-colors ${
                   isResourcesActive ? "text-[#00e5a0]" : "text-white/60 hover:text-white hover:bg-white/5"
                 }`}
               >
@@ -155,7 +155,7 @@ export default function Navbar() {
 
             {/* Dev Requests */}
             <Link href="/dev-requests">
-              <span className={`px-3 py-2 rounded-lg transition-colors cursor-pointer ${
+              <span className={`px-3 py-2 min-h-[44px] inline-flex items-center rounded-lg transition-colors cursor-pointer ${
                 location === "/dev-requests" ? "text-[#00e5a0]" : "text-white/60 hover:text-white hover:bg-white/5"
               }`}>
                 Dev Requests
@@ -216,7 +216,8 @@ export default function Navbar() {
                     color: "#9ca3af",
                     cursor: "pointer",
                     textUnderlineOffset: "2px",
-                    padding: "8px 4px",
+                    padding: "8px 12px",
+                    minHeight: 44,
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.color = "#fff";
@@ -234,7 +235,7 @@ export default function Navbar() {
 
             {location !== "/ai-dashboard" && (
               <Link href="/subscribe" className="hidden sm:block">
-                <button className="bg-[#00e5a0] text-[#0a0d12] font-bold text-sm px-5 py-2.5 rounded-lg hover:bg-[#00e5a0]/90 transition-colors">
+                <button className="bg-[#00e5a0] text-[#0a0d12] font-bold text-sm px-5 py-3 min-h-[44px] rounded-lg hover:bg-[#00e5a0]/90 transition-colors">
                   Get Access
                 </button>
               </Link>
@@ -243,7 +244,7 @@ export default function Navbar() {
             {/* Mobile hamburger */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-white/5 transition-colors"
+              className="md:hidden p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-white/5 transition-colors"
               aria-label="Toggle menu"
             >
               {mobileOpen ? (
