@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { Link } from "wouter";
 import Navbar from "./Navbar";
 import BacktestSignalLog from "./BacktestSignalLog";
+import BacktestResultsTable from "./BacktestResultsTable";
 import { useLoginModal } from "../contexts/LoginModalContext";
 
 /* ─── Trade History Gist URL ────────────────────────────────── */
@@ -184,7 +185,7 @@ function AnimatedStat({ target, prefix = '', suffix = '', label, decimals = 0 }:
         {prefix}{decimals > 0 ? val.toFixed(decimals) : Math.round(val)}{suffix}
       </span>
       <span style={{
-        fontSize: 10,
+        fontSize: 12,
         color: '#9ca3af',
         marginTop: 4,
         textTransform: 'uppercase',
@@ -262,7 +263,7 @@ export default function WeeklyIncomeHero() {
             <span
               style={{
                 fontFamily: T.fontMono,
-                fontSize: 11,
+                fontSize: 12,
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
                 color: T.accent,
@@ -314,7 +315,7 @@ export default function WeeklyIncomeHero() {
 
           {/* Footnote */}
           <p style={{
-            fontSize: 11,
+            fontSize: 12,
             color: '#6b7280',
             textAlign: 'center',
             marginBottom: 20,
@@ -340,6 +341,8 @@ export default function WeeklyIncomeHero() {
               textUnderlineOffset: '2px',
               fontFamily: T.fontMono,
               transition: 'color 0.15s',
+              minHeight: 44,
+              padding: '12px 16px',
             }}
             onMouseEnter={(e) => { e.currentTarget.style.color = '#86efac'; }}
             onMouseLeave={(e) => { e.currentTarget.style.color = '#4ade80'; }}
@@ -370,7 +373,7 @@ export default function WeeklyIncomeHero() {
                           padding: '8px 12px',
                           textAlign: i < 3 ? 'left' : 'right',
                           color: '#9ca3af',
-                          fontSize: 10,
+                          fontSize: 12,
                           textTransform: 'uppercase',
                           letterSpacing: '0.08em',
                           fontWeight: 600,
@@ -392,7 +395,7 @@ export default function WeeklyIncomeHero() {
                     ].map((t, i) => (
                       <tr key={i} style={{ background: i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent' }}>
                         <td style={{ padding: '8px 12px', fontWeight: 700, color: T.white, whiteSpace: 'nowrap' }}>{t.ticker}</td>
-                        <td style={{ padding: '8px 12px', color: '#6b7280', fontSize: 11, whiteSpace: 'nowrap' }}>{t.date}</td>
+                        <td style={{ padding: '8px 12px', color: '#6b7280', fontSize: 12, whiteSpace: 'nowrap' }}>{t.date}</td>
                         <td style={{ padding: '8px 12px', color: '#d1d5db', whiteSpace: 'nowrap' }}>{t.strike}</td>
                         <td style={{ padding: '8px 12px', textAlign: 'right', color: '#4ade80', fontWeight: 600 }}>{t.credit}</td>
                         <td style={{ padding: '8px 12px', textAlign: 'right', color: '#9ca3af' }}>{t.days}d</td>
@@ -401,7 +404,7 @@ export default function WeeklyIncomeHero() {
                           <span style={{
                             background: t.win ? 'rgba(74,222,128,0.15)' : 'rgba(248,113,113,0.15)',
                             color: t.win ? '#4ade80' : '#f87171',
-                            fontSize: 11,
+                            fontSize: 12,
                             fontWeight: 700,
                             padding: '2px 8px',
                             borderRadius: 9999,
@@ -413,7 +416,7 @@ export default function WeeklyIncomeHero() {
                 </table>
               </div>
               <p style={{
-                fontSize: 11,
+                fontSize: 12,
                 color: '#4b5563',
                 padding: '8px 12px',
                 borderTop: '1px solid rgba(255,255,255,0.05)',
@@ -433,13 +436,20 @@ export default function WeeklyIncomeHero() {
           </section>
         )}
 
+        {/* ─── Biweekly Backtest Results — public 2-period summary ──── */}
+        {!tradesLoading && (
+          <section style={{ ...sectionGap, animation: 'wih-fadeUp 0.7s ease-out 0.2s both' }}>
+            <BacktestResultsTable isMember={false} />
+          </section>
+        )}
+
         {/* ─── Who It's For — redesigned CTA cards ──────── */}
         <section style={{ textAlign: 'center', animation: 'wih-fadeUp 0.7s ease-out 0.15s both' }}>
 
           {/* Section label */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, marginBottom: 20, marginTop: 8 }}>
             <p style={{
-              fontSize: 11,
+              fontSize: 12,
               fontWeight: 600,
               textTransform: 'uppercase',
               letterSpacing: '0.15em',
@@ -710,7 +720,7 @@ export default function WeeklyIncomeHero() {
                   ["Cushion", "5.2%"],
                 ].map(([label, val]) => (
                   <div key={label}>
-                    <div style={{ fontSize: 11, color: T.dimmed }}>{label}</div>
+                    <div style={{ fontSize: 12, color: T.dimmed }}>{label}</div>
                     <div
                       style={{
                         fontSize: 15,
@@ -880,7 +890,7 @@ export default function WeeklyIncomeHero() {
             <div
               style={{
                 fontFamily: T.fontMono,
-                fontSize: 11,
+                fontSize: 12,
                 color: T.accent,
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
@@ -1053,7 +1063,7 @@ export default function WeeklyIncomeHero() {
                   key={h}
                   style={{
                     fontFamily: T.fontMono,
-                    fontSize: 10,
+                    fontSize: 12,
                     letterSpacing: "0.14em",
                     color: T.dimmed,
                     textTransform: "uppercase",
@@ -1122,7 +1132,7 @@ export default function WeeklyIncomeHero() {
                     <span
                       style={{
                         fontFamily: T.fontMono,
-                        fontSize: 10,
+                        fontSize: 12,
                         fontWeight: 600,
                         color: row.statusColor,
                         background: row.statusBg,
@@ -1137,7 +1147,7 @@ export default function WeeklyIncomeHero() {
                   <span
                     style={{
                       fontFamily: T.fontMono,
-                      fontSize: 11,
+                      fontSize: 12,
                       color: "rgba(255,255,255,0.3)",
                     }}
                   >
@@ -1256,7 +1266,7 @@ export default function WeeklyIncomeHero() {
                     key={h}
                     style={{
                       fontFamily: T.fontMono,
-                      fontSize: 11,
+                      fontSize: 12,
                       textTransform: "uppercase",
                       color: T.dimmed,
                     }}
@@ -1302,7 +1312,7 @@ export default function WeeklyIncomeHero() {
             {/* Caption */}
             <p
               style={{
-                fontSize: 11,
+                fontSize: 12,
                 color: T.dimmed,
                 textAlign: "center",
                 padding: "12px 20px 16px",
@@ -1407,7 +1417,7 @@ export default function WeeklyIncomeHero() {
             <div
               style={{
                 fontFamily: T.fontMono,
-                fontSize: 11,
+                fontSize: 12,
                 color: T.accent,
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
@@ -1453,7 +1463,7 @@ export default function WeeklyIncomeHero() {
             <p
               style={{
                 fontFamily: T.fontMono,
-                fontSize: 11,
+                fontSize: 12,
                 color: "#555",
                 marginTop: 12,
                 marginBottom: 0,
@@ -1471,7 +1481,7 @@ export default function WeeklyIncomeHero() {
           <div
             style={{
               fontFamily: T.fontMono,
-              fontSize: 11,
+              fontSize: 12,
               color: T.accent,
               letterSpacing: "0.12em",
               textTransform: "uppercase",
@@ -1524,7 +1534,7 @@ export default function WeeklyIncomeHero() {
                 <div
                   style={{
                     fontFamily: T.fontMono,
-                    fontSize: 11,
+                    fontSize: 12,
                     fontWeight: 700,
                     letterSpacing: "0.1em",
                     color: T.accent,
@@ -1639,7 +1649,7 @@ export default function WeeklyIncomeHero() {
           style={{
             textAlign: "center",
             paddingBottom: 40,
-            fontSize: 10,
+            fontSize: 12,
             color: T.ghost,
           }}
         >

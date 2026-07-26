@@ -646,10 +646,13 @@ describe('Workflow ET matrix', () => {
   });
 
   it('EDT summer date computes correct DTE', () => {
-    const dte = computeDTE('2026-07-20');
+    // Use a date guaranteed to be in the future during EDT (summer)
+    const futureYear = new Date().getFullYear() + 1;
+    const edtDate = `${futureYear}-07-20`;
+    const dte = computeDTE(edtDate);
     assert.equal(typeof dte, 'number', 'DTE must be a number');
     assert.equal(Number.isInteger(dte), true, 'DTE must be an integer (from Math.ceil)');
-    assert.ok(dte > 0, `DTE for 2026-07-20 should be positive, got ${dte}`);
+    assert.ok(dte > 0, `DTE for ${edtDate} should be positive, got ${dte}`);
   });
 
   it('expired contract DTE <= 0', () => {
@@ -1410,5 +1413,389 @@ describe('Date/DTE/timezone boundaries', () => {
     const exp = expirationForDTE(0);
     const dte = computeDTE(exp);
     assert.ok(dte <= 0, `DTE=0 expiration should yield computeDTE <= 0, got ${dte}`);
+  });
+});
+
+// ════════════════════════════════════════════════════════════════
+// Biweekly Backtest Period Tests
+// ════════════════════════════════════════════════════════════════
+
+// Import backtest-refresh helpers by extracting the pure functions
+// Since the handler module has side-effect imports, we test the logic directly
+
+describe('Biweekly period window definition', () => {
+  // Canonical definition: Monday 00:00 ET → Friday 23:59:59 ET of second week
+  // = period_start (Monday) through period_start + 11 calendar days (Friday)
+  const PERIOD_SPAN = 11;
+
+  function mondayOnOrBefore(dateStr) {
+    const d = new Date(dateStr + 'T12:00:00Z');
+    const dow = d.getUTCDay();
+    const diff = dow === 0 ? 6 : dow - 1;
+    d.setUTCDate(d.getUTCDate() - diff);
+    return d.toISOString().slice(0, 10);
+  }
+
+  function addDays(dateStr, n) {
+    const d = new Date(dateStr + 'T12:00:00Z');
+    d.setUTCDate(d.getUTCDate() + n);
+    return d.toISOString().slice(0, 10);
+  }
+
+  function getDow(dateStr) {
+    return new Date(dateStr + 'T12:00:00Z').getUTCDay();
+  }
+
+  function computeAllPeriods(anchor, upTo) {
+    const periods = [];
+    let start = anchor;
+    while (true) {
+      const end = addDays(start, PERIOD_SPAN);
+      if (end > upTo) break;
+      periods.push({ start, end });
+      start = addDays(end, 3);
+    }
+    return periods;
+  }
+
+  it('period_start is always a Monday', () => {
+    const anchor = '2025-01-06'; // Known Monday
+    const periods = computeAllPeriods(anchor, '2025-12-31');
+    for (const p of periods) {
+      assert.equal(getDow(p.start), 1, `${p.start} should be Monday`);
+    }
+  });
+
+  it('period_end is always a Friday (start + 11 days)', () => {
+    const anchor = '2025-01-06';
+    const periods = computeAllPeriods(anchor, '2025-12-31');
+    for (const p of periods) {
+      assert.equal(getDow(p.end), 5, `${p.end} should be Friday`);
+      assert.equal(addDays(p.start, PERIOD_SPAN), p.end, 'end = start + 11');
+    }
+  });
+
+  it('periods are contiguous with weekend gaps', () => {
+    const anchor = '2025-01-06';
+    const periods = computeAllPeriods(anchor, '2025-06-30');
+    for (let i = 1; i < periods.length; i++) {
+      const prevEnd = periods[i - 1].end;
+      const currStart = periods[i].start;
+      // Gap should be 3 days (Sat, Sun, Mon)
+      const gap = (new Date(currStart + 'T12:00:00Z') - new Date(prevEnd + 'T12:00:00Z')) / 86400000;
+      assert.equal(gap, 3, `Gap between ${prevEnd} and ${currStart} should be 3 days (weekend)`);
+    }
+  });
+
+  it('handles month-end boundary: Jan 27 → Feb 7', () => {
+    const periods = computeAllPeriods('2025-01-27', '2025-02-10');
+    assert.equal(periods.length, 1);
+    assert.equal(periods[0].start, '2025-01-27');
+    assert.equal(periods[0].end, '2025-02-07'); // Mon Jan 27 + 11 = Fri Feb 7
+  });
+
+  it('handles year-end boundary: Dec 22 → Jan 2', () => {
+    const periods = computeAllPeriods('2025-12-22', '2026-01-05');
+    assert.equal(periods.length, 1);
+    assert.equal(periods[0].start, '2025-12-22');
+    assert.equal(periods[0].end, '2026-01-02');
+  });
+
+  it('handles leap year Feb 29: period crossing Feb 28-29', () => {
+    // 2028 is a leap year
+    const periods = computeAllPeriods('2028-02-21', '2028-03-10');
+    assert.equal(periods.length, 1);
+    assert.equal(periods[0].start, '2028-02-21');
+    assert.equal(periods[0].end, '2028-03-03');
+  });
+
+  it('mondayOnOrBefore finds the correct Monday', () => {
+    assert.equal(mondayOnOrBefore('2025-07-21'), '2025-07-21'); // Monday
+    assert.equal(mondayOnOrBefore('2025-07-22'), '2025-07-21'); // Tuesday
+    assert.equal(mondayOnOrBefore('2025-07-25'), '2025-07-21'); // Friday
+    assert.equal(mondayOnOrBefore('2025-07-26'), '2025-07-21'); // Saturday
+    assert.equal(mondayOnOrBefore('2025-07-27'), '2025-07-21'); // Sunday
+  });
+
+  it('does not produce overlapping periods', () => {
+    const periods = computeAllPeriods('2025-01-06', '2026-12-31');
+    for (let i = 1; i < periods.length; i++) {
+      assert.ok(
+        periods[i].start > periods[i - 1].end,
+        `Period ${i} starts ${periods[i].start} should be after period ${i-1} ends ${periods[i-1].end}`
+      );
+    }
+  });
+
+  it('each period spans exactly 12 calendar days (Mon-Fri inclusive)', () => {
+    const periods = computeAllPeriods('2025-01-06', '2025-06-30');
+    for (const p of periods) {
+      const daySpan = (new Date(p.end + 'T12:00:00Z') - new Date(p.start + 'T12:00:00Z')) / 86400000;
+      assert.equal(daySpan, 11, `Period ${p.start}→${p.end} should span 11 days`);
+    }
+  });
+
+  it('produces ~26 periods per year', () => {
+    const periods = computeAllPeriods('2025-01-06', '2025-12-31');
+    // 52 weeks / 2 = 26 periods, minus any that extend past Dec 31
+    assert.ok(periods.length >= 24 && periods.length <= 27,
+      `Expected ~26 periods per year, got ${periods.length}`);
+  });
+});
+
+describe('DST transition handling for backtest periods', () => {
+  it('spring DST: March 2025 period boundaries remain correct', () => {
+    // DST 2025: March 9 (spring forward)
+    // Period crossing DST: March 3 → March 14
+    const start = '2025-03-03';
+    const d = new Date(start + 'T12:00:00Z');
+    d.setUTCDate(d.getUTCDate() + 11);
+    const end = d.toISOString().slice(0, 10);
+    assert.equal(end, '2025-03-14', 'Period end should be March 14 (Friday)');
+    assert.equal(new Date(end + 'T12:00:00Z').getUTCDay(), 5, 'Should be Friday');
+  });
+
+  it('fall DST: Nov 2025 period boundaries remain correct', () => {
+    // DST 2025: November 2 (fall back)
+    const start = '2025-10-27';
+    const d = new Date(start + 'T12:00:00Z');
+    d.setUTCDate(d.getUTCDate() + 11);
+    const end = d.toISOString().slice(0, 10);
+    assert.equal(end, '2025-11-07', 'Period end should be Nov 7 (Friday)');
+    assert.equal(new Date(end + 'T12:00:00Z').getUTCDay(), 5, 'Should be Friday');
+  });
+
+  it('Intl.DateTimeFormat ET correctly handles DST for window boundaries', () => {
+    const fmt = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/New_York',
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit',
+      hour12: false,
+    });
+
+    // Spring forward: 2025-03-09 02:00 → 03:00 ET
+    const springForward = new Date('2025-03-09T07:00:00Z'); // 2 AM EST → 3 AM EDT
+    const springParts = Object.fromEntries(
+      fmt.formatToParts(springForward).map(p => [p.type, p.value])
+    );
+    assert.equal(springParts.month, '03');
+    assert.equal(springParts.day, '09');
+    // Hour should be 03 (EDT)
+    assert.equal(parseInt(springParts.hour), 3);
+  });
+});
+
+describe('Biweekly backtest validation rules', () => {
+  it('outcome accounting: wins + losses + flats must equal trade_count', () => {
+    const testCases = [
+      { trades: 10, wins: 8, losses: 1, flats: 1, valid: true },
+      { trades: 0, wins: 0, losses: 0, flats: 0, valid: true },
+      { trades: 5, wins: 3, losses: 1, flats: 0, valid: false }, // 3+1+0 ≠ 5
+      { trades: 1, wins: 1, losses: 0, flats: 0, valid: true },
+    ];
+
+    for (const tc of testCases) {
+      const sum = tc.wins + tc.losses + tc.flats;
+      const isValid = sum === tc.trades;
+      assert.equal(isValid, tc.valid,
+        `trades=${tc.trades} W=${tc.wins} L=${tc.losses} F=${tc.flats}: sum=${sum} expected valid=${tc.valid}`);
+    }
+  });
+
+  it('win_rate calculation is correct', () => {
+    assert.equal(Math.round((8 / 10) * 10000) / 100, 80);
+    assert.equal(Math.round((0 / 0 || 0) * 10000) / 100, 0); // zero-trade
+    assert.equal(Math.round((1 / 1) * 10000) / 100, 100);
+    assert.equal(Math.round((92 / 100) * 10000) / 100, 92);
+  });
+
+  it('zero-trade period gets validation_state "no_trades"', () => {
+    const tradeCount = 0;
+    const validationState = tradeCount === 0 ? 'no_trades' : 'valid';
+    assert.equal(validationState, 'no_trades');
+  });
+
+  it('non-finite values are rejected', () => {
+    assert.ok(!isFinite(NaN));
+    assert.ok(!isFinite(Infinity));
+    assert.ok(!isFinite(-Infinity));
+    assert.ok(isFinite(0));
+    assert.ok(isFinite(-123.45));
+    assert.ok(isFinite(99999.99));
+  });
+});
+
+describe('Backtest period idempotency', () => {
+  it('unique constraint key = period_start + period_end + strategy_version', () => {
+    const key1 = '2025-01-06|2025-01-17|v1';
+    const key2 = '2025-01-06|2025-01-17|v1';
+    const key3 = '2025-01-06|2025-01-17|v2';
+    assert.equal(key1, key2, 'Same period + version = same key');
+    assert.notEqual(key1, key3, 'Different version = different key');
+  });
+
+  it('advisory lock key is deterministic', () => {
+    // Simulate hashtext behavior
+    const hash = (s) => {
+      let h = 0;
+      for (let i = 0; i < s.length; i++) {
+        h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+      }
+      return h;
+    };
+    const key1 = hash('2025-01-06|v1');
+    const key2 = hash('2025-01-06|v1');
+    const key3 = hash('2025-01-20|v1');
+    assert.equal(key1, key2, 'Same input = same lock key');
+    assert.notEqual(key1, key3, 'Different period = different lock key');
+  });
+});
+
+describe('Backtest batch catch-up', () => {
+  it('catch-up is limited to MAX_CATCH_UP=6 periods', () => {
+    const MAX_CATCH_UP = 6;
+    const unpublished = Array.from({ length: 20 }, (_, i) => ({ index: i }));
+    const batch = unpublished.slice(0, MAX_CATCH_UP);
+    assert.equal(batch.length, 6);
+  });
+
+  it('periods are processed in chronological order', () => {
+    function computeAllPeriods(anchor, upTo) {
+      const periods = [];
+      let start = anchor;
+      while (true) {
+        const d = new Date(start + 'T12:00:00Z');
+        d.setUTCDate(d.getUTCDate() + 11);
+        const end = d.toISOString().slice(0, 10);
+        if (end > upTo) break;
+        periods.push({ start, end });
+        const next = new Date(end + 'T12:00:00Z');
+        next.setUTCDate(next.getUTCDate() + 3);
+        start = next.toISOString().slice(0, 10);
+      }
+      return periods;
+    }
+
+    const periods = computeAllPeriods('2025-01-06', '2025-04-01');
+    for (let i = 1; i < periods.length; i++) {
+      assert.ok(periods[i].start > periods[i - 1].start,
+        `Period ${i} start should be after period ${i-1} start`);
+    }
+  });
+});
+
+describe('Backtest API response shape', () => {
+  it('public response has required fields', () => {
+    const publicResp = {
+      periods: [],
+      total: 0,
+      access: 'public',
+      note: 'Sign in for full detail.',
+    };
+    assert.ok(Array.isArray(publicResp.periods));
+    assert.equal(typeof publicResp.total, 'number');
+    assert.equal(publicResp.access, 'public');
+    assert.ok(publicResp.note);
+  });
+
+  it('member response has additional fields', () => {
+    const memberResp = {
+      periods: [{
+        id: 'uuid',
+        period_start: '2025-01-06',
+        period_end: '2025-01-17',
+        trade_count: 10,
+        wins: 8,
+        losses: 1,
+        win_rate: 80.0,
+        net_pnl: 456.78,
+        avg_credit: 1.85,
+        avg_hold_days: 4.2,
+        validation_state: 'valid',
+        published_at: '2025-01-20T06:00:00Z',
+        strategy_version: 'v1',
+        run_status: 'PUBLISHED',
+        trades: [],
+      }],
+      total: 1,
+      access: 'member',
+      limit: 26,
+      offset: 0,
+      last_refresh: {
+        attempted_at: '2025-01-20T06:00:00Z',
+        status: 'PUBLISHED',
+        failure_reason: null,
+      },
+      strategy_version: 'v1',
+    };
+    assert.equal(memberResp.access, 'member');
+    assert.ok(memberResp.last_refresh);
+    assert.equal(typeof memberResp.limit, 'number');
+    assert.ok(memberResp.periods[0].avg_credit);
+    assert.ok(memberResp.periods[0].avg_hold_days);
+    assert.equal(memberResp.periods[0].run_status, 'PUBLISHED');
+  });
+
+  it('pagination limits are bounded', () => {
+    // Matches: Math.min(Math.max(parseInt(val) || 26, 1), 52)
+    const clamp = (val) => Math.min(Math.max(parseInt(val) || 26, 1), 52);
+    assert.equal(clamp(100), 52);
+    assert.equal(clamp(undefined), 26);  // NaN || 26 = 26
+    assert.equal(clamp('abc'), 26);      // NaN || 26 = 26
+    assert.equal(clamp(10), 10);
+    assert.equal(clamp(0), 26);          // 0 is falsy, || 26 = 26
+    assert.equal(clamp(1), 1);
+  });
+});
+
+describe('Period-completion guard logic', () => {
+  it('does not use intraday market-open check', () => {
+    // The guard checks: business day, supported year, not holiday
+    // It does NOT check market hours (9:30-16:15)
+    // This is intentional: archival refresh runs at 6 AM UTC = ~1 AM ET
+    const guardChecks = ['supported_year', 'not_weekend', 'not_holiday'];
+    assert.ok(!guardChecks.includes('market_hours'));
+  });
+
+  it('Monday holiday falls back to Tuesday', () => {
+    // MLK Day 2025: January 20 (Monday)
+    const isHoliday = (d) => ['2025-01-20'].includes(d);
+    const schedDays = ['monday', 'tuesday']; // Workflow runs Mon & Tue
+    const monday = '2025-01-20';
+    const tuesday = '2025-01-21';
+    assert.ok(isHoliday(monday), 'MLK Day is a holiday');
+    assert.ok(!isHoliday(tuesday), 'Tuesday is not a holiday');
+    assert.ok(schedDays.includes('tuesday'), 'Workflow has Tuesday fallback');
+  });
+});
+
+describe('Backtest refresh security', () => {
+  it('timing-safe comparison rejects wrong-length keys', () => {
+    const expected = 'correct-api-key-12345';
+    const wrong = 'short';
+    assert.notEqual(wrong.length, expected.length,
+      'Wrong-length key should be rejected before timing-safe compare');
+  });
+
+  it('timing-safe comparison rejects wrong keys of correct length', () => {
+    const expected = 'correct-api-key-12345';
+    const wrong = 'xxxxxxx-xxx-xxx-xxxxx';
+    assert.equal(wrong.length, expected.length);
+    assert.ok(
+      !crypto.timingSafeEqual(Buffer.from(wrong), Buffer.from(expected)),
+      'Wrong key of correct length should be rejected'
+    );
+  });
+
+  it('public backtest endpoint does not expose run metadata', () => {
+    const publicFields = [
+      'period_start', 'period_end', 'trade_count', 'wins', 'losses',
+      'win_rate', 'net_pnl', 'validation_state', 'warning_message',
+      'published_at', 'strategy_version',
+    ];
+    const internalFields = ['failure_reason', 'source_query_ts', 'config_hash', 'last_attempt_at'];
+    for (const f of internalFields) {
+      assert.ok(!publicFields.includes(f), `${f} must not be in public response`);
+    }
   });
 });

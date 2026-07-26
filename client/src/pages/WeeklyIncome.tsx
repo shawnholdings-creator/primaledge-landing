@@ -11,6 +11,7 @@ import PrimalEdgeLogo from "@/components/PrimalEdgeLogo";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import WeeklyIncomeHero from "../components/WeeklyIncomeHero";
 import BacktestSignalLog from "../components/BacktestSignalLog";
+import BacktestResultsTable from "../components/BacktestResultsTable";
 import { useAuth } from "../contexts/AuthContext";
 
 
@@ -191,7 +192,7 @@ function ArchivePanel({
               {search && (
                 <button
                   onClick={() => setSearch("")}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/20 hover:text-white/50 transition-colors text-[10px]"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/20 hover:text-white/50 transition-colors text-xs"
                 >
                   \u2715
                 </button>
@@ -221,7 +222,7 @@ function ArchivePanel({
 
             {filtered.length === 0 && (
               <div className="px-4 py-4 text-center">
-                <span className="text-[10px] text-white/20 font-mono">No matching dates</span>
+                <span className="text-xs text-white/20 font-mono">No matching dates</span>
               </div>
             )}
 
@@ -454,7 +455,7 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
         className="px-4 sm:px-6 py-4 bg-white/[0.02] border-t border-white/[0.06]"
       >
         <div
-          className="text-[10px] text-white/25 tracking-widest uppercase mb-2"
+          className="text-xs text-white/25 tracking-widest uppercase mb-2"
           style={{ fontFamily: "'Space Grotesk', sans-serif" }}
         >
           Scoring Reasons
@@ -535,7 +536,7 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
         return (
           <div style={{ marginBottom: "20px" }}>
             <div
-              className="text-[10px] tracking-widest uppercase mb-3"
+              className="text-xs tracking-widest uppercase mb-3"
               style={{ fontFamily: "'Space Mono', 'Space Grotesk', monospace", letterSpacing: "0.18em", color: "#555" }}
             >
               Recommended Trade
@@ -598,7 +599,7 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
             </div>
             {/* How to place this trade */}
             <div className="mt-4 p-3 rounded-lg bg-white/[0.03] border border-white/[0.06]">
-              <span className="text-[10px] text-white/30 uppercase tracking-widest block mb-1.5" style={{ fontFamily: "'Space Mono', monospace" }}>How to place this trade</span>
+              <span className="text-xs text-white/30 uppercase tracking-widest block mb-1.5" style={{ fontFamily: "'Space Mono', monospace" }}>How to place this trade</span>
               <p className="text-xs text-white/45 leading-relaxed" style={{ fontFamily: "'Inter', sans-serif" }}>
                 Sell to open 1× <span className="text-white/70 font-semibold">{candidate.ticker} ${candidate.strike.toFixed(1)} {sideLabel}</span> expiring <span className="text-white/70 font-semibold">{expirationDisplay}</span> for a credit of <span className="text-white/70 font-semibold">${candidate.credit.toFixed(2)}</span> per share (${creditPer100} per contract).{" "}
                 The scanner estimates a <span className={`font-semibold ${probOfProfit >= 80 ? "text-green-400" : "text-yellow-400"}`}>{probOfProfit}% probability</span> of this contract expiring worthless and keeping the full credit.
@@ -611,7 +612,7 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
       {/* ── Score Breakdown ── */}
       <div>
         <div
-          className="text-[10px] tracking-widest uppercase mb-3"
+          className="text-xs tracking-widest uppercase mb-3"
           style={{ fontFamily: "'Space Mono', 'Space Grotesk', monospace", letterSpacing: "0.18em", color: "#555" }}
         >
           Score Breakdown
@@ -638,7 +639,7 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
                       {cat.score}/{cat.max}
                     </span>
                     <span
-                      className="text-[9px] font-bold tracking-wide px-1.5 py-0.5 rounded-full"
+                      className="text-xs font-bold tracking-wide px-1.5 py-0.5 rounded-full"
                       style={{
                         fontFamily: "'JetBrains Mono', monospace",
                         color: sc,
@@ -679,7 +680,7 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
       {sd.gates.length > 0 && (
         <div>
           <div
-            className="text-[10px] tracking-widest uppercase mb-2"
+            className="text-xs tracking-widest uppercase mb-2"
             style={{ fontFamily: "'Space Mono', 'Space Grotesk', monospace", letterSpacing: "0.18em", color: "#555" }}
           >
             Why This Made The Cut
@@ -776,14 +777,14 @@ function ScoreDetailPanel({ candidate }: { candidate: Candidate & { _grade: stri
         <div className="flex flex-wrap gap-2">
           {sd.indicators.compression && (
             <span
-              className="text-[10px] font-bold tracking-wider bg-green-500/10 border border-green-500/20 rounded-full px-2.5 py-1"
+              className="text-xs font-bold tracking-wider bg-green-500/10 border border-green-500/20 rounded-full px-2.5 py-1"
               style={{ fontFamily: "'JetBrains Mono', monospace", color: "#22c55e" }}
             >
               ⚡ COMPRESSION
             </span>
           )}
           <span
-            className="text-[10px] text-white/30 bg-white/[0.04] border border-white/[0.06] rounded-full px-2.5 py-1"
+            className="text-xs text-white/30 bg-white/[0.04] border border-white/[0.06] rounded-full px-2.5 py-1"
             style={{ fontFamily: "'JetBrains Mono', monospace" }}
           >
             This setup has cleared all platform quality gates required for member review.
@@ -987,14 +988,14 @@ function WeeklyIncomeContent() {
                   WEEKLY OPTIONS INCOME
                 </h1>
                 <p
-                  className="text-white/20 text-[10px] tracking-[0.35em] uppercase mt-1.5"
+                  className="text-white/20 text-xs tracking-[0.35em] uppercase mt-1.5"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
                   INCOME INTELLIGENCE · PRIVATE ACCESS
                 </p>
                 <div className="flex items-center gap-2 mt-2 flex-wrap">
                   <span
-                    className="text-[10px] tracking-wider px-2.5 py-1 rounded-full"
+                    className="text-xs tracking-wider px-2.5 py-1 rounded-full"
                     style={{
                       fontFamily: "'JetBrains Mono', monospace",
                       color: "#6b7280",
@@ -1008,7 +1009,7 @@ function WeeklyIncomeContent() {
                     onClick={() => signOut()}
                     style={{
                       fontFamily: "'JetBrains Mono', monospace",
-                      fontSize: "0.6rem",
+                      fontSize: "0.75rem",
                       letterSpacing: "0.1em",
                       textTransform: "uppercase",
                       color: "rgba(255,255,255,0.25)",
@@ -1048,7 +1049,7 @@ function WeeklyIncomeContent() {
                   />
                 </span>
                 <span
-                  className="text-[10px] font-bold tracking-wider"
+                  className="text-xs font-bold tracking-wider"
                   style={{
                     fontFamily: "'JetBrains Mono', monospace",
                     color: ms.color,
@@ -1076,7 +1077,7 @@ function WeeklyIncomeContent() {
                     onClick={() => setMode(m)}
                     style={{
                       fontFamily: "'JetBrains Mono', monospace",
-                      fontSize: "0.65rem",
+                      fontSize: "0.75rem",
                       fontWeight: mode === m ? 700 : 400,
                       letterSpacing: "0.1em",
                       textTransform: "uppercase",
@@ -1096,7 +1097,7 @@ function WeeklyIncomeContent() {
               <span
                 style={{
                   fontFamily: "'JetBrains Mono', monospace",
-                  fontSize: "0.6rem",
+                  fontSize: "0.75rem",
                   color: "rgba(255,255,255,0.2)",
                   letterSpacing: "0.05em",
                 }}
@@ -1110,7 +1111,7 @@ function WeeklyIncomeContent() {
             {/* Stat pills */}
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-2.5">
               <div className="bg-[#0d1118] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
-                <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Scanned</div>
+                <div className="text-xs text-white/15 tracking-widest uppercase mb-1">Scanned</div>
                 <div
                   className="text-lg font-bold text-white/60 leading-none"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
@@ -1119,7 +1120,7 @@ function WeeklyIncomeContent() {
                 </div>
               </div>
               <div className="bg-[#0d1118] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
-                <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">
+                <div className="text-xs text-white/15 tracking-widest uppercase mb-1">
                   {mode === "micro" && tradableCount === 0 ? "Next Scan" : "Candidates"}
                 </div>
                 <div
@@ -1134,7 +1135,7 @@ function WeeklyIncomeContent() {
                 </div>
               </div>
               <div className="bg-[#0d1118] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
-                <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">
+                <div className="text-xs text-white/15 tracking-widest uppercase mb-1">
                   {mode === "micro" ? "Probability of Success" : "Unique Alerts"}
                 </div>
                 <div
@@ -1145,7 +1146,7 @@ function WeeklyIncomeContent() {
                 </div>
               </div>
               <div className="bg-[#0d1118] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
-                <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">
+                <div className="text-xs text-white/15 tracking-widest uppercase mb-1">
                   {mode === "micro" ? "Avg Time to Target" : "Market"}
                 </div>
                 <div
@@ -1157,7 +1158,7 @@ function WeeklyIncomeContent() {
               </div>
               {candidates.filter(c => c.side?.toLowerCase() === "call").length > 0 && (
                 <div className="bg-[#0d1118] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
-                  <div className="text-[10px] text-white/15 tracking-widest uppercase mb-1">Call Setups</div>
+                  <div className="text-xs text-white/15 tracking-widest uppercase mb-1">Call Setups</div>
                   <div
                     className="text-lg font-bold leading-none"
                     style={{
@@ -1181,7 +1182,7 @@ function WeeklyIncomeContent() {
                 onClick={() => setActiveTab(tab)}
                 style={{
                   fontFamily: "'JetBrains Mono', monospace",
-                  fontSize: "0.7rem",
+                  fontSize: "0.75rem",
                   letterSpacing: "0.1em",
                   textTransform: "uppercase",
                   padding: "6px 16px",
@@ -1207,7 +1208,7 @@ function WeeklyIncomeContent() {
                       marginLeft: 6,
                       background: "rgba(0,229,160,0.15)",
                       color: "#00e5a0",
-                      fontSize: "0.6rem",
+                      fontSize: "0.75rem",
                       padding: "1px 6px",
                       borderRadius: 10,
                       fontWeight: 700,
@@ -1252,7 +1253,7 @@ function WeeklyIncomeContent() {
                       <path d="M10 12h4" />
                     </svg>
                     <span
-                      className="text-[10px] tracking-wider uppercase font-bold"
+                      className="text-xs tracking-wider uppercase font-bold"
                       style={{ fontFamily: "'JetBrains Mono', monospace", color: "#f59e0b" }}
                     >
                       ARCHIVE
@@ -1273,7 +1274,7 @@ function WeeklyIncomeContent() {
                       />
                     </span>
                     <span
-                      className="text-[10px] tracking-wider uppercase"
+                      className="text-xs tracking-wider uppercase"
                       style={{ fontFamily: "'JetBrains Mono', monospace", color: ms.color }}
                     >
                       {ms.text}
@@ -1378,7 +1379,7 @@ function WeeklyIncomeContent() {
                       style={{ fontFamily: "'JetBrains Mono', monospace" }}
                     >
                       <div className="flex-1 h-px" style={{ background: "rgba(239,68,68,0.12)" }} />
-                      <span className="text-[9px] tracking-widest uppercase" style={{ color: "rgba(239,68,68,0.4)" }}>
+                      <span className="text-xs tracking-widest uppercase" style={{ color: "rgba(239,68,68,0.4)" }}>
                         A-Grade Call Setups
                       </span>
                       <div className="flex-1 h-px" style={{ background: "rgba(239,68,68,0.12)" }} />
@@ -1418,7 +1419,7 @@ function WeeklyIncomeContent() {
                         </span>
                         {c.setup_type && (
                           <span
-                            className="text-[8px] tracking-wider opacity-60 block mt-0.5"
+                            className="text-xs tracking-wider opacity-60 block mt-0.5"
                             style={{
                               fontFamily: "'JetBrains Mono', monospace",
                               color: setupTypeColor(c.setup_type),
@@ -1457,7 +1458,7 @@ function WeeklyIncomeContent() {
                           const pl = premiumLabel(c.credit);
                           return pl ? (
                             <span
-                              className="text-[8px] font-bold tracking-wider px-1.5 py-0.5 rounded-full mt-0.5 inline-block"
+                              className="text-xs font-bold tracking-wider px-1.5 py-0.5 rounded-full mt-0.5 inline-block"
                               style={{
                                 fontFamily: "'JetBrains Mono', monospace",
                                 color: pl.color,
@@ -1480,7 +1481,7 @@ function WeeklyIncomeContent() {
                           {c.total_score}
                         </span>
                         <div
-                          className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black shrink-0"
+                          className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-black shrink-0"
                           style={{ backgroundColor: gs.bg, color: gs.text }}
                         >
                           {grade}
@@ -1512,7 +1513,7 @@ function WeeklyIncomeContent() {
                           ${c.stock_price.toFixed(2)}
                         </span>
                         <span
-                          className="block text-[10px] mt-0.5"
+                          className="block text-xs mt-0.5"
                           style={{
                             fontFamily: "'JetBrains Mono', monospace",
                             color: "#00e5a0",
@@ -1589,7 +1590,7 @@ function WeeklyIncomeContent() {
                         className="hidden md:flex gap-4 px-6 pb-2"
                         style={{
                           fontFamily: "'JetBrains Mono', monospace",
-                          fontSize: "0.65rem",
+                          fontSize: "0.75rem",
                           color: "rgba(255,255,255,0.25)",
                         }}
                       >
@@ -1619,13 +1620,13 @@ function WeeklyIncomeContent() {
                               {c.ticker}
                             </span>
                             <span
-                              className="text-[10px] font-bold tracking-wider"
+                              className="text-xs font-bold tracking-wider"
                               style={{ fontFamily: "'JetBrains Mono', monospace", color: sideColor }}
                             >
                               {c.side.toUpperCase()}
                             </span>
                             <div
-                              className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black shrink-0"
+                              className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-black shrink-0"
                               style={{ backgroundColor: gs.bg, color: gs.text }}
                             >
                               {grade}
@@ -1640,7 +1641,7 @@ function WeeklyIncomeContent() {
                                 ${c.stock_price.toFixed(2)}
                               </span>
                               <span
-                                className="text-[10px] block"
+                                className="text-xs block"
                                 style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00e5a0" }}
                               >
                                 {otmLabel(c.otm_pct)}
@@ -1681,7 +1682,7 @@ function WeeklyIncomeContent() {
                               const pl = premiumLabel(c.credit);
                               return pl ? (
                                 <span
-                                  className="text-[8px] font-bold tracking-wider px-1.5 py-0.5 rounded-full inline-block"
+                                  className="text-xs font-bold tracking-wider px-1.5 py-0.5 rounded-full inline-block"
                                   style={{
                                     fontFamily: "'JetBrains Mono', monospace",
                                     color: pl.color,
@@ -1717,7 +1718,7 @@ function WeeklyIncomeContent() {
                         </div>
                         {c.setup_type && (
                           <span
-                            className="text-[8px] tracking-wider opacity-60 block mt-1"
+                            className="text-xs tracking-wider opacity-60 block mt-1"
                             style={{
                               fontFamily: "'JetBrains Mono', monospace",
                               color: setupTypeColor(c.setup_type),
@@ -1776,7 +1777,7 @@ function WeeklyIncomeContent() {
                           className="px-4 pb-2 flex gap-3"
                           style={{
                             fontFamily: "'JetBrains Mono', monospace",
-                            fontSize: "0.65rem",
+                            fontSize: "0.75rem",
                             color: "rgba(255,255,255,0.25)",
                           }}
                         >
@@ -1797,6 +1798,14 @@ function WeeklyIncomeContent() {
               <h3 className="text-white font-bold text-base mt-0.5">Recent Backtest Performance</h3>
               <p className="text-gray-500 text-xs mt-0.5 mb-4">How the scanner performed over the last 3 weeks of backtesting — for reference only.</p>
               <BacktestSignalLog />
+            </div>
+
+            {/* ── Biweekly Backtest Results ── */}
+            <div className="mt-10 mb-2 px-4 sm:px-0">
+              <p className="text-xs font-mono text-green-400/70 uppercase tracking-widest">History</p>
+              <h3 className="text-white font-bold text-base mt-0.5">Biweekly Backtest Results</h3>
+              <p className="text-gray-500 text-xs mt-0.5 mb-4">Completed two-week modeled results — aggregated from historical trade data.</p>
+              <BacktestResultsTable isMember={true} />
             </div>
 
             {/* ── Info Footer ── */}
@@ -1822,13 +1831,13 @@ function WeeklyIncomeContent() {
             <div className="px-4 sm:px-6 py-3 border-t border-white/5">
               <div className="flex items-center gap-2 mb-2">
                 <span
-                  className="text-[9px] text-[#00e5a0] tracking-widest uppercase font-bold"
+                  className="text-xs text-[#00e5a0] tracking-widest uppercase font-bold"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
                   CONVICTION
                 </span>
                 <span
-                  className="text-[8px] text-white/35"
+                  className="text-xs text-white/35"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
                   Quality score from scanner analysis
@@ -1847,25 +1856,25 @@ function WeeklyIncomeContent() {
                     style={{ background: `${g.bg}08`, border: `1px solid ${g.bg}15` }}
                   >
                     <div
-                      className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-black shrink-0"
+                      className="w-4 h-4 rounded-full flex items-center justify-center text-xs font-black shrink-0"
                       style={{ backgroundColor: g.bg, color: g.text }}
                     >
                       {g.grade}
                     </div>
                     <span
-                      className="text-[9px] text-white/30 tracking-wide"
+                      className="text-xs text-white/30 tracking-wide"
                       style={{ fontFamily: "'JetBrains Mono', monospace" }}
                     >
                       {g.score}
                     </span>
                     <span
-                      className="text-[8px] text-white/15"
+                      className="text-xs text-white/15"
                       style={{ fontFamily: "'JetBrains Mono', monospace" }}
                     >
                       {g.label}
                     </span>
                     <span
-                      className="text-[7px] font-bold tracking-wider px-1 py-px rounded"
+                      className="text-xs font-bold tracking-wider px-1 py-px rounded"
                       style={{
                         fontFamily: "'JetBrains Mono', monospace",
                         color: g.where === "ENTRY" ? "#00e5a0" : "#f59e0b",
@@ -1886,13 +1895,13 @@ function WeeklyIncomeContent() {
             <div className="px-4 sm:px-6 py-3 border-t border-white/5">
               <div className="flex items-center gap-2 mb-2">
                 <span
-                  className="text-[9px] text-[#00e5a0] tracking-widest uppercase font-bold"
+                  className="text-xs text-[#00e5a0] tracking-widest uppercase font-bold"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
                   STRATEGY
                 </span>
                 <span
-                  className="text-[8px] text-white/35"
+                  className="text-xs text-white/35"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
                   Income approach based on directional bias
@@ -1924,13 +1933,13 @@ function WeeklyIncomeContent() {
                       style={{ backgroundColor: v.color }}
                     />
                     <span
-                      className="text-[9px] font-bold tracking-wide"
+                      className="text-xs font-bold tracking-wide"
                       style={{ fontFamily: "'JetBrains Mono', monospace", color: v.color }}
                     >
                       {v.label}
                     </span>
                     <span
-                      className="text-[8px] text-white/15 hidden sm:inline"
+                      className="text-xs text-white/15 hidden sm:inline"
                       style={{ fontFamily: "'JetBrains Mono', monospace" }}
                     >
                       {v.desc}
@@ -1945,7 +1954,7 @@ function WeeklyIncomeContent() {
           {/* ── PRODUCT INTRO COPY ── */}
           <section className="pt-12 pb-8 sm:pb-12">
             <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-flex items-center gap-2 font-mono text-[10px] text-[#00e5a0]/70 tracking-widest bg-[#00e5a0]/8 border border-[#00e5a0]/15 rounded-full px-4 py-1.5 mb-6">
+              <div className="inline-flex items-center gap-2 font-mono text-xs text-[#00e5a0]/70 tracking-widest bg-[#00e5a0]/8 border border-[#00e5a0]/15 rounded-full px-4 py-1.5 mb-6">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#00e5a0] animate-pulse" />
                 PRIVATE ACCESS · INCOME INTELLIGENCE
               </div>
@@ -1983,7 +1992,7 @@ function WeeklyIncomeContent() {
                 { tag: "SCORE", title: "Score Explanation", desc: "Shows why a candidate qualifies, where it is strong, what still needs review, and the final conviction read." },
               ].map((item, i) => (
                 <div key={i} className="relative bg-[#10151d] border border-white/5 rounded-xl p-6 hover:border-[#00e5a0]/20 transition-all group">
-                  <span className="font-mono text-[9px] text-[#00e5a0]/50 tracking-widest bg-[#00e5a0]/5 border border-[#00e5a0]/10 rounded px-2 py-0.5 mb-4 inline-block">{item.tag}</span>
+                  <span className="font-mono text-xs text-[#00e5a0]/50 tracking-widest bg-[#00e5a0]/5 border border-[#00e5a0]/10 rounded px-2 py-0.5 mb-4 inline-block">{item.tag}</span>
                   <div className="absolute top-5 right-5 font-['Space_Grotesk'] text-4xl font-bold text-white/[0.03]">{String(i + 1).padStart(2, "0")}</div>
                   <h3 className="font-['Space_Grotesk'] font-semibold text-base text-white mb-3 group-hover:text-[#00e5a0] transition-colors">{item.title}</h3>
                   <p className="text-white/40 text-sm leading-relaxed">{item.desc}</p>
@@ -2028,7 +2037,7 @@ function WeeklyIncomeContent() {
                 <span
                   style={{
                     fontFamily: "'JetBrains Mono', monospace",
-                    fontSize: "0.65rem",
+                    fontSize: "0.75rem",
                     letterSpacing: "0.15em",
                     color: "rgba(255,255,255,0.25)",
                     textTransform: "uppercase",
@@ -2040,7 +2049,7 @@ function WeeklyIncomeContent() {
                   <span
                     style={{
                       fontFamily: "'JetBrains Mono', monospace",
-                      fontSize: "0.6rem",
+                      fontSize: "0.75rem",
                       background: "rgba(0,229,160,0.1)",
                       color: "#00e5a0",
                       padding: "2px 8px",
@@ -2086,7 +2095,7 @@ function WeeklyIncomeContent() {
                 >
                   {/* Ticker */}
                   <div>
-                    <label style={{ display: "block", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 4 }}>Ticker</label>
+                    <label style={{ display: "block", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 4 }}>Ticker</label>
                     <input
                       type="text"
                       placeholder="NVDA"
@@ -2097,7 +2106,7 @@ function WeeklyIncomeContent() {
                   </div>
                   {/* Side */}
                   <div>
-                    <label style={{ display: "block", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 4 }}>Side</label>
+                    <label style={{ display: "block", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 4 }}>Side</label>
                     <select
                       value={formData.side}
                       onChange={(e) => setFormData({ ...formData, side: e.target.value as "PUT" | "CALL" })}
@@ -2109,7 +2118,7 @@ function WeeklyIncomeContent() {
                   </div>
                   {/* Strike */}
                   <div>
-                    <label style={{ display: "block", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 4 }}>Strike</label>
+                    <label style={{ display: "block", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 4 }}>Strike</label>
                     <input
                       type="number"
                       placeholder="118.00"
@@ -2120,7 +2129,7 @@ function WeeklyIncomeContent() {
                   </div>
                   {/* Expiration */}
                   <div>
-                    <label style={{ display: "block", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 4 }}>Expiration</label>
+                    <label style={{ display: "block", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 4 }}>Expiration</label>
                     <input
                       type="date"
                       value={formData.expiration}
@@ -2130,7 +2139,7 @@ function WeeklyIncomeContent() {
                   </div>
                   {/* Entry Credit */}
                   <div>
-                    <label style={{ display: "block", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 4 }}>Entry Credit (per share)</label>
+                    <label style={{ display: "block", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 4 }}>Entry Credit (per share)</label>
                     <input
                       type="number"
                       step="0.01"
@@ -2191,7 +2200,7 @@ function WeeklyIncomeContent() {
                         key={h}
                         style={{
                           fontFamily: "'JetBrains Mono', monospace",
-                          fontSize: "0.55rem",
+                          fontSize: "0.75rem",
                           letterSpacing: "0.12em",
                           color: "rgba(255,255,255,0.2)",
                         }}
@@ -2224,21 +2233,21 @@ function WeeklyIncomeContent() {
                         <span>${pos.entryCredit.toFixed(2)}</span>
                         <span>
                           {pos.status === "closed" ? (
-                            <span style={{ display: "inline-flex", alignItems: "center", background: "rgba(107,114,128,0.15)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.3)", fontSize: "0.6rem", fontWeight: 600, padding: "2px 8px", borderRadius: 12 }}>Closed</span>
+                            <span style={{ display: "inline-flex", alignItems: "center", background: "rgba(107,114,128,0.15)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.3)", fontSize: "0.75rem", fontWeight: 600, padding: "2px 8px", borderRadius: 12 }}>Closed</span>
                           ) : pos.exitAlertFired ? (
-                            <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "rgba(245,158,11,0.15)", border: "1px solid rgba(245,158,11,0.4)", color: "#f59e0b", fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.08em", padding: "2px 8px", borderRadius: 12 }}>
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "rgba(245,158,11,0.15)", border: "1px solid rgba(245,158,11,0.4)", color: "#f59e0b", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.08em", padding: "2px 8px", borderRadius: 12 }}>
                               <span style={{ width: 5, height: 5, borderRadius: "50%", backgroundColor: "#f59e0b", animation: "pulse 2s ease-in-out infinite", flexShrink: 0 }} />
                               Exit Signal
                             </span>
                           ) : (
-                            <span style={{ display: "inline-flex", alignItems: "center", background: "rgba(0,229,160,0.08)", border: "1px solid rgba(0,229,160,0.15)", color: "rgba(0,229,160,0.5)", fontSize: "0.6rem", fontWeight: 600, padding: "2px 8px", borderRadius: 12 }}>Monitoring</span>
+                            <span style={{ display: "inline-flex", alignItems: "center", background: "rgba(0,229,160,0.08)", border: "1px solid rgba(0,229,160,0.15)", color: "rgba(0,229,160,0.5)", fontSize: "0.75rem", fontWeight: 600, padding: "2px 8px", borderRadius: 12 }}>Monitoring</span>
                           )}
                         </span>
                         <span>
                           {pos.status === "open" ? (
                             <button
                               onClick={() => markClosed(pos.id)}
-                              style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem", color: "rgba(255,255,255,0.3)", background: "none", border: "none", cursor: "pointer", textDecoration: "none", padding: 0 }}
+                              style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.75rem", color: "rgba(255,255,255,0.3)", background: "none", border: "none", cursor: "pointer", textDecoration: "none", padding: 0 }}
                               onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.6)"; e.currentTarget.style.textDecoration = "underline"; }}
                               onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.3)"; e.currentTarget.style.textDecoration = "none"; }}
                             >
@@ -2247,7 +2256,7 @@ function WeeklyIncomeContent() {
                           ) : (
                             <button
                               onClick={() => removePosition(pos.id)}
-                              style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem", color: "rgba(239,68,68,0.3)", background: "none", border: "none", cursor: "pointer", textDecoration: "none", padding: 0 }}
+                              style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.75rem", color: "rgba(239,68,68,0.3)", background: "none", border: "none", cursor: "pointer", textDecoration: "none", padding: 0 }}
                               onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(239,68,68,0.6)"; e.currentTarget.style.textDecoration = "underline"; }}
                               onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(239,68,68,0.3)"; e.currentTarget.style.textDecoration = "none"; }}
                             >
@@ -2273,25 +2282,25 @@ function WeeklyIncomeContent() {
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
                           <span style={{ fontWeight: 700, color: pos.status === "closed" ? "rgba(255,255,255,0.3)" : "white" }}>{pos.ticker} {pos.side} ${pos.strike.toFixed(2)}</span>
                           {pos.status === "closed" ? (
-                            <span style={{ background: "rgba(107,114,128,0.15)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.3)", fontSize: "0.6rem", fontWeight: 600, padding: "2px 8px", borderRadius: 12 }}>Closed</span>
+                            <span style={{ background: "rgba(107,114,128,0.15)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.3)", fontSize: "0.75rem", fontWeight: 600, padding: "2px 8px", borderRadius: 12 }}>Closed</span>
                           ) : pos.exitAlertFired ? (
-                            <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "rgba(245,158,11,0.15)", border: "1px solid rgba(245,158,11,0.4)", color: "#f59e0b", fontSize: "0.6rem", fontWeight: 700, padding: "2px 8px", borderRadius: 12 }}>
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "rgba(245,158,11,0.15)", border: "1px solid rgba(245,158,11,0.4)", color: "#f59e0b", fontSize: "0.75rem", fontWeight: 700, padding: "2px 8px", borderRadius: 12 }}>
                               <span style={{ width: 5, height: 5, borderRadius: "50%", backgroundColor: "#f59e0b", flexShrink: 0 }} />
                               Exit Signal
                             </span>
                           ) : (
-                            <span style={{ background: "rgba(0,229,160,0.08)", border: "1px solid rgba(0,229,160,0.15)", color: "rgba(0,229,160,0.5)", fontSize: "0.6rem", fontWeight: 600, padding: "2px 8px", borderRadius: 12 }}>Monitoring</span>
+                            <span style={{ background: "rgba(0,229,160,0.08)", border: "1px solid rgba(0,229,160,0.15)", color: "rgba(0,229,160,0.5)", fontSize: "0.75rem", fontWeight: 600, padding: "2px 8px", borderRadius: 12 }}>Monitoring</span>
                           )}
                         </div>
-                        <div style={{ display: "flex", gap: 16, color: "rgba(255,255,255,0.35)", fontSize: "0.65rem", marginBottom: 8 }}>
+                        <div style={{ display: "flex", gap: 16, color: "rgba(255,255,255,0.35)", fontSize: "0.75rem", marginBottom: 8 }}>
                           <span>Exp: {pos.expiration}</span>
                           <span>Credit: ${pos.entryCredit.toFixed(2)}</span>
                         </div>
                         <div>
                           {pos.status === "open" ? (
-                            <button onClick={() => markClosed(pos.id)} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem", color: "rgba(255,255,255,0.3)", background: "none", border: "none", cursor: "pointer", padding: 0 }}>Mark Closed</button>
+                            <button onClick={() => markClosed(pos.id)} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.75rem", color: "rgba(255,255,255,0.3)", background: "none", border: "none", cursor: "pointer", padding: 0 }}>Mark Closed</button>
                           ) : (
-                            <button onClick={() => removePosition(pos.id)} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem", color: "rgba(239,68,68,0.3)", background: "none", border: "none", cursor: "pointer", padding: 0 }}>Remove</button>
+                            <button onClick={() => removePosition(pos.id)} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.75rem", color: "rgba(239,68,68,0.3)", background: "none", border: "none", cursor: "pointer", padding: 0 }}>Remove</button>
                           )}
                         </div>
                       </div>
@@ -2304,7 +2313,7 @@ function WeeklyIncomeContent() {
               <p
                 style={{
                   fontFamily: "'JetBrains Mono', monospace",
-                  fontSize: "0.65rem",
+                  fontSize: "0.75rem",
                   color: "rgba(255,255,255,0.2)",
                   fontStyle: "italic",
                   marginTop: 16,
