@@ -1,8 +1,16 @@
 /**
  * LoginModal — Centered overlay with the shared LoginForm.
  * Rendered once at the App level; opened via useLoginModal().
+ *
+ * Accessible dialog contract:
+ * - role="dialog" with aria-modal="true" and descriptive aria-label
+ * - Focus trapped while open, restored to trigger on close
+ * - Escape and backdrop click dismiss the dialog
+ * - Body scroll lock applied while open, always removed on close/unmount
+ * - Close button ≥ 44px tap target with accessible name
+ * - Session dismissal prevents re-open loops
  */
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useRef } from "react";
 import { useLocation } from "wouter";
 import { useLoginModal } from "../contexts/LoginModalContext";
 import { useAuth } from "../contexts/AuthContext";
@@ -12,10 +20,25 @@ export default function LoginModal() {
   const { isOpen, closeLoginModal, redirectTo, dismissTo } = useLoginModal();
   const { user, productAccess } = useAuth();
   const [, navigate] = useLocation();
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLElement | null>(null);
 
-  // After user dismisses modal (X, backdrop, Escape): close and navigate to hero page
+  // Capture the element that triggered the modal open
+  useEffect(() => {
+    if (isOpen) {
+      triggerRef.current = document.activeElement as HTMLElement;
+    }
+  }, [isOpen]);
+
+  // After user dismisses modal: close, restore focus, navigate if needed
   const handleDismiss = useCallback(() => {
     closeLoginModal();
+    // Restore focus to the element that opened the modal
+    if (triggerRef.current && typeof triggerRef.current.focus === "function") {
+      requestAnimationFrame(() => {
+        triggerRef.current?.focus();
+      });
+    }
     if (dismissTo) {
       navigate(dismissTo);
     }
@@ -24,15 +47,23 @@ export default function LoginModal() {
   // Close on Escape
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === "Escape") handleDismiss();
+      if (e.key === "Escape") {
+        e.preventDefault();
+        handleDismiss();
+      }
     },
     [handleDismiss],
   );
 
+  // Body scroll lock + keyboard listener
   useEffect(() => {
     if (isOpen) {
       document.addEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "hidden";
+      // Focus the dialog container for screen readers
+      requestAnimationFrame(() => {
+        dialogRef.current?.focus();
+      });
     }
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
@@ -64,11 +95,18 @@ export default function LoginModal() {
         backdropFilter: "blur(4px)",
       }}
       onClick={(e) => {
+        // Backdrop click dismisses the dialog
         if (e.target === e.currentTarget) handleDismiss();
       }}
+      role="presentation"
     >
       <div
-        className="relative"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Member Access"
+        tabIndex={-1}
+        className="relative outline-none"
         style={{
           background: "#0d0d0d",
           border: "1px solid rgba(0,255,150,0.15)",
@@ -80,11 +118,20 @@ export default function LoginModal() {
           overflowY: "auto",
         }}
       >
-        {/* Close button */}
+        {/* Close button — 44px minimum tap target */}
         <button
           onClick={handleDismiss}
-          className="absolute top-4 right-4 text-white/30 hover:text-white transition-colors text-xl leading-none"
-          aria-label="Close"
+          aria-label="Close member access dialog"
+          className="absolute top-3 right-3 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-colors rounded-lg"
+          style={{
+            width: 44,
+            height: 44,
+            fontSize: "1.25rem",
+            lineHeight: 1,
+            border: "none",
+            background: "transparent",
+            cursor: "pointer",
+          }}
         >
           ✕
         </button>

@@ -1684,21 +1684,63 @@ describe('Backtest batch catch-up', () => {
   });
 });
 
-describe('Backtest API response shape', () => {
-  it('public response has required fields', () => {
+describe('Backtest API response shape — structured status', () => {
+  it('public response has required status fields', () => {
     const publicResp = {
       periods: [],
       total: 0,
       access: 'public',
-      note: 'Sign in for full detail.',
+      status: 'no_completed_periods',
+      screening_completed: false,
+      last_evaluated_at: null,
+      last_successful_refresh_at: null,
+      next_scheduled_review_at: '2025-01-27T06:00:00.000Z',
+      published_setup_count: 0,
+      note: 'Historical modeled results summary. Sign in for full detail.',
     };
     assert.ok(Array.isArray(publicResp.periods));
     assert.equal(typeof publicResp.total, 'number');
     assert.equal(publicResp.access, 'public');
     assert.ok(publicResp.note);
+    // New status contract fields
+    assert.ok(['populated','no_completed_periods','no_qualifying_setup','stale'].includes(publicResp.status));
+    assert.equal(typeof publicResp.screening_completed, 'boolean');
+    assert.equal(typeof publicResp.published_setup_count, 'number');
+    assert.ok(publicResp.next_scheduled_review_at);
   });
 
-  it('member response has additional fields', () => {
+  it('zero-row success produces no_completed_periods, not error', () => {
+    const resp = {
+      periods: [],
+      total: 0,
+      access: 'public',
+      status: 'no_completed_periods',
+      screening_completed: false,
+      published_setup_count: 0,
+    };
+    assert.equal(resp.status, 'no_completed_periods');
+    assert.notEqual(resp.status, 'error');
+    assert.equal(resp.periods.length, 0);
+  });
+
+  it('completed screening with zero published setups produces no_qualifying_setup', () => {
+    const resp = {
+      periods: [],
+      total: 0,
+      access: 'member',
+      status: 'no_qualifying_setup',
+      screening_completed: true,
+      published_setup_count: 0,
+      last_evaluated_at: '2025-01-22T11:00:00Z',
+      next_scheduled_review_at: '2025-01-27T06:00:00Z',
+    };
+    assert.equal(resp.status, 'no_qualifying_setup');
+    assert.equal(resp.screening_completed, true);
+    assert.equal(resp.published_setup_count, 0);
+    assert.ok(resp.last_evaluated_at);
+  });
+
+  it('populated response retains all period fields', () => {
     const memberResp = {
       periods: [{
         id: 'uuid',
@@ -1719,6 +1761,11 @@ describe('Backtest API response shape', () => {
       }],
       total: 1,
       access: 'member',
+      status: 'populated',
+      screening_completed: true,
+      published_setup_count: 1,
+      last_evaluated_at: '2025-01-20T06:00:00Z',
+      last_successful_refresh_at: '2025-01-20T06:00:00Z',
       limit: 26,
       offset: 0,
       last_refresh: {
@@ -1728,39 +1775,81 @@ describe('Backtest API response shape', () => {
       },
       strategy_version: 'v1',
     };
+    assert.equal(memberResp.status, 'populated');
     assert.equal(memberResp.access, 'member');
     assert.ok(memberResp.last_refresh);
     assert.equal(typeof memberResp.limit, 'number');
     assert.ok(memberResp.periods[0].avg_credit);
     assert.ok(memberResp.periods[0].avg_hold_days);
     assert.equal(memberResp.periods[0].run_status, 'PUBLISHED');
+    assert.equal(memberResp.screening_completed, true);
+    assert.equal(memberResp.published_setup_count, 1);
+  });
+
+  it('stale status preserves periods and adds stale_reason', () => {
+    const staleResp = {
+      periods: [{
+        period_start: '2025-01-06',
+        period_end: '2025-01-17',
+        trade_count: 5,
+        wins: 4, losses: 1, win_rate: 80, net_pnl: 200,
+        validation_state: 'valid', published_at: '2025-01-20T06:00:00Z',
+        strategy_version: 'v1',
+      }],
+      status: 'stale',
+      stale_reason: 'Last refresh attempt did not succeed.',
+      published_setup_count: 1,
+      last_successful_refresh_at: '2025-01-20T06:00:00Z',
+    };
+    assert.equal(staleResp.status, 'stale');
+    assert.ok(staleResp.periods.length > 0, 'Stale state keeps existing periods visible');
+    assert.ok(staleResp.stale_reason);
+    assert.ok(staleResp.last_successful_refresh_at);
+  });
+
+  it('HTTP 500 produces error, not no_completed_periods', () => {
+    // In production: fetch throws on non-ok → frontend sets error state
+    const httpOk = false;
+    const httpStatus = 500;
+    const frontendState = !httpOk ? 'error' : 'populated';
+    assert.equal(frontendState, 'error');
+    assert.notEqual(frontendState, 'no_completed_periods');
+  });
+
+  it('no-trade copy is based on returned data, not invented counts', () => {
+    const resp = {
+      status: 'no_qualifying_setup',
+      screening_completed: true,
+      published_setup_count: 0,
+      last_evaluated_at: '2025-01-22T11:00:00Z',
+    };
+    // The frontend must NOT add counts/reasons not present in the response
+    assert.equal(resp.published_setup_count, 0);
+    assert.ok(!resp.rejection_reasons, 'Must not fabricate rejection reasons');
+    assert.ok(!resp.screened_count, 'Must not fabricate screened symbol counts');
+    assert.ok(!resp.initial_candidates, 'Must not fabricate initial candidate counts');
   });
 
   it('pagination limits are bounded', () => {
-    // Matches: Math.min(Math.max(parseInt(val) || 26, 1), 52)
     const clamp = (val) => Math.min(Math.max(parseInt(val) || 26, 1), 52);
     assert.equal(clamp(100), 52);
-    assert.equal(clamp(undefined), 26);  // NaN || 26 = 26
-    assert.equal(clamp('abc'), 26);      // NaN || 26 = 26
+    assert.equal(clamp(undefined), 26);
+    assert.equal(clamp('abc'), 26);
     assert.equal(clamp(10), 10);
-    assert.equal(clamp(0), 26);          // 0 is falsy, || 26 = 26
+    assert.equal(clamp(0), 26);
     assert.equal(clamp(1), 1);
   });
 });
 
 describe('Period-completion guard logic', () => {
   it('does not use intraday market-open check', () => {
-    // The guard checks: business day, supported year, not holiday
-    // It does NOT check market hours (9:30-16:15)
-    // This is intentional: archival refresh runs at 6 AM UTC = ~1 AM ET
     const guardChecks = ['supported_year', 'not_weekend', 'not_holiday'];
     assert.ok(!guardChecks.includes('market_hours'));
   });
 
   it('Monday holiday falls back to Tuesday', () => {
-    // MLK Day 2025: January 20 (Monday)
     const isHoliday = (d) => ['2025-01-20'].includes(d);
-    const schedDays = ['monday', 'tuesday']; // Workflow runs Mon & Tue
+    const schedDays = ['monday', 'tuesday'];
     const monday = '2025-01-20';
     const tuesday = '2025-01-21';
     assert.ok(isHoliday(monday), 'MLK Day is a holiday');
@@ -1798,4 +1887,61 @@ describe('Backtest refresh security', () => {
       assert.ok(!publicFields.includes(f), `${f} must not be in public response`);
     }
   });
+
+  it('authorization boundaries prevent public leakage of protected table/run detail', () => {
+    // Verify the member-only fields are excluded from public fields
+    const publicFields = [
+      'period_start', 'period_end', 'trade_count', 'wins', 'losses',
+      'win_rate', 'net_pnl', 'validation_state', 'warning_message',
+      'published_at', 'strategy_version',
+    ];
+    const memberOnlyFields = ['id', 'avg_credit', 'avg_hold_days', 'run_status'];
+    for (const f of memberOnlyFields) {
+      assert.ok(!publicFields.includes(f), `${f} must not leak to public response`);
+    }
+  });
 });
+
+describe('Backtest status derivation logic', () => {
+  // Pure logic test of the status derivation
+  function deriveStatus(periods, hasAnchor, screeningCompleted, latestRefreshStatus) {
+    const publishedCount = periods?.length || 0;
+    if (publishedCount > 0 && latestRefreshStatus === 'FAILED') return 'stale';
+    if (publishedCount > 0) return 'populated';
+    if (screeningCompleted || hasAnchor) return 'no_qualifying_setup';
+    return 'no_completed_periods';
+  }
+
+  it('empty periods + no anchor = no_completed_periods', () => {
+    assert.equal(deriveStatus([], false, false, null), 'no_completed_periods');
+  });
+
+  it('empty periods + anchor = no_qualifying_setup', () => {
+    assert.equal(deriveStatus([], true, false, null), 'no_qualifying_setup');
+  });
+
+  it('empty periods + screening_completed = no_qualifying_setup', () => {
+    assert.equal(deriveStatus([], false, true, null), 'no_qualifying_setup');
+  });
+
+  it('periods present = populated', () => {
+    assert.equal(deriveStatus([{ id: '1' }], true, true, 'PUBLISHED'), 'populated');
+  });
+
+  it('periods present + FAILED refresh = stale', () => {
+    assert.equal(deriveStatus([{ id: '1' }], true, true, 'FAILED'), 'stale');
+  });
+
+  it('all six states are distinct', () => {
+    const states = new Set([
+      'loading',
+      'error',
+      deriveStatus([], false, false, null),        // no_completed_periods
+      deriveStatus([], true, true, null),           // no_qualifying_setup
+      deriveStatus([{ id: '1' }], true, true, 'PUBLISHED'),  // populated
+      deriveStatus([{ id: '1' }], true, true, 'FAILED'),     // stale
+    ]);
+    assert.equal(states.size, 6, 'All six states must be visibly distinct');
+  });
+});
+

@@ -37,6 +37,15 @@ interface BacktestResponse {
   periods: BacktestPeriod[];
   total: number;
   access: "public" | "member";
+  // Authoritative status from backend
+  status: "populated" | "no_completed_periods" | "no_qualifying_setup" | "stale";
+  screening_completed: boolean;
+  last_evaluated_at: string | null;
+  last_successful_refresh_at: string | null;
+  next_scheduled_review_at: string | null;
+  published_setup_count: number;
+  stale_reason?: string;
+  // Legacy
   last_refresh?: {
     attempted_at: string | null;
     status: string | null;
@@ -48,7 +57,14 @@ interface BacktestResponse {
   offset?: number;
 }
 
-type LoadState = "loading" | "error" | "empty" | "populated" | "stale";
+// All 6 UI-meaningful states
+type LoadState =
+  | "loading"
+  | "error"
+  | "no_completed_periods"
+  | "no_qualifying_setup"
+  | "populated"
+  | "stale";
 
 // ── Data Hook ────────────────────────────────────────────────
 function useBacktestPeriods(isAuthenticated: boolean) {
@@ -63,7 +79,6 @@ function useBacktestPeriods(isAuthenticated: boolean) {
 
       const headers: Record<string, string> = {};
       if (isAuthenticated) {
-        // Get session token from Supabase
         const sessionStr = localStorage.getItem("sb-session");
         if (sessionStr) {
           try {
@@ -87,7 +102,7 @@ function useBacktestPeriods(isAuthenticated: boolean) {
       const json: BacktestResponse = await resp.json();
       setData(json);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Failed to load backtest data");
+      setError(err instanceof Error ? err.message : "Failed to load data");
     } finally {
       setLoading(false);
     }
@@ -97,11 +112,22 @@ function useBacktestPeriods(isAuthenticated: boolean) {
     fetchPeriods();
   }, [fetchPeriods]);
 
+  // Derive UI state from backend-authoritative status
   let state: LoadState = "loading";
-  if (!loading && error) state = "error";
-  else if (!loading && (!data?.periods?.length)) state = "empty";
-  else if (!loading && data?.last_refresh?.status === "FAILED") state = "stale";
-  else if (!loading && data?.periods?.length) state = "populated";
+  if (loading) {
+    state = "loading";
+  } else if (error) {
+    state = "error";
+  } else if (data?.status === "stale") {
+    state = "stale";
+  } else if (data?.status === "populated") {
+    state = "populated";
+  } else if (data?.status === "no_qualifying_setup") {
+    state = "no_qualifying_setup";
+  } else {
+    // no_completed_periods or unexpected — treat as no_completed_periods
+    state = "no_completed_periods";
+  }
 
   return { data, loading, error, state, refetch: fetchPeriods };
 }
@@ -132,9 +158,22 @@ function formatPct(val: number | null): string {
 }
 
 function formatTimestamp(ts: string | null): string {
-  if (!ts) return "Never";
+  if (!ts) return "—";
   const d = new Date(ts);
   return d.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: "America/New_York",
+  }) + " ET";
+}
+
+function formatScheduledTime(ts: string | null): string {
+  if (!ts) return "—";
+  const d = new Date(ts);
+  return d.toLocaleDateString("en-US", {
+    weekday: "long",
     month: "short",
     day: "numeric",
     hour: "numeric",
@@ -420,6 +459,254 @@ function SkeletonRow() {
   );
 }
 
+// ── No Qualifying Setup Card ─────────────────────────────────
+function NoQualifyingSetupCard({
+  data,
+}: {
+  data: BacktestResponse | null;
+}) {
+  return (
+    <div
+      data-testid="no-qualifying-setup-card"
+      className="px-4 sm:px-6 py-6"
+    >
+      <div
+        className="rounded-xl p-5 sm:p-6"
+        style={{
+          background: "linear-gradient(135deg, rgba(251,191,36,0.06) 0%, rgba(251,191,36,0.02) 100%)",
+          border: "1px solid rgba(251,191,36,0.15)",
+        }}
+      >
+        {/* Header with shield icon */}
+        <div className="flex items-start gap-3 mb-4">
+          <div
+            className="flex-shrink-0 flex items-center justify-center rounded-lg"
+            style={{
+              width: 44, height: 44,
+              background: "rgba(251,191,36,0.12)",
+            }}
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              <path d="M9 12l2 2 4-4" />
+            </svg>
+          </div>
+          <div>
+            <h4
+              className="text-white font-bold m-0"
+              style={{ fontSize: "0.9375rem", lineHeight: 1.4 }}
+            >
+              No qualifying setup this week
+            </h4>
+            <p
+              className="text-gray-400 mt-1 m-0"
+              style={{ fontSize: "0.8125rem", lineHeight: 1.5 }}
+            >
+              We reviewed the current watchlist and did not publish a trade because
+              no candidate met every required quality and risk-control check.
+            </p>
+          </div>
+        </div>
+
+        {/* Metadata timestamps */}
+        <div
+          className="rounded-lg px-4 py-3 mb-4"
+          style={{ background: "rgba(255,255,255,0.03)" }}
+        >
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-500">Screening completed:</span>
+              <span className="text-xs text-gray-300 font-mono">
+                {formatTimestamp(data?.last_evaluated_at || null)}
+              </span>
+            </div>
+            {data?.next_scheduled_review_at && (
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-gray-500">Next scheduled review:</span>
+                <span className="text-xs text-gray-300 font-mono">
+                  {formatScheduledTime(data.next_scheduled_review_at)}
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Standards statement */}
+        <p
+          className="text-gray-500 m-0 mb-4"
+          style={{ fontSize: "0.75rem", lineHeight: 1.5 }}
+        >
+          The system does not lower standards simply to create a weekly trade.
+        </p>
+
+        {/* Action links */}
+        <div className="flex flex-wrap items-center gap-3">
+          <a
+            href="#methodology"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-medium transition-colors"
+            style={{
+              minHeight: 44,
+              background: "rgba(251,191,36,0.1)",
+              color: "#fbbf24",
+              border: "1px solid rgba(251,191,36,0.2)",
+              textDecoration: "none",
+            }}
+          >
+            View methodology
+          </a>
+          <a
+            href="#backtest-history"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-medium transition-colors"
+            style={{
+              minHeight: 44,
+              background: "rgba(255,255,255,0.05)",
+              color: "#9ca3af",
+              border: "1px solid rgba(255,255,255,0.08)",
+              textDecoration: "none",
+            }}
+          >
+            View historical modeled results
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── No Completed Periods Card ────────────────────────────────
+function NoCompletedPeriodsCard({
+  data,
+}: {
+  data: BacktestResponse | null;
+}) {
+  return (
+    <div
+      data-testid="no-completed-periods-card"
+      className="px-4 sm:px-6 py-6"
+    >
+      <div
+        className="rounded-xl p-5 sm:p-6"
+        style={{
+          background: "linear-gradient(135deg, rgba(99,102,241,0.06) 0%, rgba(99,102,241,0.02) 100%)",
+          border: "1px solid rgba(99,102,241,0.15)",
+        }}
+      >
+        <div className="flex items-start gap-3">
+          <div
+            className="flex-shrink-0 flex items-center justify-center rounded-lg"
+            style={{
+              width: 44, height: 44,
+              background: "rgba(99,102,241,0.12)",
+            }}
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#818cf8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+          </div>
+          <div>
+            <h4
+              className="text-white font-bold m-0"
+              style={{ fontSize: "0.9375rem", lineHeight: 1.4 }}
+            >
+              No completed backtest periods yet
+            </h4>
+            <p
+              className="text-gray-400 mt-1 m-0"
+              style={{ fontSize: "0.8125rem", lineHeight: 1.5 }}
+            >
+              The modeled-trade evaluation system has not yet completed its first
+              two-week review window. Results will appear here automatically once the
+              first period finishes.
+            </p>
+            {data?.next_scheduled_review_at && (
+              <p
+                className="text-gray-500 mt-3 m-0"
+                style={{ fontSize: "0.75rem" }}
+              >
+                Next scheduled review: {formatScheduledTime(data.next_scheduled_review_at)}
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Error Card ───────────────────────────────────────────────
+function ErrorCard({
+  error,
+  onRetry,
+}: {
+  error: string;
+  onRetry: () => void;
+}) {
+  return (
+    <div
+      data-testid="backtest-error-card"
+      className="px-4 sm:px-6 py-6"
+    >
+      <div
+        className="rounded-xl p-5 sm:p-6"
+        style={{
+          background: "linear-gradient(135deg, rgba(239,68,68,0.06) 0%, rgba(239,68,68,0.02) 100%)",
+          border: "1px solid rgba(239,68,68,0.15)",
+        }}
+      >
+        <div className="flex items-start gap-3">
+          <div
+            className="flex-shrink-0 flex items-center justify-center rounded-lg"
+            style={{
+              width: 44, height: 44,
+              background: "rgba(239,68,68,0.12)",
+            }}
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+          </div>
+          <div className="flex-1">
+            <h4
+              className="text-white font-bold m-0"
+              style={{ fontSize: "0.9375rem", lineHeight: 1.4 }}
+            >
+              Unable to load results
+            </h4>
+            <p
+              className="text-gray-400 mt-1 m-0"
+              style={{ fontSize: "0.8125rem", lineHeight: 1.5 }}
+            >
+              A technical error occurred while requesting data. This is a connection
+              or server issue, not a data or screening problem.
+            </p>
+            <p
+              className="text-red-400/70 mt-2 m-0 font-mono"
+              style={{ fontSize: "0.6875rem" }}
+            >
+              {error}
+            </p>
+            <button
+              data-testid="backtest-retry-button"
+              onClick={onRetry}
+              className="mt-4 px-5 py-2 rounded-lg text-xs font-medium text-white transition-colors"
+              style={{
+                minHeight: 44, minWidth: 100,
+                background: "rgba(239,68,68,0.15)",
+                border: "1px solid rgba(239,68,68,0.25)",
+              }}
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Main Component ───────────────────────────────────────────
 export default function BacktestResultsTable({
   isMember = false,
@@ -464,7 +751,7 @@ export default function BacktestResultsTable({
                   className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs"
                   style={{ background: "rgba(251,191,36,0.15)", color: "#fbbf24" }}
                 >
-                  ⚠ Last refresh failed
+                  ⚠ Data may be outdated
                 </span>
               )}
             </div>
@@ -472,9 +759,9 @@ export default function BacktestResultsTable({
               Two-week modeled results history · Strategy {data?.strategy_version || "v1"}
             </p>
           </div>
-          {data?.last_refresh?.attempted_at && (
+          {data?.last_evaluated_at && (
             <span className="text-xs text-gray-600 font-mono">
-              Updated {formatTimestamp(data.last_refresh.attempted_at)}
+              Last evaluated {formatTimestamp(data.last_evaluated_at)}
             </span>
           )}
         </div>
@@ -482,7 +769,7 @@ export default function BacktestResultsTable({
 
       {/* ── Loading ── */}
       {loading && (
-        <div className="py-2">
+        <div className="py-2" role="status" aria-label="Loading backtest results">
           {[1, 2, 3].map(i => (
             <SkeletonRow key={i} />
           ))}
@@ -491,29 +778,21 @@ export default function BacktestResultsTable({
 
       {/* ── Error ── */}
       {state === "error" && (
-        <div className="px-6 py-8 text-center">
-          <p className="text-xs text-red-400 mb-3">Unable to load backtest data</p>
-          <button
-            onClick={refetch}
-            className="px-4 py-2 rounded-lg text-xs font-medium text-white transition-colors"
-            style={{ minHeight: 44, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.1)" }}
-          >
-            Retry
-          </button>
-        </div>
+        <ErrorCard error={error || "Unknown error"} onRetry={refetch} />
       )}
 
-      {/* ── Empty ── */}
-      {state === "empty" && (
-        <div className="px-6 py-8 text-center">
-          <p className="text-xs text-gray-500">
-            No completed backtest periods yet. Results will appear here after the first two-week window completes.
-          </p>
-        </div>
+      {/* ── No Qualifying Setup ── */}
+      {state === "no_qualifying_setup" && (
+        <NoQualifyingSetupCard data={data} />
       )}
 
-      {/* ── Populated — Desktop Table ── */}
-      {state !== "loading" && state !== "error" && state !== "empty" && (
+      {/* ── No Completed Periods ── */}
+      {state === "no_completed_periods" && (
+        <NoCompletedPeriodsCard data={data} />
+      )}
+
+      {/* ── Populated / Stale — Desktop Table ── */}
+      {(state === "populated" || state === "stale") && (
         <>
           {/* Desktop */}
           <div className="hidden sm:block overflow-x-auto">
@@ -585,12 +864,26 @@ export default function BacktestResultsTable({
         </>
       )}
 
-      {/* ── Stale indicator ── */}
-      {state === "stale" && data?.last_refresh?.failure_reason && (
-        <div className="px-4 py-2 border-t border-white/5">
-          <p className="text-xs text-yellow-500/70 m-0">
-            Last refresh attempt failed. Showing previously published data.
-          </p>
+      {/* ── Stale freshness notice ── */}
+      {state === "stale" && (
+        <div className="px-4 sm:px-6 py-3 border-t border-white/5">
+          <div
+            className="rounded-lg px-4 py-3"
+            style={{ background: "rgba(251,191,36,0.06)", border: "1px solid rgba(251,191,36,0.12)" }}
+          >
+            <p className="text-xs m-0" style={{ color: "#fbbf24" }}>
+              ⚠ The latest refresh did not complete successfully. Showing the last
+              valid published data below.
+              {data?.stale_reason && (
+                <span className="text-gray-500 ml-1">({data.stale_reason})</span>
+              )}
+            </p>
+            {data?.last_successful_refresh_at && (
+              <p className="text-xs text-gray-500 mt-1 m-0">
+                Last successful refresh: {formatTimestamp(data.last_successful_refresh_at)}
+              </p>
+            )}
+          </div>
         </div>
       )}
 
