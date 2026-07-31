@@ -58,11 +58,12 @@ export default async function handler(req, res) {
 
       // ignoreDuplicates returns empty array if row already existed
       if (!inserted || inserted.length === 0) {
-        return res.status(200).json({ bootstrapped: false, reason: 'cursor_already_exists' });
+        return res.status(200).json({ replayed: 0, bootstrapped: false, reason: 'cursor_already_exists' });
       }
 
       console.log(`Reconcile: bootstrapped cursor at revision ${latestRevision} (${latestTime})`);
       return res.status(200).json({
+        replayed: 0,
         bootstrapped: true,
         cursor_revision: latestRevision,
         cursor_time: latestTime,
@@ -104,7 +105,7 @@ export default async function handler(req, res) {
       .sort((a, b) => (a.committed_at > b.committed_at ? 1 : -1));
 
     if (unprocessed.length === 0) {
-      return res.status(200).json({ reconciled: 0, skipped: 0, revisions_processed: 0, cursor_advanced: false });
+      return res.status(200).json({ replayed: 0, reconciled: 0, skipped: 0, revisions_processed: 0, cursor_advanced: false });
     }
 
     let totalReconciled = 0;
@@ -223,6 +224,7 @@ export default async function handler(req, res) {
       if (revisionFailed) {
         console.error(`Reconcile: stopping at revision ${rev.version} due to validation error`);
         return res.status(200).json({
+          replayed: totalReconciled,
           reconciled: totalReconciled,
           skipped: totalSkipped,
           revisions_processed: revisionsProcessed,
@@ -252,6 +254,7 @@ export default async function handler(req, res) {
     }
 
     return res.status(200).json({
+      replayed: totalReconciled,
       reconciled: totalReconciled,
       skipped: totalSkipped,
       revisions_processed: revisionsProcessed,

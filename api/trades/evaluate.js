@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   }
 
   if (!isMarketOpen()) {
-    return res.status(200).json({ skipped: true, reason: 'market_closed' });
+    return res.status(200).json({ evaluated: 0, skipped: true, reason: 'market_closed' });
   }
 
   try {
