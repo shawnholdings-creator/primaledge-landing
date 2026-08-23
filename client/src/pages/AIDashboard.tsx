@@ -13,6 +13,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import MobileCTA from "@/components/MobileCTA";
 import AIDashboardHero from "../components/AIDashboardHero";
 import BacktestResultsTable from "../components/BacktestResultsTable";
+import { getCompanyName } from "../lib/tickerNames";
 import BacktestSignalLog from "../components/BacktestSignalLog";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -665,16 +666,26 @@ function DashboardContent() {
                       </div>
 
                       {/* Ticker — colored by direction */}
-                      <span
-                        className="text-base font-bold"
-                        style={{
-                          fontFamily: "'JetBrains Mono', monospace",
-                          color: dc.text,
-                          textShadow: dc.glow,
-                        }}
-                      >
-                        {s.ticker}
-                      </span>
+                      <div>
+                        <span
+                          className="text-base font-bold block"
+                          style={{
+                            fontFamily: "'JetBrains Mono', monospace",
+                            color: dc.text,
+                            textShadow: dc.glow,
+                          }}
+                        >
+                          {s.ticker}
+                        </span>
+                        {getCompanyName(s.ticker) && (
+                          <span
+                            className="text-[10px] text-white/25 block leading-tight"
+                            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                          >
+                            {getCompanyName(s.ticker)}
+                          </span>
+                        )}
+                      </div>
 
                       {/* Setup */}
                       <span
@@ -751,12 +762,22 @@ function DashboardContent() {
                               </span>
                             )}
                           </div>
-                          <span
-                            className="text-lg font-bold"
-                            style={{ fontFamily: "'JetBrains Mono', monospace", color: dc.text, textShadow: dc.glow }}
-                          >
-                            {s.ticker}
-                          </span>
+                          <div>
+                            <span
+                              className="text-lg font-bold block"
+                              style={{ fontFamily: "'JetBrains Mono', monospace", color: dc.text, textShadow: dc.glow }}
+                            >
+                              {s.ticker}
+                            </span>
+                            {getCompanyName(s.ticker) && (
+                              <span
+                                className="text-[9px] text-white/20 block leading-tight"
+                                style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                              >
+                                {getCompanyName(s.ticker)}
+                              </span>
+                            )}
+                          </div>
                           <div
                             className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-black shrink-0"
                             style={{ backgroundColor: gc.bg, color: gc.text }}
