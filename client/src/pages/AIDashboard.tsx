@@ -644,8 +644,8 @@ function DashboardContent() {
                         gridTemplateColumns: "0.4fr 1fr 1.5fr 0.7fr 0.7fr 1fr",
                       }}
                     >
-                      {/* Direction — Traffic Light */}
-                      <div className="flex justify-center">
+                      {/* Direction — Traffic Light + Signal Date */}
+                      <div className="flex flex-col items-center gap-1">
                         <div
                           className="w-3 h-3 rounded-full"
                           style={{
@@ -654,6 +654,14 @@ function DashboardContent() {
                           }}
                           title={s.direction || "MIXED"}
                         />
+                        {data?.timestamp && data.timestamp !== "--" && (
+                          <span
+                            className="text-[9px] text-white/25 leading-none"
+                            style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                          >
+                            {new Date(data.timestamp).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                          </span>
+                        )}
                       </div>
 
                       {/* Ticker — colored by direction */}
@@ -729,10 +737,20 @@ function DashboardContent() {
                     >
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2.5">
-                          <div
-                            className="w-2.5 h-2.5 rounded-full shrink-0"
-                            style={{ backgroundColor: dc.dot, boxShadow: dc.glow }}
-                          />
+                          <div className="flex flex-col items-center gap-0.5 shrink-0">
+                            <div
+                              className="w-2.5 h-2.5 rounded-full"
+                              style={{ backgroundColor: dc.dot, boxShadow: dc.glow }}
+                            />
+                            {data?.timestamp && data.timestamp !== "--" && (
+                              <span
+                                className="text-[7px] text-white/20 leading-none"
+                                style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                              >
+                                {new Date(data.timestamp).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                              </span>
+                            )}
+                          </div>
                           <span
                             className="text-lg font-bold"
                             style={{ fontFamily: "'JetBrains Mono', monospace", color: dc.text, textShadow: dc.glow }}
