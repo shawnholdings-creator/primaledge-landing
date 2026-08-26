@@ -90,6 +90,31 @@ interface Candidate {
   thesis?: string;
 }
 
+interface ResearchSpread {
+  strategy_type: string;
+  mode: string;
+  ticker: string;
+  stock_price: number;
+  expiration: string;
+  dte: number;
+  sell_strike: number;
+  sell_contract: string;
+  buy_strike: number;
+  buy_contract: string;
+  spread_width: number;
+  net_credit: number;
+  net_credit_dollars: number;
+  max_loss: number;
+  return_on_risk_pct: number;
+  price_buffer_pct: number;
+  probability_of_profit: number;
+  total_score: number;
+  grade: string;
+  thesis: string;
+  risk_note: string;
+  exit_review_level: number;
+}
+
 interface ScanData {
   scan_timestamp: string;
   tickers_scanned: number;
@@ -97,6 +122,7 @@ interface ScanData {
   unique_alerts: number;
   market_condition: string;
   candidates: Candidate[];
+  research_spreads?: ResearchSpread[];
 }
 
 interface GistHistoryEntry {
@@ -1791,6 +1817,196 @@ function WeeklyIncomeContent() {
                 );
               }); })()}
             </div>
+
+            {/* ── Bull Put Credit Spread Research (Micro only) ── */}
+            {mode === "micro" && (() => {
+              const spreads = data?.research_spreads ?? [];
+              const best = spreads.length > 0
+                ? [...spreads].sort((a, b) => b.total_score - a.total_score)[0]
+                : null;
+
+              return (
+                <div className="mt-8 mb-2">
+                  {/* Section header */}
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 px-5 py-3 border-t border-b border-white/[0.06]">
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <span
+                        className="text-xs tracking-[0.18em] uppercase font-bold"
+                        style={{ fontFamily: "'JetBrains Mono', monospace", color: "#3b82f6" }}
+                      >
+                        BULL PUT CREDIT SPREAD RESEARCH
+                      </span>
+                      <span
+                        className="text-[10px] tracking-wider uppercase px-2 py-0.5 rounded-full"
+                        style={{
+                          fontFamily: "'JetBrains Mono', monospace",
+                          color: "#f59e0b",
+                          background: "rgba(245,158,11,0.08)",
+                          border: "1px solid rgba(245,158,11,0.2)",
+                        }}
+                      >
+                        Research only — not a live alert
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="px-4 sm:px-5 py-5">
+                    {!best ? (
+                      /* Empty state */
+                      <div className="text-center py-8">
+                        <p
+                          className="text-sm text-white/25"
+                          style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                        >
+                          No qualifying Bull Put Credit Spread research setup in the latest scan.
+                        </p>
+                      </div>
+                    ) : (
+                      /* Research card */
+                      <div className="bg-[#10151d] border border-white/[0.06] rounded-xl overflow-hidden">
+                        {/* Ticker header */}
+                        <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06]">
+                          <div className="flex items-center gap-3">
+                            <span className="text-lg font-black text-white" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                              {best.ticker}
+                            </span>
+                            <span className="text-xs text-white/30" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                              ${best.stock_price.toFixed(2)}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {(() => {
+                              const gs = gradeStyle(best.grade);
+                              return (
+                                <div
+                                  className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-black"
+                                  style={{ backgroundColor: gs.bg, color: gs.text }}
+                                >
+                                  {best.grade}
+                                </div>
+                              );
+                            })()}
+                            <span className="text-xs text-white/40 font-mono">{best.total_score}/100</span>
+                          </div>
+                        </div>
+
+                        {/* Trade legs — stacked on mobile */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 sm:gap-0">
+                          {/* SELL leg */}
+                          <div className="px-4 py-3 border-b sm:border-b-0 sm:border-r border-white/[0.06]">
+                            <span
+                              className="text-[10px] tracking-widest uppercase font-bold block mb-1"
+                              style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00e5a0" }}
+                            >
+                              SELL
+                            </span>
+                            <span className="text-white font-bold text-base">
+                              ${best.sell_strike.toFixed(0)} PUT
+                            </span>
+                          </div>
+                          {/* BUY leg */}
+                          <div className="px-4 py-3 border-b border-white/[0.06]">
+                            <span
+                              className="text-[10px] tracking-widest uppercase font-bold block mb-1"
+                              style={{ fontFamily: "'JetBrains Mono', monospace", color: "#3b82f6" }}
+                            >
+                              BUY — protection
+                            </span>
+                            <span className="text-white font-bold text-base">
+                              ${best.buy_strike.toFixed(0)} PUT
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Metrics grid — stacked on mobile */}
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-3 px-4 py-4">
+                          <div className="flex flex-col">
+                            <span className="text-[10px] text-gray-500 uppercase tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Expiration</span>
+                            <span className="text-white font-bold text-sm mt-0.5">
+                              {best.expiration
+                                ? new Date(best.expiration + "T00:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" })
+                                : "—"}
+                              <span className="text-white/30 text-xs ml-1">({best.dte}d)</span>
+                            </span>
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="text-[10px] text-gray-500 uppercase tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Net Premium / Contract</span>
+                            <span className="font-bold text-sm mt-0.5" style={{ color: "#00e5a0" }}>
+                              ${best.net_credit_dollars.toFixed(0)}
+                            </span>
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="text-[10px] text-gray-500 uppercase tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Max Defined Loss</span>
+                            <span className="text-white font-bold text-sm mt-0.5">
+                              ${best.max_loss.toFixed(0)}
+                            </span>
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="text-[10px] text-gray-500 uppercase tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Return on Risk</span>
+                            <span className="text-white font-bold text-sm mt-0.5">
+                              {best.return_on_risk_pct.toFixed(1)}%
+                            </span>
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="text-[10px] text-gray-500 uppercase tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Price Buffer</span>
+                            <span className="font-bold text-sm mt-0.5" style={{ color: "#00e5a0" }}>
+                              {best.price_buffer_pct.toFixed(1)}%
+                            </span>
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="text-[10px] text-gray-500 uppercase tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Probability of Profit</span>
+                            <span className={`font-bold text-sm mt-0.5 ${best.probability_of_profit >= 80 ? "text-green-400" : "text-yellow-400"}`}>
+                              {best.probability_of_profit.toFixed(0)}%
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Exit review level */}
+                        <div className="px-4 pb-3">
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10px] text-gray-500 uppercase tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                              Exit-Review Level
+                            </span>
+                            <span className="text-white/60 font-mono text-xs">${best.exit_review_level.toFixed(2)}</span>
+                          </div>
+                        </div>
+
+                        {/* Thesis */}
+                        {best.thesis && (
+                          <div
+                            className="mx-4 mb-4 px-4 py-3 rounded-lg"
+                            style={{
+                              background: "rgba(59,130,246,0.04)",
+                              borderLeft: "3px solid rgba(59,130,246,0.3)",
+                            }}
+                          >
+                            <span
+                              className="text-[9px] tracking-[0.18em] uppercase block mb-1"
+                              style={{ fontFamily: "'Space Mono', monospace", color: "#3b82f6", opacity: 0.6 }}
+                            >
+                              Thesis
+                            </span>
+                            <p className="text-[13px] text-white/50 leading-relaxed m-0" style={{ fontFamily: "'Inter', sans-serif" }}>
+                              {best.thesis}
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Risk note */}
+                        {best.risk_note && (
+                          <div className="px-4 pb-4">
+                            <p className="text-[11px] text-amber-400/50 leading-relaxed" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                              ⚠ {best.risk_note}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* ── Recent Backtest Performance ── */}
             <div className="mt-10 mb-2 px-4 sm:px-0">
