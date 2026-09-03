@@ -1162,24 +1162,24 @@ function WeeklyIncomeContent() {
               </div>
               <div className="bg-[#0d1118] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
                 <div className="text-xs text-white/15 tracking-widest uppercase mb-1">
-                  {mode === "micro" ? "Probability of Success" : "Unique Alerts"}
+                  {mode === "micro" ? "Spread Setups" : "Unique Alerts"}
                 </div>
                 <div
                   className="text-lg font-bold text-white/60 leading-none"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
-                  {mode === "micro" ? "92%*" : (data?.unique_alerts ?? "—")}
+                  {mode === "micro" ? (data?.research_spreads?.length ?? 0) : (data?.unique_alerts ?? "—")}
                 </div>
               </div>
               <div className="bg-[#0d1118] border border-white/[0.06] rounded-xl px-4 py-3 text-center">
                 <div className="text-xs text-white/15 tracking-widest uppercase mb-1">
-                  {mode === "micro" ? "Avg Time to Target" : "Market"}
+                  {mode === "micro" ? "Strategy" : "Market"}
                 </div>
                 <div
                   className="text-lg font-bold text-white/40 leading-none"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
-                  {mode === "micro" ? "5 days" : (data?.market_condition || "—")}
+                  {mode === "micro" ? "Defined Risk" : (data?.market_condition || "—")}
                 </div>
               </div>
               {candidates.filter(c => c.side?.toLowerCase() === "call").length > 0 && (
@@ -1348,8 +1348,8 @@ function WeeklyIncomeContent() {
                 </div>
               )}
 
-              {/* Empty State */}
-              {!error && candidates.length === 0 && (
+              {/* Empty State (Standard mode only) */}
+              {mode === "standard" && !error && candidates.length === 0 && (
                 <div className="px-4 py-20 text-center">
                   <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/[0.03] border border-white/[0.06] mb-4">
                     <svg
@@ -1370,18 +1370,16 @@ function WeeklyIncomeContent() {
                     className="text-white/25 text-sm font-semibold mb-1.5 tracking-wide"
                     style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                   >
-                    {mode === "micro" ? "No setups this cycle." : "No Active Candidates"}
+                    No Active Candidates
                   </p>
                   <p className="text-white/[0.12] text-xs max-w-xs mx-auto leading-relaxed">
-                    {mode === "micro"
-                      ? "Check back at the next scan."
-                      : "The scanner will refresh at the next interval. Check back during market hours for new setups."}
+                    The scanner will refresh at the next interval. Check back during market hours for new setups.
                   </p>
                 </div>
               )}
 
-              {/* Signal Rows */}
-              {(() => {
+              {/* Signal Rows (Standard mode only) */}
+              {mode === "standard" && (() => {
                 const sortedCandidates = [
                   ...candidates.filter(c => c.side?.toLowerCase() === "put"),
                   ...candidates.filter(c => c.side?.toLowerCase() === "call"),
@@ -1818,195 +1816,211 @@ function WeeklyIncomeContent() {
               }); })()}
             </div>
 
-            {/* ── Bull Put Credit Spread Research (Micro only) ── */}
-            {mode === "micro" && (() => {
-              const spreads = data?.research_spreads ?? [];
-              const best = spreads.length > 0
-                ? [...spreads].sort((a, b) => b.total_score - a.total_score)[0]
-                : null;
 
-              return (
-                <div className="mt-8 mb-2">
-                  {/* Section header */}
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 px-5 py-3 border-t border-b border-white/[0.06]">
-                    <div className="flex items-center gap-3 flex-wrap">
-                      <span
-                        className="text-xs tracking-[0.18em] uppercase font-bold"
-                        style={{ fontFamily: "'JetBrains Mono', monospace", color: "#3b82f6" }}
-                      >
-                        BULL PUT CREDIT SPREAD RESEARCH
-                      </span>
-                      <span
-                        className="text-[10px] tracking-wider uppercase px-2 py-0.5 rounded-full"
+            {/* ── Micro Mode: Defined-Risk Credit Spread Cards ── */}
+            {mode === "micro" && (() => {
+              const allSpreads = data?.research_spreads ?? [];
+              const putSpreads = allSpreads.filter(s => s.strategy_type === "bull_put_credit_spread");
+              const callSpreads = allSpreads.filter(s => s.strategy_type === "bear_call_credit_spread");
+
+              const renderSpreadCard = (spread: ResearchSpread, idx: number) => {
+                const isPut = spread.strategy_type === "bull_put_credit_spread";
+                const gs = gradeStyle(spread.grade);
+                const legType = isPut ? "PUT" : "CALL";
+                return (
+                  <div key={idx} className="bg-[#10151d] border border-white/[0.06] rounded-xl overflow-hidden">
+                    {/* Ticker header */}
+                    <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06]">
+                      <div className="flex items-center gap-3">
+                        <span className="text-lg font-black text-white" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                          {spread.ticker}
+                        </span>
+                        <span className="text-xs text-white/30" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                          ${spread.stock_price.toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="text-xs tracking-wider uppercase px-2 py-0.5 rounded-full"
+                          style={{
+                            fontFamily: "'JetBrains Mono', monospace",
+                            color: "#00e5a0",
+                            background: "rgba(0,229,160,0.08)",
+                            border: "1px solid rgba(0,229,160,0.2)",
+                          }}
+                        >
+                          QUALIFIED
+                        </span>
+                        <div
+                          className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-black"
+                          style={{ backgroundColor: gs.bg, color: gs.text }}
+                        >
+                          {spread.grade}
+                        </div>
+                        <span className="text-xs text-white/40 font-mono">{spread.total_score}/100</span>
+                      </div>
+                    </div>
+
+                    {/* Trade legs */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-0">
+                      {/* SELL leg */}
+                      <div className="px-4 py-3 border-b sm:border-b-0 sm:border-r border-white/[0.06]">
+                        <span
+                          className="text-xs tracking-widest uppercase font-bold block mb-1"
+                          style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00e5a0" }}
+                        >
+                          SELL
+                        </span>
+                        <span className="text-white font-bold text-base">
+                          1 × ${spread.sell_strike.toFixed(0)} {legType}
+                        </span>
+                      </div>
+                      {/* BUY leg */}
+                      <div className="px-4 py-3 border-b border-white/[0.06]">
+                        <span
+                          className="text-xs tracking-widest uppercase font-bold block mb-1"
+                          style={{ fontFamily: "'JetBrains Mono', monospace", color: "#3b82f6" }}
+                        >
+                          BUY — protection
+                        </span>
+                        <span className="text-white font-bold text-base">
+                          1 × ${spread.buy_strike.toFixed(0)} {legType}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Metrics grid */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-3 px-4 py-4">
+                      <div className="flex flex-col">
+                        <span className="text-xs text-gray-500 uppercase tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Expiration</span>
+                        <span className="text-white font-bold text-sm mt-0.5">
+                          {spread.expiration
+                            ? new Date(spread.expiration + "T00:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" })
+                            : "—"}
+                          <span className="text-white/30 text-xs ml-1">({spread.dte}d)</span>
+                        </span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-xs text-gray-500 uppercase tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Net Premium / Contract</span>
+                        <span className="font-bold text-sm mt-0.5" style={{ color: "#00e5a0" }}>
+                          ${spread.net_credit_dollars.toFixed(0)}
+                        </span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-xs text-gray-500 uppercase tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Max Defined Loss</span>
+                        <span className="text-white font-bold text-sm mt-0.5">
+                          ${spread.max_loss.toFixed(0)}
+                        </span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-xs text-gray-500 uppercase tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Spread Width</span>
+                        <span className="text-white font-bold text-sm mt-0.5">
+                          ${spread.spread_width.toFixed(0)}
+                        </span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-xs text-gray-500 uppercase tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Return on Risk</span>
+                        <span className="text-white font-bold text-sm mt-0.5">
+                          {spread.return_on_risk_pct.toFixed(1)}%
+                        </span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-xs text-gray-500 uppercase tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Price Buffer</span>
+                        <span className="font-bold text-sm mt-0.5" style={{ color: "#00e5a0" }}>
+                          {spread.price_buffer_pct.toFixed(1)}%
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Thesis */}
+                    {spread.thesis && (
+                      <div
+                        className="mx-4 mb-4 px-4 py-3 rounded-lg"
                         style={{
-                          fontFamily: "'JetBrains Mono', monospace",
-                          color: "#f59e0b",
-                          background: "rgba(245,158,11,0.08)",
-                          border: "1px solid rgba(245,158,11,0.2)",
+                          background: isPut ? "rgba(0,229,160,0.04)" : "rgba(239,68,68,0.04)",
+                          borderLeft: isPut ? "3px solid rgba(0,229,160,0.3)" : "3px solid rgba(239,68,68,0.3)",
                         }}
                       >
-                        Research only — not a live alert
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="px-4 sm:px-5 py-5">
-                    {!best ? (
-                      /* Empty state */
-                      <div className="text-center py-8">
-                        <p
-                          className="text-sm text-white/25"
-                          style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                        >
-                          No qualifying Bull Put Credit Spread research setup in the latest scan.
+                        <p className="text-xs text-white/50 leading-relaxed m-0" style={{ fontFamily: "'Inter', sans-serif" }}>
+                          {spread.thesis}
                         </p>
                       </div>
-                    ) : (
-                      /* Research card */
-                      <div className="bg-[#10151d] border border-white/[0.06] rounded-xl overflow-hidden">
-                        {/* Ticker header */}
-                        <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06]">
-                          <div className="flex items-center gap-3">
-                            <span className="text-lg font-black text-white" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                              {best.ticker}
-                            </span>
-                            <span className="text-xs text-white/30" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                              ${best.stock_price.toFixed(2)}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            {(() => {
-                              const gs = gradeStyle(best.grade);
-                              return (
-                                <div
-                                  className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-black"
-                                  style={{ backgroundColor: gs.bg, color: gs.text }}
-                                >
-                                  {best.grade}
-                                </div>
-                              );
-                            })()}
-                            <span className="text-xs text-white/40 font-mono">{best.total_score}/100</span>
-                          </div>
-                        </div>
+                    )}
 
-                        {/* Trade legs — stacked on mobile */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 sm:gap-0">
-                          {/* SELL leg */}
-                          <div className="px-4 py-3 border-b sm:border-b-0 sm:border-r border-white/[0.06]">
-                            <span
-                              className="text-[10px] tracking-widest uppercase font-bold block mb-1"
-                              style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00e5a0" }}
-                            >
-                              SELL
-                            </span>
-                            <span className="text-white font-bold text-base">
-                              ${best.sell_strike.toFixed(0)} PUT
-                            </span>
-                          </div>
-                          {/* BUY leg */}
-                          <div className="px-4 py-3 border-b border-white/[0.06]">
-                            <span
-                              className="text-[10px] tracking-widest uppercase font-bold block mb-1"
-                              style={{ fontFamily: "'JetBrains Mono', monospace", color: "#3b82f6" }}
-                            >
-                              BUY — protection
-                            </span>
-                            <span className="text-white font-bold text-base">
-                              ${best.buy_strike.toFixed(0)} PUT
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Metrics grid — stacked on mobile */}
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-3 px-4 py-4">
-                          <div className="flex flex-col">
-                            <span className="text-[10px] text-gray-500 uppercase tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Expiration</span>
-                            <span className="text-white font-bold text-sm mt-0.5">
-                              {best.expiration
-                                ? new Date(best.expiration + "T00:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" })
-                                : "—"}
-                              <span className="text-white/30 text-xs ml-1">({best.dte}d)</span>
-                            </span>
-                          </div>
-                          <div className="flex flex-col">
-                            <span className="text-[10px] text-gray-500 uppercase tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Net Premium / Contract</span>
-                            <span className="font-bold text-sm mt-0.5" style={{ color: "#00e5a0" }}>
-                              ${best.net_credit_dollars.toFixed(0)}
-                            </span>
-                          </div>
-                          <div className="flex flex-col">
-                            <span className="text-[10px] text-gray-500 uppercase tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Max Defined Loss</span>
-                            <span className="text-white font-bold text-sm mt-0.5">
-                              ${best.max_loss.toFixed(0)}
-                            </span>
-                          </div>
-                          <div className="flex flex-col">
-                            <span className="text-[10px] text-gray-500 uppercase tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Return on Risk</span>
-                            <span className="text-white font-bold text-sm mt-0.5">
-                              {best.return_on_risk_pct.toFixed(1)}%
-                            </span>
-                          </div>
-                          <div className="flex flex-col">
-                            <span className="text-[10px] text-gray-500 uppercase tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Price Buffer</span>
-                            <span className="font-bold text-sm mt-0.5" style={{ color: "#00e5a0" }}>
-                              {best.price_buffer_pct.toFixed(1)}%
-                            </span>
-                          </div>
-                          <div className="flex flex-col">
-                            <span className="text-[10px] text-gray-500 uppercase tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Probability of Profit</span>
-                            <span className={`font-bold text-sm mt-0.5 ${best.probability_of_profit >= 80 ? "text-green-400" : "text-yellow-400"}`}>
-                              {best.probability_of_profit.toFixed(0)}%
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Exit review level */}
-                        <div className="px-4 pb-3">
-                          <div className="flex items-center gap-2">
-                            <span className="text-[10px] text-gray-500 uppercase tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                              Exit-Review Level
-                            </span>
-                            <span className="text-white/60 font-mono text-xs">${best.exit_review_level.toFixed(2)}</span>
-                          </div>
-                        </div>
-
-                        {/* Thesis */}
-                        {best.thesis && (
-                          <div
-                            className="mx-4 mb-4 px-4 py-3 rounded-lg"
-                            style={{
-                              background: "rgba(59,130,246,0.04)",
-                              borderLeft: "3px solid rgba(59,130,246,0.3)",
-                            }}
-                          >
-                            <span
-                              className="text-[9px] tracking-[0.18em] uppercase block mb-1"
-                              style={{ fontFamily: "'Space Mono', monospace", color: "#3b82f6", opacity: 0.6 }}
-                            >
-                              Thesis
-                            </span>
-                            <p className="text-[13px] text-white/50 leading-relaxed m-0" style={{ fontFamily: "'Inter', sans-serif" }}>
-                              {best.thesis}
-                            </p>
-                          </div>
-                        )}
-
-                        {/* Risk note */}
-                        {best.risk_note && (
-                          <div className="px-4 pb-4">
-                            <p className="text-[11px] text-amber-400/50 leading-relaxed" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                              ⚠ {best.risk_note}
-                            </p>
-                          </div>
-                        )}
+                    {/* Risk note */}
+                    {spread.risk_note && (
+                      <div className="px-4 pb-4">
+                        <p className="text-xs text-amber-400/50 leading-relaxed" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                          ⚠ {spread.risk_note}
+                        </p>
                       </div>
                     )}
                   </div>
+                );
+              };
+
+              return (
+                <div className="mt-4 space-y-8">
+                  {/* Empty state */}
+                  {allSpreads.length === 0 && !error && (
+                    <div className="px-4 py-16 text-center">
+                      <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/[0.03] border border-white/[0.06] mb-4">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="10" />
+                          <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                      </div>
+                      <p className="text-white/25 text-sm font-semibold mb-1.5 tracking-wide" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                        No qualifying defined-risk spread this cycle.
+                      </p>
+                      <p className="text-white/[0.12] text-xs max-w-sm mx-auto leading-relaxed">
+                        The dashboard reviewed the available chains but did not lower its standards to create a trade. Check back at the next scan.
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Put-credit spreads */}
+                  {putSpreads.length > 0 && (
+                    <div>
+                      <div className="flex items-center gap-3 px-5 py-3 border-t border-b border-white/[0.06]">
+                        <span className="text-xs tracking-[0.18em] uppercase font-bold" style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00e5a0" }}>
+                          DEFINED-RISK PUT-CREDIT SPREADS
+                        </span>
+                        <span className="text-xs text-white/20 font-mono">{putSpreads.length}</span>
+                      </div>
+                      <div className="px-4 sm:px-5 py-5 space-y-4">
+                        {putSpreads.map((s, i) => renderSpreadCard(s, i))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Call-credit spreads */}
+                  {callSpreads.length > 0 && (
+                    <div>
+                      <div className="flex items-center gap-3 px-5 py-3 border-t border-b border-white/[0.06]">
+                        <span className="text-xs tracking-[0.18em] uppercase font-bold" style={{ fontFamily: "'JetBrains Mono', monospace", color: "#ef4444" }}>
+                          DEFINED-RISK CALL-CREDIT SPREADS
+                        </span>
+                        <span className="text-xs text-white/20 font-mono">{callSpreads.length}</span>
+                      </div>
+                      <div className="px-4 sm:px-5 py-5 space-y-4">
+                        {callSpreads.map((s, i) => renderSpreadCard(s, i + 1000))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Default contract note */}
+                  {allSpreads.length > 0 && (
+                    <div className="px-5 py-3 border-t border-white/[0.06]">
+                      <p className="text-xs text-white/15 font-mono">
+                        Default: 1 contract per spread · Max risk shown is per spread
+                      </p>
+                    </div>
+                  )}
                 </div>
               );
             })()}
+
 
             {/* ── Recent Backtest Performance ── */}
             <div className="mt-10 mb-2 px-4 sm:px-0">
